@@ -9,6 +9,7 @@ define(['app','api'], function (app) {
 			$scope.ActiveStep=1;
 			$scope.SelectedStudent={};
 			$scope.ActiveStudent={};
+			$scope.ActiveOrder = null;
 			};
 			$scope.init();
 			$scope.Steps = [
@@ -42,10 +43,26 @@ define(['app','api'], function (app) {
 				$scope.PaymentSchemes=$scope.Tuitions[0].schemes;
 				
 			});
+			$scope.Discounts=[];
+			$scope.Tuitions=[];
+			api.GET('tuition',function success(response){
+				console.log(response.data);
+				$scope.Tuitions = response.data;
+				$scope.Discounts=$scope.Tuitions[0].discounts;
+				
+			});
 			$scope.nextStep = function(){
-			//if($scope.ActiveStep===1){
-				//$scope.ActiveStudent = $scope.SelectedStudent;
-			//}
+			if($scope.ActiveStep===1){
+				$scope.ActiveStudent = $scope.SelectedStudent;
+				$scope.ActiveOrder = null;
+				for(var i in $scope.YearLevels){
+					var y = $scope.YearLevels[i];
+					if(y.id === $scope.ActiveStudent.yearlevel){
+						$scope.ActiveOrder=y.order;
+						break;
+					}
+				};
+			}
 			//if($scope.ActiveStep===2){
 				//$scope.contactInfo();
 			//}
@@ -71,6 +88,9 @@ define(['app','api'], function (app) {
 										 yearlevel:student.year_level_id
 				                         };
 			};
+			$scope.filterYearLevel = function(yearlevel){
+				return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+2;
+			}
 		};
     }]);
 });

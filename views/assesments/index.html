@@ -16,35 +16,46 @@
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
 				</div>
-				<div class="list-group-canvas">
-				</div>
 			</div>
-			<div class="list-group" ng-hide="hasBasicInfo || hasContactInfo">
-				<div class="list-group-item list-group-header">
-					<label for="">Summary</label>
-				</div>
-					<div class="list-group-item">
-						<div class="row">
-							<div class="col-md-8">
-								<dl class="dl-horizontal">
-									<dt>Date</dt>
-									<dd>November 20, 2015</dd>
-									<dt>Series</dt>
-									<dd>1800</dd>
-									<dt>Account</dt>
-									<dd>{{ActiveStudent.id}} | {{ActiveStudent.name}}</dd>
-								</dl>
-							</div>
-							<div class="col-md-4">
-								<label class="pull-right">Total</label>
-								<h3 class="amount">{{TotalDue | currency: 'P'}}</h3>
-							</div>
-						</div>
+			<div class="list-group-canvas">
+				<div class="list-group" ng-hide="hasBasicInfo || hasContactInfo">
+					<div class="list-group-item list-group-header">
+						<label for="">Summary</label>
 					</div>
-				<div class="list-group-canvas">
 					<div class="list-group-item">
-						<div class="well">
-							<span>No information to display</span>
+						<dl class="dl-horizontal">
+							<dt>Name</dt>
+							<dd>{{ActiveStudent.name}}</dd>
+							<dt>ID</dt>
+							<dd>{{ActiveStudent.id}}</dd>
+							<dt>Year Level</dt>
+							<dd>{{ActiveStudent.yearlevel}}</dd>
+						</dl>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Fee Breakdown</h5>
+					</div>
+					<div class="list-group-item">
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Fee</th>
+									<th class="text-center">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>amount</td>
+									<td>amount</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-canvas">
+						<div class="list-group-item">
+							<div class="well">
+								<span>No information to display</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -94,7 +105,7 @@
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
 					</div>
-					<div class="list-group-item" ng-repeat="yearLevel in YearLevels">
+					<div class="list-group-item" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel">
 						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{yearLevel.educ_level_id}}</span> | <span>{{yearLevel.id}}</span></p>
@@ -117,7 +128,7 @@
 					<div class="list-group-item" ng-repeat="section in Sections">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{section.year_level_id}}</span> | <span>{{sections.program}}</span></p>
+						<span>{{section.year_level_id}}</span> | <span>{{section.program}}</span></p>
 					</div>
 				</div>
 			</div>
@@ -135,9 +146,44 @@
 						Loading...
 					</div>
 					<div class="list-group-item" ng-repeat="paymentScheme in PaymentSchemes">
-						<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
+						<div class="row">
+							<div class="col-md-6">
+								<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
+								<p class="list-group-item-text">
+									<span>{{paymentScheme.amount | currency:'P'}}</span>
+									x <span>{{paymentScheme.payment_frequency}}</span>
+									<span ng-if="paymentScheme.interest_charge">
+									+ <span>{{paymentScheme.interest_charge}}</span> 
+									<span>{{paymentScheme.interest_charge<0?'discount':'interest'}}</span>
+									</span>
+								</p>
+							</div>
+							<div class="col-md-6">
+								<h3 class="pull-right">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency: 'P'}}</h3>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>			
+			<div class="list-group" ng-show="ActiveStep===5">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">Select Discount</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>Discounts</h5>
+					</div>
+					<div class="list-group-item text-center" ng-if="!Sections.length">
+						Loading...
+					</div>
+					<div class="list-group-item" ng-repeat="discount in Discounts">
+						<h4 class="list-group-item-heading">{{discount.name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{paymentScheme.payment_frequency}}</span> | <span>{{paymentScheme.amount}}</span></p>
+						<span>{{discount.type}}</span> | <span>{{discount.amount}}</span>
+						</p>
 					</div>
 				</div>
 			</div>
