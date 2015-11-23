@@ -30,6 +30,8 @@
 							<dd>{{ActiveStudent.id}}</dd>
 							<dt>Year Level</dt>
 							<dd>{{ActiveStudent.yearlevel}}</dd>
+							<dt>Selected Year Level</dt>
+							<dd>{{ActiveLevel.id}}</dd>
 						</dl>
 					</div>
 					<div class="list-group-item list-group-header">
@@ -105,7 +107,7 @@
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
 					</div>
-					<div class="list-group-item" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel">
+					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel" ng-click="setSelectedLevel(yearLevel)">
 						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{yearLevel.educ_level_id}}</span> | <span>{{yearLevel.id}}</span></p>
@@ -125,7 +127,7 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item" ng-repeat="section in Sections">
+					<div class="list-group-item" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.year_level_id}}</span> | <span>{{section.program}}</span></p>

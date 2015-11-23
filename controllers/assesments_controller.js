@@ -9,6 +9,8 @@ define(['app','api'], function (app) {
 			$scope.ActiveStep=1;
 			$scope.SelectedStudent={};
 			$scope.ActiveStudent={};
+			$scope.SelectedLevel={};
+			$scope.ActiveLevel={};
 			$scope.ActiveOrder = null;
 			};
 			$scope.init();
@@ -63,9 +65,9 @@ define(['app','api'], function (app) {
 					}
 				};
 			}
-			//if($scope.ActiveStep===2){
-				//$scope.contactInfo();
-			//}
+			if($scope.ActiveStep===2){
+				$scope.ActiveLevel = $scope.SelectedLevel;
+			}
 			//if($scope.ActiveStep===3){
 				//$scope.sendInfo();
 			//};
@@ -91,6 +93,13 @@ define(['app','api'], function (app) {
 			$scope.filterYearLevel = function(yearlevel){
 				return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+2;
 			}
+			$scope.setSelectedLevel=function(yearLevel){
+				$scope.SelectedLevel = {
+										id: yearLevel.id,
+										educ_level_id: yearLevel.educ_level_id,
+										name: yearLevel.name
+									   };
+			};
 		};
     }]);
 });
