@@ -11,6 +11,8 @@ define(['app','api'], function (app) {
 			$scope.ActiveStudent={};
 			$scope.SelectedLevel={};
 			$scope.ActiveLevel={};
+			$scope.SelectedSection={};
+			$scope.ActiveSection={};
 			$scope.ActiveOrder = null;
 			};
 			$scope.init();
@@ -28,7 +30,8 @@ define(['app','api'], function (app) {
 				$scope.Students = response.data;
 			});
 			$scope.YearLevels=[];
-			api.GET('year_levels',function success(response){
+			var data={limit:13};
+			api.GET('year_levels',data,function success(response){
 				console.log(response.data);
 				$scope.YearLevels = response.data;
 			});
@@ -37,28 +40,22 @@ define(['app','api'], function (app) {
 				console.log(response.data);
 				$scope.Sections = response.data;
 			});
+			$scope.Tuitions=[];
 			$scope.PaymentSchemes=[];
-			$scope.Tuitions=[];
-			api.GET('tuition',function success(response){
-				console.log(response.data);
-				$scope.Tuitions = response.data;
-				$scope.PaymentSchemes=$scope.Tuitions[0].schemes;
-				
-			});
 			$scope.Discounts=[];
-			$scope.Tuitions=[];
 			api.GET('tuition',function success(response){
 				console.log(response.data);
 				$scope.Tuitions = response.data;
-				$scope.Discounts=$scope.Tuitions[0].discounts;
-				
 			});
 			$scope.nextStep = function(){
 			if($scope.ActiveStep===1){
 				$scope.ActiveStudent = $scope.SelectedStudent;
 				$scope.ActiveOrder = null;
+				
+				console.log($scope.ActiveStudent,$scope.YearLevels);
 				for(var i in $scope.YearLevels){
 					var y = $scope.YearLevels[i];
+					console.log(y);
 					if(y.id === $scope.ActiveStudent.yearlevel){
 						$scope.ActiveOrder=y.order;
 						break;
@@ -68,9 +65,20 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep===2){
 				$scope.ActiveLevel = $scope.SelectedLevel;
 			}
-			//if($scope.ActiveStep===3){
-				//$scope.sendInfo();
-			//};
+			if($scope.ActiveStep===3){
+				$scope.ActiveSection = $scope.SelectedSection;
+				$scope.ActiveTuition = null;
+				for(var i in $scope.Tuitions){
+					var t = $scope.Tuitions[i];
+					if(t.year_level_id===$scope.ActiveLevel.id && t.program===$scope.ActiveSection.program){
+						$scope.ActiveTuition=t;
+						break;
+					}
+				};
+				$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
+				$scope.Discounts=$scope.ActiveTuition.discounts;
+				
+			};
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;
 			}
@@ -99,6 +107,9 @@ define(['app','api'], function (app) {
 										educ_level_id: yearLevel.educ_level_id,
 										name: yearLevel.name
 									   };
+			};
+			$scope.setSelectedSection=function(section){
+				$scope.SelectedSection = section;
 			};
 		};
     }]);

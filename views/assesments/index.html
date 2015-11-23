@@ -31,7 +31,9 @@
 							<dt>Year Level</dt>
 							<dd>{{ActiveStudent.yearlevel}}</dd>
 							<dt>Selected Year Level</dt>
-							<dd>{{ActiveLevel.id}}</dd>
+							<dd>{{ActiveLevel.id}}</dd>							
+							<dt>Selected Section</dt>
+							<dd>{{ActiveSection.name}}</dd>
 						</dl>
 					</div>
 					<div class="list-group-item list-group-header">
@@ -127,7 +129,7 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}">
+					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}" ng-click="setSelectedSection(section)">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.year_level_id}}</span> | <span>{{section.program}}</span></p>
