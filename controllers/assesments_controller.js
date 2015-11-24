@@ -116,7 +116,8 @@ define(['app','api'], function (app) {
 							$scope.TotalDiscount = $scope.TotalDiscount + amount;
 						}
 					}
-				}	
+				}
+				$scope.TotalDiscount = $scope.TotalDiscount*-1;
 			}
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;

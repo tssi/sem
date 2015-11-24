@@ -12,11 +12,11 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div class="list-group-canvas">
-				<div class="list-group">
-					<div class="list-group-item list-group-header">
-						<label for="">Summary</label>
-					</div>
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<label for="">Summary</label>
+				</div>
+				<div class="list-group-canvas">
 					<div class="list-group-item">
 						<dl class="dl-horizontal">
 							<dt>ID</dt>
@@ -70,7 +70,7 @@
 								</tr>
 								<tr ng-if="ActiveScheme.interest_charge<0">
 									<td>{{ActiveScheme.name}} Discount</td>
-									<td class="text-right">{{ActiveScheme.amount | currency:'P'}}</td>
+									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
 								</tr>
 								<tr ng-if="TotalDiscount">
 									<td>
@@ -86,14 +86,7 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
-					<div class="list-group-canvas" ng-show="!hasInfo">
-						<div class="list-group-item">
-							<div class="well">
-								<span>No information to display</span>
-							</div>
-						</div>
-					</div>
+					</div>		
 				</div>
 			</div>
 		</div>
@@ -132,11 +125,11 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('level')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">Select Level</label>
+					<label for="">{{Steps[1].title}}</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>Levels</h5>
+						<h5>{{Steps[1].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
@@ -152,11 +145,11 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('section')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">Select Section</label>
+					<label for="">{{Steps[2].title}}</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>Sections</h5>
+						<h5>{{Steps[2].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
@@ -172,11 +165,11 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">Select Payment Scheme</label>
+					<label for="">{{Steps[3].title}}</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>Payment Schemes</h5>
+						<h5>{{Steps[3].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
@@ -206,11 +199,11 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('discount')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">Select Discount</label>
+					<label for="">{{Steps[4].title}}</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>Discounts</h5>
+						<h5>{{Steps[4].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
@@ -227,7 +220,7 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">Confirmation</label>
+					<label for="">{{Steps[5].title}}</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item">
