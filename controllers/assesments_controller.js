@@ -59,7 +59,6 @@ define(['app','api'], function (app) {
 				console.log($scope.ActiveStudent,$scope.YearLevels);
 				for(var i in $scope.YearLevels){
 					var y = $scope.YearLevels[i];
-					console.log(y);
 					if(y.id === $scope.ActiveStudent.yearlevel){
 						$scope.ActiveOrder=y.order;
 						break;
@@ -82,16 +81,31 @@ define(['app','api'], function (app) {
 				$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
 				$scope.Discounts=$scope.ActiveTuition.discounts;
 				
+				
 			};
 			if($scope.ActiveStep===4){
 				$scope.ActiveScheme= $scope.SelectedScheme;
 			}
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscount= $scope.SelectedDiscount;
-				for(){
-				
-				
-				};	
+				$scope.TotalDiscount = 0;
+				for(var i in $scope.ActiveDiscount.fees_applicable){
+					var d = $scope.ActiveDiscount.fees_applicable[i];
+					for(var t in $scope.ActiveTuition.fees){
+						var f = $scope.ActiveTuition.fees[t];
+						var amount = 0;
+						if(f.id===d || d==='all'){
+							if($scope.ActiveDiscount.type==='percent'){
+								amount=($scope.ActiveDiscount.amount/100) * f.amount;
+							}
+							if($scope.ActiveDiscount.type==='peso'){
+								amount=$scope.ActiveDiscount.amount;
+							}
+							console.log($scope.ActiveDiscount.type,amount,f.amount);
+							$scope.TotalDiscount = $scope.TotalDiscount + amount;
+						}
+					}
+				}	
 			}
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;

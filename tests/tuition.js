@@ -31,7 +31,7 @@ define(['model'],function($model){
 						  "type": "percent",
 						  "amount": 50,
 						  "fees_applicable": [
-							"TUI"
+							"TUI","MSC"
 						  ]
 						},
 						{

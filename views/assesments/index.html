@@ -48,7 +48,7 @@
 							<tbody>
 								<tr ng-repeat="fee in ActiveTuition.fees">
 									<td>{{fee.name}}</td>
-									<td>{{fee.amount}}</td>
+									<td>{{fee.amount | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -65,9 +65,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="discount in ActiveTuition.discounts">
-									<td>{{discount.name}}</td>
-									<td>{{discount.amount}}</td>
+								<tr>
+									<td>Discount 
+									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount | currency: 'P'}}%</span>
+									<span ng-if="ActiveDiscount.type==='peso'">P{{ActiveDiscount.amount | currency: 'P'}}</span> 
+									<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
+									<span ng-if="fee==='all'">fees</span>
+									<span ng-if="!$last"> ,</span>
+									</span>)
+									</td>
+									<td>{{TotalDiscount | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>
