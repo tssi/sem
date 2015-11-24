@@ -12,13 +12,8 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div class="list-group" ng-show="hasBasicInfo || hasContactInfo">
-				<div class="list-group-item list-group-header">
-					<label for="">Summary</label>
-				</div>
-			</div>
 			<div class="list-group-canvas">
-				<div class="list-group" ng-hide="hasBasicInfo || hasContactInfo">
+				<div class="list-group">
 					<div class="list-group-item list-group-header">
 						<label for="">Summary</label>
 					</div>
@@ -31,7 +26,7 @@
 							<dt>Year Level</dt>
 							<dd>{{ActiveLevel.id}}</dd>							
 							<dt>Selected Section</dt>
-							<dd>{{ActiveSection.name}}</dd>
+							<dd>{{ActiveSection.name}} {{ActiveSection.program}}</dd>
 							</dl>
 					</div>
 					<div class="list-group-item list-group-header">
@@ -48,7 +43,7 @@
 							<tbody>
 								<tr ng-repeat="fee in ActiveTuition.fees">
 									<td>{{fee.name}}</td>
-									<td>{{fee.amount | currency: 'P'}}</td>
+									<td class="text-right">{{fee.amount | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -65,6 +60,14 @@
 								</tr>
 							</thead>
 							<tbody>
+								<tr ng-if="ActiveScheme.interest_charge>0">
+									<td>Interest Charge</td>
+									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
+								</tr>
+								<tr ng-if="ActiveScheme.interest_charge<0">
+									<td>Amount Discount</td>
+									<td>{{ActiveScheme.name}} Discount</td>
+								</tr>
 								<tr>
 									<td>Discount 
 									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount | currency: 'P'}}%</span>
@@ -74,12 +77,12 @@
 									<span ng-if="!$last"> ,</span>
 									</span>)
 									</td>
-									<td>{{TotalDiscount | currency: 'P'}}</td>
+									<td class="text-right">{{TotalDiscount | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-canvas">
+					<div class="list-group-canvas" ng-show="!hasInfo">
 						<div class="list-group-item">
 							<div class="well">
 								<span>No information to display</span>

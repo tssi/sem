@@ -18,6 +18,10 @@ define(['app','api'], function (app) {
 			$scope.SelectedDiscount={};
 			$scope.ActiveDiscount={};
 			$scope.ActiveOrder = null;
+			//$scope.hasInfo = false;
+			//$scope.hasStudentInfo = false;
+			//$scope.hasFeeInfo = false;
+			//$scope.hasDiscountInfo = false;
 			};
 			$scope.init();
 			$scope.Steps = [
