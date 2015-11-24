@@ -12,280 +12,240 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div class="list-group" ng-show="hasBasicInfo || hasContactInfo">
+			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
 				</div>
 				<div class="list-group-canvas">
-				</div>
-			</div>
-			<div class="list-group" ng-hide="hasBasicInfo || hasContactInfo">
-				<div class="list-group-item list-group-header">
-					<label for="">Summary</label>
-				</div>
-				<div class="list-group-canvas">
-					<div class="list-group-item">
-						<div class="well">
-							<span>No information to display</span>
+					<div class="list-group-item" ng-show="hasStudentInfo || hasLevelInfo">
+						<div class="row">
+							<div class="col-md-8">
+								<dl class="dl-horizontal">
+									<dt>Student</dt>
+									<dd>{{ActiveStudent.id}} <span ng-if="ActiveStudent.id">| {{ActiveStudent.name}}</span></dd>
+									<dt ng-if="hasLevelInfo">Level / Section</dt>
+									<dd ng-if="hasLevelInfo">{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>
+									<dt ng-if="hasSchemeInfo">Payment Scheme</dt>
+									<dd ng-if="hasSchemeInfo">{{ActiveScheme.name}}</dd>	
+								</dl>
+							</div>
+							<div class="col-md-4">
+								<label class="pull-right">Total</label>
+								<h3 class="amount">{{TotalAmount | currency: 'P'}}</h3>
+							</div>
 						</div>
 					</div>
+					<div class="list-group-item list-group-header" ng-show="hasSectionInfo">
+						<h5>Fee Breakdown</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasSectionInfo">
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Fee</th>
+									<th class="text-center">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="fee in ActiveTuition.fees">
+									<td>{{fee.name}}</td>
+									<td class="text-right">{{fee.amount | currency: 'P'}}</td>
+								</tr>
+								<tr ng-if="ActiveTuition.fees.length">
+									<td>Total</td>
+									<td class="text-right">{{TotalDue | currency:'P'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item list-group-header" ng-show="hasAdjustmentInfo">
+						<h5>Adjustments</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasAdjustmentInfo">
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Fee</th>
+									<th class="text-center">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-if="ActiveScheme.interest_charge>0">
+									<td>Interest Charge</td>
+									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
+								</tr>
+								<tr ng-if="ActiveScheme.interest_charge<0">
+									<td>{{ActiveScheme.name}} Discount</td>
+									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
+								</tr>
+								<tr ng-if="TotalDiscount">
+									<td>
+									Discount 
+									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
+									<span ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency: 'P'}}</span> 
+									<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
+									<span ng-if="fee==='all'">fees</span>
+									<span ng-if="!$last"> ,</span>
+									</span>)
+									</td>
+									<td class="text-right">{{TotalDiscount | currency: 'P'}}</td>
+								</tr>
+								<tr ng-if="TotalAdjustment">
+									<td>Total Adjustment</td>
+									<td class="text-right">{{TotalAdjustment | currency: 'P'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item" ng-show="!hasInfo">
+						<div class="well">
+							<span>No Information</span>
+						</div>
+					</div>					
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
-				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
-				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=3,'glyphicon-ok': ActiveStep===3}" aria-hidden="true"></span>
-				</button>
-				<div class="list-group" ng-show="ActiveStep===1">
-				  <div class="list-group-item list-group-header">
-						<button class="btn btn-xs btn-danger" ng-click="clearField()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-						<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-						<label>Basic Information</label>
-				  </div>
-				  <div class="list-group-canvas">
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-6">
-									<label for=""> Department</label>
-									<div class="btn-group btn-group-justified">
-									  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
-										<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
-									  </div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label for=""> Level</label>
-									<select name="" id="" class="form-control"  ng-model="level">
-										<option value="">Select Level</option>
-										<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
-										</option>
-									</select>
-								</div>
+			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
+			<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}" aria-hidden="true"></span>
+			</button>
+			<div class="list-group" ng-show="ActiveStep===1">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('student')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label>{{Steps[0].title}}</label>
+				</div>
+				<div class="list-group-canvas list-group-search-results">
+					<div class="list-group-item list-group-header">
+						<h5>{{Steps[0].description}}</h5>
+					</div>
+					<div class="list-group-item text-center" ng-if="!Students.length">
+						Loading...
+					</div>
+					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelecetedStudent(student)">
+						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{student.id}}</span> | <span>{{student.year_level_id}}</span></p>
+					</div>
+				</div>
+				<div class="list-group-item list-group-search-box">
+					<div class="input-group"> 
+						<div class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></div>
+						<input type="text" class="form-control" placeholder="Search" ng-model="searchStudent"/>
+						<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearchStudent()"><span class="glyphicon glyphicon-remove"></span></button></div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===2">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('level')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[1].title}}</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>{{Steps[1].description}}</h5>
+					</div>
+					<div class="list-group-item text-center" ng-if="!YearLevels.length">
+						Loading...
+					</div>
+					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel" ng-click="setSelectedLevel(yearLevel)">
+						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{yearLevel.educ_level_id}}</span> | <span>{{yearLevel.id}}</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===3">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('section')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[2].title}}</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>{{Steps[2].description}}</h5>
+					</div>
+					<div class="list-group-item text-center" ng-if="!Sections.length">
+						Loading...
+					</div>
+					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}" ng-click="setSelectedSection(section)">
+						<h4 class="list-group-item-heading">{{section.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{section.year_level_id}}</span> | <span>{{section.program}}</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===4">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[3].title}}</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>{{Steps[3].description}}</h5>
+					</div>
+					<div class="list-group-item text-center" ng-if="!Sections.length">
+						Loading...
+					</div>
+					<div class="list-group-item ng-class:{active:paymentScheme.name===SelectedScheme.name}" ng-repeat="paymentScheme in PaymentSchemes" ng-click="setSelectedScheme(paymentScheme)">
+						<div class="row">
+							<div class="col-md-6">
+								<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
+								<p class="list-group-item-text">
+									<span>{{paymentScheme.amount | currency:'P'}}</span>
+									x <span>{{paymentScheme.payment_frequency}}</span>
+									<span ng-if="paymentScheme.interest_charge">
+									<span ng-show="paymentScheme.interest_charge>0">+</span> <span>{{paymentScheme.interest_charge}}</span> 
+									<span>{{paymentScheme.interest_charge<0?'discount':'interest'}}</span>
+									</span>
+								</p>
+							</div>
+							<div class="col-md-6">
+								<h3 class="pull-right">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency: 'P'}}</h3>
 							</div>
 						</div>
+						
 					</div>
+				</div>
+			</div>			
+			<div class="list-group" ng-show="ActiveStep===5">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('discount')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[4].title}}</label>
+				</div>
+				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>Name</h5>
+						<h5>{{Steps[4].description}}</h5>
 					</div>
+					<div class="list-group-item text-center" ng-if="!Sections.length">
+						Loading...
+					</div>
+					<div class="list-group-item ng-class:{active:discount.name===SelectedDiscount.name}" ng-repeat="discount in Discounts" ng-click="setSelectedDiscount(discount)">
+						<h4 class="list-group-item-heading">{{discount.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{discount.type}}</span> | <span>{{discount.amount}}</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===6">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[5].title}}</label>
+				</div>
+				<div class="list-group-canvas">
 					<div class="list-group-item">
 						<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">First</label>
-											<input type="text" class="form-control" placeholder="Given name" ng-model="firstName">
-										</div>
-										<div class="col-md-6">
-											<label for="">Middle</label>
-											<input type="text" class="form-control" placeholder="Middle name" ng-model="middleName">
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">Last</label>
-											<input type="text" class="form-control" placeholder="Family name" ng-model="lastName">
-										</div>
-										<div class="col-md-6">
-											<label for="">Suffix</label>
-											<input type="text" class="form-control" placeholder="Jr., III" ng-model="suffix">
-										</div>
-									</div>
-								</div>
-					</div>
-					<div class="list-group-item list-group-header">
-						<h5>Biological</h5>
-					</div>
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-6">
-									<label for=""> Gender</label>
-									<div class="btn-group btn-group-justified">
-									  <div class="btn-group">
-										<button type="button" class="btn btn-default ng-class:{'btn-primary': gender===('M')}" ng-click="getGender('M')">Male</button>
-									  </div>
-									  <div class="btn-group">
-										<button type="button" class="btn btn-default ng-class:{'btn-primary': gender===('F')}" ng-click="getGender('F')">Female</button>
-									  </div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label for=""> Birthday</label>
-									<input type="text" class="form-control" placeholder="mm/dd/yyy" ng-model="birthday"/>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-12">
-									<label for=""> Birth Place</label>
-									<input type="text" class="form-control" placeholder="Address" ng-model="birthPlace"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item list-group-header">
-						<h5>Social</h5>
-					</div>
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-6">
-									<label for=""> Religion</label>
-									<select name="" id="" class="form-control" ng-model="religion">
-										<option value="">Select Religion</option>
-										<option value="RC">Roman Catholic
-										</option>
-									</select>
-								</div>
-								<div class="col-md-6">
-									<label for=""> Citizenship</label>
-									<select name="" id="" class="form-control" ng-model="citizenship">
-										<option value="">Select Citizenship</option>
-										<option value="Fil">Filipino
-										</option>
-									</select>
-								</div>
-							</div>
+							<h5>Enter Confirmation Code</h5>
+							<input type="text" class="form-control" placeholder="See Code in the Summary" />
 						</div>
 					</div>
 				</div>
-				</div>
-				<div class="list-group" ng-show="ActiveStep===2">
-					<div class="list-group-item list-group-header">
-						<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-						<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-						<label for="">Contact Information</label>
-					</div>
-						<div class="list-group-canvas">
-							<div class="list-group-item list-group-header">
-								<h5>Contact Number</h5>
-							</div>
-							<div class="list-group-item">
-							<div class="form-group">
-								<div class="row">
-									<div class="col-md-6">
-										<label for="">Landline</label>
-										<input type="text" class="form-control" placeholder="Landline Number" ng-model="landline"/>
-									</div>
-									<div class="col-md-6">
-										<label for="">Mobile</label>
-										<input type="text" class="form-control" placeholder="Mobile Number" ng-model="mobile"/>
-									</div>
-								</div>
-							</div>	
-							</div>
-							<div class="list-group-item list-group-header">
-								<h5>Current Address</h5>
-							</div>
-							<div class="list-group-item">
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="currentCountry">
-												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="currentProvince">
-												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter:{ country_id: currentCountry}" ng-if="currentCountry">{{provinces.name}}</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="currentCity">
-												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: currentProvince}" ng-if="currentProvince">{{cities.name}}</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Barangay</label>
-											<input type="text" class="form-control" placeholder="Barangay" ng-model="currentBrgy"/>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-12">
-											<label for="">Address</label>
-											<input type="text" class="form-control" placeholder="Address" ng-model="currentAddrs"/>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="list-group-item list-group-header">
-								<h5>Home Address</h5>
-							</div>
-							<div class="list-group-item">
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="homeCountry">
-												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="homeProvince">
-												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter: {country_id: homeCountry}">{{provinces.name}}</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="homeCity">
-												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: homeProvince}">{{cities.name}}</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Barangay</label>
-											<input type="text" class="form-control" placeholder="Barangay" ng-model="homeBrgy"/>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-12">
-											<label for="">Address</label>
-											<input type="text" class="form-control" placeholder="Address" ng-model="homeAddrs"/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-				</div>
-				<div class="list-group" ng-show="ActiveStep===3">
-					<div class="list-group-item list-group-header">
-						<button class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-						<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-						<label for="">Confirmation</label>
-					</div>
-					<div class="list-group-canvas">
-						<div class="list-group-item">
-							<div class="form-group">
-								<h5>Enter Confirmation Code</h5>
-								<input type="text" class="form-control" placeholder="See Code in the Summary" />
-							</div>
-						</div>
-					</div>
-				</div>
+			</div>
 		</div>
 	</div>
 </div>
