@@ -25,12 +25,12 @@ define(['app','api'], function (app) {
 			};
 			$scope.init();
 			$scope.Steps = [
-				{id:1, description:"Select Student"},
-				{id:2, description:"Select Level"},
-				{id:3, description:"Select Section"},
-				{id:4, description:"Select Payment Scheme"},
-				{id:5, description:"Select Discount"},
-				{id:6, description:"Confirmation"}
+				{id:1, title:"Student", description:"Select Student"},
+				{id:2, title:"Level", description:"Select Level"},
+				{id:3, title:"Section", description:"Select Section"},
+				{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
+				{id:5, title:"Discount", description:"Select Discount"},
+				{id:6, title:"Confirmation", description:"Confirmation"}
 			];
 			$scope.Students=[];
 			api.GET('students',function success(response){
@@ -82,13 +82,20 @@ define(['app','api'], function (app) {
 						break;
 					}
 				};
+				$scope.TotalDue=0;	
+				for(var i in $scope.ActiveTuition.fees){
+					var a = $scope.ActiveTuition.fees[i]
+					$scope.TotalDue = $scope.TotalDue + a.amount;
+				};
 				$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
 				$scope.Discounts=$scope.ActiveTuition.discounts;
 				
 				
+							
 			};
 			if($scope.ActiveStep===4){
 				$scope.ActiveScheme= $scope.SelectedScheme;
+				
 			}
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscount= $scope.SelectedDiscount;

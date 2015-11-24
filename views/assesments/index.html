@@ -45,6 +45,10 @@
 									<td>{{fee.name}}</td>
 									<td class="text-right">{{fee.amount | currency: 'P'}}</td>
 								</tr>
+								<tr ng-if="ActiveTuition.fees.length">
+									<td>Total</td>
+									<td class="text-right">{{TotalDue | currency:'P'}}</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -68,8 +72,9 @@
 									<td>{{ActiveScheme.name}} Discount</td>
 									<td class="text-right">{{ActiveScheme.amount | currency:'P'}}</td>
 								</tr>
-								<tr>
-									<td>Discount 
+								<tr ng-if="TotalDiscount">
+									<td>
+									Discount 
 									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
 									<span ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency: 'P'}}</span> 
 									<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
@@ -100,11 +105,11 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('student')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label>Student</label>
+					<label>{{Steps[0].title}}</label>
 				</div>
 				<div class="list-group-canvas list-group-search-results">
 					<div class="list-group-item list-group-header">
-						<h5>Select Student</h5>
+						<h5>{{Steps[0].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Students.length">
 						Loading...
