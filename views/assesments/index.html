@@ -18,16 +18,22 @@
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item">
-						<dl class="dl-horizontal">
-							<dt>ID</dt>
-							<dd>{{ActiveStudent.id}}</dd>
-							<dt>Name</dt>
-							<dd>{{ActiveStudent.name}}</dd>
-							<dt>Year Level</dt>
-							<dd>{{ActiveLevel.id}}</dd>							
-							<dt>Selected Section</dt>
-							<dd>{{ActiveSection.name}} {{ActiveSection.program}}</dd>
-						</dl>
+						<div class="row">
+							<div class="col-md-8">
+								<dl class="dl-horizontal">
+									<dt>ID</dt>
+									<dd>{{ActiveStudent.id}}</dd>
+									<dt>Name</dt>
+									<dd>{{ActiveStudent.name}}</dd>
+									<dt>Level / Section</dt>
+									<dd>{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>	
+								</dl>
+							</div>
+							<div class="col-md-4">
+								<label class="pull-right">Total</label>
+								<h3 class="amount">{{TotalDue | currency: 'P'}}</h3>
+							</div>
+						</div>
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Fee Breakdown</h5>
