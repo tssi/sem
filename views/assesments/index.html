@@ -70,8 +70,8 @@
 								</tr>
 								<tr>
 									<td>Discount 
-									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount | currency: 'P'}}%</span>
-									<span ng-if="ActiveDiscount.type==='peso'">P{{ActiveDiscount.amount | currency: 'P'}}</span> 
+									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
+									<span ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency: 'P'}}</span> 
 									<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
 									<span ng-if="fee==='all'">fees</span>
 									<span ng-if="!$last"> ,</span>
