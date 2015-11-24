@@ -3,25 +3,56 @@ define(['app','api'], function (app) {
     app.register.controller('AssesmentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
 		$scope.index = function(){
 			$scope.init = function(){
-			$scope.Student={};
-			$scope.hasBasicInfo=false;
-			$scope.hasContactInfo=false;
-			$scope.ActiveStep=1;
-			$scope.SelectedStudent={};
-			$scope.ActiveStudent={};
-			$scope.SelectedLevel={};
-			$scope.ActiveLevel={};
-			$scope.SelectedSection={};
-			$scope.ActiveSection={};
-			$scope.SelectedScheme={};
-			$scope.ActiveScheme={};
-			$scope.SelectedDiscount={};
-			$scope.ActiveDiscount={};
-			$scope.ActiveOrder = null;
-			$scope.hasInfo = false;
-			$scope.hasStudentInfo = false;
-			$scope.hasFeeInfo = false;
-			$scope.hasDiscountInfo = false;
+				$scope.Student={};
+				$scope.hasBasicInfo=false;
+				$scope.hasContactInfo=false;
+				$scope.ActiveStep=1;
+				$scope.SelectedStudent={};
+				$scope.ActiveStudent={};
+				$scope.SelectedLevel={};
+				$scope.ActiveLevel={};
+				$scope.SelectedSection={};
+				$scope.ActiveSection={};
+				$scope.SelectedScheme={};
+				$scope.ActiveScheme={};
+				$scope.SelectedDiscount={};
+				$scope.ActiveDiscount={};
+				$scope.ActiveOrder = null;
+				$scope.TotalAmount = 0;
+				$scope.TotalDue = 0;
+				$scope.TotalAdjustment = 0;
+				$scope.TotalDiscount = 0;
+				$scope.hasInfo = false;
+				$scope.hasStudentInfo = false;
+				$scope.hasLevelInfo = false;
+				$scope.hasSectionInfo = false;
+				$scope.hasSchemeInfo = false;
+				$scope.hasAdjustmentInfo = false;
+				$scope.$watch('hasStudentInfo',updateHasInfo);
+				$scope.$watch('hasLevelInfo',updateHasInfo);
+				$scope.$watch('hasSectionInfo',updateHasInfo);
+				$scope.$watch('hasSchemeInfo',updateHasInfo);
+				$scope.$watch('hasAdjustmentInfo',updateHasInfo);
+				
+				$scope.$watch('ActiveStudent', function(){
+					$scope.hasStudentInfo = $scope.ActiveStudent.id;
+				});
+				$scope.$watch('ActiveLevel',function(){
+					$scope.hasLevelInfo = $scope.ActiveLevel.id;
+				});
+				$scope.$watch('ActiveSection',function(){
+					$scope.hasSectionInfo = $scope.ActiveSection.id;
+				});
+				$scope.$watch('ActiveScheme',function(){
+					$scope.hasSchemeInfo = $scope.ActiveScheme.id;
+					$scope.hasAdjustmentInfo = $scope.hasAdjustmentInfo || $scope.ActiveScheme.interest_charge;
+				});
+				$scope.$watch('TotalDiscount',function(){
+					$scope.hasAdjustmentInfo = $scope.hasAdjustmentInfo || $scope.TotalDiscount;	
+				});
+				function updateHasInfo(){
+					$scope.hasInfo = $scope.hasStudentInfo || $scope.hasLevelInfo || $scope.hasSectionInfo || $scope.hasSchemeInfo || $scope.hasAdjustmentInfo;
+				};
 			};
 			$scope.init();
 			$scope.Steps = [
@@ -100,7 +131,7 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscount= $scope.SelectedDiscount;
 				$scope.TotalDiscount = 0;
-				$scope.TotalDeduction = 0;
+				$scope.TotalAdjustment = 0;
 				$scope.TotalAmount=0;
 				for(var i in $scope.ActiveDiscount.fees_applicable){
 					var d = $scope.ActiveDiscount.fees_applicable[i];
@@ -120,8 +151,26 @@ define(['app','api'], function (app) {
 					}
 				}
 				$scope.TotalDiscount = $scope.TotalDiscount*-1;
-				$scope.TotalDeduction = $scope.TotalDiscount + $scope.ActiveScheme.interest_charge;
-				$scope.TotalAmount=$scope.TotalDue + $scope.TotalDeduction;
+				$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.interest_charge;
+				$scope.TotalAmount=$scope.TotalDue + $scope.TotalAdjustment;
+			}
+			if($scope.ActiveStep===6){
+				$scope.Assesment={
+								  student:$scope.ActiveStudent.id,
+								  tuition:$scope.ActiveTuition.id,
+								  scheme:$scope.ActiveScheme.id,
+								  discount:$scope.ActiveDiscount.id,
+								  totals:{
+										  gross:$scope.TotalDue,
+										  charges:$scope.ActiveScheme.interest_charge,
+										  discounts:$scope.TotalAdjustment,
+										  net:$scope.TotalAmount
+										 }
+								};
+				api.POST('assessments',$scope.Assesment,function success(response){
+					console.log(response);
+					$scope.init();
+				});
 			}
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;

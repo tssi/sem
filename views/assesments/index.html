@@ -17,16 +17,16 @@
 					<label for="">Summary</label>
 				</div>
 				<div class="list-group-canvas">
-					<div class="list-group-item">
+					<div class="list-group-item" ng-show="hasStudentInfo || hasLevelInfo">
 						<div class="row">
 							<div class="col-md-8">
 								<dl class="dl-horizontal">
 									<dt>Student</dt>
 									<dd>{{ActiveStudent.id}} <span ng-if="ActiveStudent.id">| {{ActiveStudent.name}}</span></dd>
-									<dt>Level / Section</dt>
-									<dd>{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>
-									<dt>Payment Scheme</dt>
-									<dd>{{ActiveScheme.name}}</dd>	
+									<dt ng-if="hasLevelInfo">Level / Section</dt>
+									<dd ng-if="hasLevelInfo">{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>
+									<dt ng-if="hasSchemeInfo">Payment Scheme</dt>
+									<dd ng-if="hasSchemeInfo">{{ActiveScheme.name}}</dd>	
 								</dl>
 							</div>
 							<div class="col-md-4">
@@ -35,10 +35,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="list-group-item list-group-header">
+					<div class="list-group-item list-group-header" ng-show="hasSectionInfo">
 						<h5>Fee Breakdown</h5>
 					</div>
-					<div class="list-group-item">
+					<div class="list-group-item" ng-show="hasSectionInfo">
 						<table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
@@ -58,10 +58,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item list-group-header">
+					<div class="list-group-item list-group-header" ng-show="hasAdjustmentInfo">
 						<h5>Adjustments</h5>
 					</div>
-					<div class="list-group-item">
+					<div class="list-group-item" ng-show="hasAdjustmentInfo">
 						<table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
@@ -90,13 +90,18 @@
 									</td>
 									<td class="text-right">{{TotalDiscount | currency: 'P'}}</td>
 								</tr>
-								<tr ng-if="TotalDeduction">
-									<td>Total Discount</td>
-									<td class="text-right">{{TotalDeduction | currency: 'P'}}</td>
+								<tr ng-if="TotalAdjustment">
+									<td>Total Adjustment</td>
+									<td class="text-right">{{TotalAdjustment | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>
-					</div>		
+					</div>
+					<div class="list-group-item" ng-show="!hasInfo">
+						<div class="well">
+							<span>No Information</span>
+						</div>
+					</div>					
 				</div>
 			</div>
 		</div>
