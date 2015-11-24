@@ -18,10 +18,10 @@ define(['app','api'], function (app) {
 			$scope.SelectedDiscount={};
 			$scope.ActiveDiscount={};
 			$scope.ActiveOrder = null;
-			//$scope.hasInfo = false;
-			//$scope.hasStudentInfo = false;
-			//$scope.hasFeeInfo = false;
-			//$scope.hasDiscountInfo = false;
+			$scope.hasInfo = false;
+			$scope.hasStudentInfo = false;
+			$scope.hasFeeInfo = false;
+			$scope.hasDiscountInfo = false;
 			};
 			$scope.init();
 			$scope.Steps = [
@@ -148,6 +148,30 @@ define(['app','api'], function (app) {
 			};
 			$scope.setSelectedDiscount=function(discount){
 				$scope.SelectedDiscount=discount;
+			};
+			$scope.resetField=function(field){
+				if(field==='student'){
+					$scope.SelectedStudent={};
+					$scope.ActiveStudent={};
+				}	
+				if(field==='level'){
+					$scope.SelectedLevel={};
+					$scope.ActiveLevel={};
+				}	
+				if(field==='section'){
+					$scope.SelectedSection={};
+					$scope.ActiveSection={};
+					$scope.ActiveTuition={};
+				}
+				if(field==='scheme'){
+					$scope.SelectedScheme={};
+					$scope.ActiveScheme={};
+				}	
+				if(field==='discount'){
+					$scope.SelectedDiscount={};
+					$scope.ActiveDiscount={};
+					$scope.TotalDiscount=null;
+				}	
 			};
 		};
     }]);

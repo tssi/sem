@@ -27,7 +27,7 @@
 							<dd>{{ActiveLevel.id}}</dd>							
 							<dt>Selected Section</dt>
 							<dd>{{ActiveSection.name}} {{ActiveSection.program}}</dd>
-							</dl>
+						</dl>
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Fee Breakdown</h5>
@@ -65,8 +65,8 @@
 									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
 								</tr>
 								<tr ng-if="ActiveScheme.interest_charge<0">
-									<td>Amount Discount</td>
 									<td>{{ActiveScheme.name}} Discount</td>
+									<td class="text-right">{{ActiveScheme.amount | currency:'P'}}</td>
 								</tr>
 								<tr>
 									<td>Discount 
@@ -98,7 +98,7 @@
 			</button>
 			<div class="list-group" ng-show="ActiveStep===1">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="resetStudent()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger" ng-click="resetField('student')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label>Student</label>
 				</div>
@@ -125,7 +125,7 @@
 			</div>
 			<div class="list-group" ng-show="ActiveStep===2">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger" ng-click="resetField('level')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">Select Level</label>
 				</div>
@@ -145,7 +145,7 @@
 			</div>
 			<div class="list-group" ng-show="ActiveStep===3">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger" ng-click="resetField('section')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">Select Section</label>
 				</div>
@@ -165,7 +165,7 @@
 			</div>
 			<div class="list-group" ng-show="ActiveStep===4">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">Select Payment Scheme</label>
 				</div>
@@ -184,7 +184,7 @@
 									<span>{{paymentScheme.amount | currency:'P'}}</span>
 									x <span>{{paymentScheme.payment_frequency}}</span>
 									<span ng-if="paymentScheme.interest_charge">
-									+ <span>{{paymentScheme.interest_charge}}</span> 
+									<span ng-show="paymentScheme.interest_charge>0">+</span> <span>{{paymentScheme.interest_charge}}</span> 
 									<span>{{paymentScheme.interest_charge<0?'discount':'interest'}}</span>
 									</span>
 								</p>
@@ -199,7 +199,7 @@
 			</div>			
 			<div class="list-group" ng-show="ActiveStep===5">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="clearField2()"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger" ng-click="resetField('discount')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">Select Discount</label>
 				</div>
