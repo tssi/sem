@@ -31,7 +31,7 @@ define(['model'],function($model){
 						  "type": "percent",
 						  "amount": 50,
 						  "fees_applicable": [
-							"TF"
+							"TUI"
 						  ]
 						},
 						{
@@ -39,6 +39,15 @@ define(['model'],function($model){
 						  "name": "Discount B",
 						  "type": "percent",
 						  "amount": 100,
+						  "fees_applicable": [
+							"all"
+						  ]
+						},
+						{
+						  "id": "DSCC",
+						  "name": "Discount C",
+						  "type": "peso",
+						  "amount": 10,
 						  "fees_applicable": [
 							"all"
 						  ]

@@ -13,6 +13,10 @@ define(['app','api'], function (app) {
 			$scope.ActiveLevel={};
 			$scope.SelectedSection={};
 			$scope.ActiveSection={};
+			$scope.SelectedScheme={};
+			$scope.ActiveScheme={};
+			$scope.SelectedDiscount={};
+			$scope.ActiveDiscount={};
 			$scope.ActiveOrder = null;
 			};
 			$scope.init();
@@ -79,6 +83,16 @@ define(['app','api'], function (app) {
 				$scope.Discounts=$scope.ActiveTuition.discounts;
 				
 			};
+			if($scope.ActiveStep===4){
+				$scope.ActiveScheme= $scope.SelectedScheme;
+			}
+			if($scope.ActiveStep===5){
+				$scope.ActiveDiscount= $scope.SelectedDiscount;
+				for(){
+				
+				
+				};	
+			}
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;
 			}
@@ -110,6 +124,12 @@ define(['app','api'], function (app) {
 			};
 			$scope.setSelectedSection=function(section){
 				$scope.SelectedSection = section;
+			};
+			$scope.setSelectedScheme=function(paymentScheme){
+				$scope.SelectedScheme=paymentScheme;
+			};
+			$scope.setSelectedDiscount=function(discount){
+				$scope.SelectedDiscount=discount;
 			};
 		};
     }]);
