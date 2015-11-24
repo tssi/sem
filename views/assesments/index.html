@@ -21,17 +21,17 @@
 						<div class="row">
 							<div class="col-md-8">
 								<dl class="dl-horizontal">
-									<dt>ID</dt>
-									<dd>{{ActiveStudent.id}}</dd>
-									<dt>Name</dt>
-									<dd>{{ActiveStudent.name}}</dd>
+									<dt>Student</dt>
+									<dd>{{ActiveStudent.id}} <span ng-if="ActiveStudent.id">| {{ActiveStudent.name}}</span></dd>
 									<dt>Level / Section</dt>
-									<dd>{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>	
+									<dd>{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>
+									<dt>Payment Scheme</dt>
+									<dd>{{ActiveScheme.name}}</dd>	
 								</dl>
 							</div>
 							<div class="col-md-4">
 								<label class="pull-right">Total</label>
-								<h3 class="amount">{{TotalDue | currency: 'P'}}</h3>
+								<h3 class="amount">{{TotalAmount | currency: 'P'}}</h3>
 							</div>
 						</div>
 					</div>
@@ -89,6 +89,10 @@
 									</span>)
 									</td>
 									<td class="text-right">{{TotalDiscount | currency: 'P'}}</td>
+								</tr>
+								<tr ng-if="TotalDeduction">
+									<td>Total Discount</td>
+									<td class="text-right">{{TotalDeduction | currency: 'P'}}</td>
 								</tr>
 							</tbody>
 						</table>

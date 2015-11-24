@@ -100,6 +100,8 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscount= $scope.SelectedDiscount;
 				$scope.TotalDiscount = 0;
+				$scope.TotalDeduction = 0;
+				$scope.TotalAmount=0;
 				for(var i in $scope.ActiveDiscount.fees_applicable){
 					var d = $scope.ActiveDiscount.fees_applicable[i];
 					for(var t in $scope.ActiveTuition.fees){
@@ -112,12 +114,14 @@ define(['app','api'], function (app) {
 							if($scope.ActiveDiscount.type==='peso'){
 								amount=$scope.ActiveDiscount.amount;
 							}
-							console.log($scope.ActiveDiscount.type,amount,f.amount);
+							//console.log($scope.ActiveDiscount.type,amount,f.amount);
 							$scope.TotalDiscount = $scope.TotalDiscount + amount;
 						}
 					}
 				}
 				$scope.TotalDiscount = $scope.TotalDiscount*-1;
+				$scope.TotalDeduction = $scope.TotalDiscount + $scope.ActiveScheme.interest_charge;
+				$scope.TotalAmount=$scope.TotalDue + $scope.TotalDeduction;
 			}
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;
