@@ -3,6 +3,7 @@ define(['app','api'], function (app) {
     app.register.controller('AssesmentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
 		$scope.index = function(){
 			$scope.init = function(){
+				$rootScope.__MODULE_NAME = 'Assessment';
 				$scope.Student={};
 				$scope.hasBasicInfo=false;
 				$scope.hasContactInfo=false;

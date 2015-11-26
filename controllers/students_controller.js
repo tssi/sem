@@ -2,6 +2,7 @@
 define(['app','api'], function (app) {
     app.register.controller('StudentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
 		$scope.index = function(){
+			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
 			$scope.Student={};
 			$scope.hasBasicInfo=false;
