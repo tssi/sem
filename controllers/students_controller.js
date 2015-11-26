@@ -11,7 +11,7 @@ define(['app','api'], function (app) {
 			};
 			$scope.init();
 			$scope.Departments=[];
-			api.GET('educ_levels',function success(response){
+			api.GET('educ_levels',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Departments=response.data;	
 			});
@@ -21,22 +21,22 @@ define(['app','api'], function (app) {
 				{id:3, description:"Confirmation"}
 			];
 			$scope.YearLevels=[];
-			api.GET('year_levels',function success(response){
+			api.GET('year_levels',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
-			api.GET('countries',function success(response){
+			api.GET('countries',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Countries = response.data;
 			});
 			$scope.Provinces=[];
-			api.GET('provinces',function success(response){
+			api.GET('provinces',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Provinces = response.data;
 			});
 			$scope.Cities=[];
-			api.GET('cities',function success(response){
+			api.GET('cities',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Cities = response.data;
 			});
