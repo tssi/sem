@@ -5,6 +5,7 @@ define(['app','api'], function (app) {
 			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
 			$scope.Student={};
+			$scope.families=[];
 			$scope.hasBasicInfo=false;
 			$scope.hasContactInfo=false;
 			$scope.ActiveStep=1;
@@ -81,6 +82,7 @@ define(['app','api'], function (app) {
 				$scope.Student.birthplace=$scope.birthPlace;
 				$scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
+				$scope.Student.family=$scope.families;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
@@ -116,6 +118,20 @@ define(['app','api'], function (app) {
 				$scope.homeBrgy = angular.copy($scope.currentBrgy);
 				$scope.homeAddrs = angular.copy($scope.currentAddrs);
 			}
+			$scope.addFamily = function(){
+				var family={
+							type:$scope.relationship,
+							name:$scope.parentName,
+							occupation:$scope.occupation
+						   };
+				$scope.families.push(family);
+				$scope.relationship=null;
+				$scope.parentName=null;
+				$scope.occupation=null;
+			};
+			$scope.removeFamily = function(index){
+				$scope.families.splice(index, 1);
+			};
 			$scope.sendInfo = function(){
 				api.POST('students',$scope.Student,function success(response){
 				console.log(response.data);
@@ -137,6 +153,7 @@ define(['app','api'], function (app) {
 				$scope.gender = null;
 				$scope.birthday = null;
 				$scope.birthPlace = null;
+				$scope.families=[];
 				$scope.religion = null;
 				$scope.citizenship = null;
 			};

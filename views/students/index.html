@@ -55,6 +55,22 @@
 								<dt>Citizenship</dt>
 								<dd>{{Student.citizenship}}</dd>
 						</dl>
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Relationship</th>
+									<th class="text-center">Name</th>
+									<th class="text-center">Occupation</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="family in Student.family">
+									<td>{{family.type}}</td>
+									<td>{{family.name}}</td>
+									<td>{{family.occupation}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
 						<h5>Contact Information</h5>
@@ -189,6 +205,54 @@
 								</div>
 							</div>
 						</div>
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Relationship</th>
+									<th class="text-center">Name</th>
+									<th class="text-center">Occupation</th>
+									<th class="text-center">&nbsp</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="family in families">
+									<td>
+										<select name="" id="" class="form-control" ng-model="family.type">
+											<option value="">Select</option>
+											<option value="Parent">Parent</option>
+											<option value="Gaurdian">Gaurdian</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Full Name" ng-model="family.name"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Occupation" ng-model="family.occupation"/>
+									</td>
+									<td><button class="btn btn-danger btn-sm" ng-click="removeFamily($index)"><span>x</span></button></td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td>
+										<select name="" id="" class="form-control" ng-model="relationship">
+											<option value="">Select Relationship</option>
+											<option value="Parent">Parent</option>
+											<option value="Gaurdian">Gaurdian</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Full Name" ng-model="parentName"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Job Title" ng-model="occupation"/>
+									</td>
+									<td>
+										<button class="btn btn-success btn-sm" ng-click="addFamily()"><span>+</span></button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Social</h5>
