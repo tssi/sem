@@ -108,6 +108,14 @@ define(['app','api'], function (app) {
 				$scope.Student.addressess.push(permanent);
 				$scope.hasContactInfo = true;
 			};
+			$scope.sameAsCurrent = function(){
+				var country = $scope.currentCountry;
+				$scope.homeCountry = country;
+				$scope.homeProvince = angular.copy($scope.currentProvince);
+				$scope.homeCity = angular.copy($scope.currentCity);
+				$scope.homeBrgy = angular.copy($scope.currentBrgy);
+				$scope.homeAddrs = angular.copy($scope.currentAddrs);
+			}
 			$scope.sendInfo = function(){
 				api.POST('students',$scope.Student,function success(response){
 				console.log(response.data);

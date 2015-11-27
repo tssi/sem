@@ -249,16 +249,14 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="currentCountry">
+											<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country.id as country.name for country in Countries | filter:{id:'PH'}">
 												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries | filter:{id:'PH'}">{{countries.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="currentProvince">
+											<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id: currentCountry}">
 												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter:{ country_id: currentCountry}" ng-if="currentCountry">{{provinces.name}}</option>
 											</select>
 										</div>
 									</div>
@@ -267,9 +265,8 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="currentCity">
+											<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:currentProvince}">
 												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: currentProvince}" ng-if="currentProvince">{{cities.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
@@ -288,23 +285,23 @@
 								</div>
 							</div>
 							<div class="list-group-item list-group-header">
-								<h5>Permanent Address</h5>
+								<h5 class="pull-left">Permanent Address</h5>
+								<button class="btn btn-default btn-sm pull-right" ng-click="sameAsCurrent()">SAME AS CURRENT</button>
+								<div class="clearfix"></div>
 							</div>
 							<div class="list-group-item">
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="homeCountry">
-												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
+											<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country.id as country.name for country in Countries">
+											  <option value="">Select Country</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="homeProvince">
+											<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id:homeCountry}">
 												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter: {country_id: homeCountry}">{{provinces.name}}</option>
 											</select>
 										</div>
 									</div>
@@ -313,9 +310,8 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="homeCity">
+											<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:homeProvince}">
 												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: homeProvince}">{{cities.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
