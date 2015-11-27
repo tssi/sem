@@ -251,7 +251,7 @@
 											<label for="">Country</label>
 											<select name="" id="" class="form-control" ng-model="currentCountry">
 												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
+												<option ng-value="countries.id" ng-repeat="countries in Countries | filter:{id:'PH'}">{{countries.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
