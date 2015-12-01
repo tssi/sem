@@ -65,7 +65,14 @@
 				<tbody>
 					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
 						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
-							<input type="text" class="form-control" ng-if="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" ng-if="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
+								<div class="input-group-btn" ng-if="col.state==='write'" ng-show="colIndex===0">
+									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addToSpreadsheet"><span class="glyphicon glyphicon-plus"></span></button>
+									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeToSpreadsheet"><span class="glyphicon glyphicon-remove"></span></button>
+								</div>
+							</div>
+							{{row.$last}}
 							<div ng-if="col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{col.value}}</div>
 						</td>
 					</tr>
