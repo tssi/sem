@@ -1,4 +1,4 @@
-<div class="row-fluid" ng-controller="FeeController">
+<div class="row-fluid" ng-controller="FeeController" ng-init="init()">
 	<button class="btn btn-primary btn-fab bottom right fixed"><span class="glyphicon glyphicon-plus"></span></button>
 	<div class="col-md-4">
 		<div class="list-group"> 
@@ -63,26 +63,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td class="col-md-2">
-							<div class="input-group input-group-sm"> 
-								<input type="text" class="form-control" value="Tuition Fee"/>
-								<div class="input-group-btn">
-									<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-								</div>
-							</div>
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
+					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
+						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
+							<input type="text" class="form-control" ng-if="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
+							<div ng-if="col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{col.value}}</div>
 						</td>
 					</tr>
 					<tr>
