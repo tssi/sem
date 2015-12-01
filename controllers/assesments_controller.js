@@ -235,6 +235,15 @@ define(['app','api'], function (app) {
 					$scope.TotalDiscount=null;
 				}	
 			};
+			$scope.filterStudent=function(student){
+				var searchBox = $scope.searchStudent;
+				var keyword = new RegExp(searchBox,'i');	
+				var test = keyword.test(student.first_name) || keyword.test(student.id);
+				return !searchBox || test;
+			};
+			$scope.clearSearchStudent=function(){
+				$scope.searchStudent=null;
+			};
 		};
     }]);
 });
