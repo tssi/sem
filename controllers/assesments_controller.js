@@ -3,6 +3,7 @@ define(['app','api'], function (app) {
     app.register.controller('AssesmentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
 		$scope.index = function(){
 			$scope.init = function(){
+				$rootScope.__MODULE_NAME = 'Assessment';
 				$scope.Student={};
 				$scope.hasBasicInfo=false;
 				$scope.hasContactInfo=false;
@@ -233,6 +234,15 @@ define(['app','api'], function (app) {
 					$scope.ActiveDiscount={};
 					$scope.TotalDiscount=null;
 				}	
+			};
+			$scope.filterStudent=function(student){
+				var searchBox = $scope.searchStudent;
+				var keyword = new RegExp(searchBox,'i');	
+				var test = keyword.test(student.first_name) || keyword.test(student.id);
+				return !searchBox || test;
+			};
+			$scope.clearSearchStudent=function(){
+				$scope.searchStudent=null;
 			};
 		};
     }]);

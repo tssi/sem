@@ -19,6 +19,13 @@ define(['model'],function($model){
 					  "birthplace": "Malvar",
 					  "religion": "Roman Catholic",
 					  "citizenship": "Filipino",
+					  "family": [
+						{
+						  "type": "parent",
+						  "name": "1234567",
+						  "occupation": "Programmer"
+						}
+					  ],
 					  "contact_numbers": [
 						{
 						  "type": "landline",

@@ -2,15 +2,17 @@
 define(['app','api'], function (app) {
     app.register.controller('StudentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
 		$scope.index = function(){
+			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
 			$scope.Student={};
+			$scope.families=[];
 			$scope.hasBasicInfo=false;
 			$scope.hasContactInfo=false;
 			$scope.ActiveStep=1;
 			};
 			$scope.init();
 			$scope.Departments=[];
-			api.GET('educ_levels',function success(response){
+			api.GET('educ_levels',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Departments=response.data;	
 			});
@@ -20,22 +22,22 @@ define(['app','api'], function (app) {
 				{id:3, description:"Confirmation"}
 			];
 			$scope.YearLevels=[];
-			api.GET('year_levels',function success(response){
+			api.GET('year_levels',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
-			api.GET('countries',function success(response){
+			api.GET('countries',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Countries = response.data;
 			});
 			$scope.Provinces=[];
-			api.GET('provinces',function success(response){
+			api.GET('provinces',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Provinces = response.data;
 			});
 			$scope.Cities=[];
-			api.GET('cities',function success(response){
+			api.GET('cities',{limit:15},function success(response){
 				console.log(response.data);
 				$scope.Cities = response.data;
 			});
@@ -80,6 +82,7 @@ define(['app','api'], function (app) {
 				$scope.Student.birthplace=$scope.birthPlace;
 				$scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
+				$scope.Student.family=$scope.families;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
@@ -107,6 +110,28 @@ define(['app','api'], function (app) {
 				$scope.Student.addressess.push(permanent);
 				$scope.hasContactInfo = true;
 			};
+			$scope.sameAsCurrent = function(){
+				var country = $scope.currentCountry;
+				$scope.homeCountry = country;
+				$scope.homeProvince = angular.copy($scope.currentProvince);
+				$scope.homeCity = angular.copy($scope.currentCity);
+				$scope.homeBrgy = angular.copy($scope.currentBrgy);
+				$scope.homeAddrs = angular.copy($scope.currentAddrs);
+			}
+			$scope.addFamily = function(){
+				var family={
+							type:$scope.relationship,
+							name:$scope.parentName,
+							occupation:$scope.occupation
+						   };
+				$scope.families.push(family);
+				$scope.relationship=null;
+				$scope.parentName=null;
+				$scope.occupation=null;
+			};
+			$scope.removeFamily = function(index){
+				$scope.families.splice(index, 1);
+			};
 			$scope.sendInfo = function(){
 				api.POST('students',$scope.Student,function success(response){
 				console.log(response.data);
@@ -128,6 +153,7 @@ define(['app','api'], function (app) {
 				$scope.gender = null;
 				$scope.birthday = null;
 				$scope.birthPlace = null;
+				$scope.families=[];
 				$scope.religion = null;
 				$scope.citizenship = null;
 			};

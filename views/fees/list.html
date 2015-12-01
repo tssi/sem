@@ -1,0 +1,170 @@
+<div class="row-fluid" ng-controller="FeeController" ng-init="init()">
+	<button class="btn btn-primary btn-fab bottom right fixed"><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="col-md-4">
+		<div class="list-group"> 
+			<div class="list-group-item list-group-header">
+				<label>Fees & Schemes</label>
+			</div>
+			<div class="list-group-canvas list-group-search-results">
+				<div class="list-group-item">
+					<h4 class="list-group-item-heading">Tuition Fees Structure</h4>
+					<p class="list-group-item-text">
+						Kinder to Grade 4
+					</p>
+				</div>
+			</div>
+			<div class="list-group-item list-group-search-box">
+				<div class="input-group"> 
+					<div class="input-group-btn"><button class="btn btn-default" ng-click="confirmSearch()"><span class="glyphicon glyphicon-search"></span></button></div>
+					<input type="text" class="form-control" placeholder="Search" ng-model="searchBooklet"/>
+					<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearch()"><span class="glyphicon glyphicon-remove"></span></button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8">
+	<div class="list-group">
+		<div class="list-group-item list-group-header">
+			<label>Fees & Schemes</label>
+		</div>
+		<div class="list-group-canvas">
+			<div class="list-group-item list-group-header">
+				<h5>Fees Information</h5>
+			</div>
+			<div class="list-group-item list-group-header">
+				<h5 class="pull-left">Fees Structure</h5>
+				<div class="btn-group  pull-right">
+					<button class="btn btn-default"><span class="glyphicon glyphicon-sort"></span></button>
+					<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+					<button class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button>
+				</div>
+				
+				<div class="clearfix"></div>
+			</div>
+			<div class="list-group-item"> 
+				<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>
+							Fees
+						</th>
+						<th>Nursery / Kinder I
+							
+						</th>
+						<th>Kinder II
+							
+						</th>
+						<th> Grade 1 - 4
+							
+						</th>
+						<th>
+							Year Levels
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
+						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
+							<div class="input-group input-group-sm" ng-if="colIndex===0 && col.state==='write'">
+								<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
+								<div class="input-group-btn">
+									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addRow(rowIndex,colIndex)"><span class="glyphicon glyphicon-plus"></span></button>
+									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeRow(rowIndex)"><span class="glyphicon glyphicon-remove"></span></button>
+								</div>
+							</div>
+							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
+							<div class="amount" ng-if="colIndex!=0 && col.state==='read'"   ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
+							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-md-2">
+							Tuition Fee
+						</td>
+						<td class="col-md-2">
+							1,500.00
+						</td>
+						<td class="col-md-2">
+							<input type="number" class="form-control" />
+						</td>
+						<td class="col-md-2">
+							<input type="number" class="form-control" />
+						</td>
+						<td class="col-md-2">
+							<input type="number" class="form-control" />
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>Total</td>
+						<td class="text-right">1,500.00</td>
+						<td>0.00</td>
+						<td>0.00</td>
+						<td>0.00</td>
+					</tr>
+				</tfoot>
+			</table>
+			
+			</div>
+			<div class="list-group-item list-group-header">
+				<h5>Schemes Structure</h5>
+			</div>
+			<div class="list-group-item"> 
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>
+								Schemes
+							</th>
+							<th>Nursery / Kinder I
+							</th>
+							<th>Kinder II
+							</th>
+							<th> Grade 1 - 4
+							</th>
+							<th>
+								Year Levels
+								<button class="btn btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="col-md-2">
+								<div class="input-group input-group-sm"> 
+									<input type="text" class="form-control" value="Cash"/>
+									<div class="input-group-btn">
+										<button class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button>
+									</div>
+								</div>
+							</td>
+							<td class="col-md-2">
+								<input type="number" class="form-control" />
+							</td>
+							<td class="col-md-2">
+								<input type="number" class="form-control" />
+							</td>
+							<td class="col-md-2">
+								<input type="number" class="form-control" />
+							</td>
+							<td class="col-md-2">
+								<input type="number" class="form-control" />
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>Total</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+							<td>0.00</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>

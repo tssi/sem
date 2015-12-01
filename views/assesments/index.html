@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-6 col-md-push-6">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
@@ -42,7 +42,7 @@
 						<table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
-									<th class="text-center">Fee</th>
+									<th class="text-center">Description</th>
 									<th class="text-center">Amount</th>
 								</tr>
 							</thead>
@@ -65,7 +65,7 @@
 						<table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
-									<th class="text-center">Fee</th>
+									<th class="text-center">Description</th>
 									<th class="text-center">Amount</th>
 								</tr>
 							</thead>
@@ -105,7 +105,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-6 col-md-pull-6">
 			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
 			<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}" aria-hidden="true"></span>
 			</button>
@@ -131,7 +131,7 @@
 				<div class="list-group-item list-group-search-box">
 					<div class="input-group"> 
 						<div class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></div>
-						<input type="text" class="form-control" placeholder="Search" ng-model="searchStudent"/>
+						<input type="text" class="form-control" placeholder="Search" ng-model="searchStudent" focus="ActiveStep===1"/>
 						<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearchStudent()"><span class="glyphicon glyphicon-remove"></span></button></div>
 					</div>
 				</div>

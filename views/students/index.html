@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-6 col-md-push-6">
 			<div class="list-group" ng-show="hasBasicInfo || hasContactInfo">
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
@@ -55,6 +55,22 @@
 								<dt>Citizenship</dt>
 								<dd>{{Student.citizenship}}</dd>
 						</dl>
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Relationship</th>
+									<th class="text-center">Name</th>
+									<th class="text-center">Occupation</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="family in Student.family">
+									<td>{{family.type}}</td>
+									<td>{{family.name}}</td>
+									<td>{{family.occupation}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
 						<h5>Contact Information</h5>
@@ -96,7 +112,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-6 col-md-pull-6">
 				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
 				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=3,'glyphicon-ok': ActiveStep===3}" aria-hidden="true"></span>
 				</button>
@@ -189,6 +205,54 @@
 								</div>
 							</div>
 						</div>
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center">Relationship</th>
+									<th class="text-center">Name</th>
+									<th class="text-center">Occupation</th>
+									<th class="text-center">&nbsp</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="family in families">
+									<td>
+										<select name="" id="" class="form-control" ng-model="family.type">
+											<option value="">Select</option>
+											<option value="Parent">Parent</option>
+											<option value="Gaurdian">Gaurdian</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Full Name" ng-model="family.name"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Occupation" ng-model="family.occupation"/>
+									</td>
+									<td><button class="btn btn-danger btn-sm" ng-click="removeFamily($index)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td>
+										<select name="" id="" class="form-control" ng-model="relationship">
+											<option value="">Select Relationship</option>
+											<option value="Parent">Parent</option>
+											<option value="Gaurdian">Gaurdian</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Full Name" ng-model="parentName"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" placeholder="Job Title" ng-model="occupation"/>
+									</td>
+									<td>
+										<button class="btn btn-success btn-sm" ng-click="addFamily()"><span class="glyphicon glyphicon-plus"></span></button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Social</h5>
@@ -249,16 +313,14 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="currentCountry">
+											<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country.id as country.name for country in Countries | filter:{id:'PH'}">
 												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="currentProvince">
+											<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id: currentCountry}">
 												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter:{ country_id: currentCountry}" ng-if="currentCountry">{{provinces.name}}</option>
 											</select>
 										</div>
 									</div>
@@ -267,9 +329,8 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="currentCity">
+											<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:currentProvince}">
 												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: currentProvince}" ng-if="currentProvince">{{cities.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
@@ -288,23 +349,23 @@
 								</div>
 							</div>
 							<div class="list-group-item list-group-header">
-								<h5>Home Address</h5>
+								<h5 class="pull-left">Permanent Address</h5>
+								<button class="btn btn-default btn-sm pull-right" ng-click="sameAsCurrent()">SAME AS CURRENT</button>
+								<div class="clearfix"></div>
 							</div>
 							<div class="list-group-item">
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="homeCountry">
-												<option value="">Select Country</option>
-												<option ng-value="countries.id" ng-repeat="countries in Countries">{{countries.name}}</option>
+											<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country.id as country.name for country in Countries">
+											  <option value="">Select Country</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="homeProvince">
+											<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id:homeCountry}">
 												<option value="">Select Province</option>
-												<option ng-value="provinces.id" ng-repeat="provinces in Provinces | filter: {country_id: homeCountry}">{{provinces.name}}</option>
 											</select>
 										</div>
 									</div>
@@ -313,9 +374,8 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="homeCity">
+											<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:homeProvince}">
 												<option value="">Select City</option>
-												<option ng-value="cities.name" ng-repeat="cities in Cities | filter:{province_id: homeProvince}">{{cities.name}}</option>
 											</select>
 										</div>
 										<div class="col-md-6">
