@@ -6,7 +6,7 @@ define(['app','api'], function (app) {
 						[
 							{
 								row:1,
-								col:2,
+								col:1,
 								state: "read",
 								value:"A"
 							},
@@ -38,32 +38,32 @@ define(['app','api'], function (app) {
 						[
 							{
 								row:2,
-								col:2,
-								state: "write",
+								col:1,
+								state: "read",
 								value:"F"
 							},
 							{
 								row:2,
 								col:2,
-								state: "write",
+								state: "read",
 								value:"G"
 							},
 							{
 								row:2,
 								col:3,
-								state: "write",
+								state: "read",
 								value:"H"
 							},
 							{
 								row:2,
 								col:4,
-								state: "write",
+								state: "read",
 								value:"I"
 							},
 							{
 								row:2,
 								col:5,
-								state: "write",
+								state: "read",
 								value:"J"
 							},
 						]
@@ -71,6 +71,19 @@ define(['app','api'], function (app) {
 		};
 		$scope.updateState=function(rowIndex,colIndex,state){
 			$scope.Spreadsheet[rowIndex][colIndex].state=state;
+		};
+		$scope.addRow=function(rowIndex){
+			var row = angular.copy($scope.Spreadsheet[rowIndex]);
+			for(var index in row){
+				row[index].value=null;
+				row[index].row=rowIndex.length+1;
+				row[index].state='read';
+			};
+			$scope.Spreadsheet.push(row);
+			
+		};
+		$scope.removeRow=function(rowIndex){
+			$scope.Spreadsheet.splice(rowIndex,1);
 		};
     }]);
 });
