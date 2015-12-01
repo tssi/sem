@@ -72,7 +72,7 @@
 									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeToSpreadsheet"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</div>
-							<input type="number" class="form-control" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-show="colIndex!=0" ng-if="col.state==='write'"/>
+							<input type="text" class="form-control"  ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-show="colIndex!=0" ng-if="col.state==='write'"/>
 							<div ng-if="col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{col.value}}</div>
 						</td>
 					</tr>
