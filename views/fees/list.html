@@ -63,16 +63,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
-						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
-							<div class="input-group input-group-sm">
-								<input type="text" class="form-control" ng-if="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
-								<div class="input-group-btn" ng-if="col.state==='write'" ng-show="colIndex===0">
+					<tr ng-repeat="(rowIndex,row) in Spreadsheet track by rowIndex">
+						<td class="col-md-2" ng-repeat="(colIndex,col) in row track by colIndex">
+							<div class="input-group input-group-sm" ng-show="colIndex===0" ng-if="col.state==='write'">
+								<input type="text" class="form-control"  ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
+								<div class="input-group-btn">
 									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addToSpreadsheet"><span class="glyphicon glyphicon-plus"></span></button>
 									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeToSpreadsheet"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</div>
-							{{row.$last}}
+							<input type="number" class="form-control" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-show="colIndex!=0" ng-if="col.state==='write'"/>
 							<div ng-if="col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{col.value}}</div>
 						</td>
 					</tr>
