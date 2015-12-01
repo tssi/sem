@@ -76,7 +76,13 @@ define(['app','api'], function (app) {
 		$scope.updateState=function(rowIndex,colIndex,state){
 			var delay = 0;
 			if(state=='read') delay = 150;
-			$timeout(function(){$scope.Spreadsheet[rowIndex][colIndex].state=state;},delay);
+			$timeout(function(){
+				if(state=='write'){
+					$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+					$scope.ActiveRow=rowIndex;
+					$scope.ActiveCol=colIndex;
+				}
+			},delay);
 		};
 		$scope.addRow=function(rowIndex,colIndex){
 			var delay = 151;
@@ -98,16 +104,21 @@ define(['app','api'], function (app) {
 		};
 		$scope.handlePress=function(event){
 			if(event.key==="Enter"){
-				$scope.ActiveRow = $scope.ActiveRow+1;
-				if($scope.ActiveRow>$scope.ActiveRow.length)
-					
+				$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+				if($scope.ActiveRow==$scope.Spreadsheet.length-1 && $scope.ActiveCol==$scope.Spreadsheet[$scope.ActiveRow].length-1){
+					$scope.ActiveRow=0;
+					$scope.ActiveCol=0;
+				}
+				else if($scope.ActiveRow===$scope.Spreadsheet.length-1){
+					$scope.ActiveRow=0;
+					$scope.ActiveCol=$scope.ActiveCol+1;
+				}
+				else
+					$scope.ActiveRow = $scope.ActiveRow+1;
 			};
 			if(event.key==="Tab"){
 				$scope.ActiveCol = $scope.ActiveCol+1;
 			};
-			
-			
-			console.log(event);
 		};
 		$scope.ActivateCell=function(){
 			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
