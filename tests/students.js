@@ -23,7 +23,7 @@ define(['model'],function($model){
 						{
 						  "type": "parent",
 						  "name": "1234567",
-						  "occupation" "Programmer"
+						  "occupation": "Programmer"
 						}
 					  ],
 					  "contact_numbers": [
