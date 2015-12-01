@@ -68,13 +68,17 @@ define(['app','api'], function (app) {
 							},
 						]
 					  ];
+			$scope.ActiveRow=0;
+			$scope.ActiveCol=0;
+			$scope.$watch('ActiveRow',$scope.ActivateCell);
+			$scope.$watch('ActiveCol',$scope.ActivateCell);
 		};
 		$scope.updateState=function(rowIndex,colIndex,state){
 			var delay = 0;
 			if(state=='read') delay = 150;
 			$timeout(function(){$scope.Spreadsheet[rowIndex][colIndex].state=state;},delay);
 		};
-		$scope.addRow=function(rowIndex){
+		$scope.addRow=function(rowIndex,colIndex){
 			var delay = 151;
 			var row = angular.copy($scope.Spreadsheet[rowIndex]);
 			for(var index in row){
@@ -83,11 +87,30 @@ define(['app','api'], function (app) {
 				row[index].state='read';
 			};
 			
-			$timeout(function(){$scope.Spreadsheet.push(row);},delay);
-			
+			$timeout(function(){
+				$scope.Spreadsheet.push(row);
+				$scope.ActiveRow=rowIndex+1;
+				$scope.ActiveCol=colIndex;
+			},delay);
 		};
 		$scope.removeRow=function(rowIndex){
 			$scope.Spreadsheet.splice(rowIndex,1);
+		};
+		$scope.handlePress=function(event){
+			if(event.key==="Enter"){
+				$scope.ActiveRow = $scope.ActiveRow+1;
+				if($scope.ActiveRow>$scope.ActiveRow.length)
+					
+			};
+			if(event.key==="Tab"){
+				$scope.ActiveCol = $scope.ActiveCol+1;
+			};
+			
+			
+			console.log(event);
+		};
+		$scope.ActivateCell=function(){
+			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
 		};
     }]);
 });
