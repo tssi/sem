@@ -63,17 +63,18 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="(rowIndex,row) in Spreadsheet track by rowIndex">
-						<td class="col-md-2" ng-repeat="(colIndex,col) in row track by colIndex">
-							<div class="input-group input-group-sm" ng-show="colIndex===0" ng-if="col.state==='write'">
+					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
+						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
+							<div class="input-group input-group-sm" ng-if="colIndex===0 && col.state==='write'">
 								<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')"/>
 								<div class="input-group-btn">
 									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addRow(rowIndex)"><span class="glyphicon glyphicon-plus"></span></button>
 									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeRow(rowIndex)"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</div>
-							<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-show="colIndex!=0" ng-if="col.state==='write'"/>
-							<div ng-if="col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
+							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" />
+							<div class="amount" ng-if="colIndex!=0 && col.state==='read'"   ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
+							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
 						</td>
 					</tr>
 					<tr>
