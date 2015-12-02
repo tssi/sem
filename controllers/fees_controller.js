@@ -72,7 +72,7 @@ define(['app','api'], function (app) {
 			$scope.ActiveCol=0;
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
-			//$scope.$watchGroup([$scope.Spreadsheet],$scope.ComputeTotals);
+			$scope.$watchGroup(['Spreadsheet'],$scope.AdjustTotal);
 			$scope.ComputeTotal();
 		};
 		$scope.ComputeTotal = function(){
@@ -89,6 +89,9 @@ define(['app','api'], function (app) {
 					};
 				};
 			};
+		};
+		$scope.AdjustTotal = function(newValue,oldValue){
+			console.log(newValue,oldValue,'debug');
 		};
 		$scope.updateState=function(rowIndex,colIndex,state){
 			var delay = 0;
@@ -155,9 +158,6 @@ define(['app','api'], function (app) {
 		};
 		$scope.ActivateCell=function(){
 			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
-		};
-		$scope.ComputeTotals=function(){
-			
 		};
     }]);
 });
