@@ -20,19 +20,19 @@ define(['app','api'], function (app) {
 								row:1,
 								col:3,
 								state: "read",
-								value:5000.55
+								value:5001.55
 							},
 							{
 								row:1,
 								col:4,
 								state: "read",
-								value:5000.55
+								value:5002.55
 							},
 							{
 								row:2,
 								col:5,
 								state: "read",
-								value:5000.55
+								value:5003.55
 							},
 						],
 						[
@@ -52,19 +52,19 @@ define(['app','api'], function (app) {
 								row:2,
 								col:3,
 								state: "read",
-								value:5000.55
+								value:5001.55
 							},
 							{
 								row:2,
 								col:4,
 								state: "read",
-								value:5000.55
+								value:5002.55
 							},
 							{
 								row:2,
 								col:5,
 								state: "read",
-								value:5000.55
+								value:5003.55
 							},
 						]
 					  ];
@@ -72,6 +72,23 @@ define(['app','api'], function (app) {
 			$scope.ActiveCol=0;
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
+			//$scope.$watchGroup([$scope.Spreadsheet],$scope.ComputeTotals);
+			$scope.ComputeTotal();
+		};
+		$scope.ComputeTotal = function(){
+			$scope.Totals={};
+			for(var rowIndex in $scope.Spreadsheet){
+				var row = $scope.Spreadsheet[rowIndex];
+				for(var colIndex in row){
+					var col=row[colIndex]
+					if(colIndex > 0){
+						if(!$scope.Totals[colIndex]){
+							$scope.Totals[colIndex]=0;
+						};
+						$scope.Totals[colIndex] = $scope.Totals[colIndex]+col.value;
+					};
+				};
+			};
 		};
 		$scope.updateState=function(rowIndex,colIndex,state){
 			var delay = 0;
@@ -98,6 +115,7 @@ define(['app','api'], function (app) {
 				$scope.ActiveRow=rowIndex+1;
 				$scope.ActiveCol=colIndex;
 			},delay);
+				
 		};
 		$scope.removeRow=function(rowIndex){
 			$scope.Spreadsheet.splice(rowIndex,1);
@@ -137,6 +155,9 @@ define(['app','api'], function (app) {
 		};
 		$scope.ActivateCell=function(){
 			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
+		};
+		$scope.ComputeTotals=function(){
+			
 		};
     }]);
 });

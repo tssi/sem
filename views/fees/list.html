@@ -34,8 +34,6 @@
 			<div class="list-group-item list-group-header">
 				<h5 class="pull-left">Fees Structure</h5>
 				<div class="btn-group  pull-right">
-					<button class="btn btn-default"><span class="glyphicon glyphicon-sort"></span></button>
-					<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
 					<button class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button>
 				</div>
 				
@@ -77,31 +75,11 @@
 							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
 						</td>
 					</tr>
-					<tr>
-						<td class="col-md-2">
-							Tuition Fee
-						</td>
-						<td class="col-md-2">
-							1,500.00
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
 						<td>Total</td>
-						<td class="text-right">1,500.00</td>
-						<td>0.00</td>
-						<td>0.00</td>
-						<td>0.00</td>
+						<td class="text-right" ng-repeat="total in Totals">{{total | currency:'P'}}</td>
 					</tr>
 				</tfoot>
 			</table>
