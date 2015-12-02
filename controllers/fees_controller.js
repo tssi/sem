@@ -105,11 +105,13 @@ define(['app','api'], function (app) {
 		$scope.handlePress=function(event){
 			if(event.key==="Enter"){
 				$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
-				if($scope.ActiveRow==$scope.Spreadsheet.length-1 && $scope.ActiveCol==$scope.Spreadsheet[$scope.ActiveRow].length-1){
+				var lastRow=$scope.Spreadsheet.length-1;
+				var lastCol=$scope.Spreadsheet[$scope.ActiveRow].length-1
+				if($scope.ActiveRow==lastRow && $scope.ActiveCol==lastCol){
 					$scope.ActiveRow=0;
 					$scope.ActiveCol=0;
 				}
-				else if($scope.ActiveRow===$scope.Spreadsheet.length-1){
+				else if($scope.ActiveRow===lastRow){
 					$scope.ActiveRow=0;
 					$scope.ActiveCol=$scope.ActiveCol+1;
 				}
@@ -117,8 +119,21 @@ define(['app','api'], function (app) {
 					$scope.ActiveRow = $scope.ActiveRow+1;
 			};
 			if(event.key==="Tab"){
-				$scope.ActiveCol = $scope.ActiveCol+1;
-			};
+				$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+				var lastRow=$scope.Spreadsheet.length-1;
+				var lastCol=$scope.Spreadsheet[$scope.ActiveRow].length-1
+				if($scope.ActiveRow===lastRow && $scope.ActiveCol===lastCol){
+					$scope.ActiveRow=0;
+					$scope.ActiveCol=-1;
+				}
+				if($scope.ActiveCol==lastCol){
+					$scope.ActiveCol=-1;
+					$scope.ActiveRow=$scope.ActiveRow+1;
+				}
+				if($scope.ActiveCol<lastCol){
+					$scope.ActiveCol = $scope.ActiveCol+1;
+				}
+			};                
 		};
 		$scope.ActivateCell=function(){
 			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';

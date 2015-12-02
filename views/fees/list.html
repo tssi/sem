@@ -73,7 +73,7 @@
 								</div>
 							</div>
 							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
-							<div class="amount" ng-if="colIndex!=0 && col.state==='read'"   ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
+							<div class="amount" ng-if="colIndex!=0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
 							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
 						</td>
 					</tr>
