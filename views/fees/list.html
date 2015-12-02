@@ -34,8 +34,6 @@
 			<div class="list-group-item list-group-header">
 				<h5 class="pull-left">Fees Structure</h5>
 				<div class="btn-group  pull-right">
-					<button class="btn btn-default"><span class="glyphicon glyphicon-sort"></span></button>
-					<button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
 					<button class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></button>
 				</div>
 				
@@ -45,20 +43,10 @@
 				<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>
-							Fees
-						</th>
-						<th>Nursery / Kinder I
-							
-						</th>
-						<th>Kinder II
-							
-						</th>
-						<th> Grade 1 - 4
-							
-						</th>
-						<th>
-							Year Levels
+						<th ng-repeat="title in Titles">
+							{{title.title}}
+							<button class="btn btn-default btn btn-xs" ng-if="$last" ng-click="addCol()"><span class="glyphicon glyphicon-plus"></span></button>
+							<button class="btn btn-default btn btn-xs" ng-if="!$last" ng-click="removeCol($index)"><span class="glyphicon glyphicon-remove"></span></button>
 						</th>
 					</tr>
 				</thead>
@@ -73,39 +61,19 @@
 								</div>
 							</div>
 							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
-							<div class="amount" ng-if="colIndex!=0 && col.state==='read'"   ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
+							<div class="amount" ng-if="colIndex!=0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
 							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-md-2">
-							Tuition Fee
-						</td>
-						<td class="col-md-2">
-							1,500.00
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
-						</td>
-						<td class="col-md-2">
-							<input type="number" class="form-control" />
 						</td>
 					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
 						<td>Total</td>
-						<td class="text-right">1,500.00</td>
-						<td>0.00</td>
-						<td>0.00</td>
-						<td>0.00</td>
+						<td class="text-right" ng-repeat="total in Totals">{{total | currency:'P'}}</td>
 					</tr>
 				</tfoot>
 			</table>
-			
+			{{Totals}}
 			</div>
 			<div class="list-group-item list-group-header">
 				<h5>Schemes Structure</h5>
