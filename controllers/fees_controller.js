@@ -2,6 +2,13 @@
 define(['app','api'], function (app) {
     app.register.controller('FeeController',['$scope','$rootScope','$timeout','api', function ($scope,$rootScope,$timeout,api) {
 		$scope.init=function(){
+			$scope.Titles = [
+							{id:1, title:"Fees"},
+							{id:2, title:"Nursery/Kinder I"},
+							{id:3, title:"Kinder II"},
+							{id:4, title:"Grade 1-4"},
+							{id:5, title:"Year Levels"},
+						   ];
 			$scope.Spreadsheet=[
 						[
 							{
@@ -125,6 +132,9 @@ define(['app','api'], function (app) {
 				$scope.ActiveCol=colIndex;
 			},delay);
 				
+		};
+		$scope.addCol=function(){
+			//$scope.Spreadsheet.push();
 		};
 		$scope.removeRow=function(rowIndex){
 			$scope.Spreadsheet.splice(rowIndex,1);
