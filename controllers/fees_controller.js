@@ -14,7 +14,7 @@ define(['app','api'], function (app) {
 								row:1,
 								col:2,
 								state: "read",
-								value:5000.55
+								value:2
 							},
 							{
 								row:1,
@@ -46,7 +46,7 @@ define(['app','api'], function (app) {
 								row:2,
 								col:2,
 								state: "read",
-								value:5000.55
+								value:6
 							},
 							{
 								row:2,
@@ -72,7 +72,7 @@ define(['app','api'], function (app) {
 			$scope.ActiveCol=0;
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
-			$scope.$watchGroup(['Spreadsheet'],$scope.AdjustTotal);
+			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.AdjustTotal);
 			$scope.ComputeTotal();
 		};
 		$scope.ComputeTotal = function(){
@@ -91,7 +91,13 @@ define(['app','api'], function (app) {
 			};
 		};
 		$scope.AdjustTotal = function(newValue,oldValue){
-			console.log(newValue,oldValue,'debug');
+			var old=oldValue.value;
+			var new1 = newValue.value;
+			console.log(old,new1);
+			if($scope.ActiveCol>0 && typeof oldValue.value!='string' && typeof newValue.value!='string'){
+				$scope.Totals[$scope.ActiveCol]=-old+new1;
+				console.log($scope.Totals[$scope.ActiveCol]);
+			}
 		};
 		$scope.updateState=function(rowIndex,colIndex,state){
 			var delay = 0;
