@@ -154,7 +154,14 @@ define(['app','api'], function (app) {
 			$scope.Totals[$scope.Titles.length]=0;
 		};
 		$scope.removeCol=function(index){
+			//remove column Title
 			$scope.Titles.splice(index,1);
+			//remove column body
+			for(var index in $scope.Spreadsheet){
+				var row = $scope.Spreadsheet[index];
+				row.splice(index,1);
+			};
+			delete $scope.Totals[parseInt(index)+1];
 		};
 		$scope.removeRow=function(rowIndex){
 			$scope.Spreadsheet.splice(rowIndex,1);
