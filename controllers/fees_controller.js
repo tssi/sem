@@ -142,7 +142,16 @@ define(['app','api'], function (app) {
 						 };
 			$scope.Titles.push(newTitle);
 			//add column body
-			
+			for(var index in $scope.Spreadsheet){
+				var row = $scope.Spreadsheet[index];
+				var cell = {row:index+1,
+							col:$scope.Titles.length,
+							value:null,
+							state:'read'
+						   };
+				row.push(cell);
+			};
+			$scope.Totals[$scope.Titles.length]=0;
 		};
 		$scope.removeCol=function(index){
 			$scope.Titles.splice(index,1);
