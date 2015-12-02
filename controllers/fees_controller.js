@@ -102,7 +102,7 @@ define(['app','api'], function (app) {
 			var new1 = newValue.value;
 			console.log(old,new1);
 			if($scope.ActiveCol>0 && typeof oldValue.value!='string' && typeof newValue.value!='string'){
-				$scope.Totals[$scope.ActiveCol]=-old+new1;
+				$scope.Totals[$scope.ActiveCol]=old+new1;
 				console.log($scope.Totals[$scope.ActiveCol]);
 			}
 		};
@@ -134,7 +134,18 @@ define(['app','api'], function (app) {
 				
 		};
 		$scope.addCol=function(){
-			//$scope.Spreadsheet.push();
+			//add column Title
+			var length=$scope.Titles.length+1;
+			var newTitle={
+							id:length,
+							title:'New title'
+						 };
+			$scope.Titles.push(newTitle);
+			//add column body
+			
+		};
+		$scope.removeCol=function(index){
+			$scope.Titles.splice(index,1);
 		};
 		$scope.removeRow=function(rowIndex){
 			$scope.Spreadsheet.splice(rowIndex,1);
