@@ -66,7 +66,9 @@
 					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
 						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
 							<div class="input-group input-group-sm" ng-if="colIndex===0 && col.state==='write'">
-								<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState('cell','write',{row:rowIndex,col:colIndex})" ng-keypress="handlePress($event)"/>
+								<select name="" id="" class="form-control" ng-model="col.value" ng-blur="updateState('cell','read',{row:rowIndex,col:colIndex})" ng-keypress="handlePress($event)" ng-options="fee.id as fee.name for fee in Fees">
+									<option value="">Select Fee</option>
+								</select>
 								<div class="input-group-btn">
 									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addRow(rowIndex,colIndex)"><span class="glyphicon glyphicon-plus"></span></button>
 									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeRow(rowIndex)"><span class="glyphicon glyphicon-remove"></span></button>
@@ -80,8 +82,8 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td>Total</td>
-						<td class="text-right" ng-repeat="total in Totals">{{total | currency:'P'}}</td>
+						<td><b>Total</b></td>
+						<td class="text-right" ng-repeat="total in Totals"><b>{{total | currency:'P'}}</b></td>
 					</tr>
 				</tfoot>
 			</table>

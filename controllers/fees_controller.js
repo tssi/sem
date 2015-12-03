@@ -80,11 +80,13 @@ define(['app','api'], function (app) {
 			$scope.$watch('ActiveIndex',$scope.ActivateHeader);
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
-			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.AdjustTotal);
+			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.ComputeTotal);
 			$scope.ComputeTotal();
 			api.GET('year_levels',{limit:15},function success(response){
 				$scope.YearLevels = response.data;
-				console.log($scope.YearLevels);
+			});
+			api.GET('fees',{limit:15},function success(response){
+				$scope.Fees = response.data;
 			});
 		};
 		$scope.ComputeTotal = function(){
@@ -112,9 +114,9 @@ define(['app','api'], function (app) {
 			}
 		};
 		$scope.updateState=function(type,state,address){
+			var delay = 0;
+			if(state=='read') delay = 150;
 			if(type=='header'){
-				var delay = 0;
-				if(state=='read') delay = 150;
 				$timeout(function(){
 					if(state==='write'){
 						if($scope.ActiveIndex!=null){
@@ -125,8 +127,6 @@ define(['app','api'], function (app) {
 				},delay);
 			}
 			if(type=='cell'){
-				var delay = 0;
-				if(state=='read') delay = 150;
 				$timeout(function(){
 					if(state=='write'){
 						if($scope.ActiveRow!=null && $scope.ActiveCol!=null){
