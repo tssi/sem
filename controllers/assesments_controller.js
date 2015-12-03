@@ -4,31 +4,14 @@ define(['app','api'], function (app) {
 		$scope.index = function(){
 			$scope.init = function(){
 				$rootScope.__MODULE_NAME = 'Assessment';
-				$scope.Student={};
-				$scope.hasBasicInfo=false;
-				$scope.hasContactInfo=false;
-				$scope.ActiveStep=1;
-				$scope.SelectedStudent={};
-				$scope.ActiveStudent={};
-				$scope.SelectedLevel={};
-				$scope.ActiveLevel={};
-				$scope.SelectedSection={};
-				$scope.ActiveSection={};
-				$scope.SelectedScheme={};
-				$scope.ActiveScheme={};
-				$scope.SelectedDiscount={};
-				$scope.ActiveDiscount={};
-				$scope.ActiveOrder = null;
-				$scope.TotalAmount = 0;
-				$scope.TotalDue = 0;
-				$scope.TotalAdjustment = 0;
-				$scope.TotalDiscount = 0;
-				$scope.hasInfo = false;
-				$scope.hasStudentInfo = false;
-				$scope.hasLevelInfo = false;
-				$scope.hasSectionInfo = false;
-				$scope.hasSchemeInfo = false;
-				$scope.hasAdjustmentInfo = false;
+				$scope.Steps = [
+					{id:1, title:"Student", description:"Select Student"},
+					{id:2, title:"Level", description:"Select Level"},
+					{id:3, title:"Section", description:"Select Section"},
+					{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
+					{id:5, title:"Discount", description:"Select Discount"},
+					{id:6, title:"Confirmation", description:"Confirmation"}
+				];
 				$scope.$watch('hasStudentInfo',updateHasInfo);
 				$scope.$watch('hasLevelInfo',updateHasInfo);
 				$scope.$watch('hasSectionInfo',updateHasInfo);
@@ -54,39 +37,61 @@ define(['app','api'], function (app) {
 				function updateHasInfo(){
 					$scope.hasInfo = $scope.hasStudentInfo || $scope.hasLevelInfo || $scope.hasSectionInfo || $scope.hasSchemeInfo || $scope.hasAdjustmentInfo;
 				};
+				$scope.initAssessment = function(){
+					$scope.Student={};
+					$scope.hasBasicInfo=false;
+					$scope.hasContactInfo=false;
+					$scope.ActiveStep=1;
+					$scope.SelectedStudent={};
+					$scope.ActiveStudent={};
+					$scope.SelectedLevel={};
+					$scope.ActiveLevel={};
+					$scope.SelectedSection={};
+					$scope.ActiveSection={};
+					$scope.SelectedScheme={};
+					$scope.ActiveScheme={};
+					$scope.SelectedDiscount={};
+					$scope.ActiveDiscount={};
+					$scope.ActiveOrder = null;
+					$scope.TotalAmount = 0;
+					$scope.TotalDue = 0;
+					$scope.TotalAdjustment = 0;
+					$scope.TotalDiscount = 0;
+					$scope.hasInfo = false;
+					$scope.hasStudentInfo = false;
+					$scope.hasLevelInfo = false;
+					$scope.hasSectionInfo = false;
+					$scope.hasSchemeInfo = false;
+					$scope.hasAdjustmentInfo = false;
+				}
+				$scope.initDataSource = function(){
+					$scope.Students=[];
+					$scope.YearLevels=[];
+					$scope.Sections=[];
+					$scope.Tuitions=[];
+					$scope.PaymentSchemes=[];
+					$scope.Discounts=[];
+					api.GET('students',function success(response){
+						console.log(response.data);
+						$scope.Students = response.data;
+					});
+					api.GET('year_levels',{limit:15},function success(response){
+						console.log(response.data);
+						$scope.YearLevels = response.data;
+					});
+					api.GET('sections',function success(response){
+						console.log(response.data);
+						$scope.Sections = response.data;
+					});
+					api.GET('tuition',function success(response){
+						console.log(response.data);
+						$scope.Tuitions = response.data;
+					});
+				}
+				$scope.initAssessment();
+				$scope.initDataSource();
 			};
 			$scope.init();
-			$scope.Steps = [
-				{id:1, title:"Student", description:"Select Student"},
-				{id:2, title:"Level", description:"Select Level"},
-				{id:3, title:"Section", description:"Select Section"},
-				{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
-				{id:5, title:"Discount", description:"Select Discount"},
-				{id:6, title:"Confirmation", description:"Confirmation"}
-			];
-			$scope.Students=[];
-			api.GET('students',function success(response){
-				console.log(response.data);
-				$scope.Students = response.data;
-			});
-			$scope.YearLevels=[];
-			var data={limit:13};
-			api.GET('year_levels',data,function success(response){
-				console.log(response.data);
-				$scope.YearLevels = response.data;
-			});
-			$scope.Sections=[];
-			api.GET('sections',function success(response){
-				console.log(response.data);
-				$scope.Sections = response.data;
-			});
-			$scope.Tuitions=[];
-			$scope.PaymentSchemes=[];
-			$scope.Discounts=[];
-			api.GET('tuition',function success(response){
-				console.log(response.data);
-				$scope.Tuitions = response.data;
-			});
 			$scope.nextStep = function(){
 			if($scope.ActiveStep===1){
 				$scope.ActiveStudent = $scope.SelectedStudent;
