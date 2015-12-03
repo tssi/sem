@@ -11,12 +11,26 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6 col-md-push-6">
+		<div class="col-md-6">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
 				</div>
 				<div class="list-group-canvas">
+					<div class="list-group-item" ng-if="!hasInfo">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-user"></i>
+								</div>
+								<h4>Assessment not yet started!</h4>
+								<p class="empty-state-message">Choose a student and assess.</p>
+							</div>
+							<div class="empty-state-help alert alert-info"> 
+								<span class="empty-state-action-icon glyphicon glyphicon-chevron-right"></span> Click to proceed, after completing each step.
+							</div>
+						</div>
+					</div>		
 					<div class="list-group-item" ng-show="hasStudentInfo || hasLevelInfo">
 						<div class="row">
 							<div class="col-md-8">
@@ -97,15 +111,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item" ng-show="!hasInfo">
-						<div class="well">
-							<span>No Information</span>
-						</div>
-					</div>					
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-md-pull-6">
+		<div class="col-md-6">
 			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
 			<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}" aria-hidden="true"></span>
 			</button>
