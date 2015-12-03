@@ -76,7 +76,11 @@
 							</div>
 							<input type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState('cell','read',{row:rowIndex,col:colIndex})" ng-keypress="handlePress($event)"/>
 							<div class="amount" ng-if="colIndex!=0 && col.state==='read'" ng-click="updateState('cell','write',{row:rowIndex,col:colIndex})">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
-							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState('cell','write',{row:rowIndex,col:colIndex})">{{!col.value?'&nbsp;':col.value}}</div>
+							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState('cell','write',{row:rowIndex,col:colIndex})">
+								<span ng-repeat="fee in Fees | filter:{id:col.value}">
+									{{!col.value?'&nbsp;':fee.name}}
+								</span>
+							</div>
 						</td>
 					</tr>
 				</tbody>

@@ -14,7 +14,7 @@ define(['app','api'], function (app) {
 								row:1,
 								col:1,
 								state: "read",
-								value:"A"
+								value:"TUI"
 							},
 							{
 								row:1,
@@ -46,7 +46,7 @@ define(['app','api'], function (app) {
 								row:2,
 								col:1,
 								state: "read",
-								value:"F"
+								value:"REG"
 							},
 							{
 								row:2,
