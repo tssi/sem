@@ -46,13 +46,13 @@
 						<th>Fees</th>
 						<th ng-repeat="title in Titles">
 							<div class="input-group input-group-sm" ng-if="title.state==='write'">
-								<input type="text" class="form-control" focus="title.state==='write'" ng-model="title.title" ng-blur="updateHeaderState($index,'read')"/>
+								<input type="text" class="form-control" focus="title.state==='write'" ng-model="title.title" ng-blur="updateState('header','read','{index:$index}')"/>
 								<div class="input-group-btn">
 									<button class="btn btn-default btn btn-xs" ng-if="$last" ng-click="addCol()"><span class="glyphicon glyphicon-plus"></span></button>
 									<button class="btn btn-default btn btn-xs" ng-if="!$last" ng-click="removeCol($index)"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</div>
-							<div ng-if="title.state==='read'" ng-click="updateHeaderState($index,'write')">{{!title.title?'&nbsp;':title.title}}</div>
+							<div ng-if="title.state==='read'" ng-click="updateState('header','read','{index:$index})'">{{!title.title?'&nbsp;':title.title}}</div>
 						</th>
 					</tr>
 				</thead>
@@ -60,15 +60,15 @@
 					<tr ng-repeat="(rowIndex,row) in Spreadsheet">
 						<td class="col-md-2" ng-repeat="(colIndex,col) in row">
 							<div class="input-group input-group-sm" ng-if="colIndex===0 && col.state==='write'">
-								<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
+								<input type="text" class="form-control" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState('cell','read','{row:rowIndex,col:colIndex}')" ng-keypress="handlePress($event)"/>
 								<div class="input-group-btn">
 									<button class="btn btn-default" ng-if="rowIndex===Spreadsheet.length-1" ng-click="addRow(rowIndex,colIndex)"><span class="glyphicon glyphicon-plus"></span></button>
 									<button class="btn btn-default" ng-if="rowIndex!=Spreadsheet.length-1" ng-click="removeRow(rowIndex)"><span class="glyphicon glyphicon-remove"></span></button>
 								</div>
 							</div>
-							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState(rowIndex,colIndex,'read')" ng-keypress="handlePress($event)"/>
-							<div class="amount" ng-if="colIndex!=0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
-							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState(rowIndex,colIndex,'write')">{{!col.value?'&nbsp;':col.value}}</div>
+							<input  type="number" class="form-control" ng-if="colIndex!=0 && col.state==='write'" focus="col.state==='write'" ng-model="col.value" ng-blur="updateState('cell','read',{row:rowIndex,col:colIndex})" ng-keypress="handlePress($event)"/>
+							<div class="amount" ng-if="colIndex!=0 && col.state==='read'" ng-click="updateState('cell','read','{row:rowIndex,col:colIndex}')">{{!col.value?'&nbsp;':(col.value| currency:'P')}}</div>
+							<div ng-if="colIndex==0 && col.state==='read'" ng-click="updateState('cell','read','{row:rowIndex,col:colIndex}')">{{!col.value?'&nbsp;':col.value}}</div>
 						</td>
 					</tr>
 				</tbody>

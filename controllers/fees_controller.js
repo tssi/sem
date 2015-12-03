@@ -107,16 +107,28 @@ define(['app','api'], function (app) {
 				console.log($scope.Totals[$scope.ActiveCol]);
 			}
 		};
-		$scope.updateState=function(rowIndex,colIndex,state){
-			var delay = 0;
-			if(state=='read') delay = 150;
-			$timeout(function(){
-				if(state=='write'){
-					$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
-					$scope.ActiveRow=rowIndex;
-					$scope.ActiveCol=colIndex;
-				}
-			},delay);
+		$scope.updateState=function(type,state,address){
+			if(type=='header'){
+				var delay = 0;
+				if(state=='read') delay = 150;
+				$timeout(function(){
+					if(state==='write'){
+						$scope.Titles[$scope.ActiveIndex].state='read';
+						$scope.ActiveIndex=address.index;
+					}
+				},delay);
+			}
+			if(type=='cell'){
+				var delay = 0;
+				if(state=='read') delay = 150;
+				$timeout(function(){
+					if(state=='write'){
+						$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+						$scope.ActiveRow=address.row;
+						$scope.ActiveCol=address.col;
+					}
+				},delay);
+			}
 		};
 		$scope.updateHeaderState=function(index,state){
 			var delay = 0;
