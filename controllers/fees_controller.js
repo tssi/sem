@@ -108,6 +108,7 @@ define(['app','api'], function (app) {
 			}
 		};
 		$scope.updateState=function(type,state,address){
+			console.log(address,type,state);
 			if(type=='header'){
 				var delay = 0;
 				if(state=='read') delay = 150;
