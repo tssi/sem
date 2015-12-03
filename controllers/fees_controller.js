@@ -4,7 +4,13 @@ define(['app','api'], function (app) {
 		$scope.init=function(){
 			$scope.Titles = [
 							{id:1, value:"PS1", state:"read"},
-							{id:2, value:"PS2", state:"read"},
+							{id:2, value:"PS3", state:"read"},
+							{id:3, value:"G1", state:"read"},
+							{id:4, value:"G4", state:"read"},
+						   ];
+			$scope.TitlesSchemes = [
+							{id:1, value:"PS1", state:"read"},
+							{id:2, value:"PS3", state:"read"},
 							{id:3, value:"G1", state:"read"},
 							{id:4, value:"G4", state:"read"},
 						   ];
@@ -78,6 +84,8 @@ define(['app','api'], function (app) {
 			$scope.ActiveCol=null;
 			$scope.ActiveIndex=null;
 			$scope.$watch('ActiveIndex',$scope.ActivateHeader);
+			$scope.ActiveIndexScheme=null;
+			$scope.$watch('ActiveIndexScheme',$scope.ActivateHeaderScheme);
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
 			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.ComputeTotal);
@@ -113,29 +121,44 @@ define(['app','api'], function (app) {
 				}
 			}
 		};
-		$scope.updateState=function(type,state,address){
+		$scope.updateState=function(type,state,address,target){
 			var delay = 0;
 			if(state=='read') delay = 150;
-			if(type=='header'){
-				$timeout(function(){
-					if(state==='write'){
-						if($scope.ActiveIndex!=null){
-							$scope.Titles[$scope.ActiveIndex].state='read';
+			if(target=='fees'){
+				if(type=='header'){
+					$timeout(function(){
+						if(state==='write'){
+							if($scope.ActiveIndex!=null){
+								$scope.Titles[$scope.ActiveIndex].state='read';
+							}
+							$scope.ActiveIndex=address.index;
 						}
-						$scope.ActiveIndex=address.index;
-					}
-				},delay);
+					},delay);
+				}
+				if(type=='cell'){
+					$timeout(function(){
+						if(state=='write'){
+							if($scope.ActiveRow!=null && $scope.ActiveCol!=null){
+								$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+							}
+							$scope.ActiveRow=address.row;
+							$scope.ActiveCol=address.col;
+						}
+					},delay);
+				}
 			}
-			if(type=='cell'){
-				$timeout(function(){
-					if(state=='write'){
-						if($scope.ActiveRow!=null && $scope.ActiveCol!=null){
-							$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+			if(target=='schemes'){
+				console.log('schemes');
+				if(type=='header'){
+					$timeout(function(){
+						if(state==='write'){
+							if($scope.ActiveIndexScheme!=null){
+								$scope.TitlesSchemes[$scope.ActiveIndexScheme].state='read';
+							}
+							$scope.ActiveIndexScheme=address.index;
 						}
-						$scope.ActiveRow=address.row;
-						$scope.ActiveCol=address.col;
-					}
-				},delay);
+					},delay);
+				}
 			}
 		};
 		$scope.addRow=function(rowIndex,colIndex){
@@ -234,6 +257,11 @@ define(['app','api'], function (app) {
 		$scope.ActivateHeader=function(){
 			if($scope.ActiveIndex !=null){
 				$scope.Titles[$scope.ActiveIndex].state='write';
+			}
+		};
+		$scope.ActivateHeaderScheme=function(){
+			if($scope.ActiveIndexScheme !=null){
+				$scope.TitlesSchemes[$scope.ActiveIndexScheme].state='write';
 			}
 		};
     }]);
