@@ -3,11 +3,10 @@ define(['app','api'], function (app) {
     app.register.controller('FeeController',['$scope','$rootScope','$timeout','api', function ($scope,$rootScope,$timeout,api) {
 		$scope.init=function(){
 			$scope.Titles = [
-							{id:1, title:"Fees"},
-							{id:2, title:"Nursery/Kinder I"},
-							{id:3, title:"Kinder II"},
-							{id:4, title:"Grade 1-4"},
-							{id:5, title:"Year Levels"},
+							{id:1, title:"Nursery/Kinder I", state:"read"},
+							{id:2, title:"Kinder II", state:"read"},
+							{id:3, title:"Grade 1-4", state:"read"},
+							{id:4, title:"Year Levels", state:"read"},
 						   ];
 			$scope.Spreadsheet=[
 						[
@@ -77,6 +76,8 @@ define(['app','api'], function (app) {
 					  ];
 			$scope.ActiveRow=0;
 			$scope.ActiveCol=0;
+			$scope.ActiveIndex=0;
+			$scope.$watch('ActiveIndex',$scope.ActivateHeader);
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
 			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.AdjustTotal);
@@ -117,6 +118,16 @@ define(['app','api'], function (app) {
 				}
 			},delay);
 		};
+		$scope.updateHeaderState=function(index,state){
+			var delay = 0;
+			if(state=='read') delay = 150;
+			$timeout(function(){
+				if(state==='write'){
+					$scope.Titles[$scope.ActiveIndex].state='read';
+					$scope.ActiveIndex=index;
+				}
+			},delay);
+		};
 		$scope.addRow=function(rowIndex,colIndex){
 			var delay = 151;
 			var row = angular.copy($scope.Spreadsheet[rowIndex]);
@@ -128,6 +139,7 @@ define(['app','api'], function (app) {
 			
 			$timeout(function(){
 				$scope.Spreadsheet.push(row);
+				$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
 				$scope.ActiveRow=rowIndex+1;
 				$scope.ActiveCol=colIndex;
 			},delay);
@@ -135,12 +147,17 @@ define(['app','api'], function (app) {
 		};
 		$scope.addCol=function(){
 			//add column Title
+			var delay = 151;
 			var length=$scope.Titles.length+1;
 			var newTitle={
 							id:length,
-							title:'New title'
+							title:null
 						 };
-			$scope.Titles.push(newTitle);
+			$timeout(function(){
+				$scope.Titles.push(newTitle);
+				$scope.Titles[$scope.ActiveIndex].state='read';
+				$scope.ActiveIndex=$scope.ActiveIndex+1;
+			},delay);
 			//add column body
 			for(var index in $scope.Spreadsheet){
 				var row = $scope.Spreadsheet[index];
@@ -201,6 +218,9 @@ define(['app','api'], function (app) {
 		};
 		$scope.ActivateCell=function(){
 			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
+		};
+		$scope.ActivateHeader=function(){
+			$scope.Titles[$scope.ActiveIndex].state='write';
 		};
     }]);
 });
