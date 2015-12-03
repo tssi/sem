@@ -3,10 +3,10 @@ define(['app','api'], function (app) {
     app.register.controller('FeeController',['$scope','$rootScope','$timeout','api', function ($scope,$rootScope,$timeout,api) {
 		$scope.init=function(){
 			$scope.Titles = [
-							{id:1, title:"Nursery/Kinder I", state:"read"},
-							{id:2, title:"Kinder II", state:"read"},
-							{id:3, title:"Grade 1-4", state:"read"},
-							{id:4, title:"Year Levels", state:"read"},
+							{id:1, value:"PS1", state:"read"},
+							{id:2, value:"PS2", state:"read"},
+							{id:3, value:"G1", state:"read"},
+							{id:4, value:"G4", state:"read"},
 						   ];
 			$scope.Spreadsheet=[
 						[
@@ -74,14 +74,18 @@ define(['app','api'], function (app) {
 							},
 						]
 					  ];
-			$scope.ActiveRow=0;
-			$scope.ActiveCol=0;
-			$scope.ActiveIndex=0;
+			$scope.ActiveRow=null;
+			$scope.ActiveCol=null;
+			$scope.ActiveIndex=null;
 			$scope.$watch('ActiveIndex',$scope.ActivateHeader);
 			$scope.$watch('ActiveRow',$scope.ActivateCell);
 			$scope.$watch('ActiveCol',$scope.ActivateCell);
 			$scope.$watch('Spreadsheet[ActiveRow][ActiveCol]',$scope.AdjustTotal);
 			$scope.ComputeTotal();
+			api.GET('year_levels',{limit:15},function success(response){
+				$scope.YearLevels = response.data;
+				console.log($scope.YearLevels);
+			});
 		};
 		$scope.ComputeTotal = function(){
 			$scope.Totals={};
@@ -99,22 +103,23 @@ define(['app','api'], function (app) {
 			};
 		};
 		$scope.AdjustTotal = function(newValue,oldValue){
-			var old=oldValue.value;
-			var new1 = newValue.value;
-			console.log(old,new1);
-			if($scope.ActiveCol>0 && typeof oldValue.value!='string' && typeof newValue.value!='string'){
-				$scope.Totals[$scope.ActiveCol]=old+new1;
-				console.log($scope.Totals[$scope.ActiveCol]);
+			if(oldValue){
+				var old=oldValue.value;
+				var new1 = newValue.value;
+				if($scope.ActiveCol>0 && typeof oldValue.value!='string' && typeof newValue.value!='string'){
+					$scope.Totals[$scope.ActiveCol]=old+new1;
+				}
 			}
 		};
 		$scope.updateState=function(type,state,address){
-			console.log(address,type,state);
 			if(type=='header'){
 				var delay = 0;
 				if(state=='read') delay = 150;
 				$timeout(function(){
 					if(state==='write'){
-						$scope.Titles[$scope.ActiveIndex].state='read';
+						if($scope.ActiveIndex!=null){
+							$scope.Titles[$scope.ActiveIndex].state='read';
+						}
 						$scope.ActiveIndex=address.index;
 					}
 				},delay);
@@ -124,22 +129,14 @@ define(['app','api'], function (app) {
 				if(state=='read') delay = 150;
 				$timeout(function(){
 					if(state=='write'){
-						$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+						if($scope.ActiveRow!=null && $scope.ActiveCol!=null){
+							$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='read';
+						}
 						$scope.ActiveRow=address.row;
 						$scope.ActiveCol=address.col;
 					}
 				},delay);
 			}
-		};
-		$scope.updateHeaderState=function(index,state){
-			var delay = 0;
-			if(state=='read') delay = 150;
-			$timeout(function(){
-				if(state==='write'){
-					$scope.Titles[$scope.ActiveIndex].state='read';
-					$scope.ActiveIndex=index;
-				}
-			},delay);
 		};
 		$scope.addRow=function(rowIndex,colIndex){
 			var delay = 151;
@@ -230,10 +227,14 @@ define(['app','api'], function (app) {
 			};                
 		};
 		$scope.ActivateCell=function(){
-			$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
+			if($scope.ActiveRow != null && $scope.ActiveCol!=null){
+				$scope.Spreadsheet[$scope.ActiveRow][$scope.ActiveCol].state='write';
+			}
 		};
 		$scope.ActivateHeader=function(){
-			$scope.Titles[$scope.ActiveIndex].state='write';
+			if($scope.ActiveIndex !=null){
+				$scope.Titles[$scope.ActiveIndex].state='write';
+			}
 		};
     }]);
 });
