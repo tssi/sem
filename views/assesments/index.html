@@ -233,14 +233,22 @@
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[4].description}}</h5>
 					</div>
-					<div class="list-group-item text-center" ng-if="!Sections.length">
+					<div class="list-group-item text-center" ng-if="!Discounts.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:discount.name===SelectedDiscount.name}" ng-repeat="discount in Discounts" ng-click="setSelectedDiscount(discount)">
-						<h4 class="list-group-item-heading">{{discount.name}}</h4>
-						<p class="list-group-item-text">
-						<span>{{discount.type}}</span> | <span>{{discount.amount}}</span>
-						</p>
+					<div class="list-group-item" ng-repeat="discount in Discounts">
+						<div class="checkbox checkbox-lg">
+							<label >
+							<input type="checkbox" ng-checked="SelectedDiscounts[discount.id] &&  isEmpty(SelectedDiscounts)">
+								<span class="cr" ng-click="toggleSelectDiscount(discount.id)"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+							</label>
+							<div class="description">
+								<h4 class="list-group-item-heading">{{discount.name}}</h4>
+								<p class="list-group-item-text">
+								<span>{{discount.type}}</span> | <span>{{discount.amount}}</span>
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

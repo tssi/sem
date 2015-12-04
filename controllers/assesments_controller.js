@@ -52,6 +52,8 @@ define(['app','api'], function (app) {
 					$scope.ActiveScheme={};
 					$scope.SelectedDiscount={};
 					$scope.ActiveDiscount={};
+					$scope.ActiveDiscounts=[];
+					$scope.SelectedDiscounts={};
 					$scope.ActiveOrder = null;
 					$scope.TotalAmount = 0;
 					$scope.TotalDue = 0;
