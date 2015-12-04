@@ -50,8 +50,6 @@ define(['app','api'], function (app) {
 					$scope.ActiveSection={};
 					$scope.SelectedScheme={};
 					$scope.ActiveScheme={};
-					$scope.SelectedDiscount={};
-					$scope.ActiveDiscount={};
 					$scope.ActiveDiscounts=[];
 					$scope.SelectedDiscounts={};
 					$scope.ActiveOrder = null;
@@ -74,19 +72,15 @@ define(['app','api'], function (app) {
 					$scope.PaymentSchemes=[];
 					$scope.Discounts=[];
 					api.GET('students',function success(response){
-						console.log(response.data);
 						$scope.Students = response.data;
 					});
 					api.GET('year_levels',{limit:15},function success(response){
-						console.log(response.data);
 						$scope.YearLevels = response.data;
 					});
 					api.GET('sections',function success(response){
-						console.log(response.data);
 						$scope.Sections = response.data;
 					});
 					api.GET('tuition',function success(response){
-						console.log(response.data);
 						$scope.Tuitions = response.data;
 					});
 				}
@@ -98,8 +92,6 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep===1){
 				$scope.ActiveStudent = $scope.SelectedStudent;
 				$scope.ActiveOrder = null;
-				
-				console.log($scope.ActiveStudent,$scope.YearLevels);
 				for(var i in $scope.YearLevels){
 					var y = $scope.YearLevels[i];
 					if(y.id === $scope.ActiveStudent.yearlevel){
@@ -137,24 +129,35 @@ define(['app','api'], function (app) {
 				
 			}
 			if($scope.ActiveStep===5){
-				$scope.ActiveDiscount= $scope.SelectedDiscount;
+				$scope.ActiveDiscounts= [];
+				for(var i in $scope.Discounts){
+					var dsc =$scope.Discounts[i];
+					if($scope.SelectedDiscounts[dsc.id]){
+						$scope.ActiveDiscounts.push(dsc);
+					}
+				}
 				$scope.TotalDiscount = 0;
 				$scope.TotalAdjustment = 0;
 				$scope.TotalAmount=0;
-				for(var i in $scope.ActiveDiscount.fees_applicable){
-					var d = $scope.ActiveDiscount.fees_applicable[i];
-					for(var t in $scope.ActiveTuition.fees){
-						var f = $scope.ActiveTuition.fees[t];
-						var amount = 0;
-						if(f.id===d || d==='all'){
-							if($scope.ActiveDiscount.type==='percent'){
-								amount=($scope.ActiveDiscount.amount/100) * f.amount;
+				for(var index in $scope.ActiveDiscounts){
+					var discount  = $scope.ActiveDiscounts[index];
+						discount.computed_amount = 0;
+					for(var i in discount.fees_applicable){
+						var d = discount.fees_applicable[i];
+						for(var t in $scope.ActiveTuition.fees){
+							var f = $scope.ActiveTuition.fees[t];
+							var amount = 0;
+							
+							if(f.id===d || d==='all'){
+								if(discount.type==='percent'){
+									amount=(discount.amount/100) * f.amount;
+								}
+								if(discount.type==='peso'){
+									amount=discount.amount;
+								}
+								discount.computed_amount = discount.computed_amount + amount;
+								$scope.TotalDiscount = $scope.TotalDiscount + amount;
 							}
-							if($scope.ActiveDiscount.type==='peso'){
-								amount=$scope.ActiveDiscount.amount;
-							}
-							//console.log($scope.ActiveDiscount.type,amount,f.amount);
-							$scope.TotalDiscount = $scope.TotalDiscount + amount;
 						}
 					}
 				}
@@ -167,7 +170,7 @@ define(['app','api'], function (app) {
 								  student:$scope.ActiveStudent.id,
 								  tuition:$scope.ActiveTuition.id,
 								  scheme:$scope.ActiveScheme.id,
-								  discount:$scope.ActiveDiscount.id,
+								  discount:$scope.ActiveDiscounts,
 								  totals:{
 										  gross:$scope.TotalDue,
 										  charges:$scope.ActiveScheme.interest_charge,
@@ -176,7 +179,6 @@ define(['app','api'], function (app) {
 										 }
 								};
 				api.POST('assessments',$scope.Assesment,function success(response){
-					console.log(response);
 					$scope.init();
 				});
 			}
@@ -192,7 +194,7 @@ define(['app','api'], function (app) {
 			$scope.updateStep=function(step){
 				$scope.ActiveStep = step.id;
 			};
-			$scope.setSelecetedStudent=function(student){
+			$scope.setSelectedStudent=function(student){
 				$scope.SelectedStudent = {
 										 id:student.id,
 										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" "+student.suffix_name,
@@ -237,8 +239,8 @@ define(['app','api'], function (app) {
 					$scope.ActiveScheme={};
 				}	
 				if(field==='discount'){
-					$scope.SelectedDiscount={};
-					$scope.ActiveDiscount={};
+					$scope.SelectedDiscounts={};
+					$scope.ActiveDiscounts=[];
 					$scope.TotalDiscount=null;
 				}	
 			};
@@ -251,6 +253,9 @@ define(['app','api'], function (app) {
 			$scope.clearSearchStudent=function(){
 				$scope.searchStudent=null;
 			};
+			$scope.toggleSelectDiscount=function(id){
+				$scope.SelectedDiscounts[id] = !$scope.SelectedDiscounts[id]; 
+			}
 		};
     }]);
 });
