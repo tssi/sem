@@ -29,7 +29,7 @@
 						  </ul>
 					</div>
 				</div>
-				<div class="list-group-canvas">
+				<div class="list-group-canvas" ng-show="List">
 					<div class="list-group-item list-group-header">
 						<h5>List Information</h5>
 					</div>
@@ -42,7 +42,7 @@
 						</dl>
 					</div>
 					<div class="list-group-item list-group-header">
-						<h5>List Item</h5>
+						<h5>List Items</h5>
 					</div>
 					<div class="list-group-item" ng-show="List.state==='edit'">
 						<table class="table table-bordered table-condensed">
@@ -53,7 +53,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td><input type="text" class="form-control" ng-blur="updateItemID(listitem)" ng-model="listitem.id"/></td>
+									<td><input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem.id"/></td>
 									<td><input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem.name"/></td>
 									<td class="text-center"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
@@ -80,6 +80,19 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</div>
+				<div class="list-group-canvas" ng-hide="List">
+					<div class="list-group-item">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</div>
+								<h4>Nothing to Maintain!</h4>
+								<p class="empty-state-message">Choose from the list you want to maintain.</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

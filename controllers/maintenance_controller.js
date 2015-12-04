@@ -51,14 +51,6 @@ define(['app','api'], function (app) {
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
-		$scope.updateItemID=function(listitem){
-			$scope.NewItem={
-							id:listitem.id,
-							name:listitem.name
-						   };
-			api.POST($scope.List.path,$scope.NewItem,function success(response){
-			});
-		};
     }]);
 });
 
