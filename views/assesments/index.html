@@ -38,7 +38,7 @@
 					<div class="list-group-item" ng-show="hasStudentInfo || hasLevelInfo">
 						<div class="row">
 							<div class="col-md-8">
-								<dl class="dl-horizontal">
+								<dl>
 									<dt>Student</dt>
 									<dd>{{ActiveStudent.id}} <span ng-if="ActiveStudent.id">| {{ActiveStudent.name}}</span></dd>
 									<dt ng-if="hasLevelInfo">Level / Section</dt>
@@ -47,9 +47,9 @@
 									<dd ng-if="hasSchemeInfo">{{ActiveScheme.name}}</dd>	
 								</dl>
 							</div>
-							<div class="col-md-4">
-								<label class="pull-right">Total</label>
-								<h3 class="amount">{{TotalAmount | currency: 'P'}}</h3>
+							<div class="col-md-4 amount amount-total">
+								<label>Total</label>
+								<h3>{{TotalAmount | currency: 'P'}}</h3>
 							</div>
 						</div>
 					</div>
