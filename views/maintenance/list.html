@@ -1,0 +1,88 @@
+<!--div for controller-->
+<div ng-controller="MaintenanceController" ng-init="list()">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<label for="">Maintenance</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item ng-class:{active: list.name === List.name}" ng-repeat="list in MaintenanceList" ng-click="openMaintenance(list)">
+						<h4 class="list-group-item-heading" >{{list.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{list.description}}</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="removeMaintenanceInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<label ng-if="!List">List Information</label>
+					<label ng-if="List">{{List.name}}</label>
+					<div class="btn-group btn-group-sm pull-right" uib-dropdown>
+						  <button class="btn btn-default dropdown-toggle" type="button"  uib-dropdown-toggle>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						  </ul>
+					</div>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>List Information</h5>
+					</div>
+					<div class="list-group-item">
+						<dl class="dl-horizontal">
+							<dt>Name</dt>
+							<dd>{{List.name}}</dd>
+							<dt>Description</dt>
+							<dd>{{List.description}}</dd>
+						</dl>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>List Item</h5>
+					</div>
+					<div class="list-group-item" ng-show="List.state==='edit'">
+						<table class="table table-bordered table-condensed">
+							<thead>
+								<th class="text-center col-md-4">ID</th>
+								<th class="text-center col-md-7">Name</th>
+								<th class="text-center col-md-1"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="listitem in ListItems">
+									<td><input type="text" class="form-control" ng-model="listitem.id"/></td>
+									<td><input type="text" class="form-control" ng-model="listitem.name"/></td>
+									<td class="text-center"><button class="btn btn-danger" ng-click="removeItem($index,id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<td><input type="text" class="form-control" ng-model="newID" placeholder="ID"/></td>
+								<td><input type="text" class="form-control" ng-model="newName" placeholder="Name"/></td>
+								<td class="text-center"><button class="btn btn-success" ng-click="addNewItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+							</tfoot>
+						</table>
+					</div>
+					<div class="list-group-item" ng-show="List.state==='sort'">
+						<table ui-tree class="table table-bordered table-condensed">
+							<thead>
+								<th class="text-center col-md-4">ID</th>
+								<th class="text-center col-md-7">Name</th>
+								<th class="text-center col-md-1"><button class="btn btn-danger" ng-click="updateState('edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
+							</thead>
+							<tbody ui-tree-nodes ng-model="ListItems">
+								<tr ng-repeat="listitem in ListItems" ui-tree-node >
+									<td>{{listitem.id}}</td>
+									<td>{{listitem.name}}</td>
+									<td class="text-center"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

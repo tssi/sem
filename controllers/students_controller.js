@@ -41,6 +41,16 @@ define(['app','api'], function (app) {
 				console.log(response.data);
 				$scope.Cities = response.data;
 			});
+			$scope.Religions=[];
+			api.GET('religions',{limit:15},function success(response){
+				console.log(response.data);
+				$scope.Religions = response.data;
+			});
+			$scope.Citizenships=[];
+			api.GET('citizenships',{limit:15},function success(response){
+				console.log(response.data);
+				$scope.Citizenships = response.data;
+			});
 			$scope.nextStep = function(){
 			if($scope.ActiveStep===1){
 				$scope.basicInfo();
