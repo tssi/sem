@@ -13,31 +13,31 @@ define(['model'],function($model){
 					  "program": "pilot"
 					},
 					{
-					  "id": 1,
+					  "id": 2,
 					  "name": "B7",
 					  "year_level_id": "G7",
 					  "program": "regular"
 					},
 					{
-					  "id": 1,
+					  "id": 3,
 					  "name": "A8",
 					  "year_level_id": "G8",
 					  "program": "pilot"
 					},
 					{
-					  "id": 1,
+					  "id": 4,
 					  "name": "B8",
 					  "year_level_id": "G8",
 					  "program": "regular"
 					},
 					{
-					  "id": 1,
+					  "id": 5,
 					  "name": "A9",
 					  "year_level_id": "G9",
 					  "program": "pilot"
 					},
 					{
-					  "id": 1,
+					  "id": 6,
 					  "name": "B9",
 					  "year_level_id": "G9",
 					  "program": "regular"
