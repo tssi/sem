@@ -262,18 +262,14 @@
 							<div class="row">
 								<div class="col-md-6">
 									<label for=""> Religion</label>
-									<select name="" id="" class="form-control" ng-model="religion">
+									<select name="" id="" class="form-control" ng-model="religion" ng-options="religion.name as religion.name for religion in Religions">
 										<option value="">Select Religion</option>
-										<option value="RC">Roman Catholic
-										</option>
 									</select>
 								</div>
 								<div class="col-md-6">
 									<label for=""> Citizenship</label>
-									<select name="" id="" class="form-control" ng-model="citizenship">
+									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
 										<option value="">Select Citizenship</option>
-										<option value="Fil">Filipino
-										</option>
 									</select>
 								</div>
 							</div>
