@@ -14,7 +14,7 @@ define(['app','api'], function (app) {
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
-			api.GET(list.path,{limit:15},function success(response){
+			api.GET(list.path,{limit:25},function success(response){
 				$scope.ListItems=response.data;
 			});
 		};
@@ -29,7 +29,6 @@ define(['app','api'], function (app) {
 			$scope.List.state=state;
 		};
 		$scope.addNewItem=function(){
-			console.log($scope.List.path);
 			$scope.NewItem={
 							id:$scope.newID,
 							name:$scope.newName
