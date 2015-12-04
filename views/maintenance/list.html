@@ -53,9 +53,9 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td><input type="text" class="form-control" ng-model="listitem.id"/></td>
-									<td><input type="text" class="form-control" ng-model="listitem.name"/></td>
-									<td class="text-center"><button class="btn btn-danger" ng-click="removeItem($index,id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td><input type="text" class="form-control" ng-blur="updateItemID(listitem)" ng-model="listitem.id"/></td>
+									<td><input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem.name"/></td>
+									<td class="text-center"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 							</tbody>
 							<tfoot>
@@ -76,7 +76,7 @@
 								<tr ng-repeat="listitem in ListItems" ui-tree-node >
 									<td>{{listitem.id}}</td>
 									<td>{{listitem.name}}</td>
-									<td class="text-center"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
+									<td class="text-center"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>
 							</tbody>
 						</table>

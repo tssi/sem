@@ -23,14 +23,18 @@ define(['app','api'], function (app) {
 			$scope.ListItems=null;
 		};
 		$scope.removeItem=function(index,id){
-			$scope.ListItems.splice(index, 1);
+			console.log(id);
+			var data = {id:id};
+			api.DELETE($scope.List.path,data,function(response){
+				console.log(response.data);
+				$scope.ListItems.splice(index, 1);
+				});
 		};
 		$scope.updateState=function(state){
 			$scope.List.state=state;
 		};
 		$scope.addNewItem=function(){
 			$scope.NewItem={
-							id:$scope.newID,
 							name:$scope.newName
 						   };
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
@@ -39,7 +43,22 @@ define(['app','api'], function (app) {
 				$scope.newName=null;
 			});
 		};
-		
+		$scope.updateItem=function(listitem){
+			$scope.NewItem={
+							id:listitem.id,
+							name:listitem.name
+						   };
+			api.POST($scope.List.path,$scope.NewItem,function success(response){
+			});
+		};
+		$scope.updateItemID=function(listitem){
+			$scope.NewItem={
+							id:listitem.id,
+							name:listitem.name
+						   };
+			api.POST($scope.List.path,$scope.NewItem,function success(response){
+			});
+		};
     }]);
 });
 
