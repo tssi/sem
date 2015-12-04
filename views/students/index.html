@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6 col-md-push-6">
+		<div class="col-md-6">
 			<div class="list-group" ng-show="hasBasicInfo || hasContactInfo">
 				<div class="list-group-item list-group-header">
 					<label for="">Summary</label>
@@ -104,15 +104,24 @@
 					<label for="">Summary</label>
 				</div>
 				<div class="list-group-canvas">
-					<div class="list-group-item">
-						<div class="well">
-							<span>No information to display</span>
+					<div class="list-group-item" ng-if="!hasInfo">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-user"></i>
+								</div>
+								<h4>Inquiry not yet started!</h4>
+								<p class="empty-state-message">Get your student's information.</p>
+							</div>
+							<div class="empty-state-help alert alert-info"> 
+								<span class="empty-state-action-icon glyphicon glyphicon-chevron-right"></span> Click to proceed, after completing each step.
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 col-md-pull-6">
+		<div class="col-md-6">
 				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
 				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=3,'glyphicon-ok': ActiveStep===3}" aria-hidden="true"></span>
 				</button>
@@ -211,7 +220,7 @@
 									<th class="text-center">Relationship</th>
 									<th class="text-center">Name</th>
 									<th class="text-center">Occupation</th>
-									<th class="text-center">&nbsp</th>
+									<th class="text-center">&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -262,18 +271,14 @@
 							<div class="row">
 								<div class="col-md-6">
 									<label for=""> Religion</label>
-									<select name="" id="" class="form-control" ng-model="religion">
+									<select name="" id="" class="form-control" ng-model="religion" ng-options="religion.name as religion.name for religion in Religions">
 										<option value="">Select Religion</option>
-										<option value="RC">Roman Catholic
-										</option>
 									</select>
 								</div>
 								<div class="col-md-6">
 									<label for=""> Citizenship</label>
-									<select name="" id="" class="form-control" ng-model="citizenship">
+									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
 										<option value="">Select Citizenship</option>
-										<option value="Fil">Filipino
-										</option>
 									</select>
 								</div>
 							</div>
@@ -403,9 +408,17 @@
 					</div>
 					<div class="list-group-canvas">
 						<div class="list-group-item">
-							<div class="form-group">
-								<h5>Enter Confirmation Code</h5>
-								<input type="text" class="form-control" placeholder="See Code in the Summary" />
+							<div class="empty-state">
+								<div class="well">
+									<div class="empty-state-icon">
+										<i class="glyphicon glyphicon-thumbs-up"></i>
+									</div>
+									<h4>Great job!</h4>
+									<p class="empty-state-message">Review your inquiry summary.</p>
+								</div>
+								<div class="empty-state-help alert alert-info"> 
+									<span class="empty-state-action-icon glyphicon glyphicon-ok"></span> Click to confirm.
+								</div>
 							</div>
 						</div>
 					</div>
