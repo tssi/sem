@@ -49,7 +49,7 @@
 							</div>
 							<div class="col-md-4 amount amount-total">
 								<label>Total</label>
-								<h3>{{TotalAmount | currency: 'P'}}</h3>
+								<h3><div class="amount total peso">{{TotalAmount | currency}}</div></h3>
 							</div>
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 						<h5>Fee Breakdown</h5>
 					</div>
 					<div class="list-group-item" ng-show="hasSectionInfo">
-						<table class="table table-condensed table-bordered">
+						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
 									<th class="text-center">Description</th>
@@ -67,20 +67,22 @@
 							<tbody>
 								<tr ng-repeat="fee in ActiveTuition.fees">
 									<td>{{fee.name}}</td>
-									<td class="text-right">{{fee.amount | currency: 'P'}}</td>
-								</tr>
-								<tr ng-if="ActiveTuition.fees.length">
-									<td>Total</td>
-									<td class="text-right">{{TotalDue | currency:'P'}}</td>
+									<td><div class="amount" ng-class="{peso:$first}">{{fee.amount | currency: ''}}</div></td>
 								</tr>
 							</tbody>
+							<tfoot> 
+								<tr ng-if="ActiveTuition.fees.length">
+									<td>Total Due</td>
+									<td><div class="amount peso">{{TotalDue | currency}}</div></td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 					<div class="list-group-item list-group-header" ng-show="hasAdjustmentInfo">
 						<h5>Adjustments</h5>
 					</div>
 					<div class="list-group-item" ng-show="hasAdjustmentInfo">
-						<table class="table table-condensed table-bordered">
+						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
 									<th class="text-center">Description</th>
@@ -90,29 +92,42 @@
 							<tbody>
 								<tr ng-if="ActiveScheme.interest_charge>0">
 									<td>Interest Charge</td>
-									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
+									<td><div class="amount peso">{{ActiveScheme.interest_charge | currency}}</div></td>
 								</tr>
 								<tr ng-if="ActiveScheme.interest_charge<0">
 									<td>{{ActiveScheme.name}} Discount</td>
-									<td class="text-right">{{ActiveScheme.interest_charge | currency:'P'}}</td>
+									<td><div class="amount peso">{{ActiveScheme.interest_charge | currency}}</div></td>
 								</tr>
 								<tr ng-if="TotalDiscount">
 									<td>
-									Discount 
-									(<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
-									<span ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency: 'P'}}</span> 
-									<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
-									<span ng-if="fee==='all'">fees</span>
-									<span ng-if="!$last"> ,</span>
-									</span>)
+									Discounts:
 									</td>
-									<td class="text-right">{{TotalDiscount | currency: 'P'}}</td>
+									<td rowspan="{{ActiveDiscounts.length+1}}"><div class="amount" ng-class="{peso:!ActiveScheme.interest_charge}">{{TotalDiscount | currency}}</div></td>
 								</tr>
-								<tr ng-if="TotalAdjustment">
-									<td>Total Adjustment</td>
-									<td class="text-right">{{TotalAdjustment | currency: 'P'}}</td>
+								<tr ng-if="TotalDiscount" ng-repeat="ActiveDiscount in ActiveDiscounts">
+									<td>
+										<div class="row">
+											<div class="col-md-5 col-md-offset-1">
+												<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
+												<span ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency}}</span> 
+												<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
+												<span ng-if="fee==='all'">fees</span>
+												<span ng-if="!$last"> ,</span>
+												</span>
+											</div>
+											<div class="col-md-4 col-md-offset-2">
+												<div class="amount pull-right" ng-class="{peso:$first}">{{ActiveDiscount.computed_amount | currency}}</div>
+											</div>
+										</div>
+									</td>
 								</tr>
 							</tbody>
+							<tfoot> 
+								<tr ng-if="TotalAdjustment">
+									<td>Total Adjustment</td>
+									<td><div class="amount peso">{{TotalAdjustment | currency}}</div></td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -135,7 +150,7 @@
 					<div class="list-group-item text-center" ng-if="!Students.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelecetedStudent(student)">
+					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
 						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{student.id}}</span> | <span>{{student.year_level_id}}</span></p>
@@ -207,7 +222,7 @@
 							<div class="col-md-6">
 								<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
 								<p class="list-group-item-text">
-									<span>{{paymentScheme.amount | currency:'P'}}</span>
+									<span class="amount total peso">{{paymentScheme.amount | currency}}</span>
 									x <span>{{paymentScheme.payment_frequency}}</span>
 									<span ng-if="paymentScheme.interest_charge">
 									<span ng-show="paymentScheme.interest_charge>0">+</span> <span>{{paymentScheme.interest_charge}}</span> 
@@ -216,7 +231,7 @@
 								</p>
 							</div>
 							<div class="col-md-6">
-								<h3 class="pull-right">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency: 'P'}}</h3>
+								<h3 class="amount total peso">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency}}</h3>
 							</div>
 						</div>
 						
