@@ -1,0 +1,71 @@
+<!--div for controller-->
+<div ng-controller="MaintenanceController" ng-init="list()">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<label for="">Maintenance</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item ng-class:{active: list.name === List.name}" ng-repeat="list in MaintenanceList" ng-click="openMaintenance(list)">
+						<h4 class="list-group-item-heading" >{{list.id}}</h4>
+						<p class="list-group-item-text">
+						<span>{{list.name}}</span> | <span>{{list.description}}</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="removeMaintenanceInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<label ng-if="!List">List Information</label>
+					<label ng-if="List">{{List.name}}</label>
+					<div class="btn-group btn-group-sm pull-right" uib-dropdown>
+						  <button class="btn btn-default dropdown-toggle" type="button"  uib-dropdown-toggle>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li><a ng-click="deleteBooklet(Booklet.id)">Delete</a></li>
+						  </ul>
+					</div>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>List Information</h5>
+					</div>
+					<div class="list-group-item">
+						<dl class="dl-horizontal">
+							<dt>Name</dt>
+							<dd>{{List.name}}</dd>
+							<dt>Description</dt>
+							<dd>{{List.description}}</dd>
+						</dl>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>List Information</h5>
+					</div>
+					<div class="list-group-item">
+						<table class="table table-bordered table-condensed">
+							<thead>
+								<th class="text-center">Name</th>
+								<th class="text-center">Description</th>
+								<th class="text-center"><button class="btn btn-default btn-sm"><span class="glyphicon glyphicon-sort"></span></button></th>
+							</thead>
+							<tbody>
+								<td><input type="text" class="form-control" ng-model="List.name"/></td>
+								<td><input type="text" class="form-control" ng-model="List.description"/></td>
+								<td><button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></td>
+							</tbody>
+							<tfoot>
+								<td><input type="text" class="form-control"/></td>
+								<td><input type="text" class="form-control"/></td>
+								<td><button class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span></button></td>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
