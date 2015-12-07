@@ -10,7 +10,8 @@ define(['app','api'], function (app) {
 									{id:4, name:"Religion", description:"List of Religion", path:"religions"},
 									{id:5, name:"Citizenship", description:"List of Citizenship", path:"citizenships"}
 								   ];
-		};
+		$scope.newItem={};
+	   };
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
@@ -38,20 +39,16 @@ define(['app','api'], function (app) {
 			$scope.List.state=state;
 		};
 		$scope.addNewItem=function(){
-			$scope.NewItem={
-							name:$scope.newName
-						   };
-			api.POST($scope.List.path,$scope.NewItem,function success(response){
+			console.log($scope.newItem);
+			api.POST($scope.List.path,$scope.newItem,function success(response){
 				$scope.ListItems.unshift(response.data);
-				$scope.newID=null;
-				$scope.newName=null;
+				console.log($scope.ListItems);
+				$scope.newItem={};
 			});
 		};
 		$scope.updateItem=function(listitem){
-			$scope.NewItem={
-							id:listitem.id,
-							name:listitem.name
-						   };
+			$scope.NewItem=listitem;
+			console.log($scope.NewItem);
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
