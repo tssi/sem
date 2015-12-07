@@ -74,10 +74,10 @@ define(['app','api'], function (app) {
 					api.GET('students',function success(response){
 						$scope.Students = response.data;
 					});
-					api.GET('year_levels',{limit:15},function success(response){
+					api.GET('year_levels',{limit:'less'},function success(response){
 						$scope.YearLevels = response.data;
 					});
-					api.GET('sections',function success(response){
+					api.GET('sections',{limit:'less'},function success(response){
 						$scope.Sections = response.data;
 					});
 					api.GET('tuition',function success(response){
