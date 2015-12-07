@@ -39,7 +39,6 @@ define(['app','api'], function (app) {
 			$scope.List.state=state;
 		};
 		$scope.addNewItem=function(){
-			console.log($scope.newItem);
 			api.POST($scope.List.path,$scope.newItem,function success(response){
 				$scope.ListItems.unshift(response.data);
 				console.log($scope.ListItems);
@@ -48,16 +47,13 @@ define(['app','api'], function (app) {
 		};
 		$scope.updateItem=function(listitem){
 			$scope.NewItem=listitem;
-			console.log($scope.NewItem);
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
 		api.GET('year_levels',{limit:15},function success(response){
-			console.log(response.data);
 			$scope.YearLevels = response.data;
 		});
 		api.GET('educ_levels',{limit:15},function success(response){
-			console.log(response.data);
 			$scope.EducLevels = response.data;
 		});
     }]);
