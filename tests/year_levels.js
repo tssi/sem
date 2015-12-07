@@ -88,7 +88,7 @@ define(['model'],function($model){
 						"educ_level_id": "HS",
 						"name": "Grade 9",
 						"alias": "G9",
-						"order": 11
+						"order": 12
 					  },
 					  {
 						"id": "GX",
