@@ -14,8 +14,12 @@ define(['app','api'], function (app) {
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
+			$scope.Columns=[];
 			api.GET(list.path,{limit:25},function success(response){
 				$scope.ListItems=response.data;
+				for(var key in response.data[0]){
+					$scope.Columns.push(key);
+				};
 			});
 		};
 		$scope.removeMaintenanceInfo=function(){
