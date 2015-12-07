@@ -52,13 +52,29 @@
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
-									<td class="col-md-2" ng-repeat="column in Columns"><input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}"/></td>
+									<td class="col-md-2" ng-repeat="column in Columns">
+									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
+										<option value="">Select YearLevel</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='educ_level_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
+										<option value="">Select EducLevels</option>
+									</select>
+									</td>
 									<td class="text-center col-md-2"><button class="btn btn-success" ng-click="addNewItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td class="col-md-2" ng-repeat="column in Columns"><input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]"/></td>
+									<td class="col-md-2" ng-repeat="column in Columns">
+									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
+										<option value="">Select YearLevel</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='educ_level_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
+										<option value="">Select EducLevels</option>
+									</select>
+									</td>
 									<td class="text-center col-md-2"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 							</tbody>

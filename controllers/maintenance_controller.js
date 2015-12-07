@@ -52,6 +52,14 @@ define(['app','api'], function (app) {
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
+		api.GET('year_levels',{limit:15},function success(response){
+			console.log(response.data);
+			$scope.YearLevels = response.data;
+		});
+		api.GET('educ_levels',{limit:15},function success(response){
+			console.log(response.data);
+			$scope.EducLevels = response.data;
+		});
     }]);
 });
 
