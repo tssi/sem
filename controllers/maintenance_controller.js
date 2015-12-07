@@ -10,12 +10,18 @@ define(['app','api'], function (app) {
 									{id:4, name:"Religion", description:"List of Religion", path:"religions"},
 									{id:5, name:"Citizenship", description:"List of Citizenship", path:"citizenships"}
 								   ];
-		};
+			$scope.newItem={};
+	   };
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
+			$scope.Columns=[];
 			api.GET(list.path,{limit:25},function success(response){
 				$scope.ListItems=response.data;
+				for(var key in response.data[0]){
+					$scope.Columns.push(key);
+				};
+				$scope.ColumnLen =  Math.round(10/$scope.Columns.length);
 			});
 		};
 		$scope.removeMaintenanceInfo=function(){
@@ -34,23 +40,23 @@ define(['app','api'], function (app) {
 			$scope.List.state=state;
 		};
 		$scope.addNewItem=function(){
-			$scope.NewItem={
-							name:$scope.newName
-						   };
-			api.POST($scope.List.path,$scope.NewItem,function success(response){
-				$scope.ListItems.push(response.data);
-				$scope.newID=null;
-				$scope.newName=null;
+			api.POST($scope.List.path,$scope.newItem,function success(response){
+				$scope.ListItems.unshift(response.data);
+				console.log($scope.ListItems);
+				$scope.newItem={};
 			});
 		};
 		$scope.updateItem=function(listitem){
-			$scope.NewItem={
-							id:listitem.id,
-							name:listitem.name
-						   };
+			$scope.NewItem=listitem;
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
+		api.GET('year_levels',{limit:15},function success(response){
+			$scope.YearLevels = response.data;
+		});
+		api.GET('educ_levels',{limit:15},function success(response){
+			$scope.EducLevels = response.data;
+		});
     }]);
 });
 
