@@ -47,9 +47,16 @@
 					<div class="list-group-item" ng-show="List.state==='edit'">
 						<table class="table table-bordered table-condensed">
 							<thead>
-								<th class="text-center col-md-4">ID</th>
-								<th class="text-center col-md-7">Name</th>
-								<th class="text-center col-md-1"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+								<tr>
+									<th class="text-center col-md-4">ID</th>
+									<th class="text-center col-md-7">Name</th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+								</tr>
+								<tr>
+									<td><input type="text" class="form-control" ng-model="newID" placeholder="ID"/></td>
+									<td><input type="text" class="form-control" ng-model="newName" placeholder="Name"/></td>
+									<td class="text-center"><button class="btn btn-success" ng-click="addNewItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
@@ -58,19 +65,22 @@
 									<td class="text-center"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 							</tbody>
-							<tfoot>
-								<td><input type="text" class="form-control" ng-model="newID" placeholder="ID"/></td>
-								<td><input type="text" class="form-control" ng-model="newName" placeholder="Name"/></td>
-								<td class="text-center"><button class="btn btn-success" ng-click="addNewItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
-							</tfoot>
 						</table>
 					</div>
 					<div class="list-group-item" ng-show="List.state==='sort'">
 						<table ui-tree class="table table-bordered table-condensed table-sort">
 							<thead>
-								<th class="text-center col-md-4">ID</th>
-								<th class="text-center col-md-7">Name</th>
-								<th class="text-center col-md-1"><button class="btn btn-danger" ng-click="updateState('edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
+								<tr>
+									<th class="text-center col-md-4">ID</th>
+									<th class="text-center col-md-7">Name</th>
+									<th class="text-center col-md-1"><button class="btn btn-danger" ng-click="updateState('edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="text-center help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
+									</td>
+									<td class="text-center"><a href="" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></a></td>
+								</tr>
 							</thead>
 							<tbody ui-tree-nodes ng-model="ListItems">
 								<tr ng-repeat="listitem in ListItems" ui-tree-node >

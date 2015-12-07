@@ -38,7 +38,7 @@ define(['app','api'], function (app) {
 							name:$scope.newName
 						   };
 			api.POST($scope.List.path,$scope.NewItem,function success(response){
-				$scope.ListItems.push(response.data);
+				$scope.ListItems.unshift(response.data);
 				$scope.newID=null;
 				$scope.newName=null;
 			});
