@@ -180,7 +180,10 @@
 					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel" ng-click="setSelectedLevel(yearLevel)">
 						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{yearLevel.educ_level_id}}</span> | <span>{{yearLevel.id}}</span></p>
+						<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
+						<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1">Promoted</span>
+						<span class="label label-success" ng-if="yearLevel.order==ActiveOrder+2">Accelerated</span>
+						</p>
 					</div>
 				</div>
 			</div>
