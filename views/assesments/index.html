@@ -228,7 +228,8 @@
 									<span class="amount total peso">{{paymentScheme.amount | currency}}</span>
 									x <span>{{paymentScheme.payment_frequency}}</span>
 									<span ng-if="paymentScheme.interest_charge">
-									<span ng-show="paymentScheme.interest_charge>0">+</span> <span>{{paymentScheme.interest_charge}}</span> 
+									<span ng-show="paymentScheme.interest_charge>0">plus <span class="amount total peso">{{paymentScheme.interest_charge | currency}}</span> </span> 
+									<span ng-show="paymentScheme.interest_charge<0">less <span class="amount total peso">{{(paymentScheme.interest_charge*-1) | currency}}</span> </span> 
 									<span>{{paymentScheme.interest_charge<0?'discount':'interest'}}</span>
 									</span>
 								</p>
@@ -237,7 +238,6 @@
 								<h3 class="amount total peso">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency}}</h3>
 							</div>
 						</div>
-						
 					</div>
 				</div>
 			</div>			
