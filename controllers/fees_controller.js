@@ -2,6 +2,7 @@
 define(['app','api'], function (app) {
     app.register.controller('FeeController',['$scope','$rootScope','$timeout','api', function ($scope,$rootScope,$timeout,api) {
 		$scope.init=function(){
+			$rootScope.__MODULE_NAME = 'Fees Structure';
 			$scope.Titles = [
 							{id:1, value:"PS1", state:"read"},
 							{id:2, value:"PS3", state:"read"},
