@@ -1,10 +1,10 @@
 <!--div for controller-->
 <div ng-controller="MaintenanceController" ng-init="list()">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
-					<label for="">Maintenance</label>
+					<label for="">List Maintenance</label>
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item ng-class:{active: list.name === List.name}" ng-repeat="list in MaintenanceList" ng-click="openMaintenance(list)">
@@ -15,13 +15,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="removeMaintenanceInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-danger pull-right" ng-disabled="!List" ng-click="removeMaintenanceInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<label ng-if="!List">List Information</label>
 					<label ng-if="List">{{List.name}}</label>
-					<div class="btn-group btn-group-sm pull-right" uib-dropdown>
+					<div class="btn-group btn-group-sm pull-right hide" uib-dropdown>
 						  <button class="btn btn-default dropdown-toggle" type="button"  uib-dropdown-toggle>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						  </button>
@@ -31,18 +31,7 @@
 				</div>
 				<div class="list-group-canvas" ng-show="List">
 					<div class="list-group-item list-group-header">
-						<h5>List Information</h5>
-					</div>
-					<div class="list-group-item">
-						<dl class="dl-horizontal">
-							<dt>Name</dt>
-							<dd>{{List.name}}</dd>
-							<dt>Description</dt>
-							<dd>{{List.description}}</dd>
-						</dl>
-					</div>
-					<div class="list-group-item list-group-header">
-						<h5>List Items</h5>
+						<h5>{{List.name}} List</h5>
 					</div>
 					<div class="list-group-item" ng-show="List.state==='edit'" ng-if="Columns.length">
 						
@@ -53,7 +42,7 @@
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
-									<td class="col-md-2" ng-repeat="column in Columns">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">
 									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -67,7 +56,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td class="col-md-2" ng-repeat="column in Columns">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">
 									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -85,7 +74,7 @@
 						<table ui-tree class="table table-bordered table-condensed table-sort">
 							<thead>
 								<tr>
-									<th class="text-center col-md-2" ng-repeat="column in Columns">{{column}}</th>
+									<th class="text-center col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{column}}</th>
 									<th class="text-center col-md-1"><button class="btn btn-danger" ng-click="updateState('edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
 								</tr>
 								<tr>
@@ -97,7 +86,7 @@
 							</thead>
 							<tbody ui-tree-nodes ng-model="ListItems">
 								<tr ng-repeat="listitem in ListItems" ui-tree-node >
-									<td class="col-md-2" ng-repeat="column in Columns">{{listitem[column]}}</td>
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{listitem[column]}}</td>
 									<td class="text-center col-md-1"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>
 							</tbody>
@@ -114,8 +103,8 @@
 								<div class="empty-state-icon">
 									<i class="glyphicon glyphicon-list-alt"></i>
 								</div>
-								<h4>Nothing to Maintain!</h4>
-								<p class="empty-state-message">Choose from the list you want to maintain.</p>
+								<h4>No list selected!</h4>
+								<p class="empty-state-message">Choose the list to manage.</p>
 							</div>
 						</div>
 					</div>

@@ -74,10 +74,10 @@ define(['app','api'], function (app) {
 					api.GET('students',function success(response){
 						$scope.Students = response.data;
 					});
-					api.GET('year_levels',{limit:15},function success(response){
+					api.GET('year_levels',{limit:'less'},function success(response){
 						$scope.YearLevels = response.data;
 					});
-					api.GET('sections',function success(response){
+					api.GET('sections',{limit:'less'},function success(response){
 						$scope.Sections = response.data;
 					});
 					api.GET('tuition',function success(response){
@@ -120,13 +120,12 @@ define(['app','api'], function (app) {
 				};
 				$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
 				$scope.Discounts=$scope.ActiveTuition.discounts;
-				
-				
-							
+				$scope.TotalAmount=$scope.TotalDue;
 			};
 			if($scope.ActiveStep===4){
 				$scope.ActiveScheme= $scope.SelectedScheme;
-				
+				$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.interest_charge;
+				$scope.TotalAdjustment = $scope.ActiveScheme.interest_charge;
 			}
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscounts= [];

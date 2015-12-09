@@ -109,7 +109,7 @@ define(['model'],function($model){
 						  "type": "percent",
 						  "amount": 51,
 						  "fees_applicable": [
-							"TF"
+							"TUI"
 						  ]
 						},
 						{
@@ -178,7 +178,7 @@ define(['model'],function($model){
 						  "type": "percent",
 						  "amount": 52,
 						  "fees_applicable": [
-							"TF"
+							"TUI"
 						  ]
 						},
 						{

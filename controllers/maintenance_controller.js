@@ -10,7 +10,7 @@ define(['app','api'], function (app) {
 									{id:4, name:"Religion", description:"List of Religion", path:"religions"},
 									{id:5, name:"Citizenship", description:"List of Citizenship", path:"citizenships"}
 								   ];
-		$scope.newItem={};
+			$scope.newItem={};
 	   };
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
@@ -21,6 +21,7 @@ define(['app','api'], function (app) {
 				for(var key in response.data[0]){
 					$scope.Columns.push(key);
 				};
+				$scope.ColumnLen =  Math.round(10/$scope.Columns.length);
 			});
 		};
 		$scope.removeMaintenanceInfo=function(){
