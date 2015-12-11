@@ -1,6 +1,6 @@
 "use strict";
 define(['app','api'], function (app) {
-    app.register.controller('AssesmentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
+    app.register.controller('AssesmentController',['$scope','$rootScope','$uibModal','api', function ($scope,$rootScope,$uibModal,api) {
 		$scope.index = function(){
 			$scope.init = function(){
 				$rootScope.__MODULE_NAME = 'Assessment';
@@ -96,6 +96,7 @@ define(['app','api'], function (app) {
 					$scope.hasSchemeInfo = false;
 					$scope.hasScheduleInfo = false;
 					$scope.hasAdjustmentInfo = false;
+					$scope.AssesmentSaving = false;
 				}
 				$scope.initDataSource = function(){
 					$scope.Students=[];
@@ -210,8 +211,9 @@ define(['app','api'], function (app) {
 										  net:$scope.TotalAmount
 										 }
 								};
+				$scope.AssesmentSaving = true;
 				api.POST('assessments',$scope.Assesment,function success(response){
-					$scope.init();
+					$scope.openModal();
 				});
 			}
 			if($scope.ActiveStep<$scope.Steps.length){
@@ -288,8 +290,33 @@ define(['app','api'], function (app) {
 			$scope.toggleSelectDiscount=function(id){
 				$scope.SelectedDiscounts[id] = !$scope.SelectedDiscounts[id]; 
 			}
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+						animation: true,
+						size:'sm',
+						templateUrl: 'successModal.html',
+						controller: 'SuccessModalController',
+					});
+					modalInstance.result.then(function () {
+					  
+					}, function (source) {
+						$scope.init();
+					});
+			}
 		};
     }]);
+	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.dismissModal = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss('ok');
+		};
+	}]);
+	
 });
 
 
