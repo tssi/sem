@@ -64,13 +64,6 @@ define(['app','api'], function (app) {
 					for(var index in __amounts){
 						schedule[index].amount  = __amounts[index];
 					}
-					//Remove schedule with no amount
-					for(var index in schedule){
-						if(!schedule[index].amount){
-							schedule.splice(index,schedule.length-index);
-							break;
-						}
-					}
 					$scope.ActiveScheme.schedule = schedule;
 				}
 				function updateHasInfo(){
