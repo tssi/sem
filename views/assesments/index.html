@@ -129,7 +129,12 @@
 								</tr>
 							</tfoot>
 						</table>
-						<table class="table table-bordered table-condensed">
+					</div>
+					<div class="list-group-item list-group-header" ng-show="hasScheduleInfo">
+						<h5>Payment Schedule</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasScheduleInfo"> 
+						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
 									<th class="text-center">Billing Period</th>
@@ -138,16 +143,20 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td colspan="2">Upon Enrollment</td>
-									<td class="amount">P10,000.00</td>
-								</tr>
-								<tr>
-									<td>July 2015</td>
-									<td>July 5</td>
-									<td class="amount">P10,000.00</td>
+								<tr ng-repeat="schedule in ActiveScheme.schedule">
+									<td colspan="{{$first?2:1}}">{{schedule.billing_period}}</td>
+									<td ng-if="!$first">{{schedule.due_date}}</td>
+									<td>
+										<div class="amount pull-right" ng-class="{peso:$first}">{{schedule.amount | currency}}</div>
+									</td>
 								</tr>
 							</tbody>
+							<tfoot> 
+								<tr ng-if="TotalAmount">
+									<td colspan="2">Total Amount</td>
+									<td><div class="amount peso">{{TotalAmount | currency}}</div></td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>

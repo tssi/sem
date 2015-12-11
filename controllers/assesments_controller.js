@@ -27,13 +27,52 @@ define(['app','api'], function (app) {
 				$scope.$watch('ActiveSection',function(){
 					$scope.hasSectionInfo = $scope.ActiveSection.id;
 				});
-				$scope.$watch('ActiveScheme',function(){
-					$scope.hasSchemeInfo = $scope.ActiveScheme.id;
-					$scope.hasAdjustmentInfo = $scope.hasAdjustmentInfo || $scope.ActiveScheme.interest_charge;
+				$scope.$watchGroup(['ActiveScheme','TotalDiscount'],function(){
+					$scope.hasScheduleInfo = $scope.hasSchemeInfo = $scope.ActiveScheme.id;
+					$scope.hasAdjustmentInfo = $scope.ActiveScheme.interest_charge || $scope.TotalDiscount;
+					if($scope.TotalDiscount&&$scope.hasScheduleInfo)
+						computePaymentSchedule();
+					
 				});
-				$scope.$watch('TotalDiscount',function(){
-					$scope.hasAdjustmentInfo = $scope.hasAdjustmentInfo || $scope.TotalDiscount;	
-				});
+				function computePaymentSchedule(){
+					var totalDiscount = angular.copy($scope.TotalDiscount)*-1;
+					var schedule = angular.copy($scope.SelectedScheme.schedule);
+					//Deduct discount
+					for(var index in schedule){
+						var bill = schedule[index];
+						if(totalDiscount>bill.amount){
+							totalDiscount = totalDiscount - bill.amount;
+							bill.amount = 0;
+						}else if(totalDiscount<=bill.amount){
+							bill.amount =  bill.amount - totalDiscount;
+							totalDiscount = 0;
+						}
+						schedule[index]=bill;
+						if(!totalDiscount) break;
+					}
+					//Collect adjusted and reset amount
+					var __amounts = [];
+					for(var index in schedule){
+						var bill = schedule[index];
+						if(bill.amount){
+							__amounts.push(bill.amount);
+							bill.amount=0;
+							schedule[index] = bill;
+						}
+					}
+					//Assign collected amounts
+					for(var index in __amounts){
+						schedule[index].amount  = __amounts[index];
+					}
+					//Remove schedule with no amount
+					for(var index in schedule){
+						if(!schedule[index].amount){
+							schedule.splice(index,schedule.length-index);
+							break;
+						}
+					}
+					$scope.ActiveScheme.schedule = schedule;
+				}
 				function updateHasInfo(){
 					$scope.hasInfo = $scope.hasStudentInfo || $scope.hasLevelInfo || $scope.hasSectionInfo || $scope.hasSchemeInfo || $scope.hasAdjustmentInfo;
 				};
@@ -62,6 +101,7 @@ define(['app','api'], function (app) {
 					$scope.hasLevelInfo = false;
 					$scope.hasSectionInfo = false;
 					$scope.hasSchemeInfo = false;
+					$scope.hasScheduleInfo = false;
 					$scope.hasAdjustmentInfo = false;
 				}
 				$scope.initDataSource = function(){
