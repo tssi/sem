@@ -19,6 +19,7 @@ define(['model'],function($model){
 					  "birthplace": "Malvar",
 					  "religion": "Roman Catholic",
 					  "citizenship": "Filipino",
+					  "prev_school": "ICMS",
 					  "family": [
 						{
 						  "type": "parent",

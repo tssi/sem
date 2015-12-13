@@ -47,7 +47,16 @@ define(['model'],function($model){
 						  "id": "DSCC",
 						  "name": "Discount C",
 						  "type": "peso",
-						  "amount": 10,
+						  "amount": 550,
+						  "fees_applicable": [
+							"all"
+						  ]
+						},
+						{
+						  "id": "DSCD",
+						  "name": "Discount D",
+						  "type": "peso",
+						  "amount": 1000,
 						  "fees_applicable": [
 							"all"
 						  ]
@@ -59,28 +68,131 @@ define(['model'],function($model){
 						  "name": "Annual",
 						  "payment_frequency": 1,
 						  "amount": 8000,
-						  "interest_charge": -500
+						  "interest_charge": -500,
+						  "schedule":[
+							{
+								"billing_period": "Upon enrollment",
+								"due_date": "June 5",
+								"amount": 7500
+							}
+						  ],
 						},
 						{
 						  "id": "SEMI",
 						  "name": "Semi Annual",
 						  "payment_frequency": 2,
 						  "amount": 4000,
-						  "interest_charge": -250
+						  "interest_charge": -250,
+						   "schedule":[
+							{
+								"billing_period": "Upon enrollment",
+								"due_date": "Jun 5",
+								"amount": 3750
+							},
+							{
+								"billing_period": "September 2016",
+								"due_date": "Sep 5",
+								"amount": 4000
+							}
+						  ],
 						},
 						{
 						  "id": "MNTH",
 						  "name": "Monthly",
 						  "payment_frequency": 8,
 						  "amount": 1000,
-						  "interest_charge": 0
+						  "interest_charge": 0,
+						  "schedule":[
+							{
+								"billing_period": "Upon enrollment",
+								"due_date": "Jun 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "July 2016",
+								"due_date": "Jul 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "August 2016",
+								"due_date": "Aug 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "September 2016",
+								"due_date": "Sep 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "October 2016",
+								"due_date": "Oct 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "November 2016",
+								"due_date": "Nov 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "December 2016",
+								"due_date": "Dec 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "January 2017",
+								"due_date": "Jan 5",
+								"amount": 1000
+							},
+							]
 						},
 						{
 						  "id": "EASY",
 						  "name": "Easy",
 						  "payment_frequency": 8,
-						  "amount": 1100,
-						  "interest_charge": 800
+						  "amount": 1000,
+						  "interest_charge": 800,
+						  "schedule":[
+							{
+								"billing_period": "Upon enrollment",
+								"due_date": "Jun 5",
+								"amount": 1800
+							},
+							{
+								"billing_period": "July 2016",
+								"due_date": "Jul 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "August 2016",
+								"due_date": "Aug 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "September 2016",
+								"due_date": "Sep 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "October 2016",
+								"due_date": "Oct 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "November 2016",
+								"due_date": "Nov 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "December 2016",
+								"due_date": "Dec 5",
+								"amount": 1000
+							},
+							{
+								"billing_period": "January 2017",
+								"due_date": "Jan 5",
+								"amount": 1000
+							},
+							]
 						}
 					  ]
 					},

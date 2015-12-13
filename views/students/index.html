@@ -54,6 +54,8 @@
 								<dd>{{Student.religion}}</dd>
 								<dt>Citizenship</dt>
 								<dd>{{Student.citizenship}}</dd>
+								<dt>Previous School</dt>
+								<dd>{{Student.prev_school}}</dd>
 						</dl>
 						<table class="table table-condensed table-bordered">
 							<thead>
@@ -132,28 +134,6 @@
 						<label>Basic Information</label>
 				  </div>
 				  <div class="list-group-canvas">
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-6">
-									<label for=""> Department</label>
-									<div class="btn-group btn-group-justified">
-									  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
-										<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
-									  </div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<label for=""> Level</label>
-									<select name="" id="" class="form-control"  ng-model="level">
-										<option value="">Select Level</option>
-										<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
-										</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Name</h5>
 					</div>
@@ -280,6 +260,41 @@
 									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
 										<option value="">Select Citizenship</option>
 									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Academic</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-6">
+										<label for=""> Department</label>
+										<div class="btn-group btn-group-justified">
+										  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
+											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
+										  </div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<label for=""> Level</label>
+										<select name="" id="" class="form-control"  ng-model="level">
+											<option value="">Select Level</option>
+											<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-12">
+										<label for="">Previous School</label>
+										<input type="text" class="form-control" placeholder="School Name" ng-model="prevSchool"/>
+									</div>
 								</div>
 							</div>
 						</div>

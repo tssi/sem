@@ -130,12 +130,41 @@
 							</tfoot>
 						</table>
 					</div>
+					<div class="list-group-item list-group-header" ng-show="hasScheduleInfo">
+						<h5>Payment Schedule</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasScheduleInfo"> 
+						<table class="table table-condensed table-bordered table-amounts">
+							<thead>
+								<tr>
+									<th class="text-center">Billing Period</th>
+									<th class="text-center">Due Date</th>
+									<th class="text-center">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="schedule in ActiveScheme.schedule" ng-if="schedule.amount">
+									<td colspan="{{$first?2:1}}">{{schedule.billing_period}}</td>
+									<td ng-if="!$first">{{schedule.due_date}}</td>
+									<td>
+										<div class="amount pull-right" ng-class="{peso:$first}">{{schedule.amount | currency}}</div>
+									</td>
+								</tr>
+							</tbody>
+							<tfoot> 
+								<tr ng-if="TotalAmount">
+									<td colspan="2">Total Amount</td>
+									<td><div class="amount peso">{{TotalAmount | currency}}</div></td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
-			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
-			<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}" aria-hidden="true"></span>
+			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="AssesmentSaving">
+			<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}"  aria-hidden="true"></span>
 			</button>
 			<div class="list-group" ng-show="ActiveStep===1">
 				<div class="list-group-item list-group-header">
@@ -148,7 +177,8 @@
 						<h5>{{Steps[0].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Students.length">
-						Loading...
+						<div class="preloader-message">Loading...</div>
+						<div class="loader"></div>
 					</div>
 					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
 						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
@@ -283,7 +313,7 @@
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item">
-						<div class="empty-state">
+						<div class="empty-state" ng-hide="AssesmentSaving">
 							<div class="well">
 								<div class="empty-state-icon">
 									<i class="glyphicon glyphicon-thumbs-up"></i>
@@ -295,9 +325,29 @@
 								<span class="empty-state-action-icon glyphicon glyphicon-ok"></span> Click to confirm.
 							</div>
 						</div>
+						<div class="empty-state" ng-show="AssesmentSaving">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-floppy-disk"></i>
+								</div>
+								<h4>Saving...</h4>
+								<p class="empty-state-message">Please wait for awhile.</p>
+							</div>
+							<div class="loader fade in" ng-hide="__MODAL_OPEN"></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script type="text/ng-template" id="successModal.html">
+			<div class="modal-body text-center">
+				<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
+				<h1>Success</h1>
+				<p>Student can now proceed to the casheir.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
+			</div>
+		</script>
 </div>

@@ -93,6 +93,7 @@ define(['app','api'], function (app) {
 				$scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
 				$scope.Student.family=$scope.families;
+				$scope.Student.prev_school=$scope.prevSchool;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
@@ -166,6 +167,7 @@ define(['app','api'], function (app) {
 				$scope.families=[];
 				$scope.religion = null;
 				$scope.citizenship = null;
+				$scope.prevSchool=null;
 			};
 			$scope.clearField2=function(){
 				$scope.landline = null;
