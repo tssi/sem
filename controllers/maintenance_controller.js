@@ -11,6 +11,9 @@ define(['app','api'], function (app) {
 									{id:5, name:"Citizenship", description:"List of Citizenship", path:"citizenships"}
 								   ];
 			$scope.newItem={};
+			$scope.$watchCollection('SortItem',function(newValue,oldValue){
+				$scope.sortItems();
+			});
 	   };
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
@@ -21,7 +24,7 @@ define(['app','api'], function (app) {
 				for(var key in response.data[0]){
 					$scope.Columns.push(key);
 				};
-				$scope.ColumnLen =  Math.round(10/$scope.Columns.length);
+				$scope.ColumnLen =  Math.round(10/($scope.Columns.length-1));
 			});
 		};
 		$scope.removeMaintenanceInfo=function(){
@@ -38,6 +41,9 @@ define(['app','api'], function (app) {
 		};
 		$scope.updateState=function(state){
 			$scope.List.state=state;
+			if(state==='sort'){
+				$scope.SortItem=angular.copy($scope.ListItems);
+			}
 		};
 		$scope.addNewItem=function(){
 			api.POST($scope.List.path,$scope.newItem,function success(response){
@@ -57,6 +63,17 @@ define(['app','api'], function (app) {
 		api.GET('educ_levels',{limit:15},function success(response){
 			$scope.EducLevels = response.data;
 		});
+		$scope.sortItems=function(){
+			for(var index in $scope.SortItem){
+				$scope.SortItem[index].order = parseInt(index)+1;
+			}
+		};
+		$scope.saveSortItems=function(){
+			$scope.ListItems=angular.copy($scope.SortItem);
+			api.POST($scope.List.path,$scope.ListItems,function success(response){
+				$scope.List.state="edit";
+			});
+		};
     }]);
 });
 

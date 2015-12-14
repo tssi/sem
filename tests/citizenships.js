@@ -8,7 +8,8 @@ define(['model'],function($model){
 				data:[
 					  {
 						"id": 1,
-						"name": "Filipino"
+						"name": "Filipino",
+						"order": 1
 					  }
 					]
 			}

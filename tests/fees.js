@@ -8,83 +8,103 @@ define(['model'],function($model){
 				data:[
 					{
 					  "id": "TUI",
-					  "name": "Tuition Fee"
+					  "name": "Tuition Fee",
+					  "order": 1
 					},
 					{
 					  "id": "REG",
-					  "name": "Registration"
+					  "name": "Registration",
+					  "order": 2
 					},
 					{
 					  "id": "MDF",
-					  "name": "Medical/Dental Fee"
+					  "name": "Medical/Dental Fee",
+					  "order": 3
 					},
 					{
 					  "id": "GUI",
-					  "name": "Guidance Fee"
+					  "name": "Guidance Fee",
+					  "order": 4
 					},
 					{
 					  "id": "INS",
-					  "name": "Insurance"
+					  "name": "Insurance",
+					  "order": 5
 					},
 					{
 					  "id": "LIB",
-					  "name": "Library"
+					  "name": "Library",
+					  "order": 6
 					},
 					{
 					  "id": "ATH",
-					  "name": "Athletics"
+					  "name": "Athletics",
+					  "order": 7
 					},
 					{
 					  "id": "LFT",
-					  "name": "Laboraty Fee-TLE"
+					  "name": "Laboraty Fee-TLE",
+					  "order": 8
 					},
 					{
 					  "id": "LFS",
-					  "name": "Laboraty Fee-Science"
+					  "name": "Laboraty Fee-Science",
+					  "order": 9
 					},
 					{
 					  "id": "BSP",
-					  "name": "BSP/GSP"
+					  "name": "BSP/GSP",
+					  "order": 10
 					},
 					{
 					  "id": "IDL",
-					  "name": "ID Lamination"
+					  "name": "ID Lamination",
+					  "order": 11
 					},
 					{
 					  "id": "REP",
-					  "name": "Report Card"
+					  "name": "Report Card",
+					  "order": 12
 					},
 					{
 					  "id": "CLA",
-					  "name": "Class Picture"
+					  "name": "Class Picture",
+					  "order": 13
 					},
 					{
 					  "id": "INM",
-					  "name": "Instructional Materials"
+					  "name": "Instructional Materials",
+					  "order": 14
 					},
 					{
 					  "id": "SCH",
-					  "name": "School Organization"
+					  "name": "School Organization",
+					  "order": 15
 					},
 					{
 					  "id": "REC",
-					  "name": "Recollection Fee"
+					  "name": "Recollection Fee",
+					  "order": 16
 					},
 					{
 					  "id": "GRA",
-					  "name": "Graduation Fee"
+					  "name": "Graduation Fee",
+					  "order": 17
 					},
 					{
 					  "id": "YEA",
-					  "name": "Yearbook"
+					  "name": "Yearbook",
+					  "order": 18
 					},
 					{
 					  "id": "ENE",
-					  "name": "Energy Fee"
+					  "name": "Energy Fee",
+					  "order": 19
 					},
 					{
 					  "id": "COMP",
-					  "name": "Computer Fee"
+					  "name": "Computer Fee",
+					  "order": 20
 					}
 				]
 			}
