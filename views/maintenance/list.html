@@ -38,11 +38,11 @@
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Columns.length}">
 							<thead>
 								<tr>
-									<th class="text-center col-md-2" ng-repeat="column in Columns">{{column}}</th>
+									<th class="text-center col-md-2" ng-repeat="column in Columns" ng-hide="column==='order'">{{column}}</th>
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
 									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -56,7 +56,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
 									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -81,11 +81,11 @@
 									<td colspan="{{Columns.length}}">
 										<div class="text-center help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
 									</td>
-									<td class="text-center"><a href="" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></a></td>
+									<td class="text-center"><a href="" class="btn btn-success" ng-click="saveSortItems()"><span class="glyphicon glyphicon-floppy-disk"></span></a></td>
 								</tr>
 							</thead>
-							<tbody ui-tree-nodes ng-model="ListItems">
-								<tr ng-repeat="listitem in ListItems" ui-tree-node >
+							<tbody ui-tree-nodes ng-model="SortItem">
+								<tr ng-repeat="listitem in SortItem" ui-tree-node >
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{listitem[column]}}</td>
 									<td class="text-center col-md-1"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>

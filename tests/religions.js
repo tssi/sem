@@ -8,11 +8,13 @@ define(['model'],function($model){
 				data:[
 					  {
 						"id": 1,
-						"name": "Catholic"
+						"name": "Catholic",
+						"order": 2
 					  },
 					  {
 						"id": 2,
-						"name": "Inglesia ni Cristo"
+						"name": "Inglesia ni Cristo",
+						"order": 1
 					  },
 					]
 			}
