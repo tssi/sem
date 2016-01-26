@@ -1,5 +1,5 @@
 <?php
-/* Family Fixture generated on: 2016-01-26 06:44:31 : 1453790671 */
+/* Family Fixture generated on: 2016-01-26 06:52:44 : 1453791164 */
 class FamilyFixture extends CakeTestFixture {
 	var $name = 'Family';
 
@@ -22,8 +22,8 @@ class FamilyFixture extends CakeTestFixture {
 			'type' => 'Lorem ip',
 			'name' => 'Lorem ipsum dolor sit amet',
 			'occupation' => 'Lorem ipsum dolor sit amet',
-			'created' => '2016-01-26 06:44:31',
-			'modified' => '2016-01-26 06:44:31'
+			'created' => '2016-01-26 06:52:44',
+			'modified' => '2016-01-26 06:52:44'
 		),
 	);
 }

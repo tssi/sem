@@ -1,5 +1,5 @@
 <?php
-/* Province Test cases generated on: 2016-01-26 06:44:32 : 1453790672*/
+/* Province Test cases generated on: 2016-01-26 06:52:44 : 1453791164*/
 App::import('Model', 'Province');
 
 class ProvinceTestCase extends CakeTestCase {

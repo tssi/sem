@@ -1,5 +1,5 @@
 <?php
-/* Address Fixture generated on: 2016-01-26 06:44:29 : 1453790669 */
+/* Address Fixture generated on: 2016-01-26 06:52:40 : 1453791160 */
 class AddressFixture extends CakeTestFixture {
 	var $name = 'Address';
 
@@ -26,8 +26,8 @@ class AddressFixture extends CakeTestFixture {
 			'city' => 'Lorem ipsum dolor sit amet',
 			'barangay' => 'Lorem ipsum dolor sit amet',
 			'address' => 'Lorem ipsum dolor sit amet',
-			'created' => '2016-01-26 06:44:29',
-			'modified' => '2016-01-26 06:44:29'
+			'created' => '2016-01-26 06:52:40',
+			'modified' => '2016-01-26 06:52:40'
 		),
 	);
 }

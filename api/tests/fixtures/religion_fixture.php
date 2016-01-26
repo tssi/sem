@@ -1,5 +1,5 @@
 <?php
-/* Religion Fixture generated on: 2016-01-26 06:44:33 : 1453790673 */
+/* Religion Fixture generated on: 2016-01-26 06:52:45 : 1453791165 */
 class ReligionFixture extends CakeTestFixture {
 	var $name = 'Religion';
 
@@ -16,8 +16,8 @@ class ReligionFixture extends CakeTestFixture {
 		array(
 			'id' => 1,
 			'name' => 'Lorem ipsum dolor sit amet',
-			'created' => '2016-01-26 06:44:33',
-			'modified' => '2016-01-26 06:44:33'
+			'created' => '2016-01-26 06:52:45',
+			'modified' => '2016-01-26 06:52:45'
 		),
 	);
 }

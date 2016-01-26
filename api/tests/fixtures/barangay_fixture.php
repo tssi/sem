@@ -1,5 +1,5 @@
 <?php
-/* Barangay Fixture generated on: 2016-01-26 06:44:29 : 1453790669 */
+/* Barangay Fixture generated on: 2016-01-26 06:52:41 : 1453791161 */
 class BarangayFixture extends CakeTestFixture {
 	var $name = 'Barangay';
 

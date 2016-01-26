@@ -1,5 +1,5 @@
 <?php
-/* Barangays Test cases generated on: 2016-01-26 06:45:05 : 1453790705*/
+/* Barangays Test cases generated on: 2016-01-26 06:52:52 : 1453791172*/
 App::import('Controller', 'Barangays');
 
 class TestBarangaysController extends BarangaysController {

@@ -1,9 +1,9 @@
 <?php
-/* Family Test cases generated on: 2016-01-26 06:44:31 : 1453790671*/
+/* Family Test cases generated on: 2016-01-26 06:52:44 : 1453791164*/
 App::import('Model', 'Family');
 
 class FamilyTestCase extends CakeTestCase {
-	var $fixtures = array('app.family', 'app.student');
+	var $fixtures = array('app.family', 'app.student', 'app.educ_level', 'app.year_level');
 
 	function startTest() {
 		$this->Family =& ClassRegistry::init('Family');

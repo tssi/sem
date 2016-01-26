@@ -1,5 +1,5 @@
 <?php
-/* Country Fixture generated on: 2016-01-26 06:44:31 : 1453790671 */
+/* Country Fixture generated on: 2016-01-26 06:52:43 : 1453791163 */
 class CountryFixture extends CakeTestFixture {
 	var $name = 'Country';
 

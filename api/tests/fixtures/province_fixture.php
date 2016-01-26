@@ -1,5 +1,5 @@
 <?php
-/* Province Fixture generated on: 2016-01-26 06:44:32 : 1453790672 */
+/* Province Fixture generated on: 2016-01-26 06:52:44 : 1453791164 */
 class ProvinceFixture extends CakeTestFixture {
 	var $name = 'Province';
 

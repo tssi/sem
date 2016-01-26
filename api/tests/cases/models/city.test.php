@@ -1,9 +1,9 @@
 <?php
-/* City Test cases generated on: 2016-01-26 06:44:30 : 1453790670*/
+/* City Test cases generated on: 2016-01-26 06:52:41 : 1453791161*/
 App::import('Model', 'City');
 
 class CityTestCase extends CakeTestCase {
-	var $fixtures = array('app.city', 'app.province', 'app.barangay');
+	var $fixtures = array('app.city', 'app.province', 'app.country', 'app.barangay');
 
 	function startTest() {
 		$this->City =& ClassRegistry::init('City');

@@ -1,5 +1,5 @@
 <?php
-/* ContactNumber Fixture generated on: 2016-01-26 06:44:30 : 1453790670 */
+/* ContactNumber Fixture generated on: 2016-01-26 06:52:42 : 1453791162 */
 class ContactNumberFixture extends CakeTestFixture {
 	var $name = 'ContactNumber';
 
@@ -18,8 +18,8 @@ class ContactNumberFixture extends CakeTestFixture {
 			'id' => 1,
 			'type' => 'Lorem ip',
 			'number' => 'Lorem ipsu',
-			'created' => '2016-01-26 06:44:30',
-			'modified' => '2016-01-26 06:44:30'
+			'created' => '2016-01-26 06:52:42',
+			'modified' => '2016-01-26 06:52:42'
 		),
 	);
 }
