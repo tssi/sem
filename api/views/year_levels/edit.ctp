@@ -3,7 +3,7 @@
 	<fieldset>
 		<legend><?php __('Edit Year Level'); ?></legend>
 	<?php
-		echo $this->Form->input('id');
+		echo $this->Form->input('id',array('type'=>'text'));
 		echo $this->Form->input('educ_level_id');
 		echo $this->Form->input('name');
 		echo $this->Form->input('alias');

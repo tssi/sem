@@ -3,6 +3,7 @@
 	<fieldset>
 		<legend><?php __('Add Educ Level'); ?></legend>
 	<?php
+		echo $this->Form->input('id',array('type'=>'text'));
 		echo $this->Form->input('name');
 		echo $this->Form->input('alias');
 	?>
