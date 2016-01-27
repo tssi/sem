@@ -12,7 +12,7 @@ define(['app','api'], function (app) {
 			};
 			$scope.init();
 			$scope.Departments=[];
-			api.GET('educ_levels',{limit:15},function success(response){
+			api.GET('educ_levels',function success(response){
 				console.log(response.data);
 				$scope.Departments=response.data;	
 			});
@@ -22,32 +22,32 @@ define(['app','api'], function (app) {
 				{id:3, description:"Confirmation"}
 			];
 			$scope.YearLevels=[];
-			api.GET('year_levels',{limit:15},function success(response){
+			api.GET('year_levels',function success(response){
 				console.log(response.data);
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
-			api.GET('countries',{limit:15},function success(response){
+			api.GET('countries',function success(response){
 				console.log(response.data);
 				$scope.Countries = response.data;
 			});
 			$scope.Provinces=[];
-			api.GET('provinces',{limit:15},function success(response){
+			api.GET('provinces',function success(response){
 				console.log(response.data);
 				$scope.Provinces = response.data;
 			});
 			$scope.Cities=[];
-			api.GET('cities',{limit:15},function success(response){
+			api.GET('cities',function success(response){
 				console.log(response.data);
 				$scope.Cities = response.data;
 			});
 			$scope.Religions=[];
-			api.GET('religions',{limit:15},function success(response){
+			api.GET('religions',function success(response){
 				console.log(response.data);
 				$scope.Religions = response.data;
 			});
 			$scope.Citizenships=[];
-			api.GET('citizenships',{limit:15},function success(response){
+			api.GET('citizenships',function success(response){
 				console.log(response.data);
 				$scope.Citizenships = response.data;
 			});
