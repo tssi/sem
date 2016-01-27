@@ -32,7 +32,7 @@
  */
 class AppController extends Controller {
 	var $components = array('RequestHandler','Session');
-	var $helpers = array('Html','Form','Api');
+	var $helpers = array('Html','Form','Session','Api');
 	function beforeFilter() {
 		if ($this->RequestHandler->ext === 'json'){
 			$this->RequestHandler->setContent('json', 'application/json');
@@ -46,6 +46,29 @@ class AppController extends Controller {
 			$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:null;
 			$recursive =  -1;
 			$offset = $conf['offset'] = $page&&$limit?($page-1)*$limit:null;
+			//Sorting
+			$sort = isset($_GET['sort'])?$_GET['sort']:null;
+			$direction = null;
+			if($sort){
+				switch($sort){
+					case 'latest':
+						$direction = 'desc';
+					break;
+					case 'oldest':
+						$direction = 'asc';
+					break;
+				}
+				$sort = 'modified';
+			}
+			//Filter
+			$conditions = array();
+			$blacklist = array('url','page','limit','offset','sort','order','created','modified');
+			foreach($_GET as $field=>$value){
+				if(!in_array($field,$blacklist)){
+					array_push($conditions,array($__Class.'.'.$field=>$value));
+				}
+			}
+			$conf['conditions']=$conditions;
 			//Pagination count
 			$count_conf = $conf;
 			unset($count_conf['limit']);
@@ -69,6 +92,8 @@ class AppController extends Controller {
 			$paginate['cache'] = 'default';
 			if($limit) $paginate['limit']=$limit;
 			if($recursive) $paginate['recursive']=$recursive;
+			if($conditions) $paginate['conditions']=$conditions;
+			if($sort&&$direction) $paginate['order']=array($__Class.'.'.$sort=>$direction);
 			$this->paginate = array($__Class => $paginate);
 			$this->set(compact('meta'));
 		}

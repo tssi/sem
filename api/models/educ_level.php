@@ -2,7 +2,7 @@
 class EducLevel extends AppModel {
 	var $name = 'EducLevel';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
+	var $order = 'order';
 	var $hasMany = array(
 		'Student' => array(
 			'className' => 'Student',

@@ -5,6 +5,7 @@
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('alias');?></th>
+			<th><?php echo $this->Paginator->sort('order');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -21,6 +22,7 @@
 		<td><?php echo $educLevel['EducLevel']['id']; ?>&nbsp;</td>
 		<td><?php echo $educLevel['EducLevel']['name']; ?>&nbsp;</td>
 		<td><?php echo $educLevel['EducLevel']['alias']; ?>&nbsp;</td>
+		<td><?php echo $educLevel['EducLevel']['order']; ?>&nbsp;</td>
 		<td><?php echo $educLevel['EducLevel']['created']; ?>&nbsp;</td>
 		<td><?php echo $educLevel['EducLevel']['modified']; ?>&nbsp;</td>
 		<td class="actions">
