@@ -32,6 +32,55 @@
  */
 class AppController extends Controller {
 	var $components = array('RequestHandler','Session','Api');
-	var $helpers = array('Html','Form','Session','Api');
-	
+	var $helpers = array('Html','Form','Session');
+	function redirect($config){
+		if($this->RequestHandler->isAjax()){
+			$message = $this->Session->read('Message.flash.message');
+			if($message) $this->Session->write('meta.message',$message);
+			$this->beforeRender();
+		}else{
+			return parent::redirect($config);
+		}
+	}
+	function beforeRender(){
+		if($this->RequestHandler->isAjax()||$this->RequestHandler->ext=='json'){
+			header('Content-Type: application/json');
+			$meta = $this->Session->read('meta');
+			$response = array('meta'=>$meta);
+			if($this->params['action']=='index'||$this->params['action']=='view'){
+				$endpoint = $this->params['controller'];
+				if($this->params['action']=='view'){
+					$endpoint =  Inflector::singularize($endpoint);
+				}
+				$dataField = Inflector::variable($endpoint);
+				if(isset($this->viewVars[$dataField])){
+					$response['data'] = $this->viewVars[$dataField];
+				}else{
+					return $this->cakeError('emptyRecord',array('id'=>null));
+				}
+			}
+			echo $this->encodeData($response);
+			$this->_stop();
+		}else{
+			return parent::beforeRender();
+		}
+	}
+	protected function encodeData($response) {
+	  if(isset($response['data'])){
+		  $endpoint = $this->params['controller'];
+		  $__Class = Inflector::classify($endpoint);
+		  $__data = array();
+		  if($this->action=='index'){
+			  foreach($response['data'] as $key=>$value){
+				  array_push($__data,$value[$__Class]);
+			  }
+		  }else{
+			  $__data = $response['data'][$__Class];
+		  }
+		  $response['data']=$__data;
+		  if($response['data']==null)
+			return $this->cakeError('emptyRecord',array('id'=>null));
+	 }
+	 return json_encode($response);
+  }
 }

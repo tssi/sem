@@ -33,4 +33,39 @@
  * ...and connect the rest of 'Pages' controller's urls.
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+	Router::connect(
+			"/:controller/add",
+			array("action" => "add")
+		);
+	Router::connect(
+			"/:controller/edit",
+			array("action" => "edit")
+		);
+	Router::connect(
+			"/:controller/delete",
+			array("action" => "delete")
+		);
+		Router::connect(
+			"/:controller/view",
+			array("action" => "view")
+		);
+	Router::connect(
+			"/:controller",
+			array("action" => "index", "[method]" => "GET")
+		);
+	Router::connect(
+			"/:controller/:id",
+			array("action" => "view", "[method]" => "GET"),
+			array("pass"=>array("id"))
+		);
+	Router::connect(
+			"/:controller",
+			array("action" => "add", "[method]" => "POST")
+		);
+	Router::connect(
+			"/:controller/:id",
+			array("action" => "delete", "[method]" => "DELETE"),
+			array("pass"=>array("id"))
+		);
+	
 	Router::parseExtensions('json');
