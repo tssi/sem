@@ -38,18 +38,6 @@
 			array("action" => "add")
 		);
 	Router::connect(
-			"/:controller/edit",
-			array("action" => "edit")
-		);
-	Router::connect(
-			"/:controller/delete",
-			array("action" => "delete")
-		);
-		Router::connect(
-			"/:controller/view",
-			array("action" => "view")
-		);
-	Router::connect(
 			"/:controller",
 			array("action" => "index", "[method]" => "GET")
 		);
