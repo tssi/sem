@@ -31,72 +31,7 @@
  * @subpackage    cake.app
  */
 class AppController extends Controller {
-	var $components = array('RequestHandler','Session');
+	var $components = array('RequestHandler','Session','Api');
 	var $helpers = array('Html','Form','Session','Api');
-	function beforeFilter() {
-		if ($this->RequestHandler->ext === 'json'){
-			$this->RequestHandler->setContent('json', 'application/json');
-			//Configure::write('debug', 0);
-			$endpoint = $this->RequestHandler->params['controller'];
-			$__Class = Inflector::classify($endpoint);
-			$Endpoint = &ClassRegistry::init($__Class);
-			$conf = array();
-			//Pagination config
-			$page = isset($_GET['page'])?$_GET['page']:1;
-			$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:null;
-			$recursive =  -1;
-			$offset = $conf['offset'] = $page&&$limit?($page-1)*$limit:null;
-			//Sorting
-			$sort = isset($_GET['sort'])?$_GET['sort']:null;
-			$direction = null;
-			if($sort){
-				switch($sort){
-					case 'latest':
-						$direction = 'desc';
-					break;
-					case 'oldest':
-						$direction = 'asc';
-					break;
-				}
-				$sort = 'modified';
-			}
-			//Filter
-			$conditions = array();
-			$blacklist = array('url','page','limit','offset','sort','order','created','modified');
-			foreach($_GET as $field=>$value){
-				if(!in_array($field,$blacklist)){
-					array_push($conditions,array($__Class.'.'.$field=>$value));
-				}
-			}
-			$conf['conditions']=$conditions;
-			//Pagination count
-			$count_conf = $conf;
-			unset($count_conf['limit']);
-			unset($count_conf['offset']);
-			$count = $Endpoint->find('count',$count_conf);
-			$last = $limit?ceil($count/$limit):1;
-			$next = $page < $last ? $page + 1:null;
-			$prev = $page>1?$page - 1:null;
-			//Meta Data
-			$meta = array();
-			$page_url = null;
-			$meta['title'] = $__Class;
-			$meta['next'] = $next? $page_url.$next:null;
-			$meta['prev'] = $prev? $page_url.$prev:null;
-			$meta['last'] = $page_url.$last;
-			$meta['items'] = $count;
-			$meta['pages'] = $last;
-			//Set up paginate
-			$paginate = array();
-			$paginate['page'] = $page;
-			$paginate['cache'] = 'default';
-			if($limit) $paginate['limit']=$limit;
-			if($recursive) $paginate['recursive']=$recursive;
-			if($conditions) $paginate['conditions']=$conditions;
-			if($sort&&$direction) $paginate['order']=array($__Class.'.'.$sort=>$direction);
-			$this->paginate = array($__Class => $paginate);
-			$this->set(compact('meta'));
-		}
-		return parent::beforeFilter();
-	}
+	
 }
