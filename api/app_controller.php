@@ -44,31 +44,42 @@ class AppController extends Controller {
 	}
 	function beforeRender(){
 		if($this->RequestHandler->isAjax()||$this->RequestHandler->ext=='json'){
-			header('Content-Type: application/json');
-			$meta = $this->Session->read('meta');
-			$meta['code'] = '200';
-			$response = array('meta'=>$meta);
-			if($this->params['action']=='index'||$this->params['action']=='view'){
-				$endpoint = $this->params['controller'];
-				if($this->params['action']=='view'){
-					$endpoint =  Inflector::singularize($endpoint);
-				}
-				$dataField = Inflector::variable($endpoint);
-				if(isset($this->viewVars[$dataField])){
-					$response['data'] = $this->viewVars[$dataField];
-				}else{
-					return $this->cakeError('emptyRecord',array('id'=>null));
-				}
-			}else if($this->params['action']=='add'||$this->params['action']=='edit'){
-				$modelClass = $this->modelClass;
-				$this->data[$modelClass]['id'] = $this->$modelClass->id;
-				$response['data'] = $this->data;
-			}
-			echo $this->encodeData($response);
-			$this->_stop();
+			$this->sanitizeApiRequest();
 		}else{
 			return parent::beforeRender();
 		}
+	}
+	protected function sanitizeApiRequest(){
+		if($this->name=='CakeError'){
+			if(isset($this->viewVars['title'])){
+				if($this->viewVars['title'] == 'Missing Controller'){
+					return $this->cakeError('invalidEndpoint');
+				}
+			}
+			return;
+		} 
+		header('Content-Type: application/json');
+		$meta = $this->Session->read('meta');
+		$meta['code'] = '200';
+		$response = array('meta'=>$meta);
+		if($this->params['action']=='index'||$this->params['action']=='view'){
+			$endpoint = $this->params['controller'];
+			if($this->params['action']=='view'){
+				$endpoint =  Inflector::singularize($endpoint);
+			}
+			$dataField = Inflector::variable($endpoint);
+			if(isset($this->viewVars[$dataField])){
+				$response['data'] = $this->viewVars[$dataField];
+			}else{
+				return $this->cakeError('dataNotSet');
+			}
+		}else if($this->params['action']=='add'||$this->params['action']=='edit'){
+			$modelClass = $this->modelClass;
+			$this->data[$modelClass]['id'] = $this->$modelClass->id;
+			$response['data'] = $this->data;
+		}
+		echo $this->encodeData($response);
+		$this->_stop();
 	}
 	protected function encodeData($response) {
 	  if(isset($response['data'])){
@@ -84,7 +95,7 @@ class AppController extends Controller {
 		  }
 		  $response['data']=$__data;
 		  if($response['data']==null)
-			return $this->cakeError('emptyRecord',array('id'=>null));
+			return $this->cakeError('emptyRecord');
 	 }
 	 return json_encode($response);
   }
