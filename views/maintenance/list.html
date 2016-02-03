@@ -39,7 +39,7 @@
 							<thead>
 								<tr>
 									<th class="text-center col-md-2" ng-repeat="column in Columns" >{{column}}</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="ListItems.length==0" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
@@ -66,6 +66,12 @@
 									</select>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+								<tr ng-if="ListItems.length==0"> 
+									<td colspan="{{Columns.length}}">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add {{List.name}}.</div>
+									</td>
+									<td></td>
 								</tr>
 							</tbody>
 						</table>
@@ -99,11 +105,11 @@
 									<i class="glyphicon glyphicon-refresh"></i>
 								</div>
 								<h4>Loading...</h4>
-								<p class="empty-state-message">Please wait.</p>
+								<p class="empty-state-message">Please wait.{{ErrorCode}}</p>
 							</div>
 						</div>
 					</div>
-					<div class="list-group-item text-center" ng-show="ErrorCode">
+					<div class="list-group-item text-center" ng-show="ErrorCode&&ErrorCode!=404">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">
