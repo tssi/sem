@@ -38,11 +38,11 @@
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Columns.length}">
 							<thead>
 								<tr>
-									<th class="text-center col-md-2" ng-repeat="column in Columns" ng-hide="column==='order'">{{column}}</th>
+									<th class="text-center col-md-2" ng-repeat="column in Columns" >{{column}}</th>
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
 									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -56,7 +56,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
 									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -92,11 +92,33 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item text-center" ng-hide="Columns.length">
-						Loading...
+					<div class="list-group-item text-center" ng-hide="Columns.length || ErrorCode">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-refresh"></i>
+								</div>
+								<h4>Loading...</h4>
+								<p class="empty-state-message">Please wait.</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item text-center" ng-show="ErrorCode">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>Error {{ErrorCode}}</h4>
+								<p class="empty-state-message">{{ErrorMessage}}</p>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="list-group-canvas" ng-hide="List">
+					<div class="list-group-item list-group-header">
+						<h5>Manage list</h5>
+					</div>
 					<div class="list-group-item">
 						<div class="empty-state">
 							<div class="well">

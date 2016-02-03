@@ -19,12 +19,18 @@ define(['app','api'], function (app) {
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
 			$scope.Columns=[];
+			$scope.ErrorMessage  = null;
+			$scope.ErrorCode  = null;
 			api.GET(list.path,{limit:25},function success(response){
 				$scope.ListItems=response.data;
 				for(var key in response.data[0]){
-					$scope.Columns.push(key);
+					if(key!="order"&&key!="created"&&key!="modified")
+							$scope.Columns.push(key);
 				};
-				$scope.ColumnLen =  Math.round(10/($scope.Columns.length-1));
+				$scope.ColumnLen =  Math.round(10/($scope.Columns.length));
+			},function error(response){
+				$scope.ErrorMessage =  response.meta.message;
+				$scope.ErrorCode = response.meta.code;
 			});
 		};
 		$scope.removeMaintenanceInfo=function(){
@@ -35,7 +41,6 @@ define(['app','api'], function (app) {
 			console.log(id);
 			var data = {id:id};
 			api.DELETE($scope.List.path,data,function(response){
-				console.log(response.data);
 				$scope.ListItems.splice(index, 1);
 				});
 		};
@@ -54,7 +59,7 @@ define(['app','api'], function (app) {
 		};
 		$scope.updateItem=function(listitem){
 			$scope.NewItem=listitem;
-			api.POST($scope.List.path,$scope.NewItem,function success(response){
+			api.PUT($scope.List.path,$scope.NewItem,function success(response){
 			});
 		};
 		api.GET('year_levels',{limit:15},function success(response){
