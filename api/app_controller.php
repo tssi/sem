@@ -46,6 +46,7 @@ class AppController extends Controller {
 		if($this->RequestHandler->isAjax()||$this->RequestHandler->ext=='json'){
 			header('Content-Type: application/json');
 			$meta = $this->Session->read('meta');
+			$meta['code'] = '200';
 			$response = array('meta'=>$meta);
 			if($this->params['action']=='index'||$this->params['action']=='view'){
 				$endpoint = $this->params['controller'];
@@ -58,6 +59,10 @@ class AppController extends Controller {
 				}else{
 					return $this->cakeError('emptyRecord',array('id'=>null));
 				}
+			}else if($this->params['action']=='add'||$this->params['action']=='edit'){
+				$modelClass = $this->modelClass;
+				$this->data[$modelClass]['id'] = $this->$modelClass->id;
+				$response['data'] = $this->data;
 			}
 			echo $this->encodeData($response);
 			$this->_stop();

@@ -17,6 +17,9 @@ class ApiComponent extends Object {
 			case 'DELETE':
 				$this->apiDelete($this->controller);
 			break;
+			case 'PUT':
+				$this->apiPut($this->controller);
+			break;
 		  }
 	  }
    }
@@ -110,6 +113,20 @@ class ApiComponent extends Object {
     protected function apiDelete(&$controller){
 	   $endpoint = $this->controller->params['controller'];
 	   $__Class = Inflector::classify($endpoint);
+	   $input = file_get_contents('php://input');
+	   $data = array($__Class=>json_decode($input,true));
+	   $this->controller->data = $data;
+	   $meta = array();
+	   $page_url = null;
+	   $meta['message'] = $__Class;
+	   $meta['epoch'] = time();
+	   $this->controller->Session->write('meta',$meta);
+   }
+    protected function apiPut(&$controller){
+	   $endpoint = $this->controller->params['controller'];
+	   $__Class = Inflector::classify($endpoint);
+	   $data = array($__Class=> $_POST);
+	   $this->controller->data = $data;
 	   $meta = array();
 	   $page_url = null;
 	   $meta['message'] = $__Class;
