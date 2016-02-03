@@ -2,7 +2,7 @@
 class AppError extends ErrorHandler {
 	function emptyRecord($params){
 		$code ='404';
-		$message = sprintf('Not Found');
+		$message = sprintf('Empty Record Found');
 		$this->fetchError($code,$message);
 	}
 	protected function fetchError($code,$message){
