@@ -50,10 +50,9 @@
 			"/:controller",
 			array("action" => "add", "[method]" => "POST")
 		);
+	App::import('Lib', 'routes/SlugRoute');
 	Router::connect(
-			"/:controller/:id",
-			array("action" => "delete", "[method]" => "DELETE"),
-			array("pass"=>array("id"))
+			"/:controller",
+			array("action"=>"delete", "[method]" => array("DELETE","PUT")),array('routeClass' => 'SlugRoute')
 		);
-	
 	Router::parseExtensions('json');
