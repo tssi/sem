@@ -28,27 +28,22 @@ define(['app','api'], function (app) {
 			});
 			$scope.Countries=[];
 			api.GET('countries',function success(response){
-				console.log(response.data);
 				$scope.Countries = response.data;
 			});
 			$scope.Provinces=[];
 			api.GET('provinces',function success(response){
-				console.log(response.data);
 				$scope.Provinces = response.data;
 			});
 			$scope.Cities=[];
 			api.GET('cities',function success(response){
-				console.log(response.data);
 				$scope.Cities = response.data;
 			});
 			$scope.Religions=[];
 			api.GET('religions',function success(response){
-				console.log(response.data);
 				$scope.Religions = response.data;
 			});
 			$scope.Citizenships=[];
 			api.GET('citizenships',function success(response){
-				console.log(response.data);
 				$scope.Citizenships = response.data;
 			});
 			$scope.nextStep = function(){
