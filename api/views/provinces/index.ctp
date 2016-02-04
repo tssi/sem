@@ -6,7 +6,7 @@
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('country_id');?></th>
 			<th><?php echo $this->Paginator->sort('is_active');?></th>
-			<th><?php echo $this->Paginator->sort('seq_order');?></th>
+			<th><?php echo $this->Paginator->sort('order');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
@@ -24,7 +24,7 @@
 			<?php echo $this->Html->link($province['Country']['name'], array('controller' => 'countries', 'action' => 'view', $province['Country']['id'])); ?>
 		</td>
 		<td><?php echo $province['Province']['is_active']; ?>&nbsp;</td>
-		<td><?php echo $province['Province']['seq_order']; ?>&nbsp;</td>
+		<td><?php echo $province['Province']['order']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $province['Province']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $province['Province']['id'])); ?>

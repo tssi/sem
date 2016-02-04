@@ -21,9 +21,9 @@
 			<?php echo $province['Province']['is_active']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Seq Order'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Order'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $province['Province']['seq_order']; ?>
+			<?php echo $province['Province']['order']; ?>
 			&nbsp;
 		</dd>
 	</dl>

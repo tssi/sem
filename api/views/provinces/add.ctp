@@ -6,7 +6,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('country_id');
 		echo $this->Form->input('is_active');
-		echo $this->Form->input('seq_order');
+		echo $this->Form->input('order');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

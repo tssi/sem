@@ -10,9 +10,26 @@ define(['app','api'], function (app) {
 			});
 			
 	   };
+		//Opening the modal
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+					animation: true,
+					templateUrl: 'MaintenanceListModal.html',
+					controller: 'ModalInstanceController',
+				});
+				modalInstance.result.then(function (list) {
+				  $scope.MaintenanceList.push(list);
+				}, function (source) {
+					//Re-initialize booklets when confirmed
+					
+						
+				});
+			};
 		$scope.openMaintenance=function(list){
 			$scope.List=angular.copy(list);
 			$scope.List.state = 'edit';
+			$scope.List.sortable = false;
+			$scope.ListItems=[];
 			$scope.Columns=[];
 			$scope.ErrorMessage  = null;
 			$scope.ErrorCode  = null;
@@ -23,6 +40,9 @@ define(['app','api'], function (app) {
 					var type = column.type;
 					if(key!="order"&&key!="created"&&key!="modified"&&!(key=="id" && type=="integer" ))
 							$scope.Columns.push(key);
+					if(key=='order'){
+						$scope.List.sortable = true;
+					}
 				};
 			}
 			$scope.ColumnLen =  Math.round(11/($scope.Columns.length));
@@ -94,6 +114,23 @@ define(['app','api'], function (app) {
 			});
 		};
     }]);
+	app.register.controller('ModalInstanceController',['$scope','$uibModalInstance','api', function ($scope, $uibModalInstance, api){
+		$scope.confirmMaintenanceList = function(){
+			var list = {
+				name:$scope.name,
+				description:$scope.description,
+				path:$scope.path,
+			}
+			api.POST('maintenance_lists',list,function success(response){
+				$uibModalInstance.close(response.data);
+			},function error(response){
+				
+			});
+		};
+		$scope.cancelMaintenanceList = function(){
+			$uibModalInstance.dismiss('cancel');
+		};
+	}]);
 });
 
 
