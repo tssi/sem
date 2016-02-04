@@ -1,10 +1,10 @@
 <?php
-/* Student Fixture generated on: 2016-01-26 06:52:45 : 1453791165 */
+/* Student Fixture generated on: 2016-02-04 08:58:40 : 1454576320 */
 class StudentFixture extends CakeTestFixture {
 	var $name = 'Student';
 
 	var $fields = array(
-		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 11, 'key' => 'primary', 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'educ_level_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 2, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'year_level_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 2, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'first_name' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
@@ -25,7 +25,7 @@ class StudentFixture extends CakeTestFixture {
 
 	var $records = array(
 		array(
-			'id' => 'Lorem ips',
+			'id' => 1,
 			'educ_level_id' => '',
 			'year_level_id' => '',
 			'first_name' => 'Lorem ipsum dolor sit amet',
@@ -33,13 +33,13 @@ class StudentFixture extends CakeTestFixture {
 			'last_name' => 'Lorem ipsum dolor sit amet',
 			'suffix_name' => 'Lorem ip',
 			'gender' => 'Lorem ipsum dolor sit ame',
-			'birthday' => '2016-01-26',
+			'birthday' => '2016-02-04',
 			'birthplace' => 'Lorem ipsum dolor sit amet',
 			'religion' => 'Lorem ipsum dolor sit amet',
 			'citizenship' => 'Lorem ipsum dolor ',
 			'prev_school' => 'Lorem ipsum dolor sit amet',
-			'created' => '2016-01-26 06:52:45',
-			'modified' => '2016-01-26 06:52:45'
+			'created' => '2016-02-04 08:58:40',
+			'modified' => '2016-02-04 08:58:40'
 		),
 	);
 }

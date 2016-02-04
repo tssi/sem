@@ -19,7 +19,7 @@ class StudentsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Student->create();
-			if ($this->Student->save($this->data)) {
+			if ($this->Student->saveAll($this->data)) {
 				$this->Session->setFlash(__('The student has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

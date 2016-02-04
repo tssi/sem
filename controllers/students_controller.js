@@ -116,9 +116,9 @@ define(['app','api'], function (app) {
 								barangay:$scope.homeBrgy,
 								address:$scope.homeAddrs,
 								};
-				$scope.Student.addressess=[];
-				$scope.Student.addressess.push(current);
-				$scope.Student.addressess.push(permanent);
+				$scope.Student.addresses=[];
+				$scope.Student.addresses.push(current);
+				$scope.Student.addresses.push(permanent);
 				$scope.hasContactInfo = true;
 			};
 			$scope.sameAsCurrent = function(){

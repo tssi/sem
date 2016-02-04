@@ -1,9 +1,9 @@
 <?php
-/* Address Test cases generated on: 2016-01-26 06:52:40 : 1453791160*/
+/* Address Test cases generated on: 2016-02-04 08:58:46 : 1454576326*/
 App::import('Model', 'Address');
 
 class AddressTestCase extends CakeTestCase {
-	var $fixtures = array('app.address');
+	var $fixtures = array('app.address', 'app.student', 'app.educ_level', 'app.year_level', 'app.contact_number', 'app.family');
 
 	function startTest() {
 		$this->Address =& ClassRegistry::init('Address');
