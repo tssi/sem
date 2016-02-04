@@ -19,7 +19,7 @@ class ProvincesController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Province->create();
-			if ($this->Province->save($this->data)) {
+			if ($this->Province->saveAll($this->data)) {
 				$this->Session->setFlash(__('The province has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

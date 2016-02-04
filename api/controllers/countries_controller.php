@@ -19,7 +19,7 @@ class CountriesController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Country->create();
-			if ($this->Country->save($this->data)) {
+			if ($this->Country->saveAll($this->data)) {
 				$this->Session->setFlash(__('The country has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
