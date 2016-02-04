@@ -1,5 +1,5 @@
 <?php
-/* Religion Test cases generated on: 2016-01-26 06:52:45 : 1453791165*/
+/* Religion Test cases generated on: 2016-02-03 08:14:43 : 1454487283*/
 App::import('Model', 'Religion');
 
 class ReligionTestCase extends CakeTestCase {

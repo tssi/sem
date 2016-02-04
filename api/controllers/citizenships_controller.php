@@ -19,7 +19,7 @@ class CitizenshipsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Citizenship->create();
-			if ($this->Citizenship->save($this->data)) {
+			if ($this->Citizenship->saveAll($this->data)) {
 				$this->Session->setFlash(__('The citizenship has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

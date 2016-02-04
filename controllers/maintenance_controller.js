@@ -18,12 +18,14 @@ define(['app','api'], function (app) {
 			$scope.ErrorCode  = null;
 			if(typeof list.schema=='object'){
 				for(var index in list.schema){
-					var key =  list.schema[index];
-					if(key!="order"&&key!="created"&&key!="modified")
+					var column =  list.schema[index];
+					var key = column.name;
+					var type = column.type;
+					if(key!="order"&&key!="created"&&key!="modified"&&!(key=="id" && type=="integer" ))
 							$scope.Columns.push(key);
 				};
 			}
-			$scope.ColumnLen =  Math.round(10/($scope.Columns.length));
+			$scope.ColumnLen =  Math.round(11/($scope.Columns.length));
 			api.GET(list.path,function success(response){
 				$scope.ListItems=response.data;
 			},function error(response){
@@ -52,9 +54,9 @@ define(['app','api'], function (app) {
 			}
 		};
 		$scope.addNewItem=function(){
+			$scope.newItem.order =  $scope.ListItems.length+1;
 			api.POST($scope.List.path,$scope.newItem,function success(response){
-				$scope.ListItems.unshift(response.data);
-				console.log($scope.ListItems);
+				$scope.ListItems.push(response.data);
 				$scope.newItem={};
 			});
 		};
@@ -81,8 +83,13 @@ define(['app','api'], function (app) {
 			}
 		};
 		$scope.saveSortItems=function(){
-			$scope.ListItems=angular.copy($scope.SortItem);
-			api.POST($scope.List.path,$scope.ListItems,function success(response){
+			var data = {reorder:[]};
+			for(var index in $scope.SortItem){
+				var item =  $scope.SortItem[index];
+				data.reorder.push(item.id);
+			}
+			api.POST($scope.List.path,data,function success(response){
+				$scope.ListItems=angular.copy($scope.SortItem);
 				$scope.List.state="edit";
 			});
 		};

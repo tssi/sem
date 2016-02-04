@@ -19,7 +19,7 @@ class ReligionsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Religion->create();
-			if ($this->Religion->save($this->data)) {
+			if ($this->Religion->saveAll($this->data)) {
 				$this->Session->setFlash(__('The religion has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

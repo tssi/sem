@@ -103,6 +103,10 @@ class ApiComponent extends Object {
 	   $__Class = Inflector::classify($endpoint);
 	   $input = file_get_contents('php://input');
 	   $data = array($__Class=>json_decode($input,true));
+	   if(isset($data[$__Class]['reorder'])){
+		   $data =  $this->apiReorder($data[$__Class]['reorder']);
+		   unset($data[$__Class]['reorder']);
+	   }
 	   $this->controller->data = $data;
 	   $meta = array();
 	   $page_url = null;
@@ -133,6 +137,14 @@ class ApiComponent extends Object {
 	   $meta['epoch'] = time();
 	   $this->controller->Session->write('meta',$meta);
    }
+	protected function apiReorder($data){
+		$stack = array();
+		foreach($data as $index=>$value){
+			$item =  array('id'=>$value, 'order'=>$index+1);
+			array_push($stack,$item);
+		}
+		return $stack;
+	}
  }
 
 ?>

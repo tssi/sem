@@ -13,7 +13,9 @@ class MaintenanceList extends AppModel {
 					$model = new $class();
 					$schema = array();
 					foreach($model->_schema as $column=>$value){
-						array_push($schema,$column);
+						$col = $value;
+						$col['name']=$column;
+						array_push($schema,$col);
 					}
 					$maintenanceLists[$index]['MaintenanceList']['schema']=$schema;
 				}else{

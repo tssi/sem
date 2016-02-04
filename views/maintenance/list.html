@@ -91,7 +91,7 @@
 								</tr>
 							</thead>
 							<tbody ui-tree-nodes ng-model="SortItem">
-								<tr ng-repeat="listitem in SortItem" ui-tree-node >
+								<tr ng-repeat="listitem in SortItem " ui-tree-node >
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{listitem[column]}}</td>
 									<td class="text-center col-md-1"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>

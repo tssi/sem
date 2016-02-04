@@ -19,7 +19,7 @@ class YearLevelsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->YearLevel->create();
-			if ($this->YearLevel->save($this->data)) {
+			if ($this->YearLevel->saveAll($this->data)) {
 				$this->Session->setFlash(__('The year level has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
