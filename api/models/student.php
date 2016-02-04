@@ -21,6 +21,32 @@ class Student extends AppModel {
 	);
 
 	var $hasMany = array(
+		'Address' => array(
+			'className' => 'Address',
+			'foreignKey' => 'student_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'ContactNumber' => array(
+			'className' => 'ContactNumber',
+			'foreignKey' => 'student_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'Family' => array(
 			'className' => 'Family',
 			'foreignKey' => 'student_id',
