@@ -85,14 +85,14 @@
 							<dd ng-repeat="contact_number in Student.contact_numbers | filter: {type:'mobile'}">{{contact_number.number}}</dd>
 							<dt>Current Address</dt>
 							<dd>
-								<address ng-repeat="address in Student.addressess | filter: {type:'current'}">
+								<address ng-repeat="address in Student.addresses | filter: {type:'current'}">
 									{{address.address}}, {{address.barangay}},<br/>
 									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: currentProvince}" ng-if="currentProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: currentCountry}" ng-if="currentCountry">{{country.name}}</span><br/>
 								</address>
 							</dd>
 							<dt>Home Address</dt>
 							<dd>
-								<address ng-repeat="address in Student.addressess | filter: {type:'permanent'}">
+								<address ng-repeat="address in Student.addresses | filter: {type:'permanent'}">
 									{{address.address}}, {{address.barangay}},<br/>
 									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: homeProvince}" ng-if="homeProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: homeCountry}" ng-if="homeCountry">{{country.name}}</span><br/>
 								</address>
