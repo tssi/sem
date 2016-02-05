@@ -43,6 +43,8 @@ class Tuition extends AppModel {
 	function afterFind($results){
 		if(isset($results[0]['Tuition'])){
 			//pr($results);
+			$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
+			$billingPeriods = $BillingPeriod->find('list');
 			foreach($results as $index=>$result){
 				//Fee Breakdown
 				$fees = array();
@@ -73,8 +75,6 @@ class Tuition extends AppModel {
 				$results[$index]['Tuition']['discounts']=$discounts;
 				//Payment Scheme
 				$schemes = array();
-				$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
-				$billingPeriods = $BillingPeriod->find('list');
 				foreach($result['PaymentScheme'] as $scheme){
 					$schedules=array();
 					//Payment Scheme Schedule
