@@ -1,0 +1,275 @@
+<!--div for controller-->
+<div ng-controller="TuitionController" ng-init="list()">
+	<button class="btn btn-primary btn-fab bottom right fixed" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<label for="">Tuition list</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)">
+						<h4 class="list-group-item-heading" >{{tuition.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{tuition.description}}</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger pull-right" ng-disabled="!Tuition" ng-click="removeTuitionInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<label ng-if="!Tuition">Tuition Information</label>
+					<label ng-if="Tuition">{{Tuition.name}}</label>
+					<div class="btn-group btn-group-sm pull-right hide" uib-dropdown>
+						  <button class="btn btn-default dropdown-toggle" type="button"  uib-dropdown-toggle>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						  </ul>
+					</div>
+				</div>
+				<div class="list-group-canvas" ng-show="Tuition">
+					<div class="list-group-item list-group-header">
+						<h5>{{Tuition.name}} Tuition</h5>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Breakdown</h5>
+					</div>
+					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.fees.length">
+						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.fees.length}">
+							<thead>
+								<tr>
+									<th class="text-center col-md-5">Fee</th>
+									<th class="text-center col-md-5">Amount</th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+								</tr>
+								<tr >
+									<td class="col-md-5">
+										<select class="form-control" ng-model="name">
+										</select>
+									</td>
+									<td class="col-md-5">
+										<input type="number" class="form-control" ng-model="amount" placeholder="amount"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addfeeItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  ng-repeat="fee in Tuition.fees" >
+									<td class="col-md-5">
+										<input type="text" class="form-control" ng-model="fee.name" placeholder="Name"/>
+									</td>
+									<td class="col-md-5">
+										<input type="number" class="form-control" ng-model="fee.amount" placeholder="Amount"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removefeeItem(fee)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Discount</h5>
+					</div>
+					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.discounts.length">
+						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
+							<thead>
+								<tr>
+									<th class="text-center col-md-5">Discount</th>
+									<th class="text-center col-md-5">Amount</th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+								</tr>
+								<tr >
+									<td class="col-md-5">
+										<select class="form-control" ng-model="name">
+										</select>
+									</td>
+									<td class="col-md-5">
+										<input type="number" class="form-control" ng-model="amount" placeholder="Amount"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="adddiscountItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  ng-repeat="discount in Tuition.discounts" >
+									<td class="col-md-5">
+										<input type="text" class="form-control" ng-model="discount.name" placeholder="Name"/>
+									</td>
+									<td class="col-md-5">
+										<input type="number" class="form-control" ng-model="discount.amount" placeholder="Amount"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Schedule</h5>
+					</div>
+					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.schemes.length">
+						<table class="table table-bordered table-condensed">
+							<thead>
+								<tr>
+									<th>Scheme</th>
+									<th>Annual
+									</th>
+									<th>Semi Annual
+									</th>
+									<th>Monthly
+									</th>
+									<th>Easy
+									</th>
+									<th class="text-center"><button class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td> Upon Enrollment
+									</td>
+									<td> 2,000
+									</td>
+									<td> 3,000
+									</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+								</tr>
+								<tr>
+									<td> Sep 2016
+									</td>
+									<td> 
+									</td>
+									<td> 3,000
+									</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+								</tr>
+								<tr>
+									<td> Oct 2016
+									</td>
+									<td> 
+									</td>
+									<td> 
+									</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+								</tr>
+								<tr>
+									<td> Nov 2016
+									</td>
+									<td> 
+									</td>
+									<td> 
+									</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+								</tr>
+								<tr>
+									<td> Jan 2017
+									</td>
+									<td> 
+									</td>
+									<td> 
+									</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td> <b>Total</b>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<td> 4,000</td>
+									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+					
+					<div class="list-group-item text-center" ng-hide="Tuition.fees.length || ErrorCode">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-refresh"></i>
+								</div>
+								<h4>Loading...</h4>
+								<p class="empty-state-message">Please wait.{{ErrorCode}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item text-center" ng-show="ErrorCode&&ErrorCode!=404">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>Error {{ErrorCode}}</h4>
+								<p class="empty-state-message">{{ErrorMessage}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-canvas" ng-hide="Tuition">
+					<div class="list-group-item list-group-header">
+						<h5>Manage list</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</div>
+								<h4>No list selected!</h4>
+								<p class="empty-state-message">Choose the list to manage.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/ng-template" id="TuitionTuitionModal.html">
+			<div class="modal-header">
+				<h3 class="modal-title">Tuition Information</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							Details
+						</div>						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<input type="text" placeholder="Name" class="form-control" ng-model="name"/>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<input type="text" placeholder="Description" class="form-control" ng-model="description"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<input type="text" placeholder="Path" class="form-control" ng-model="path"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="button" ng-click="confirmTuitionTuition()">Confirm</button>
+				<button class="btn btn-default pull-left" type="button" ng-click="cancelTuitionTuition()">Cancel</button>
+			</div>
+		</script>
+</div>
