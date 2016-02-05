@@ -77,9 +77,10 @@ class Tuition extends AppModel {
 					$schedules=array();
 					//Payment Scheme Schedule
 					foreach($scheme['PaymentSchemeSchedule'] as $schedule){
+						$due_dates = explode(',',$schedule['due_dates']);
 						$schedule = array(
 							'billing_period'=>$schedule['billing_period'],
-							'due_date'=>$schedule['due_date'],
+							'due_dates'=>$due_dates,
 							'amount'=>(double)$schedule['amount'],
 						);
 						array_push($schedules,$schedule);
