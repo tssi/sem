@@ -8,6 +8,16 @@ define(['app','api'], function (app) {
 	   $scope.openTuition = function(tuition){
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = 'edit';
+		   
+		   $scope.columns=[];
+		   $scope.rows=[];
+		   
+		   for(var index in $scope.Tuition.schemes){
+			   var column = $scope.Tuition.schemes[index].name;
+			   $scope.columns.push(column);
+			   if($scope.rows.length < $scope.Tuition.schemes[index].schedule.length)
+				   $scope.rows = angular.copy($scope.Tuition.schemes[index].schedule);
+		   }
 	   }
 	   function initAPIRequest(){
 		   api.GET('tuitions',function success(response){
