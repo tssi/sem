@@ -41,12 +41,12 @@
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.fees.length}">
 							<thead>
 								<tr>
-									<th class="text-center col-md-5">Fee</th>
+									<th class="text-center col-md-6">Fee</th>
 									<th class="text-center col-md-5">Amount</th>
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
-									<td class="col-md-5">
+									<td class="col-md-6">
 										<select class="form-control" ng-model="name">
 										</select>
 									</td>
@@ -76,12 +76,12 @@
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
 							<thead>
 								<tr>
-									<th class="text-center col-md-5">Discount</th>
+									<th class="text-center col-md-6">Discount</th>
 									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
-									<td class="col-md-5">
+									<td class="col-md-6">
 										<select class="form-control" ng-model="name">
 										</select>
 									</td>
@@ -112,81 +112,24 @@
 							<thead>
 								<tr>
 									<th>Scheme</th>
-									<th>Annual
-									</th>
-									<th>Semi Annual
-									</th>
-									<th>Monthly
-									</th>
-									<th>Easy
-									</th>
+									<th ng-repeat="column in columns">{{column}}</th>
 									<th class="text-center"><button class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td> Upon Enrollment
+								<tr ng-repeat="row in rows">
+									<td>{{row.billing_period}}
 									</td>
-									<td> 2,000
+									<td ng-repeat="column in columns">
+										<input type="number" class="form-control" placeholder="Amount" />
 									</td>
-									<td> 3,000
-									</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
-								</tr>
-								<tr>
-									<td> Sep 2016
-									</td>
-									<td> 
-									</td>
-									<td> 3,000
-									</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
-								</tr>
-								<tr>
-									<td> Oct 2016
-									</td>
-									<td> 
-									</td>
-									<td> 
-									</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
-								</tr>
-								<tr>
-									<td> Nov 2016
-									</td>
-									<td> 
-									</td>
-									<td> 
-									</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
-								</tr>
-								<tr>
-									<td> Jan 2017
-									</td>
-									<td> 
-									</td>
-									<td> 
-									</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
 									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
 								</tr>
 							</tbody>
 							<tfoot>
 								<tr>
 									<td> <b>Total</b>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
-									<td> 4,000</td>
+									<td ng-repeat="column in columns"> 4,000</td>
 									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
 								</tr>
 							</tfoot>
