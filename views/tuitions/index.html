@@ -43,7 +43,7 @@
 								<tr>
 									<th class="text-center col-md-6">Fee</th>
 									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="eraseAmounts('fees')"><span class="glyphicon glyphicon-erase"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-6">
@@ -78,7 +78,7 @@
 								<tr>
 									<th class="text-center col-md-6">Discount</th>
 									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0 || !Tuition.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="eraseAmounts('discounts')"><span class="glyphicon glyphicon-erase"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-6">
@@ -113,7 +113,7 @@
 								<tr>
 									<th>Scheme</th>
 									<th ng-repeat="scheme in Schemes">{{scheme.name}}</th>
-									<th class="text-center"><button class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button></th>
+									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-erase"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
