@@ -44,8 +44,8 @@ class Tuition extends AppModel {
 		if(isset($results[0]['Tuition'])){
 			//pr($results);
 			$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
-			$billingPeriods = $BillingPeriod->find('list');
 			foreach($results as $index=>$result){
+				$billingPeriods = $BillingPeriod->getDueDates($result['Tuition']['sy']);
 				//Fee Breakdown
 				$fees = array();
 				foreach($result['FeeBreakdown'] as $breakdown){
@@ -79,12 +79,12 @@ class Tuition extends AppModel {
 					$schedules=array();
 					//Payment Scheme Schedule
 					foreach($scheme['PaymentSchemeSchedule'] as $schedule){
-						$due_dates = explode(',',$schedule['due_dates']);
+						$bill_period = $billingPeriods[$schedule['billing_period_id']];
 						$schedule = array(
 							'id'=>$schedule['id'],
 							'billing_period_id'=>$schedule['billing_period_id'],
-							'billing_period'=>$billingPeriods[$schedule['billing_period_id']],
-							'due_dates'=>$due_dates,
+							'billing_period'=>$bill_period['name'],
+							'due_dates'=>$bill_period['due_dates'],
 							'amount'=>(double)$schedule['amount'],
 						);
 						array_push($schedules,$schedule);
