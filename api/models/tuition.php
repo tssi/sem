@@ -39,7 +39,11 @@ class Tuition extends AppModel {
                 'insertQuery'            => ''
             )
     );
-	var $hasMany = array('FeeBreakdown','PaymentScheme');
+	var $hasMany = array(
+			'FeeBreakdown'=>array(
+				'order'=>'FeeBreakdown.order',
+			),
+			'PaymentScheme');
 	function afterFind($results){
 		if(isset($results[0]['Tuition'])){
 			//pr($results);
@@ -47,63 +51,69 @@ class Tuition extends AppModel {
 			foreach($results as $index=>$result){
 				$billingPeriods = $BillingPeriod->getDueDates($result['Tuition']['sy']);
 				//Fee Breakdown
-				$fees = array();
-				foreach($result['FeeBreakdown'] as $breakdown){
-					$fee = array(
-						'id'=>$breakdown['fee_id'],
-						'fee_breakdown_id'=>$breakdown['id'],
-						'name'=>$breakdown['Fee']['name'],
-						'amount'=>(double)$breakdown['amount'],
-					);
-					array_push($fees,$fee);
-				}
-				$results[$index]['Tuition']['fees']=$fees;
-				//Discounts
-				$discounts = array();
-				foreach($result['Discount'] as $discount){
-					$fees_applicable = $discount['fees_applicable'];
-					if($fees_applicable!='all')
-						$fees_applicable =  explode(',',$fees_applicable);
-					$discount = array(
-						'id'=>$discount['id'],
-						'tuition_discount_id'=>$discount['TuitionDiscount']['id'],
-						'name'=>$discount['name'],
-						'type'=>$discount['type'],
-						'amount'=>(double)$discount['amount'],
-						'display_amount'=>$discount['display_amount'],
-						'fees_applicable'=>$fees_applicable,
-					);
-					array_push($discounts,$discount);
-				}
-				$results[$index]['Tuition']['discounts']=$discounts;
-				//Payment Scheme
-				$schemes = array();
-				foreach($result['PaymentScheme'] as $scheme){
-					$schedules=array();
-					//Payment Scheme Schedule
-					foreach($scheme['PaymentSchemeSchedule'] as $schedule){
-						$bill_period = $billingPeriods[$schedule['billing_period_id']];
-						$schedule = array(
-							'id'=>$schedule['id'],
-							'billing_period_id'=>$schedule['billing_period_id'],
-							'billing_period'=>$bill_period['name'],
-							'due_dates'=>$bill_period['due_dates'],
-							'bill_months'=>$bill_period['bill_months'],
-							'amount'=>(double)$schedule['amount'],
+				if(isset($result['FeeBreakdown'])){
+					$fees = array();
+					foreach($result['FeeBreakdown'] as $breakdown){
+						$fee = array(
+							'id'=>$breakdown['fee_id'],
+							'fee_breakdown_id'=>$breakdown['id'],
+							'name'=>$breakdown['Fee']['name'],
+							'amount'=>(double)$breakdown['amount'],
 						);
-						array_push($schedules,$schedule);
+						array_push($fees,$fee);
 					}
-					$scheme =array(
-						'id'=>$scheme['Scheme']['id'],
-						'name'=>$scheme['Scheme']['name'],
-						'payment_frequency'=>(int)$scheme['Scheme']['payment_frequency'],
-						'amount'=>(double)$scheme['amount'],
-						'interest_charge'=>(double)$scheme['interest_charge'],
-						'schedule'=>$schedules,
-					);
-					array_push($schemes,$scheme);
+					$results[$index]['Tuition']['fees']=$fees;
 				}
-				$results[$index]['Tuition']['schemes']=$schemes;
+				//Discounts
+				if(isset($result['Discount'])){
+					$discounts = array();
+					foreach($result['Discount'] as $discount){
+						$fees_applicable = $discount['fees_applicable'];
+						if($fees_applicable!='all')
+							$fees_applicable =  explode(',',$fees_applicable);
+						$discount = array(
+							'id'=>$discount['id'],
+							'tuition_discount_id'=>$discount['TuitionDiscount']['id'],
+							'name'=>$discount['name'],
+							'type'=>$discount['type'],
+							'amount'=>(double)$discount['amount'],
+							'display_amount'=>$discount['display_amount'],
+							'fees_applicable'=>$fees_applicable,
+						);
+						array_push($discounts,$discount);
+					}
+					$results[$index]['Tuition']['discounts']=$discounts;
+				}
+				//Payment Scheme
+				if(isset($result['PaymentScheme'])){
+					$schemes = array();
+					foreach($result['PaymentScheme'] as $scheme){
+						$schedules=array();
+						//Payment Scheme Schedule
+						foreach($scheme['PaymentSchemeSchedule'] as $schedule){
+							$bill_period = $billingPeriods[$schedule['billing_period_id']];
+							$schedule = array(
+								'id'=>$schedule['id'],
+								'billing_period_id'=>$schedule['billing_period_id'],
+								'billing_period'=>$bill_period['name'],
+								'due_dates'=>$bill_period['due_dates'],
+								'bill_months'=>$bill_period['bill_months'],
+								'amount'=>(double)$schedule['amount'],
+							);
+							array_push($schedules,$schedule);
+						}
+						$scheme =array(
+							'id'=>$scheme['Scheme']['id'],
+							'name'=>$scheme['Scheme']['name'],
+							'payment_frequency'=>(int)$scheme['Scheme']['payment_frequency'],
+							'amount'=>(double)$scheme['amount'],
+							'interest_charge'=>(double)$scheme['interest_charge'],
+							'schedule'=>$schedules,
+						);
+						array_push($schemes,$scheme);
+					}
+					$results[$index]['Tuition']['schemes']=$schemes;
+				}
 			}
 		}
 		return $results;

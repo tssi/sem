@@ -37,23 +37,24 @@
 					<div class="list-group-item list-group-header">
 						<h5>Breakdown</h5>
 					</div>
-					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.fees.length">
-						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.fees.length}">
+					<div class="list-group-item" ng-show="Tuition.state.fees==='edit'">
+						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
 									<th class="text-center col-md-6">Fee</th>
 									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="updateState('fees','sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-6">
-										<select class="form-control" ng-model="FeeId" ng-options="fee as fee.name for fee in Fees track by fee.id">
+										<select class="form-control" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
+											<option value="">Select Fee</option>
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="FeeAmount" placeholder="amount"/>
+										<input type="number" class="form-control" ng-model="FeeItem.amount" placeholder="amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addfeeItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -64,11 +65,40 @@
 									<td class="col-md-5">
 										<input type="number" class="form-control" ng-model="fee.amount" placeholder="Amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removefeeItem(fee)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
+					<div class="list-group-item" ng-show="Tuition.state.fees==='sort'">
+						<table ui-tree class="table table-bordered table-condensed table-sort">
+							<thead>
+								<tr>
+									<th class="text-center col-md-6">Fee</th>
+									<th class="text-center col-md-5">Amount</th>
+									<th class="text-center col-md-2"><button class="btn btn-danger" ng-disabled="Tuition.length==0" ng-click="updateState('fees','edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
+								</tr>
+								<tr >
+									<td colspan="2">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('fees')"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+								</tr>
+							</thead>
+							<tbody  ui-tree-nodes  ng-model="SortItem.fees" ng-if="SortItem.fees">
+								<tr ng-repeat="fee in SortItem.fees"  ui-tree-node>
+									<td class="col-md-5">
+										{{fee.name}}
+									</td>
+									<td class="col-md-5">
+										{{fee.amount}}
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
 					<div class="list-group-item list-group-header">
 						<h5>Schedule</h5>
 					</div>
