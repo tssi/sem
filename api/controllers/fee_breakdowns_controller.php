@@ -19,7 +19,7 @@ class FeeBreakdownsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->FeeBreakdown->create();
-			if ($this->FeeBreakdown->save($this->data)) {
+			if ($this->FeeBreakdown->saveAll($this->data)) {
 				$this->Session->setFlash(__('The fee breakdown has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
