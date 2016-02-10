@@ -43,7 +43,7 @@
 								<tr>
 									<th class="text-center col-md-6">Fee</th>
 									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="eraseAmounts('fees')"><span class="glyphicon glyphicon-erase"></span></button></th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-6">
@@ -59,47 +59,12 @@
 							<tbody>
 								<tr  ng-repeat="fee in Tuition.fees" >
 									<td class="col-md-5">
-										<input type="text" class="form-control" ng-model="fee.name" placeholder="Name"/>
+										<input type="text" class="form-control" ng-model="fee.name" ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
 										<input type="number" class="form-control" ng-model="fee.amount" placeholder="Amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removefeeItem(fee)"><span class="glyphicon glyphicon-remove"></span></button></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="list-group-item list-group-header">
-						<h5>Discount</h5>
-					</div>
-					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.discounts.length">
-						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
-							<thead>
-								<tr>
-									<th class="text-center col-md-6">Discount</th>
-									<th class="text-center col-md-5">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="eraseAmounts('discounts')"><span class="glyphicon glyphicon-erase"></span></button></th>
-								</tr>
-								<tr >
-									<td class="col-md-6">
-										<select class="form-control" ng-model="DiscountId"  ng-options="discount as discount.name for discount in Discounts track by discount.id"
-										</select>
-									</td>
-									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="DiscountAmount" placeholder="amount"/>
-									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="adddiscountItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr  ng-repeat="discount in Tuition.discounts" >
-									<td class="col-md-5">
-										<input type="text" class="form-control" ng-model="discount.name" placeholder="Name" ng-readonly="true"/>
-									</td>
-									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="discount.amount" placeholder="Amount" ng-readonly="true"/>
-									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -113,7 +78,7 @@
 								<tr>
 									<th>Scheme</th>
 									<th ng-repeat="scheme in Schemes">{{scheme.name}}</th>
-									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-erase"></i></button></th>
+									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-remove"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -123,7 +88,7 @@
 									<td ng-repeat="scheme in Schemes">
 										<input type="number" class="form-control" placeholder="Amount"  ng-model="Amounts[billingPeriod.id][scheme.id]" />
 									</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button></th>
+									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-erase"></i></button></th>
 								</tr>
 							</tbody>
 							<tfoot>
@@ -135,7 +100,48 @@
 							</tfoot>
 						</table>
 					</div>
-					
+					<div class="list-group-item list-group-header">
+						<h5>Discount</h5>
+					</div>
+					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.discounts.length">
+						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
+							<thead>
+								<tr>
+									<th class="text-center col-md-4">Discount</th>
+									<th class="text-center col-md-4">Fees Applicable</th>
+									<th class="text-center col-md-3">Amount</th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
+								</tr>
+								<tr >
+									<td class="col-md-4">
+										<select class="form-control" ng-model="Discount"  ng-options="discount as discount.name for discount in Discounts track by discount.id"
+										</select>
+									</td>
+									<td class="col-md-4">
+										<input type="text" class="form-control" ng-model="Discount.fees_applicable" placeholder="fees" ng-readonly="true"/>
+									</td>
+									<td class="col-md-3">
+										<input type="text" class="form-control" ng-model="Discount.display_amount" placeholder="amount" ng-readonly="true"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="adddiscountItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  ng-repeat="discount in Tuition.discounts" >
+									<td class="col-md-4">
+										<input type="text" class="form-control" ng-model="discount.name" ng-readonly="true"/>
+									</td>
+									<td class="col-md-4">
+										<input type="text" class="form-control" ng-model="discount.fees_applicable" placeholder="Fees Applicable" ng-readonly="true"/>
+									</td>
+									<td class="col-md-3">
+										<input type="text" class="form-control text-right" ng-value="discount.display_amount" placeholder="Amount" ng-readonly="true"/>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 					<div class="list-group-item text-center" ng-hide="Tuition.fees.length || ErrorCode">
 						<div class="empty-state">
 							<div class="well">
