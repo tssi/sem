@@ -51,6 +51,7 @@ class Tuition extends AppModel {
 				foreach($result['FeeBreakdown'] as $breakdown){
 					$fee = array(
 						'id'=>$breakdown['fee_id'],
+						'fee_breakdown_id'=>$breakdown['id'],
 						'name'=>$breakdown['Fee']['name'],
 						'amount'=>(double)$breakdown['amount'],
 					);
@@ -65,6 +66,7 @@ class Tuition extends AppModel {
 						$fees_applicable =  explode(',',$fees_applicable);
 					$discount = array(
 						'id'=>$discount['id'],
+						'tuition_discount_id'=>$discount['TuitionDiscount']['id'],
 						'name'=>$discount['name'],
 						'type'=>$discount['type'],
 						'amount'=>(double)$discount['amount'],
@@ -85,6 +87,7 @@ class Tuition extends AppModel {
 							'billing_period_id'=>$schedule['billing_period_id'],
 							'billing_period'=>$bill_period['name'],
 							'due_dates'=>$bill_period['due_dates'],
+							'bill_months'=>$bill_period['bill_months'],
 							'amount'=>(double)$schedule['amount'],
 						);
 						array_push($schedules,$schedule);
