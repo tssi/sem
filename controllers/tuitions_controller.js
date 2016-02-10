@@ -19,7 +19,7 @@ define(['app','api'], function (app) {
 		   api.GET('schemes',function success(response){
 			   $scope.Schemes = response.data;
 		   });
-		    api.GET('billing_periods',function success(response){
+		   api.GET('billing_periods',function success(response){
 			   $scope.BillingPeriods = response.data;
 			   $scope.Amounts = {};
 			   for(var i in $scope.BillingPeriods){
@@ -27,6 +27,12 @@ define(['app','api'], function (app) {
 				   $scope.Amounts[period.id]={};
 			   }
 		   });
+		   api.GET('fees',function success(response){
+			   $scope.Fees = response.data;
+		   });
+		   api.GET('discounts',function success(response){
+			   $scope.Discounts = response.data;
+		   })
 	   }
 	}]);
 });
