@@ -102,7 +102,7 @@
 					<div class="list-group-item list-group-header">
 						<h5>Schedule</h5>
 					</div>
-					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.schemes.length">
+					<div class="list-group-item" ng-show="Tuition.state.schedule==='edit'" ng-if="Tuition.schemes.length">
 						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
@@ -133,7 +133,7 @@
 					<div class="list-group-item list-group-header">
 						<h5>Discount</h5>
 					</div>
-					<div class="list-group-item" ng-show="Tuition.state==='edit'" ng-if="Tuition.discounts.length">
+					<div class="list-group-item" ng-show="Tuition.state.discounts==='edit'" ng-if="Tuition.discounts.length">
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
 							<thead>
 								<tr>
@@ -172,7 +172,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item text-center" ng-hide="Tuition.fees.length || ErrorCode">
+					<div class="list-group-item text-center" ng-hide="Tuition.discounts.length || ErrorCode">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">

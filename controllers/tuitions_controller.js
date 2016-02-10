@@ -12,7 +12,7 @@ define(['app','api'], function (app) {
 	   };
 	   $scope.openTuition = function(tuition){
 		   $scope.Tuition = tuition;
-		   $scope.Tuition.state = {fees:'edit',discounts:'edit'};
+		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
 		   $scope.FeeItem = {};
 		   $scope.SortItem = {};
 	   }
