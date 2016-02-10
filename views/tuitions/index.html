@@ -67,6 +67,11 @@
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
+								<tr ng-if="Tuition.fees.length==0"> 
+									<td colspan="3">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add fees.</div>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -168,6 +173,11 @@
 										<input type="text" class="form-control text-right" ng-value="discount.display_amount" placeholder="Amount" ng-readonly="true"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+								<tr ng-if="Tuition.discounts.length==0"> 
+									<td colspan="3">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add discounts.</div>
+									</td>
 								</tr>
 							</tbody>
 						</table>
