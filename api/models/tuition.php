@@ -70,6 +70,7 @@ class Tuition extends AppModel {
 						'name'=>$discount['name'],
 						'type'=>$discount['type'],
 						'amount'=>(double)$discount['amount'],
+						'display_amount'=>$discount['display_amount'],
 						'fees_applicable'=>$fees_applicable,
 					);
 					array_push($discounts,$discount);
