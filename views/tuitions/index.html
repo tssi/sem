@@ -47,11 +47,11 @@
 								</tr>
 								<tr >
 									<td class="col-md-6">
-										<select class="form-control" ng-model="name">
+										<select class="form-control" ng-model="FeeId" ng-options="fee as fee.name for fee in Fees track by fee.id">
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="amount" placeholder="amount"/>
+										<input type="number" class="form-control" ng-model="FeeAmount" placeholder="amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addfeeItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
@@ -82,11 +82,11 @@
 								</tr>
 								<tr >
 									<td class="col-md-6">
-										<select class="form-control" ng-model="name">
+										<select class="form-control" ng-model="DiscountId"  ng-options="discount as discount.name for discount in Discounts track by discount.id"
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="amount" placeholder="Amount"/>
+										<input type="number" class="form-control" ng-model="DiscountAmount" placeholder="amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="adddiscountItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
@@ -94,10 +94,10 @@
 							<tbody>
 								<tr  ng-repeat="discount in Tuition.discounts" >
 									<td class="col-md-5">
-										<input type="text" class="form-control" ng-model="discount.name" placeholder="Name"/>
+										<input type="text" class="form-control" ng-model="discount.name" placeholder="Name" ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="discount.amount" placeholder="Amount"/>
+										<input type="number" class="form-control" ng-model="discount.amount" placeholder="Amount" ng-readonly="true"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
