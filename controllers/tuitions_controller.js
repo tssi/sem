@@ -16,6 +16,12 @@ define(['app','api'], function (app) {
 		   $scope.FeeItem = {};
 		   $scope.SortItem = {};
 	   }
+	   $scope.removeTuitionInfo = function(){
+		   $scope.Tuition = null;
+		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
+		   $scope.FeeItem = {};
+		   $scope.SortItem = {};
+	   }
 	   $scope.addFeeItem = function(feeItem,amount){
 		   var data =  {
 			   fee_id:feeItem.id,
