@@ -93,10 +93,10 @@
 							<tbody  ui-tree-nodes  ng-model="SortItem.fees" ng-if="SortItem.fees">
 								<tr ng-repeat="fee in SortItem.fees"  ui-tree-node>
 									<td class="col-md-5">
-										{{fee.name}}
+										<input type="text" class="form-control" ng-disabled="true"  ng-model="fee.name" />
 									</td>
 									<td class="col-md-5">
-										{{fee.amount}}
+										<input type="number" class="form-control" ng-disabled="true" ng-model="fee.amount" />
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
 								</tr>
@@ -145,7 +145,7 @@
 									<th class="text-center col-md-4">Discount</th>
 									<th class="text-center col-md-4">Fees Applicable</th>
 									<th class="text-center col-md-3">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.discounts.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="true" ng-click="updateState('discounts','sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-4">
@@ -183,6 +183,41 @@
 							</tbody>
 						</table>
 					</div>
+					<div class="list-group-item" ng-show="Tuition.state.discounts==='sort'">
+						<table ui-tree class="table table-bordered table-condensed table-sort">
+							<thead>
+								<tr>
+									<th class="text-center col-md-4">Discount</th>
+									<th class="text-center col-md-4">Fees Applicable</th>
+									<th class="text-center col-md-3">Amount</th>
+									<th class="text-center col-md-1"><button class="btn btn-danger"  ng-click="updateState('discounts','edit')"><span class="glyphicon glyphicon-remove"></span></button></th>
+								</tr>
+								<tr >
+									<td colspan="3">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('discounts')"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tbody  ui-tree-nodes  ng-model="SortItem.discounts" ng-if="SortItem.discounts">
+								<tr ng-repeat="discount in SortItem.discounts"  ui-tree-node>
+									<td class="col-md-4">
+										<input type="text" class="form-control" ng-disabled="true" ng-model="discount.name" />
+									</td>
+									<td class="col-md-4">
+										<input type="text" class="form-control"  ng-disabled="true" ng-model="discount.fees_applicable" />
+									</td>
+									<td class="col-md-3 text-right">
+										<input type="text" class="form-control text-right"  ng-disabled="true" ng-model="discount.display_amount" />
+									</td>
+									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
+								</tr>
+							</tbody>
+							</tbody>
+						</table>
+					</div>
+				
 				</div>
 				<div class="list-group-canvas" ng-hide="Tuition">
 					<div class="list-group-item list-group-header">
