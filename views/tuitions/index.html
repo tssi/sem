@@ -149,16 +149,17 @@
 								</tr>
 								<tr >
 									<td class="col-md-4">
-										<select class="form-control" ng-model="Discount"  ng-options="discount as discount.name for discount in Discounts track by discount.id"
+										<select class="form-control" ng-model="Discount"  ng-options="discount as discount.name for discount in Discounts track by discount.id">
+											<option value="">Select Discount</option>
 										</select>
 									</td>
 									<td class="col-md-4">
 										<input type="text" class="form-control" ng-model="Discount.fees_applicable" placeholder="fees" ng-readonly="true"/>
 									</td>
 									<td class="col-md-3">
-										<input type="text" class="form-control" ng-model="Discount.display_amount" placeholder="amount" ng-readonly="true"/>
+										<input type="text" class="form-control text-right" ng-model="Discount.display_amount" placeholder="amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="adddiscountItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(Discount)"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
