@@ -2,7 +2,7 @@
 <div ng-controller="TuitionController" ng-init="list()">
 	<button class="btn btn-primary btn-fab bottom right fixed" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">Tuition list</label>
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-9">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger pull-right" ng-disabled="!Tuition" ng-click="removeTuitionInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
@@ -52,7 +52,7 @@
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="FeeItem.amount" placeholder="amount"/>
+										<input type="number" class="form-control" autoselect ng-model="FeeItem.amount" placeholder="amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
@@ -63,7 +63,7 @@
 										<input type="text" class="form-control" ng-model="fee.name" ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-model="fee.amount" placeholder="Amount"/>
+										<input type="number" class="form-control" autoselect ng-model="fee.amount" placeholder="Amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
@@ -111,25 +111,32 @@
 						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
-									<th>Scheme</th>
+									<th class="col-md-2">Scheme</th>
 									<th ng-repeat="scheme in Schemes">{{scheme.name}}</th>
 									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-remove"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="billingPeriod in BillingPeriods">
-									<td>{{billingPeriod.name}}
+									<td class="align-middle">
+										{{billingPeriod.name}}
 									</td>
-									<td ng-repeat="scheme in Schemes">
-										<input type="number" class="form-control" placeholder="Amount"  ng-model="Amounts[billingPeriod.id][scheme.id]" />
+									<td class="align-middle" ng-repeat="scheme in Schemes">
+										<div class="input-group" ng-if="Multiplyer[billingPeriod.id]>1">
+											<span class="input-group-addon">{{Multiplyer[billingPeriod.id]}}&times;</span>
+											<input type="number" class="form-control" placeholder="Amount"  ng-change="computeTotal(scheme.id)" ng-model="Amounts[billingPeriod.id][scheme.id]" />
+										</div>
+										<input ng-if="Multiplyer[billingPeriod.id]==1" type="number" autoselect class="form-control" placeholder="Amount"  ng-change="computeTotal(scheme.id)" ng-model="Amounts[billingPeriod.id][scheme.id]" />
 									</td>
-									<th class="text-center"><button class="btn btn-danger"><i class="glyphicon glyphicon-erase"></i></button></th>
+									<th class="text-center"><button class="btn btn-danger" ng-click="resetAmounts(billingPeriod.id)"><i class="glyphicon glyphicon-erase"></i></button></th>
 								</tr>
 							</tbody>
 							<tfoot>
-								<tr>
-									<td> <b>Total</b>
-									<td ng-repeat="scheme in Schemes"> 4,000</td>
+								<tr class="text-bold">
+									<td>Total</td>
+									<td ng-repeat="scheme in Schemes">
+										<div class="amount total peso">{{Totals[scheme.id] | currency}}</div>
+									</td>
 									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
 								</tr>
 							</tfoot>
