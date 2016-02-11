@@ -138,28 +138,28 @@
 					<div class="list-group-item list-group-header">
 						<h5>Discount</h5>
 					</div>
-					<div class="list-group-item" ng-show="Tuition.state.discounts==='edit'" ng-if="Tuition.discounts.length">
-						<table class="table table-bordered table-condensed" ng-class="{hide:!Tuition.discounts.length}">
+					<div class="list-group-item" ng-show="Tuition.state.discounts==='edit'">
+						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
 									<th class="text-center col-md-4">Discount</th>
 									<th class="text-center col-md-4">Fees Applicable</th>
 									<th class="text-center col-md-3">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="Tuition.discounts.length==0"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-4">
-										<select class="form-control" ng-model="Discount"  ng-options="discount as discount.name for discount in Discounts track by discount.id">
+										<select class="form-control" ng-model="DiscountItem"  ng-options="discount as discount.name for discount in Discounts track by discount.id">
 											<option value="">Select Discount</option>
 										</select>
 									</td>
 									<td class="col-md-4">
-										<input type="text" class="form-control" ng-model="Discount.fees_applicable" placeholder="fees" ng-readonly="true"/>
+										<input type="text" class="form-control" ng-model="DiscountItem.fees_applicable" placeholder="fees" ng-readonly="true"/>
 									</td>
 									<td class="col-md-3">
-										<input type="text" class="form-control text-right" ng-model="Discount.display_amount" placeholder="amount" ng-readonly="true"/>
+										<input type="text" class="form-control text-right" ng-model="DiscountItem.display_amount" placeholder="amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(Discount)"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(DiscountItem)"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -173,37 +173,15 @@
 									<td class="col-md-3">
 										<input type="text" class="form-control text-right" ng-value="discount.display_amount" placeholder="Amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removediscountItem(discount)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeDiscountItem(discount,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 								<tr ng-if="Tuition.discounts.length==0"> 
-									<td colspan="3">
+									<td colspan="4">
 										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add discounts.</div>
 									</td>
 								</tr>
 							</tbody>
 						</table>
-					</div>
-					<div class="list-group-item text-center" ng-hide="Tuition.discounts.length || ErrorCode">
-						<div class="empty-state">
-							<div class="well">
-								<div class="empty-state-icon">
-									<i class="glyphicon glyphicon-refresh"></i>
-								</div>
-								<h4>Loading...</h4>
-								<p class="empty-state-message">Please wait.{{ErrorCode}}</p>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item text-center" ng-show="ErrorCode&&ErrorCode!=404">
-						<div class="empty-state">
-							<div class="well">
-								<div class="empty-state-icon">
-									<i class="glyphicon glyphicon-exclamation-sign"></i>
-								</div>
-								<h4>Error {{ErrorCode}}</h4>
-								<p class="empty-state-message">{{ErrorMessage}}</p>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="list-group-canvas" ng-hide="Tuition">

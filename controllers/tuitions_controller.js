@@ -53,7 +53,7 @@ define(['app','api'], function (app) {
 					tuition_discount_id:response.data.id,
 					name:discountItem.name,
 					fees_applicable:discountItem.fees_applicable,
-					disaplay_amount:discountItem.disaplay_amount,
+					display_amount:discountItem.display_amount,
 					order:response.data.order
 				};
 			   $scope.Tuition.discounts.push(discount);
