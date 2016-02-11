@@ -3,24 +3,20 @@ define(['app','api'], function (app) {
     app.register.controller('TuitionController',['$scope','$rootScope','$uibModal','api', function ($scope,$rootScope,$uibModal,api) {
 		$scope.list=function(){
 			$rootScope.__MODULE_NAME = 'Tuition Structure';
-			$scope.FeeItem = {};
-			$scope.SortItem = {};
+			resetTuition();
 			initAPIRequest();
 			$scope.$watchCollection('SortItem.fees',function(newValue,oldValue){
 				$scope.sortItems('fees');
 			});
 	   };
 	   $scope.openTuition = function(tuition){
+		   resetTuition();
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
-		   $scope.FeeItem = {};
-		   $scope.SortItem = {};
 	   }
 	   $scope.removeTuitionInfo = function(){
+		   resetTuition();
 		   $scope.Tuition = null;
-		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
-		   $scope.FeeItem = {};
-		   $scope.SortItem = {};
 	   }
 	   $scope.addFeeItem = function(feeItem,amount){
 		   var data =  {
@@ -46,6 +42,30 @@ define(['app','api'], function (app) {
 			  $scope.Tuition.fees.splice(index,1); 
 		   });
 	   }
+	   $scope.addDiscountItem = function(discountItem){
+		   var data =  {
+			   discount_id:discountItem.id,
+			   tuition_id:$scope.Tuition.id,
+			   order:$scope.Tuition.discounts.length+1
+			  };
+		   api.POST('tuition_discounts',data,function success(response){
+			   var discount = {
+					tuition_discount_id:response.data.id,
+					name:discountItem.name,
+					fees_applicable:discountItem.fees_applicable,
+					disaplay_amount:discountItem.disaplay_amount,
+					order:response.data.order
+				};
+			   $scope.Tuition.discounts.push(discount);
+			   $scope.DiscountItem = {};
+		   });
+	   }
+	   $scope.removeDiscountItem = function(item,index){
+		   var data = {id:item.tuition_discount_id};
+		   api.DELETE('tuition_discounts',data,function success(response){
+			  $scope.Tuition.discounts.splice(index,1); 
+		   });
+	   }
 	   $scope.updateState=function(list,state){
 			$scope.Tuition.state[list]=state;
 			if(state==='sort'){
@@ -69,6 +89,11 @@ define(['app','api'], function (app) {
 				$scope.Tuition.state[list]="edit";
 			});
 		};
+		function resetTuition(){
+			$scope.FeeItem = {};
+			$scope.DiscountItem = {};
+			$scope.SortItem = {};
+		}
 	   function initAPIRequest(){
 		   api.GET('tuitions',function success(response){
 			   $scope.TuitionList = response.data;
