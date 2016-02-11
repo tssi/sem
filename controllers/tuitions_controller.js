@@ -13,9 +13,10 @@ define(['app','api'], function (app) {
 		   resetTuition();
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
+		   initAmounts();
+		   initTotals();
 	   }
 	   $scope.removeTuitionInfo = function(){
-		   resetTuition();
 		   $scope.Tuition = null;
 	   }
 	   $scope.addFeeItem = function(feeItem,amount){
@@ -89,6 +90,22 @@ define(['app','api'], function (app) {
 				$scope.Tuition.state[list]="edit";
 			});
 		};
+		$scope.computeTotal = function(scheme_id){
+			$scope.Totals[scheme_id]=0;
+			for(var bill_period in $scope.Amounts){
+				var amount = $scope.Amounts[bill_period][scheme_id];
+				var multiplyer = $scope.Multiplyer[bill_period];
+				if(amount)
+					$scope.Totals[scheme_id]+=(amount*multiplyer);
+			}
+		}
+		$scope.resetAmounts = function(bill_period){
+			$scope.Amounts[bill_period] = {};
+			for(var i in $scope.Schemes){
+				var scheme = $scope.Schemes[i];
+				$scope.computeTotal(scheme.id);
+			}
+		}
 		function resetTuition(){
 			$scope.FeeItem = {};
 			$scope.DiscountItem = {};
@@ -103,14 +120,11 @@ define(['app','api'], function (app) {
 		   });
 		   api.GET('schemes',function success(response){
 			   $scope.Schemes = response.data;
+			   initTotals();
 		   });
 		   api.GET('billing_periods',function success(response){
-			   $scope.BillingPeriods = response.data;
-			   $scope.Amounts = {};
-			   for(var i in $scope.BillingPeriods){
-				   var period =  $scope.BillingPeriods[i];
-				   $scope.Amounts[period.id]={};
-			   }
+			  $scope.BillingPeriods = response.data;
+			  initAmounts();
 		   });
 		   api.GET('fees',function success(response){
 			   $scope.Fees = response.data;
@@ -118,6 +132,22 @@ define(['app','api'], function (app) {
 		   api.GET('discounts',function success(response){
 			   $scope.Discounts = response.data;
 		   })
+	   }
+	   function initAmounts(){
+		   $scope.Amounts = {};
+		   $scope.Multiplyer = {};
+		   for(var i in $scope.BillingPeriods){
+			   var period =  $scope.BillingPeriods[i];
+			   $scope.Amounts[period.id]={};
+			   $scope.Multiplyer[period.id]=period.payment_frequency;
+		   }
+	   }
+	   function initTotals(){
+		   $scope.Totals = {};
+		   for(var i in $scope.Schemes){
+			   var scheme =  $scope.Schemes[i];
+			   $scope.Totals[scheme.id]=0;
+		   }
 	   }
 	}]);
 });
