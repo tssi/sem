@@ -45,7 +45,7 @@
 									<th class="text-center col-md-5">Amount</th>
 									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="Tuition.length==0" ng-click="updateState('fees','sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
-								<tr >
+								<tr>
 									<td class="col-md-6">
 										<select class="form-control" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
 											<option value="">Select Fee</option>
@@ -73,6 +73,15 @@
 									</td>
 								</tr>
 							</tbody>
+							<tfoot>
+								<tr class="text-bold">
+									<td class="align-middle">Total</td>
+									<td class="align-middle"><div class="amount total peso">{{Tuition.amount | currency}}</div></td>
+									<td class="text-center col-md-1">
+										<button class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 					<div class="list-group-item" ng-show="Tuition.state.fees==='sort'">
@@ -101,6 +110,15 @@
 									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
 								</tr>
 							</tbody>
+							<tfoot>
+								<tr class="text-bold">
+									<td class="align-middle">Total</td>
+									<td class="align-middle"><div class="amount total peso">{{Tuition.amount | currency}}</div></td>
+									<td class="text-center col-md-1">
+										<button class="btn btn-success" ng-disabled="true"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 					
@@ -111,8 +129,8 @@
 						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
-									<th class="col-md-2">Scheme</th>
-									<th ng-repeat="scheme in Schemes">{{scheme.name}}</th>
+									<th class="col-md-2 text-center">Scheme</th>
+									<th class="text-center" ng-repeat="scheme in Schemes">{{scheme.name}}</th>
 									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-remove"></i></button></th>
 								</tr>
 							</thead>
@@ -133,8 +151,8 @@
 							</tbody>
 							<tfoot>
 								<tr class="text-bold">
-									<td>Total</td>
-									<td ng-repeat="scheme in Schemes">
+									<td class="align-middle">Total</td>
+									<td class="align-middle" ng-repeat="scheme in Schemes">
 										<div class="amount total peso">{{Totals[scheme.id] | currency}}</div>
 									</td>
 									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
