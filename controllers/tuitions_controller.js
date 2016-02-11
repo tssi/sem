@@ -43,6 +43,13 @@ define(['app','api'], function (app) {
 			  $scope.Tuition.fees.splice(index,1); 
 		   });
 	   }
+	   $scope.updateFeeItem = function(feeItem){
+		     var data =  {
+			   id:feeItem.fee_breakdown_id,
+			   amount:feeItem.amount
+			  };
+		   api.PUT('fee_breakdowns',data,function success(response){});
+	   }
 	   $scope.addDiscountItem = function(discountItem){
 		   var data =  {
 			   discount_id:discountItem.id,

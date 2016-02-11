@@ -63,7 +63,7 @@
 										<input type="text" class="form-control" ng-model="fee.name" ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="fee.amount" placeholder="Amount"/>
+										<input type="number" class="form-control" autoselect ng-model="fee.amount" ng-blur="updateFeeItem(fee)" placeholder="Amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
