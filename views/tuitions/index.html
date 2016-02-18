@@ -5,13 +5,17 @@
 	</a>
 	<button class="btn btn-primary btn-fab bottom right fixed" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">Tuition list</label>
 				</div>
 				<div class="list-group-canvas">
-					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)">
+					<div class="list-group-item text-center" ng-if="!TuitionList.length">
+						<div class="preloader-message">Loading...</div>
+						<div class="loader"></div>
+					</div>
+					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)" ng-if="TuitionList.length">
 						<h4 class="list-group-item-heading" >{{tuition.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{tuition.description}}</span></p>
@@ -19,7 +23,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-8">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger pull-right" ng-disabled="!Tuition" ng-click="removeTuitionInfo()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
@@ -35,7 +39,26 @@
 				</div>
 				<div class="list-group-canvas" ng-show="Tuition">
 					<div class="list-group-item list-group-header">
-						<h5>{{Tuition.name}} Tuition</h5>
+						<h5>Tuition Information</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="row">
+							<div class="col-md-6">
+								<dl class="dl-horizontal">
+									<dt>Name</dt>
+									<dd>{{Tuition.name}}</dd>
+									<dt>Description</dt>
+									<dd>{{Tuition.description}}</dd>
+									<dt>Effecitve SY & Level</dt>
+									<dd>{{Tuition.display_sy}} / {{Tuition.year_level}}</dd>
+								</dl>
+							</div>
+							<div class="col-md-6 amount amount-total">
+								<label>Total</label>
+								<h3 class="amount total peso">{{Tuition.amount | currency}}</h3>
+							</div>
+						</div>
+						
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Breakdown</h5>
@@ -50,25 +73,25 @@
 								</tr>
 								<tr>
 									<td class="col-md-6">
-										<select class="form-control" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
+										<select class="form-control" ng-click="FocusAmount=false" ng-change="FocusAmount=true" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
 											<option value="">Select Fee</option>
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="FeeItem.amount" placeholder="amount"/>
+										<input type="text" class="form-control text-right" focus="FocusAmount" autoselect monetary ng-model="FeeItem.amount" placeholder="amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)" ng-disabled="SavingFeeItem"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr  ng-repeat="fee in Tuition.fees" >
 									<td class="col-md-5">
-										<input type="text" class="form-control" ng-model="fee.name" ng-readonly="true"/>
+										<input type="text" class="form-control" ng-model="fee.name"   ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="fee.amount" ng-blur="updateFeeItem(fee)" placeholder="Amount"/>
+										<input type="text" class="form-control text-right" autoselect monetary ng-model="fee.amount" ng-change="updateFeeItem(fee,$index)"  ng-model-options="{ debounce: 333 }"placeholder="Amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger"  ng-click="removeFeeItem(fee,$index)" ng-disabled="SavingFee[$index]"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 								<tr ng-if="Tuition.fees.length==0"> 
 									<td colspan="3">
@@ -81,7 +104,7 @@
 									<td class="align-middle">Total</td>
 									<td class="align-middle"><div class="amount total peso">{{Tuition.amount | currency}}</div></td>
 									<td class="text-center col-md-1">
-										<button class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+										<button class="btn btn-success" ng-disabled="SavingTutionTotal" ng-click="saveTuitionTotal()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 									</td>
 								</tr>
 							</tfoot>
@@ -99,7 +122,7 @@
 									<td colspan="2">
 										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('fees')"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('fees')" ng-disabled="SavingFees" ><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
 								</tr>
 							</thead>
 							<tbody  ui-tree-nodes  ng-model="SortItem.fees" ng-if="SortItem.fees">
@@ -108,7 +131,7 @@
 										<input type="text" class="form-control" ng-disabled="true"  ng-model="fee.name" />
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-disabled="true" ng-model="fee.amount" />
+										<input type="text" class="form-control text-right" monetary ng-disabled="true" ng-model="fee.amount" />
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
 								</tr>
@@ -128,13 +151,13 @@
 					<div class="list-group-item list-group-header">
 						<h5>Schedule</h5>
 					</div>
-					<div class="list-group-item" ng-show="Tuition.state.schedule==='edit'" ng-if="Tuition.schemes.length">
+					<div class="list-group-item" ng-show="Tuition.state.schedule==='edit'">
 						<table class="table table-bordered table-condensed">
 							<thead>
 								<tr>
 									<th class="col-md-2 text-center">Scheme</th>
 									<th class="text-center" ng-repeat="scheme in Schemes">{{scheme.name}}</th>
-									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-remove"></i></button></th>
+									<th class="text-center"><button class="btn btn-warning" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-trash"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -145,11 +168,11 @@
 									<td class="align-middle" ng-repeat="scheme in Schemes">
 										<div class="input-group" ng-if="Multiplyer[billingPeriod.id]>1">
 											<span class="input-group-addon">{{Multiplyer[billingPeriod.id]}}&times;</span>
-											<input type="number" class="form-control" placeholder="Amount"  ng-change="computeTotal(scheme.id)" ng-model="Amounts[billingPeriod.id][scheme.id]" />
+											<input type="text" autoselect monetary class="form-control text-right" placeholder="Amount"  ng-change="computeTotal(scheme.id,billingPeriod.id)" ng-model="Amounts[billingPeriod.id][scheme.id]"   ng-model-options="{debounce:333}" />
 										</div>
-										<input ng-if="Multiplyer[billingPeriod.id]==1" type="number" autoselect class="form-control" placeholder="Amount"  ng-change="computeTotal(scheme.id)" ng-model="Amounts[billingPeriod.id][scheme.id]" />
+										<input ng-if="Multiplyer[billingPeriod.id]==1" type="text" autoselect monetary class="form-control text-right" placeholder="Amount"  ng-change="computeTotal(scheme.id,billingPeriod.id)" ng-model="Amounts[billingPeriod.id][scheme.id]"  ng-model-options="{debounce:333}" />
 									</td>
-									<th class="text-center"><button class="btn btn-danger" ng-click="resetAmounts(billingPeriod.id)"><i class="glyphicon glyphicon-erase"></i></button></th>
+									<td  class="text-center"><button class="btn btn-danger" ng-click="resetAmounts(billingPeriod.id)" ng-disabled="SavingSchedule[billingPeriod.id]" ><i class="glyphicon glyphicon-erase"></i></button></td>
 								</tr>
 							</tbody>
 							<tfoot>
@@ -158,7 +181,15 @@
 									<td class="align-middle" ng-repeat="scheme in Schemes">
 										<div class="amount total peso">{{Totals[scheme.id] | currency}}</div>
 									</td>
-									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
+									<td class="text-center"><button class="btn btn-success" ng-disabled="SavingScheduleTotals" ng-click="savePayschemSchedule()"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
+								</tr>
+								<tr>
+									<td class="align-middle">Variance</td>
+									<td class="align-middle" ng-repeat="scheme in Schemes">
+										<div ng-show="ShowVariance" class="amount total peso">{{Variance[scheme.id] | currency}}</div>
+										<div ng-hide="ShowVariance" class="text-center">-</div>
+									</td>
+									<td class="text-center"><button class="btn btn-default" ng-click="ShowVariance=!ShowVariance"><i class="glyphicon glyphicon-eye-open" ng-class="{'glyphicon-eye-open':!ShowVariance,'glyphicon-eye-close':ShowVariance}"></i></button></td>
 								</tr>
 							</tfoot>
 						</table>
@@ -173,7 +204,7 @@
 									<th class="text-center col-md-4">Discount</th>
 									<th class="text-center col-md-4">Fees Applicable</th>
 									<th class="text-center col-md-3">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="true" ng-click="updateState('discounts','sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-warning" ng-click="eraseAmounts('discounts')" ng-disabled="SavingDiscountItem|| !Tuition.discounts.length"><span class="glyphicon glyphicon-trash"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-4">
@@ -187,7 +218,7 @@
 									<td class="col-md-3">
 										<input type="text" class="form-control text-right" ng-model="DiscountItem.display_amount" placeholder="amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(DiscountItem)"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(DiscountItem)" ng-disabled="SavingDiscountItem" ><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -201,7 +232,7 @@
 									<td class="col-md-3">
 										<input type="text" class="form-control text-right" ng-value="discount.display_amount" placeholder="Amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeDiscountItem(discount,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeDiscountItem(discount,$index)" ng-disabled="SavingDiscount[$index]||DeletingDiscounts"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 								<tr ng-if="Tuition.discounts.length==0"> 
 									<td colspan="4">
@@ -248,17 +279,14 @@
 				
 				</div>
 				<div class="list-group-canvas" ng-hide="Tuition">
-					<div class="list-group-item list-group-header">
-						<h5>Manage list</h5>
-					</div>
 					<div class="list-group-item">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">
 									<i class="glyphicon glyphicon-list-alt"></i>
 								</div>
-								<h4>No list selected!</h4>
-								<p class="empty-state-message">Choose the list to manage.</p>
+								<h4>No tuition structure selected!</h4>
+								<p class="empty-state-message">Choose item from the list to manage.</p>
 							</div>
 						</div>
 					</div>
