@@ -2,8 +2,13 @@
 class Tuition extends AppModel {
 	var $name = 'Tuition';
 	var $recursive = 2;
+	var $virtualFields = array(
+						'display_sy'=>"CONCAT(Tuition.sy,' - ',Tuition.sy+1)",
+						);
 	var $actsAs = array('Containable');
 	var $contain = array('FeeBreakdown',
+						'YearLevel.id',
+						'YearLevel.name',
 						'FeeBreakdown.Fee.name',
 						'Discount',
 						'PaymentScheme',
@@ -49,6 +54,7 @@ class Tuition extends AppModel {
 			//pr($results);
 			$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
 			foreach($results as $index=>$result){
+				$results[$index]['Tuition']['year_level']=$result['YearLevel']['name'];
 				$billingPeriods = $BillingPeriod->getDueDates($result['Tuition']['sy']);
 				//Fee Breakdown
 				if(isset($result['FeeBreakdown'])){
