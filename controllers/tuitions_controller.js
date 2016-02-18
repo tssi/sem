@@ -8,11 +8,38 @@ define(['app','api'], function (app) {
 			$scope.$watchCollection('SortItem.fees',function(newValue,oldValue){
 				$scope.sortItems('fees');
 			});
+			$scope.$watch(
+				function($scope) {
+					if($scope.Tuition == undefined) return false;
+					return $scope.Tuition.fees.
+						map(function(obj) {
+							return obj.amount
+						});
+				}, 
+				function (newValue) {
+					if(newValue){
+						var total = 0;
+						for(var i in newValue){
+							var amount =  newValue[i];
+							total+=amount;
+						}
+						$scope.Tuition.amount =  total;
+						$scope.saveTuitionTotal();
+					}
+			}, true);
 	   };
+	   $scope.saveTuitionTotal = function(){
+			var data = {id:$scope.Tuition.id,amount:$scope.Tuition.amount};
+			$scope.SavingTutionTotal = true;
+			api.PUT('tuitions',data,function success(response){
+				$scope.SavingTutionTotal = false;
+			});
+	   }
 	   $scope.openTuition = function(tuition){
 		   resetTuition();
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
+		   $scope.SavingFee = [];
 		   initAmounts();
 		   initTotals();
 	   }
@@ -26,6 +53,7 @@ define(['app','api'], function (app) {
 			   tuition_id:$scope.Tuition.id,
 			   order:$scope.Tuition.fees.length+1
 			  };
+			$scope.SavingFeeItem = true;
 		   api.POST('fee_breakdowns',data,function success(response){
 			   var fee = {
 					fee_breakdown_id:response.data.id,
@@ -35,20 +63,26 @@ define(['app','api'], function (app) {
 				};
 			   $scope.Tuition.fees.push(fee);
 			   $scope.FeeItem = {};
+			   $scope.SavingFeeItem = false;
 		   });
 	   }
 	   $scope.removeFeeItem = function(item,index){
 		   var data = {id:item.fee_breakdown_id};
+		   $scope.SavingFee[index]=true;
 		   api.DELETE('fee_breakdowns',data,function success(response){
+			  $scope.SavingFee[index]=false;
 			  $scope.Tuition.fees.splice(index,1); 
 		   });
 	   }
-	   $scope.updateFeeItem = function(feeItem){
+	   $scope.updateFeeItem = function(feeItem,index){
 		     var data =  {
 			   id:feeItem.fee_breakdown_id,
 			   amount:feeItem.amount
 			  };
-		   api.PUT('fee_breakdowns',data,function success(response){});
+			$scope.SavingFee[index]=true;
+		   api.PUT('fee_breakdowns',data,function success(response){
+			   $scope.SavingFee[index]=false;
+		   });
 	   }
 	   $scope.addDiscountItem = function(discountItem){
 		   var data =  {
@@ -92,9 +126,11 @@ define(['app','api'], function (app) {
 				data.reorder.push(item.fee_breakdown_id);
 			}
 			var path = 'fee_breakdowns';
+			$scope.SavingFees =true;
 			api.POST(path,data,function success(response){
 				$scope.Tuition[list]=angular.copy($scope.SortItem[[list]]);
 				$scope.Tuition.state[list]="edit";
+				$scope.SavingFees =false;
 			});
 		};
 		$scope.computeTotal = function(scheme_id){
