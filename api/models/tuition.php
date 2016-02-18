@@ -3,12 +3,15 @@ class Tuition extends AppModel {
 	var $name = 'Tuition';
 	var $recursive = 2;
 	var $virtualFields = array(
+						'code_sy'=>"RIGHT(Tuition.sy,2)",
 						'display_sy'=>"CONCAT(Tuition.sy,' - ',Tuition.sy+1)",
 						);
 	var $actsAs = array('Containable');
 	var $contain = array('FeeBreakdown',
 						'YearLevel.id',
 						'YearLevel.name',
+						'Program.id',
+						'Program.name',
 						'FeeBreakdown.Fee.name',
 						'Discount',
 						'PaymentScheme',
@@ -21,6 +24,13 @@ class Tuition extends AppModel {
 		'YearLevel' => array(
 			'className' => 'YearLevel',
 			'foreignKey' => 'year_level_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Program' => array(
+			'className' => 'Program',
+			'foreignKey' => 'program_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -54,8 +64,12 @@ class Tuition extends AppModel {
 			//pr($results);
 			$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
 			foreach($results as $index=>$result){
-				$results[$index]['Tuition']['year_level']=$result['YearLevel']['name'];
-				$billingPeriods = $BillingPeriod->getDueDates($result['Tuition']['sy']);
+				if(isset($result['Program']['name']))
+					$results[$index]['Tuition']['program']=$result['Program']['name'];
+				if(isset($result['YearLevel']['name']))
+					$results[$index]['Tuition']['year_level']=$result['YearLevel']['name'];
+				if(isset($result['Tuition']['sy']))
+					$billingPeriods = $BillingPeriod->find('list');
 				//Fee Breakdown
 				if(isset($result['FeeBreakdown'])){
 					$fees = array();
@@ -98,12 +112,15 @@ class Tuition extends AppModel {
 						//Payment Scheme Schedule
 						foreach($scheme['PaymentSchemeSchedule'] as $schedule){
 							$bill_period = $billingPeriods[$schedule['billing_period_id']];
+							$due_dates = explode(',',$schedule['due_dates']);
+							$bill_months = $BillingPeriod->getBillMonths($due_dates);
 							$schedule = array(
 								'id'=>$schedule['id'],
+								'payment_scheme_id'=>$schedule['payment_scheme_id'],
 								'billing_period_id'=>$schedule['billing_period_id'],
-								'billing_period'=>$bill_period['name'],
-								'due_dates'=>$bill_period['due_dates'],
-								'bill_months'=>$bill_period['bill_months'],
+								'billing_period'=>$bill_period,
+								'due_dates'=>$due_dates,
+								'bill_months'=>$bill_months,
 								'amount'=>(double)$schedule['amount'],
 							);
 							array_push($schedules,$schedule);
@@ -112,8 +129,8 @@ class Tuition extends AppModel {
 							'id'=>$scheme['Scheme']['id'],
 							'name'=>$scheme['Scheme']['name'],
 							'payment_frequency'=>(int)$scheme['Scheme']['payment_frequency'],
-							'amount'=>(double)$scheme['amount'],
-							'interest_charge'=>(double)$scheme['interest_charge'],
+							'total_amount'=>(double)$scheme['total_amount'],
+							'variance_amount'=>(double)$scheme['variance_amount'],
 							'schedule'=>$schedules,
 						);
 						array_push($schemes,$scheme);
