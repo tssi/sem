@@ -204,7 +204,7 @@
 									<th class="text-center col-md-4">Discount</th>
 									<th class="text-center col-md-4">Fees Applicable</th>
 									<th class="text-center col-md-3">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-warning" ng-click="eraseAmounts('discounts')"><span class="glyphicon glyphicon-trash"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-warning" ng-click="eraseAmounts('discounts')" ng-disabled="SavingDiscountItem|| !Tuition.discounts.length"><span class="glyphicon glyphicon-trash"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-4">
@@ -218,7 +218,7 @@
 									<td class="col-md-3">
 										<input type="text" class="form-control text-right" ng-model="DiscountItem.display_amount" placeholder="amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(DiscountItem)"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addDiscountItem(DiscountItem)" ng-disabled="SavingDiscountItem" ><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
@@ -232,7 +232,7 @@
 									<td class="col-md-3">
 										<input type="text" class="form-control text-right" ng-value="discount.display_amount" placeholder="Amount" ng-readonly="true"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeDiscountItem(discount,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeDiscountItem(discount,$index)" ng-disabled="SavingDiscount[$index]||DeletingDiscounts"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 								<tr ng-if="Tuition.discounts.length==0"> 
 									<td colspan="4">

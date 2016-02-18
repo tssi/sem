@@ -46,6 +46,7 @@ define(['app','api'], function (app) {
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
 		   $scope.SavingFee = [];
+		   $scope.SavingDiscount = [];
 		   $scope.SavingSchedule = {};
 		   initAmounts();
 		   initTotals();
@@ -99,6 +100,7 @@ define(['app','api'], function (app) {
 			   tuition_id:$scope.Tuition.id,
 			   order:$scope.Tuition.discounts.length+1
 			  };
+			 $scope.SavingDiscountItem = true;
 		   api.POST('tuition_discounts',data,function success(response){
 			   var discount = {
 					tuition_discount_id:response.data.id,
@@ -109,11 +111,15 @@ define(['app','api'], function (app) {
 				};
 			   $scope.Tuition.discounts.push(discount);
 			   $scope.DiscountItem = {};
+			   $scope.SavingDiscountItem = false;
 		   });
 	   }
 	   $scope.removeDiscountItem = function(item,index){
 		   var data = {id:item.tuition_discount_id};
+		    $scope.SavingDiscount[index]=true;
 		   api.DELETE('tuition_discounts',data,function success(response){
+			   $scope.SavingDiscount[index]=false;
+			   $scope.SavingDiscountItem = false;
 			  $scope.Tuition.discounts.splice(index,1); 
 		   });
 	   }
@@ -232,6 +238,17 @@ define(['app','api'], function (app) {
 					$scope.ScheduleId[bp_id]={};
 				}				
 				initTotals();
+			}else if(target=='discounts'){
+				$scope.SavingDiscountItem = true;
+				for(var index in $scope.Tuition.discounts){
+					var data = {id:$scope.Tuition.discounts[index].tuition_discount_id};
+						$scope.SavingDiscount[index]=true;
+						 api.DELETE('tuition_discounts',data,function success(response){
+						   $scope.SavingDiscount[index]=false;
+						   $scope.SavingDiscountItem = false;
+						  $scope.Tuition.discounts=[]; 
+						});
+				}
 			}
 		}
 		function resetTuition(){
