@@ -75,6 +75,7 @@ define(['app','api'], function (app) {
 		   });
 	   }
 	   $scope.updateFeeItem = function(feeItem,index){
+			if(!feeItem.amount) feeItem.amount=0;
 		     var data =  {
 			   id:feeItem.fee_breakdown_id,
 			   amount:feeItem.amount
