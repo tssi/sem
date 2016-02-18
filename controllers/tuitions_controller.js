@@ -46,6 +46,7 @@ define(['app','api'], function (app) {
 		   $scope.Tuition = tuition;
 		   $scope.Tuition.state = {fees:'edit',schedule:'edit',discounts:'edit'};
 		   $scope.SavingFee = [];
+		   $scope.SavingSchedule = {};
 		   initAmounts();
 		   initTotals();
 		   mapAmounts();
@@ -159,20 +160,78 @@ define(['app','api'], function (app) {
 				var amount = $scope.Amounts[billing_period_id][scheme_id];
 					if(amount==undefined) amount = 0;
 				var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,total_amount:total_amount,variance_amount:variance_amount};
+				var schedule_data = {id:schedule_id,tuition_id:tuition_id,scheme_id:scheme_id,billing_period_id:billing_period_id,amount:amount};
+				$scope.SavingSchedule[billing_period_id] = true;
+				$scope.SavingScheduleTotals = true;
 				api.PUT('payment_schemes',scheme_data,function success(response){
 					$scope.SchemeId[billing_period_id][scheme_id] =  response.data.id;
-				});
-				var schedule_data = {id:schedule_id,tuition_id:tuition_id,scheme_id:scheme_id,billing_period_id:billing_period_id,amount:amount};
-				api.PUT('payment_scheme_schedules',schedule_data,function success(response){
-					$scope.ScheduleId[billing_period_id][scheme_id] =  response.data.id;
+					api.PUT('payment_scheme_schedules',schedule_data,function success(response){
+						$scope.ScheduleId[billing_period_id][scheme_id] =  response.data.id;
+						$scope.SavingSchedule[billing_period_id] = false;
+						$scope.SavingScheduleTotals = false;
+					});
 				});
 			}
+		}
+		$scope.savePayschemSchedule = function(){
+			var tuition_id = $scope.Tuition.id;
+			var schemes = [];
+			var schedules = [];
+			for(var i in $scope.BillingPeriods){
+				var bp = $scope.BillingPeriods[i];
+				var billing_period_id = bp.id;
+				var hasAmount =false;
+				for(var scheme_id  in $scope.SchemeId[billing_period_id]){
+					var payment_scheme_id = $scope.SchemeId[billing_period_id][scheme_id];
+					var schedule_id = $scope.ScheduleId[billing_period_id][scheme_id];
+					var total_amount  = $scope.Totals[scheme_id];
+					var variance_amount  = $scope.Variance[scheme_id];
+					var amount = $scope.Amounts[billing_period_id][scheme_id];
+					var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,total_amount:total_amount,variance_amount:variance_amount};
+					var schedule_data = {id:schedule_id,tuition_id:tuition_id,scheme_id:scheme_id,billing_period_id:billing_period_id,amount:amount};
+					$scope.SavingSchedule[billing_period_id] = true;
+					schemes.push(scheme_data);
+					schedules.push(schedule_data);
+					hasAmount |= amount;
+				}
+				if(hasAmount) 
+					$scope.SavingSchedule[billing_period_id] = true;
+			}
+			$scope.SavingScheduleTotals = true;
+			api.PUT('payment_schemes',schemes,function success(response){
+					api.PUT('payment_scheme_schedules',schedules,function success(response){
+						for(var index in response.data){
+							var datum = response.data[index];
+							if(datum){
+								$scope.SavingSchedule[datum.billing_period_id]=false;
+							}
+						}
+						$scope.SavingScheduleTotals = false;
+					});
+				});
+			
 		}
 		$scope.resetAmounts = function(bill_period){
 			$scope.Amounts[bill_period] = {};
 			for(var i in $scope.Schemes){
 				var scheme = $scope.Schemes[i];
 				$scope.computeTotal(scheme.id,bill_period);
+			}
+		}
+		$scope.eraseAmounts = function(target){
+			if(target=='schemes'){
+				for(var i in $scope.BillingPeriods){
+					var bill_period =  $scope.BillingPeriods[i];
+					var bp_id = bill_period.id;
+					for(var scheme_id in $scope.SchemeId[bp_id])
+						api.DELETE('payment_schemes',{id:$scope.SchemeId[bp_id][scheme_id]},function success(response){});
+					for(var scheme_id in $scope.ScheduleId[bp_id])
+						api.DELETE('payment_scheme_schedules',{id:$scope.ScheduleId[bp_id][scheme_id]},function success(response){});
+					$scope.Amounts[bp_id] = {};
+					$scope.SchemeId[bp_id]={};
+					$scope.ScheduleId[bp_id]={};
+				}				
+				initTotals();
 			}
 		}
 		function resetTuition(){

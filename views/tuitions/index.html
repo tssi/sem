@@ -157,7 +157,7 @@
 								<tr>
 									<th class="col-md-2 text-center">Scheme</th>
 									<th class="text-center" ng-repeat="scheme in Schemes">{{scheme.name}}</th>
-									<th class="text-center"><button class="btn btn-default" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-remove"></i></button></th>
+									<th class="text-center"><button class="btn btn-warning" ng-click="eraseAmounts('schemes')"><i class="glyphicon glyphicon-trash"></i></button></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -172,7 +172,7 @@
 										</div>
 										<input ng-if="Multiplyer[billingPeriod.id]==1" type="text" autoselect monetary class="form-control text-right" placeholder="Amount"  ng-change="computeTotal(scheme.id,billingPeriod.id)" ng-model="Amounts[billingPeriod.id][scheme.id]"  ng-model-options="{debounce:333}" />
 									</td>
-									<th class="text-center"><button class="btn btn-danger" ng-click="resetAmounts(billingPeriod.id)"><i class="glyphicon glyphicon-erase"></i></button></th>
+									<td  class="text-center"><button class="btn btn-danger" ng-click="resetAmounts(billingPeriod.id)" ng-disabled="SavingSchedule[billingPeriod.id]" ><i class="glyphicon glyphicon-erase"></i></button></td>
 								</tr>
 							</tbody>
 							<tfoot>
@@ -181,14 +181,15 @@
 									<td class="align-middle" ng-repeat="scheme in Schemes">
 										<div class="amount total peso">{{Totals[scheme.id] | currency}}</div>
 									</td>
-									<td class="text-center"><button class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
+									<td class="text-center"><button class="btn btn-success" ng-disabled="SavingScheduleTotals" ng-click="savePayschemSchedule()"><i class="glyphicon glyphicon-floppy-disk"></i></button></td>
 								</tr>
-								<tr class="text-bold">
+								<tr>
 									<td class="align-middle">Variance</td>
 									<td class="align-middle" ng-repeat="scheme in Schemes">
-										<div class="amount total peso">{{Variance[scheme.id] | currency}}</div>
+										<div ng-show="ShowVariance" class="amount total peso">{{Variance[scheme.id] | currency}}</div>
+										<div ng-hide="ShowVariance" class="text-center">-</div>
 									</td>
-									<td class="text-center"><button class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></button></td>
+									<td class="text-center"><button class="btn btn-default" ng-click="ShowVariance=!ShowVariance"><i class="glyphicon glyphicon-eye-open" ng-class="{'glyphicon-eye-open':!ShowVariance,'glyphicon-eye-close':ShowVariance}"></i></button></td>
 								</tr>
 							</tfoot>
 						</table>
@@ -203,7 +204,7 @@
 									<th class="text-center col-md-4">Discount</th>
 									<th class="text-center col-md-4">Fees Applicable</th>
 									<th class="text-center col-md-3">Amount</th>
-									<th class="text-center col-md-1"><button class="btn btn-default" ng-disabled="true" ng-click="updateState('discounts','sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-1"><button class="btn btn-warning" ng-click="eraseAmounts('discounts')"><span class="glyphicon glyphicon-trash"></span></button></th>
 								</tr>
 								<tr >
 									<td class="col-md-4">
