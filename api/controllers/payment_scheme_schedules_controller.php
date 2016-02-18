@@ -35,8 +35,20 @@ class PaymentSchemeSchedulesController extends AppController {
 		}
 		if (!empty($this->data)) {
 			if ($this->PaymentSchemeSchedule->saveAll($this->data)) {
-				if($this->data['PaymentSchemeSchedule']['amount']==0){
-					$this->PaymentSchemeSchedule->delete($this->PaymentSchemeSchedule->id);
+				if(isset($this->data['PaymentSchemeSchedule'][0])){
+					foreach($this->data['PaymentSchemeSchedule'] as $schedule){
+						$this->PaymentSchemeSchedule->deleteAll(array(
+														'tuition_id'=>$schedule['tuition_id'],
+														'scheme_id'=>$schedule['scheme_id'],
+														'billing_period_id'=>$schedule['billing_period_id'],
+														'amount'=>0,
+														));
+					}
+				}else{
+					if($this->data['PaymentSchemeSchedule']['amount']==0){
+						$this->PaymentSchemeSchedule->delete($this->PaymentSchemeSchedule->id);
+				}
+				
 				}
 				$this->Session->setFlash(__('The payment scheme schedule has been saved', true));
 				$this->redirect(array('action' => 'index'));
