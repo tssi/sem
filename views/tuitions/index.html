@@ -50,12 +50,12 @@
 								</tr>
 								<tr>
 									<td class="col-md-6">
-										<select class="form-control" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
+										<select class="form-control" ng-click="FocusAmount=false" ng-change="FocusAmount=true" ng-model="FeeItem.id" ng-options="fee as fee.name for fee in Fees track by fee.id">
 											<option value="">Select Fee</option>
 										</select>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="FeeItem.amount" placeholder="amount"/>
+										<input type="text" class="form-control text-right" focus="FocusAmount" autoselect monetary ng-model="FeeItem.amount" placeholder="amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)" ng-disabled="SavingFeeItem"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
@@ -66,7 +66,7 @@
 										<input type="text" class="form-control" ng-model="fee.name"   ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="fee.amount" ng-change="updateFeeItem(fee,$index)"  ng-model-options="{ debounce: 500 }"placeholder="Amount"/>
+										<input type="text" class="form-control text-right" autoselect monetary ng-model="fee.amount" ng-change="updateFeeItem(fee,$index)"  ng-model-options="{ debounce: 333 }"placeholder="Amount"/>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger"  ng-click="removeFeeItem(fee,$index)" ng-disabled="SavingFee[$index]"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
@@ -108,7 +108,7 @@
 										<input type="text" class="form-control" ng-disabled="true"  ng-model="fee.name" />
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" ng-disabled="true" ng-model="fee.amount" />
+										<input type="text" class="form-control text-right" monetary ng-disabled="true" ng-model="fee.amount" />
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></button></td>
 								</tr>
