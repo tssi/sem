@@ -13,7 +13,7 @@ define(['app','api'], function (app) {
 					if($scope.Tuition == undefined) return false;
 					return $scope.Tuition.fees.
 						map(function(obj) {
-							return obj.amount
+							return obj.amount;
 						});
 				}, 
 				function (newValue) {
@@ -21,7 +21,7 @@ define(['app','api'], function (app) {
 						var total = 0;
 						for(var i in newValue){
 							var amount =  newValue[i];
-							total+=amount;
+							total+=parseFloat(amount);
 						}
 						$scope.Tuition.amount =  total;
 						$scope.saveTuitionTotal();
