@@ -11,7 +11,11 @@
 					<label for="">Tuition list</label>
 				</div>
 				<div class="list-group-canvas">
-					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)">
+					<div class="list-group-item text-center" ng-if="!TuitionList.length">
+						<div class="preloader-message">Loading...</div>
+						<div class="loader"></div>
+					</div>
+					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)" ng-if="TuitionList.length">
 						<h4 class="list-group-item-heading" >{{tuition.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{tuition.description}}</span></p>
@@ -35,7 +39,26 @@
 				</div>
 				<div class="list-group-canvas" ng-show="Tuition">
 					<div class="list-group-item list-group-header">
-						<h5>{{Tuition.name}} Tuition</h5>
+						<h5>Tuition Information</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="row">
+							<div class="col-md-6">
+								<dl class="dl-horizontal">
+									<dt>Name</dt>
+									<dd>{{Tuition.name}}</dd>
+									<dt>Description</dt>
+									<dd>{{Tuition.description}}</dd>
+									<dt>Effecitve SY & Level</dt>
+									<dd>{{Tuition.display_sy}} / {{Tuition.year_level}}</dd>
+								</dl>
+							</div>
+							<div class="col-md-6 amount amount-total">
+								<label>Total</label>
+								<h3 class="amount total peso">{{Tuition.amount | currency}}</h3>
+							</div>
+						</div>
+						
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Breakdown</h5>
@@ -248,17 +271,14 @@
 				
 				</div>
 				<div class="list-group-canvas" ng-hide="Tuition">
-					<div class="list-group-item list-group-header">
-						<h5>Manage list</h5>
-					</div>
 					<div class="list-group-item">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">
 									<i class="glyphicon glyphicon-list-alt"></i>
 								</div>
-								<h4>No list selected!</h4>
-								<p class="empty-state-message">Choose the list to manage.</p>
+								<h4>No tuition structure selected!</h4>
+								<p class="empty-state-message">Choose item from the list to manage.</p>
 							</div>
 						</div>
 					</div>
