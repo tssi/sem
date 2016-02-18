@@ -57,18 +57,18 @@
 									<td class="col-md-5">
 										<input type="number" class="form-control" autoselect ng-model="FeeItem.amount" placeholder="amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)"><span class="glyphicon glyphicon-plus"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addFeeItem(FeeItem.id,FeeItem.amount)" ng-disabled="SavingFeeItem"><span class="glyphicon glyphicon-plus"></span></button></td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr  ng-repeat="fee in Tuition.fees" >
 									<td class="col-md-5">
-										<input type="text" class="form-control" ng-model="fee.name" ng-readonly="true"/>
+										<input type="text" class="form-control" ng-model="fee.name"   ng-readonly="true"/>
 									</td>
 									<td class="col-md-5">
-										<input type="number" class="form-control" autoselect ng-model="fee.amount" ng-blur="updateFeeItem(fee)" placeholder="Amount"/>
+										<input type="number" class="form-control" autoselect ng-model="fee.amount" ng-change="updateFeeItem(fee,$index)"  ng-model-options="{ debounce: 500 }"placeholder="Amount"/>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeFeeItem(fee,$index)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-danger"  ng-click="removeFeeItem(fee,$index)" ng-disabled="SavingFee[$index]"><span class="glyphicon glyphicon-remove"></span></button></td>
 								</tr>
 								<tr ng-if="Tuition.fees.length==0"> 
 									<td colspan="3">
@@ -81,7 +81,7 @@
 									<td class="align-middle">Total</td>
 									<td class="align-middle"><div class="amount total peso">{{Tuition.amount | currency}}</div></td>
 									<td class="text-center col-md-1">
-										<button class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+										<button class="btn btn-success" ng-disabled="SavingTutionTotal" ng-click="saveTuitionTotal()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 									</td>
 								</tr>
 							</tfoot>
@@ -99,7 +99,7 @@
 									<td colspan="2">
 										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-sort"></span></a> Click and drag to reorder.</div>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('fees')"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="saveSortItems('fees')" ng-disabled="SavingFees" ><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
 								</tr>
 							</thead>
 							<tbody  ui-tree-nodes  ng-model="SortItem.fees" ng-if="SortItem.fees">
