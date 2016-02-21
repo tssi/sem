@@ -20,6 +20,7 @@ class TuitionsController extends AppController {
 		if (!empty($this->data)) {
 			$this->Tuition->create();
 			if ($this->Tuition->saveAll($this->data)) {
+				$this->data = $this->Tuition->findById($this->Tuition->id);
 				$this->Session->setFlash(__('The tuition has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

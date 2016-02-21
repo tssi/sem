@@ -10,7 +10,7 @@ define(['app','api'], function (app) {
 			});
 			$scope.$watch(
 				function($scope) {
-					if($scope.Tuition == undefined) return false;
+					if($scope.Tuition == undefined ||$scope.Tuition.fees == undefined ) return false;
 					return $scope.Tuition.fees.
 						map(function(obj) {
 							return obj.amount;
@@ -251,6 +251,21 @@ define(['app','api'], function (app) {
 				}
 			}
 		}
+		$scope.openModal = function(){
+				var modalInstance = $uibModal.open({
+					animation: true,
+					templateUrl: 'TuitionModal.html',
+					controller: 'ModalInstanceController',
+				});
+				modalInstance.result.then(function (tuition) {
+				  $scope.TuitionList.push(tuition);
+				  $scope.openTuition(tuition);
+				}, function (source) {
+					//Re-initialize booklets when confirmed
+					
+						
+				});
+		}
 		function resetTuition(){
 			$scope.FeeItem = {};
 			$scope.DiscountItem = {};
@@ -317,5 +332,90 @@ define(['app','api'], function (app) {
 				$scope.computeTotal(scheme.id);
 		   }		   
 	   }
+	}]);
+	app.register.controller('ModalInstanceController',['$scope','$filter','$uibModalInstance','api', function ($scope, $filter, $uibModalInstance, api){
+		$scope.initialize = function(){
+			initAPIRequest();
+			$scope.$watchGroup(['school_year','program','year_level'],generateTuitionCode);
+			function generateTuitionCode(){
+				var code = '';
+				if($scope.year_level&&$scope.program&&$scope.school_year){
+					code += $scope.year_level;
+					code += $scope.program;
+					code += $scope.school_year.slice(-2);
+				}
+				
+				$scope.tuition_code = code;
+				var year_level = $scope.year_level?$filter('filter')($scope.YearLevels, {id: $scope.year_level})[0]:null;
+				var school_year = $scope.school_year?$filter('filter')($scope.SchoolYears, {id: $scope.school_year})[0]:null;
+				var program = $scope.program?$scope.Programs[$scope.program]:'';
+				$scope.placeholder_name='Name';
+				$scope.placeholder_description='Description';
+				if($scope.year_level||program){
+					$scope.placeholder_name+=': ';
+					$scope.placeholder_description+=': ';
+				}
+				if($scope.year_level){
+					$scope.placeholder_name += year_level.alias+' ';
+					$scope.placeholder_description += year_level.name+' ';
+				}
+				if(program){
+					$scope.placeholder_name += program+' ';
+					$scope.placeholder_description += program+' ';
+				}
+					
+				if(school_year&&($scope.year_level||program)){
+					$scope.placeholder_name += school_year.id;
+					$scope.placeholder_description += school_year.label;
+				}
+				
+			}
+		}
+		$scope.setDeparment  = function(id){
+			$scope.department = id;
+		}
+		$scope.suggestValue = function(field,is_pristine,suggestion){
+			if(is_pristine){
+				if(suggestion){
+					var placeholder = suggestion;
+					var token_index = placeholder.indexOf(':');
+					suggestion  =  placeholder.substr(token_index+2,placeholder.length);
+				}
+				$scope[field] = suggestion;
+			}
+			
+		}
+		$scope.confirmTuition = function(){
+			var data = {
+				id:$scope.tuition_code,
+				name:$scope.name,
+				description:$scope.description,
+				sy:$scope.school_year,
+				year_level_id:$scope.year_level,
+				program_id:$scope.program,
+				amount:0,
+			}
+			$scope.SavingTuition= true;
+			api.POST('tuitions',data,function success(response){
+				$scope.SavingTuition = false;
+				$uibModalInstance.close(response.data);
+			},function error(response){
+				
+			});
+		};
+		$scope.cancelTuition = function(){
+			$uibModalInstance.dismiss('cancel');
+		};
+		function initAPIRequest(){
+			api.GET('system_defaults',function success(response){
+				$scope.SchoolYears = response.data.SCHOOL_YEARS;
+				$scope.Programs = response.data.PROGRAMS;
+				$scope.Departments = response.data.DEPARTMENTS;
+				$scope.YearLevels = response.data.YEAR_LEVELS;
+				$scope.ACTIVE_SY = response.data.ACTIVE_SY;
+				$scope.school_year = response.data.ACTIVE_SY.toString();
+			
+			});
+		}
 	}]);
 });
