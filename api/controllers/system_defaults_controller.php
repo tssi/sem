@@ -5,7 +5,11 @@ class SystemDefaultsController extends AppController {
 
 	function index() {
 		$this->SystemDefault->recursive = 0;
-		$this->set('systemDefaults', $this->paginate());
+		if($this->RequestHandler->ext=='json'){
+			$this->set('systemDefaults',$this->SystemDefault->sanitize($this->paginate()));
+		}else{
+			$this->set('systemDefaults', $this->paginate());
+		}
 	}
 
 	function view($id = null) {
