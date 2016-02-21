@@ -93,7 +93,7 @@ class AppController extends Controller {
 		  }else{
 			  $__data = $response['data'][$__Class];
 		  }
-		  if($this->params['action']=='index'){
+		  if($this->params['controller']=='system_defaults'){
 			  if(count($__data)==1){
 				  $__data = $__data[0];
 			  }
