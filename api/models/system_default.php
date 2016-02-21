@@ -1,7 +1,7 @@
 <?php
 class SystemDefault extends AppModel {
 	var $name = 'SystemDefault';
-	function afterFind($results){
+	function sanitize($results){
 		if(isset($results[0]))
 			if(isset($results[0]['SystemDefault'])){
 				$_result = array();
@@ -25,6 +25,17 @@ class SystemDefault extends AppModel {
 						$_result['SCHOOL_YEARS'] = $school_years;
 					}
 				}
+				$Deparment = &ClassRegistry::init('EducLevel');
+				$_result['DEPARTMENTS'] = $Deparment->find('list');
+				$YearLevel = &ClassRegistry::init('YearLevel');
+				$YearLevel->recursive=-1;
+				$yearLevels = $YearLevel->find('all',array('fields'=>array('id','name','alias','educ_level_id')));
+				$_result['YEAR_LEVELS'] = array();
+				foreach($yearLevels as $yearLevel){
+					array_push($_result['YEAR_LEVELS'],$yearLevel['YearLevel']);
+				}
+				$Program = &ClassRegistry::init('Program');
+				$_result['PROGRAMS'] = $Program->find('list');
 				
 				$results = array(array('SystemDefault'=>$_result));
 			}
