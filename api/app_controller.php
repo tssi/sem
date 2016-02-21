@@ -93,6 +93,11 @@ class AppController extends Controller {
 		  }else{
 			  $__data = $response['data'][$__Class];
 		  }
+		  if($this->params['action']=='index'){
+			  if(count($__data)==1){
+				  $__data = $__data[0];
+			  }
+		  }
 		  $response['data']=$__data;
 		  if($response['data']==null)
 			return $this->cakeError('emptyRecord');
