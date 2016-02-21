@@ -294,41 +294,79 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/ng-template" id="TuitionTuitionModal.html">
+	<script type="text/ng-template" id="TuitionModal.html">
 			<div class="modal-header">
 				<h3 class="modal-title">Tuition Information</h3>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" ng-init="initialize()">
+				<form name="TuitionAddForm">
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
-							Details
-						</div>						
+							<label>SY</label>
+							<select class="form-control" ng-model="school_year">
+								<option value="">Select School Year</option>
+								<option ng-value="sy.id" ng-repeat="sy in SchoolYears" ng-selected="sy.id==ACTIVE_SY">{{sy.label}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Program</label>
+							<select class="form-control" ng-model="program">
+								<option value="">Select Program</option>
+								<option value="{{id}}" ng-repeat="(id, name) in Programs">{{name}}</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<input type="text" placeholder="Name" class="form-control" ng-model="name"/>
+							<label>Department</label>
+							<div class="btn-group btn-group-justified">
+							  <div class="btn-group" ng-repeat="(id, name) in Departments">
+								<button class="btn btn-default ng-class:{'btn-primary': id==department}"  ng-click="setDeparment(id)">{{id}}</button>
+							  </div>
+							</div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<input type="text" placeholder="Description" class="form-control" ng-model="description"/>
+							<label>Level</label>
+							<select class="form-control" ng-model="year_level">
+								<option value="">Select Level</option>
+								<option ng-if="department" value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{educ_level_id: department}">{{yearlevel.name}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Tuition</label>
+							<input type="text" placeholder="{{placeholder_name}}" name="TuitionName" ng-focus="suggestValue('name',TuitionAddForm.TuitionName.$pristine,placeholder_name)"  ng-blur="suggestValue('name',TuitionAddForm.TuitionName.$pristine,null)" autoselect  class="form-control" ng-model="name"/>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Code</label>
+							<input type="text" placeholder="Tuition Code" class="form-control" ng-readonly="true" ng-model="tuition_code"/>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<input type="text" placeholder="Path" class="form-control" ng-model="path"/>
+							<input type="text" placeholder="{{placeholder_description}}" name="TuitionDescription" ng-focus="suggestValue('description',TuitionAddForm.TuitionDescription.$pristine,placeholder_description)"  ng-blur="suggestValue('description',TuitionAddForm.TuitionDescription.$pristine,null)" autoselect class="form-control" ng-model="description"/>
 						</div>
 					</div>
 				</div>
+				</form>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-primary" type="button" ng-click="confirmTuitionTuition()">Confirm</button>
-				<button class="btn btn-default pull-left" type="button" ng-click="cancelTuitionTuition()">Cancel</button>
+				<button class="btn btn-primary" type="button" ng-click="confirmTuition()" ng-disabled="SavingTuition">Confirm</button>
+				<button class="btn btn-default pull-left" type="button" ng-click="cancelTuition()">Cancel</button>
 			</div>
 		</script>
 </div>
