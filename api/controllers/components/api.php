@@ -54,17 +54,31 @@ class ApiComponent extends Object {
 		}
 		//Filter
 		$conditions = array();
-		$blacklist = array('url','page','limit','offset','sort','order','created','modified');
+		$blacklist = array('url','page','limit','offset','sort','order','created','modified','fields','keyword');
 		foreach($_GET as $field=>$value){
 			if(!in_array($field,$blacklist)){
 				array_push($conditions,array($__Class.'.'.$field=>$value));
 			}
+		}
+		//Search
+		$keyword = null;
+		$fields = null;
+		if(isset($_GET['keyword'])) $keyword = '%'.$_GET['keyword'].'%';
+		if($keyword&&isset($_GET['fields'])) $fields = explode(',',$_GET['fields']);
+		if($keyword && $fields){
+			$cond = array();
+			foreach($fields as $fld){
+				$cond[$__Class.'.'.$fld.' LIKE'] = $keyword;
+			}
+			$conditions = array_merge($conditions,array('OR'=>$cond));
 		}
 		$conf['conditions']=$conditions;
 		//Meta Data
 		$meta = array();
 		$page_url = '';
 		$meta['message'] = Inflector::humanize($endpoint);
+		if($keyword)
+			$meta['keyword'] = $_GET['keyword'];
 		switch($this->controller->action){
 			case 'index':
 				//Pagination count
