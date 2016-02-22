@@ -52,6 +52,24 @@ define(['app','api'], function (app) {
 		   initTotals();
 		   mapAmounts();
 	   }
+	   $scope.navigatePage=function(page){
+			$scope.ActivePage=page;
+			getTuitions({page:$scope.ActivePage});
+		};
+		$scope.filterTuition=function(tuition){
+				var searchBox = $scope.searchTuition;
+				var keyword = new RegExp(searchBox,'i');	
+				var test = keyword.test(tuition.name) || keyword.test(tuition.description);
+				return !searchBox || test;
+			};
+		$scope.confirmSearch = function(){
+			getTuitions({page:$scope.ActivePage,keyword:$scope.searchTuition,fields:['name','description']});
+		}
+		//Filter search box
+		$scope.clearSearch = function(){
+			$scope.searchTuition = null;
+			getTuitions({page:$scope.ActivePage,fields:['name','description']});
+		};
 	   $scope.removeTuitionInfo = function(){
 		   $scope.Tuition = null;
 	   }
@@ -272,12 +290,11 @@ define(['app','api'], function (app) {
 			$scope.SortItem = {};
 		}
 	   function initAPIRequest(){
-		   api.GET('tuitions',function success(response){
-			   $scope.TuitionList = response.data;
-		   },function error(response){
-			   $scope.ErrorCode = response.meta.code;
-			   $scope.ErrorMessage = response.meta.message;
-		   });
+			$scope.ActivePage = 1;
+			$scope.NextPage=null;
+			$scope.PrevPage=null;
+			$scope.DataLoading = false;
+			getTuitions({page:$scope.ActivePage});
 		   api.GET('schemes',function success(response){
 			   $scope.Schemes = response.data;
 			   initTotals();
@@ -293,6 +310,28 @@ define(['app','api'], function (app) {
 			   $scope.Discounts = response.data;
 		   })
 	   }
+	   function getTuitions(data){
+			$scope.DataLoading=true;
+			$scope.ErrorCode  = null;
+			$scope.ErrorMessage  = null;
+			data.limit = 5;
+			api.GET('tuitions',data,function success(response){
+				$scope.TuitionList=response.data;
+				$scope.NextPage=response.meta.next;
+				$scope.PrevPage=response.meta.prev;
+				$scope.TotalItems=response.meta.count;
+				$scope.LastItem=response.meta.page*response.meta.limit;
+				$scope.FirstItem=$scope.LastItem-(response.meta.limit-1);
+				if($scope.LastItem>$scope.TotalItems){
+					$scope.LastItem=$scope.TotalItems;
+				};
+				$scope.DataLoading = false;							
+			},function error(response){
+			   $scope.DataLoading = false;	
+			   $scope.ErrorCode = response.meta.code;
+			   $scope.ErrorMessage = response.meta.message;
+		   });
+		}
 	   function initAmounts(){
 		   $scope.Amounts = {};
 		   $scope.Multiplyer = {};

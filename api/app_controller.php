@@ -99,8 +99,15 @@ class AppController extends Controller {
 			  }
 		  }
 		  $response['data']=$__data;
-		  if($response['data']==null)
-			return $this->cakeError('emptyRecord');
+		  if($response['data']==null){
+			if(isset($response['meta']['keyword'])){
+				$keyword = $response['meta']['keyword'];
+				return $this->cakeError('noResults',compact('keyword'));  
+			}
+			else 
+				return $this->cakeError('emptyRecord');  
+		  }
+			
 	 }
 	 return json_encode($response);
   }

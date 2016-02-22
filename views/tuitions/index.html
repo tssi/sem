@@ -8,17 +8,52 @@
 		<div class="col-md-4">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
+					<div class="btn-group btn-group-sm pull-right" uib-dropdown>
+						<button class="btn btn-default disabled">{{FirstItem}} - {{LastItem}} of {{TotalItems}}</button>
+						<button class="btn btn-default" ng-disabled="!PrevPage || DataLoading" ng-click="navigatePage(PrevPage)"><span class="glyphicon glyphicon-chevron-left"></span></button>
+						<button class="btn btn-default" ng-disabled="!NextPage || DataLoading" ng-click="navigatePage(NextPage)"><span class="glyphicon glyphicon-chevron-right"></span></button>
+						
+						  <button class="btn btn-default dropdown-toggle" type="button" id="filterButton" uib-dropdown-toggle ng-if="AllowFilter">
+							<span class="glyphicon glyphicon-filter"></span>
+						  </button>
+						  <ul class="dropdown-menu" aria-labelledby="filterButton" ng-if="AllowFilter">
+							<li><a href="#/">Sort</a></li>
+							<li><a href="#/">Filter</a></li>
+							<li><a href="#/">Go to Page</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#/">Some other link</a></li>
+							
+						  </ul>
+					</div>
 					<label for="">Tuition list</label>
 				</div>
-				<div class="list-group-canvas">
-					<div class="list-group-item text-center" ng-if="!TuitionList.length">
+				<div class="list-group-canvas list-group-search-results" >
+					<div class="list-group-item text-center" ng-if="searchTuition">
+						<h4 class="list-group-item-heading">Search result(s) for <b><i>{{searchTuition}}</i></b>.</h4>
+						<p class="list-group-item-text">
+							Click the <span class="glyphicon glyphicon-search" aria-hidden="true"></span> to look further.
+							Click the <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> to cancel.
+						</p>
+					</div>
+					<div class="list-group-item text-center" ng-if="!TuitionList.length || DataLoading">
 						<div class="preloader-message">Loading...</div>
 						<div class="loader"></div>
 					</div>
-					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList" ng-click="openTuition(tuition)" ng-if="TuitionList.length">
+					<div class="list-group-item text-center" ng-if="ErrorCode">
+						<div class="preloader-message">{{ErrorMessage}}</div>
+					</div>
+					
+					<div class="list-group-item ng-class:{active: tuition.id === Tuition.id}" ng-repeat="tuition in TuitionList | filter:filterTuition" ng-click="openTuition(tuition)" ng-if="TuitionList.length && !DataLoading">
 						<h4 class="list-group-item-heading" >{{tuition.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{tuition.description}}</span></p>
+					</div>
+				</div>
+				<div class="list-group-item list-group-search-box">
+					<div class="input-group"> 
+						<div class="input-group-btn"><button class="btn btn-default" ng-click="confirmSearch()"><span class="glyphicon glyphicon-search"></span></button></div>
+						<input type="text" class="form-control" placeholder="Search" ng-model="searchTuition"/>
+						<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearch()"><span class="glyphicon glyphicon-remove"></span></button></div>
 					</div>
 				</div>
 			</div>

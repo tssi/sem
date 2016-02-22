@@ -33,8 +33,8 @@ class ApiComponent extends Object {
 		$Endpoint = &ClassRegistry::init($__Class);
 		$conf = array();
 		//Pagination config
-		$page = isset($_GET['page'])?$_GET['page']:1;
-		$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:null;
+		$page = (int)(isset($_GET['page'])?$_GET['page']:1);
+		$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:10;
 		$recursive = isset($Endpoint->recursive)?$Endpoint->recursive:-1;
 		$contain = isset($Endpoint->contain)?$Endpoint->contain:null;
 		$offset = $conf['offset'] = $page?($page-1)*$limit:null;
@@ -54,21 +54,36 @@ class ApiComponent extends Object {
 		}
 		//Filter
 		$conditions = array();
-		$blacklist = array('url','page','limit','offset','sort','order','created','modified');
+		$blacklist = array('url','page','limit','offset','sort','order','created','modified','fields','keyword');
 		foreach($_GET as $field=>$value){
 			if(!in_array($field,$blacklist)){
 				array_push($conditions,array($__Class.'.'.$field=>$value));
 			}
 		}
+		//Search
+		$keyword = null;
+		$fields = null;
+		if(isset($_GET['keyword'])) $keyword = '%'.$_GET['keyword'].'%';
+		if($keyword&&isset($_GET['fields'])) $fields = explode(',',$_GET['fields']);
+		if($keyword && $fields){
+			$cond = array();
+			foreach($fields as $fld){
+				$cond[$__Class.'.'.$fld.' LIKE'] = $keyword;
+			}
+			$conditions = array_merge($conditions,array('OR'=>$cond));
+		}
 		$conf['conditions']=$conditions;
 		//Meta Data
 		$meta = array();
-		$page_url = null;
+		$page_url = '';
 		$meta['message'] = Inflector::humanize($endpoint);
+		if($keyword)
+			$meta['keyword'] = $_GET['keyword'];
 		switch($this->controller->action){
 			case 'index':
 				//Pagination count
 				$count_conf = $conf;
+				$meta['limit'] = $limit;
 				unset($count_conf['limit']);
 				unset($count_conf['offset']);
 				$count = $Endpoint->find('count',$count_conf);
@@ -76,10 +91,11 @@ class ApiComponent extends Object {
 				$next = $page < $last ? $page + 1:null;
 				$prev = $page>1?$page - 1:null;
 				$meta['message'] = 'List of '. $meta['message'];
-				$meta['next'] = $next? $page_url.$next:null;
-				$meta['prev'] = $prev? $page_url.$prev:null;
-				$meta['last'] = $page_url.$last;
-				$meta['items'] = $count;
+				$meta['next'] = $next? $next:null;
+				$meta['prev'] = $prev? $prev:null;
+				$meta['last'] = $last;
+				$meta['count'] = $count;
+				$meta['page'] = $page;
 				$meta['pages'] = $last;
 				//Set up paginate
 				$paginate = array();
