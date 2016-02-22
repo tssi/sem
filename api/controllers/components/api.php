@@ -33,8 +33,8 @@ class ApiComponent extends Object {
 		$Endpoint = &ClassRegistry::init($__Class);
 		$conf = array();
 		//Pagination config
-		$page = isset($_GET['page'])?$_GET['page']:1;
-		$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:null;
+		$page = (int)(isset($_GET['page'])?$_GET['page']:1);
+		$limit = $conf['limit'] = isset($_GET['limit'])?$_GET['limit']:10;
 		$recursive = isset($Endpoint->recursive)?$Endpoint->recursive:-1;
 		$contain = isset($Endpoint->contain)?$Endpoint->contain:null;
 		$offset = $conf['offset'] = $page?($page-1)*$limit:null;
@@ -63,12 +63,13 @@ class ApiComponent extends Object {
 		$conf['conditions']=$conditions;
 		//Meta Data
 		$meta = array();
-		$page_url = null;
+		$page_url = '';
 		$meta['message'] = Inflector::humanize($endpoint);
 		switch($this->controller->action){
 			case 'index':
 				//Pagination count
 				$count_conf = $conf;
+				$meta['limit'] = $limit;
 				unset($count_conf['limit']);
 				unset($count_conf['offset']);
 				$count = $Endpoint->find('count',$count_conf);
@@ -76,10 +77,11 @@ class ApiComponent extends Object {
 				$next = $page < $last ? $page + 1:null;
 				$prev = $page>1?$page - 1:null;
 				$meta['message'] = 'List of '. $meta['message'];
-				$meta['next'] = $next? $page_url.$next:null;
-				$meta['prev'] = $prev? $page_url.$prev:null;
-				$meta['last'] = $page_url.$last;
-				$meta['items'] = $count;
+				$meta['next'] = $next? $next:null;
+				$meta['prev'] = $prev? $prev:null;
+				$meta['last'] = $last;
+				$meta['count'] = $count;
+				$meta['page'] = $page;
 				$meta['pages'] = $last;
 				//Set up paginate
 				$paginate = array();
