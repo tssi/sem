@@ -316,15 +316,24 @@ define(['app','api'], function (app) {
 			$scope.ErrorMessage  = null;
 			data.limit = 5;
 			api.GET('tuitions',data,function success(response){
-				$scope.TuitionList=response.data;
-				$scope.NextPage=response.meta.next;
-				$scope.PrevPage=response.meta.prev;
-				$scope.TotalItems=response.meta.count;
-				$scope.LastItem=response.meta.page*response.meta.limit;
-				$scope.FirstItem=$scope.LastItem-(response.meta.limit-1);
-				if($scope.LastItem>$scope.TotalItems){
-					$scope.LastItem=$scope.TotalItems;
-				};
+				console.log(response);
+				switch(parseInt(response.meta.code)){
+					case 200:
+						$scope.TuitionList=response.data;
+						$scope.NextPage=response.meta.next;
+						$scope.PrevPage=response.meta.prev;
+						$scope.TotalItems=response.meta.count;
+						$scope.LastItem=response.meta.page*response.meta.limit;
+						$scope.FirstItem=$scope.LastItem-(response.meta.limit-1);
+						if($scope.LastItem>$scope.TotalItems){
+							$scope.LastItem=$scope.TotalItems;
+						};
+					break;
+					default:
+						$scope.ErrorCode = response.meta.code;
+						$scope.ErrorMessage = response.meta.message;
+					break;
+				}
 				$scope.DataLoading = false;							
 			},function error(response){
 			   $scope.DataLoading = false;	
