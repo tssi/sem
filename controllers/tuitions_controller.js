@@ -56,6 +56,20 @@ define(['app','api'], function (app) {
 			$scope.ActivePage=page;
 			getTuitions({page:$scope.ActivePage});
 		};
+		$scope.filterTuition=function(tuition){
+				var searchBox = $scope.searchTuition;
+				var keyword = new RegExp(searchBox,'i');	
+				var test = keyword.test(tuition.name) || keyword.test(tuition.description);
+				return !searchBox || test;
+			};
+		$scope.confirmSearch = function(){
+			getTuitions({page:$scope.ActivePage,keyword:$scope.searchTuition,fields:['name','description']});
+		}
+		//Filter search box
+		$scope.clearSearch = function(){
+			$scope.searchTuition = null;
+			getTuitions({page:$scope.ActivePage,fields:['name','description']});
+		};
 	   $scope.removeTuitionInfo = function(){
 		   $scope.Tuition = null;
 	   }
@@ -298,6 +312,8 @@ define(['app','api'], function (app) {
 	   }
 	   function getTuitions(data){
 			$scope.DataLoading=true;
+			$scope.ErrorCode  = null;
+			$scope.ErrorMessage  = null;
 			data.limit = 5;
 			api.GET('tuitions',data,function success(response){
 				$scope.TuitionList=response.data;
@@ -311,6 +327,7 @@ define(['app','api'], function (app) {
 				};
 				$scope.DataLoading = false;							
 			},function error(response){
+			   $scope.DataLoading = false;	
 			   $scope.ErrorCode = response.meta.code;
 			   $scope.ErrorMessage = response.meta.message;
 		   });
