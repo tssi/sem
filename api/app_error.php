@@ -15,6 +15,11 @@ class AppError extends ErrorHandler {
 		$message = sprintf('Empty Record Found');
 		$this->fetchError($code,$message);
 	}
+	function noResults($params){
+		$code ='404';
+		$message = sprintf('No results found for "'.$params['keyword'].'".');
+		$this->fetchError($code,$message);
+	}
 	protected function fetchError($code,$message){
 		$this->controller->set(compact('code','message'));
 		$this->controller->layout='json/default';
