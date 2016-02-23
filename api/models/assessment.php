@@ -108,8 +108,9 @@ class Assessment extends AppModel {
 		//Fees
 		$data['AssessmentFee']=array();
 		$this->Tuition->FeeBreakdown->recursive = -1;
+		$this->Tuition->FeeBreakdown->order = 'FeeBreakdown.order';
 		$conditions = array('FeeBreakdown.tuition_id'=>$data['Assessment']['tuition_id']);
-		$fees = $this->Tuition->FeeBreakdown->find('all',array(compact('conditions')));
+		$fees = $this->Tuition->FeeBreakdown->find('all',array(compact('conditions','order')));
 		foreach($fees as $fee){
 			$fee = $fee['FeeBreakdown'];
 			unset($fee['id']);
