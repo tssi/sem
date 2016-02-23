@@ -58,7 +58,10 @@ class Tuition extends AppModel {
 			'FeeBreakdown'=>array(
 				'order'=>'FeeBreakdown.order',
 			),
-			'PaymentScheme');
+			'PaymentScheme'=>array(
+				'order'=>'PaymentScheme.order'
+				)
+			);
 	function afterFind($results){
 		if(isset($results[0]['Tuition'])){
 			//pr($results);
@@ -91,6 +94,8 @@ class Tuition extends AppModel {
 						$fees_applicable = $discount['fees_applicable'];
 						if($fees_applicable!='all')
 							$fees_applicable =  explode(',',$fees_applicable);
+						else
+							$fees_applicable =  array('all');
 						$discount = array(
 							'id'=>$discount['id'],
 							'tuition_discount_id'=>$discount['TuitionDiscount']['id'],
@@ -125,6 +130,7 @@ class Tuition extends AppModel {
 							);
 							array_push($schedules,$schedule);
 						}
+						$schedules =  $this->PaymentScheme->PaymentSchemeSchedule->sortSchedule($schedules);
 						$scheme =array(
 							'id'=>$scheme['Scheme']['id'],
 							'name'=>$scheme['Scheme']['name'],
