@@ -19,7 +19,8 @@ class AssessmentsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Assessment->create();
-			if ($this->Assessment->save($this->data)) {
+			$this->data =  $this->Assessment->prepareData($this->data);
+			if ($this->Assessment->saveAll($this->data)) {
 				$this->Session->setFlash(__('The assessment has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
