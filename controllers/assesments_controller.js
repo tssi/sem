@@ -76,11 +76,15 @@ define(['app','api'], function (app) {
 										amount=discount.amount;
 									}
 									discount.fees_amount.push(amount);
+									if( d==='all'){
+										discount.fees_applicable[t]=f.id;
+									}
 									discount.computed_amount = discount.computed_amount + amount;
 									$scope.TotalDiscount = $scope.TotalDiscount + amount;
 								}
 							}
 						}
+						 $scope.ActiveDiscounts[index]= discount;
 					}
 					$scope.TotalDiscount = $scope.TotalDiscount*-1;
 					$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.variance_amount;
