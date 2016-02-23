@@ -29,7 +29,7 @@ define(['app','api'], function (app) {
 				});
 				$scope.$watchGroup(['ActiveScheme','TotalDiscount'],function(){
 					$scope.hasScheduleInfo = $scope.hasSchemeInfo = $scope.ActiveScheme.id;
-					$scope.hasAdjustmentInfo = $scope.ActiveScheme.interest_charge || $scope.TotalDiscount;
+					$scope.hasAdjustmentInfo = $scope.ActiveScheme.variance_amount || $scope.TotalDiscount;
 					if($scope.TotalDiscount&&$scope.hasScheduleInfo)
 						computePaymentSchedule();
 					
@@ -142,11 +142,12 @@ define(['app','api'], function (app) {
 				$scope.ActiveTuition = null;
 				for(var i in $scope.Tuitions){
 					var t = $scope.Tuitions[i];
-					if(t.year_level_id===$scope.ActiveLevel.id && t.program===$scope.ActiveSection.program){
+					if(t.year_level_id===$scope.ActiveLevel.id && t.program_id===$scope.ActiveSection.program){
 						$scope.ActiveTuition=t;
 						break;
 					}
 				};
+				console.log($scope.ActiveTuition);
 				$scope.TotalDue=0;	
 				for(var i in $scope.ActiveTuition.fees){
 					var a = $scope.ActiveTuition.fees[i]
@@ -158,8 +159,8 @@ define(['app','api'], function (app) {
 			};
 			if($scope.ActiveStep===4){
 				$scope.ActiveScheme= $scope.SelectedScheme;
-				$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.interest_charge;
-				$scope.TotalAdjustment = $scope.ActiveScheme.interest_charge;
+				$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.variance_amount;
+				$scope.TotalAdjustment = $scope.ActiveScheme.variance_amount;
 			}
 			if($scope.ActiveStep===5){
 				$scope.ActiveDiscounts= [];
@@ -175,6 +176,7 @@ define(['app','api'], function (app) {
 				for(var index in $scope.ActiveDiscounts){
 					var discount  = $scope.ActiveDiscounts[index];
 						discount.computed_amount = 0;
+						discount.fees_amount = [];
 					for(var i in discount.fees_applicable){
 						var d = discount.fees_applicable[i];
 						for(var t in $scope.ActiveTuition.fees){
@@ -188,6 +190,7 @@ define(['app','api'], function (app) {
 								if(discount.type==='peso'){
 									amount=discount.amount;
 								}
+								discount.fees_amount.push(amount);
 								discount.computed_amount = discount.computed_amount + amount;
 								$scope.TotalDiscount = $scope.TotalDiscount + amount;
 							}
@@ -195,7 +198,7 @@ define(['app','api'], function (app) {
 					}
 				}
 				$scope.TotalDiscount = $scope.TotalDiscount*-1;
-				$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.interest_charge;
+				$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.variance_amount;
 				$scope.TotalAmount=$scope.TotalDue + $scope.TotalAdjustment;
 			}
 			if($scope.ActiveStep===6){
@@ -203,10 +206,11 @@ define(['app','api'], function (app) {
 								  student:$scope.ActiveStudent.id,
 								  tuition:$scope.ActiveTuition.id,
 								  scheme:$scope.ActiveScheme.id,
+								  schedule:$scope.ActiveScheme.schedule,
 								  discount:$scope.ActiveDiscounts,
 								  totals:{
 										  gross:$scope.TotalDue,
-										  charges:$scope.ActiveScheme.interest_charge,
+										  charges:$scope.ActiveScheme.variance_amount,
 										  discounts:$scope.TotalAdjustment,
 										  net:$scope.TotalAmount
 										 }
