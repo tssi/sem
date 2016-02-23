@@ -179,11 +179,12 @@ define(['app','api'], function (app) {
 				var tuition_id = $scope.Tuition.id;
 				var payment_scheme_id = $scope.SchemeId[billing_period_id][scheme_id];
 				var schedule_id = $scope.ScheduleId[billing_period_id][scheme_id];
+				var scheme_order = $scope.SchemeOrder[scheme_id];
 				var total_amount  = $scope.Totals[scheme_id];
 				var variance_amount  = $scope.Variance[scheme_id];
 				var amount = $scope.Amounts[billing_period_id][scheme_id];
 					if(amount==undefined) amount = 0;
-				var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,total_amount:total_amount,variance_amount:variance_amount};
+				var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,order:scheme_order,total_amount:total_amount,variance_amount:variance_amount};
 				var schedule_data = {id:schedule_id,tuition_id:tuition_id,scheme_id:scheme_id,billing_period_id:billing_period_id,amount:amount};
 				$scope.SavingSchedule[billing_period_id] = true;
 				$scope.SavingScheduleTotals = true;
@@ -208,10 +209,11 @@ define(['app','api'], function (app) {
 				for(var scheme_id  in $scope.SchemeId[billing_period_id]){
 					var payment_scheme_id = $scope.SchemeId[billing_period_id][scheme_id];
 					var schedule_id = $scope.ScheduleId[billing_period_id][scheme_id];
+					var scheme_order = $scope.SchemeOrder[scheme_id];
 					var total_amount  = $scope.Totals[scheme_id];
 					var variance_amount  = $scope.Variance[scheme_id];
 					var amount = $scope.Amounts[billing_period_id][scheme_id];
-					var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,total_amount:total_amount,variance_amount:variance_amount};
+					var scheme_data = {id:payment_scheme_id,tuition_id:tuition_id,scheme_id:scheme_id,order:scheme_order,total_amount:total_amount,variance_amount:variance_amount};
 					var schedule_data = {id:schedule_id,tuition_id:tuition_id,scheme_id:scheme_id,billing_period_id:billing_period_id,amount:amount};
 					$scope.SavingSchedule[billing_period_id] = true;
 					schemes.push(scheme_data);
@@ -359,9 +361,11 @@ define(['app','api'], function (app) {
 	   function initTotals(){
 		   $scope.Totals = {};
 		   $scope.Variance = {};
+		   $scope.SchemeOrder = {};
 		   for(var i in $scope.Schemes){
 			   var scheme =  $scope.Schemes[i];
 			   $scope.Totals[scheme.id]=0;
+			   $scope.SchemeOrder[scheme.id]=scheme.order;
 			   if($scope.Tuition) 
 					$scope.Variance[scheme.id]=-$scope.Tuition.amount;
 			   else
