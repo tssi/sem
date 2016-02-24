@@ -2,102 +2,128 @@
 define(['model'],function($model){
 	return new $model(
 			{
-				meta:{
-					title: 'Year Levels',
+			  "meta": {
+				"message": "List of Year Levels",
+				"limit": 2000,
+				"next": null,
+				"prev": null,
+				"last": 1,
+				"count": 12,
+				"page": 1,
+				"pages": 1,
+				"epoch": 1456275562,
+				"code": 200
+			  },
+			  "data": [
+				{
+				  "id": "G1",
+				  "educ_level_id": "GS",
+				  "name": "Grade 1",
+				  "alias": "G1",
+				  "order": 1,
+				  "created": "2016-01-26 07:26:09",
+				  "modified": "2016-02-04 07:18:08"
 				},
-				data:[
-					  {
-						"id": "PS1",
-						"educ_level_id": "PS",
-						"name": "Nursery",
-						"alias": "N",
-						"order": 1
-					  },
-					  {
-						"id": "PS2",
-						"educ_level_id": "PS",
-						"name": "Kinder I",
-						"alias": "K1",
-						"order": 2
-					  },
-					  {
-						"id": "PS3",
-						"educ_level_id": "PS",
-						"name": "Kinder II",
-						"alias": "K2",
-						"order": 3
-					  },
-					  {
-						"id": "G1",
-						"educ_level_id": "GS",
-						"name": "Grade 1",
-						"alias": "G1",
-						"order": 4
-					  },
-					  {
-						"id": "G2",
-						"educ_level_id": "GS",
-						"name": "Grade 2",
-						"alias": "G2",
-						"order": 5
-					  },
-					  {
-						"id": "G3",
-						"educ_level_id": "GS",
-						"name": "Grade 3",
-						"alias": "G3",
-						"order": 6
-					  },
-					  {
-						"id": "G4",
-						"educ_level_id": "GS",
-						"name": "Grade 4",
-						"alias": "G4",
-						"order": 7
-					  },
-					  {
-						"id": "G5",
-						"educ_level_id": "GS",
-						"name": "Grade 5",
-						"alias": "G5",
-						"order": 8
-					  },
-					  {
-						"id": "G6",
-						"educ_level_id": "GS",
-						"name": "Grade 6",
-						"alias": "G6",
-						"order": 9
-					  },
-					  {
-						"id": "G7",
-						"educ_level_id": "HS",
-						"name": "Grade 7",
-						"alias": "G7",
-						"order": 10
-					  },
-					  {
-						"id": "G8",
-						"educ_level_id": "HS",
-						"name": "Grade 8",
-						"alias": "G8",
-						"order": 11
-					  },
-					  {
-						"id": "G9",
-						"educ_level_id": "HS",
-						"name": "Grade 9",
-						"alias": "G9",
-						"order": 12
-					  },
-					  {
-						"id": "GX",
-						"educ_level_id": "HS",
-						"name": "Grade 10",
-						"alias": "GX",
-						"order": 13
-					  }
-					]
+				{
+				  "id": "G2",
+				  "educ_level_id": "GS",
+				  "name": "Grade 2",
+				  "alias": "G2",
+				  "order": 2,
+				  "created": "2016-01-27 17:32:25",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G3",
+				  "educ_level_id": "GS",
+				  "name": "Grade 3",
+				  "alias": "G3",
+				  "order": 3,
+				  "created": "2016-01-26 07:26:37",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G4",
+				  "educ_level_id": "GS",
+				  "name": "Grade 4",
+				  "alias": "G4",
+				  "order": 4,
+				  "created": "2016-01-26 07:27:29",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G5",
+				  "educ_level_id": "GS",
+				  "name": "Grade 5",
+				  "alias": "G5",
+				  "order": 5,
+				  "created": "2016-01-26 07:27:48",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G6",
+				  "educ_level_id": "GS",
+				  "name": "Grade 6",
+				  "alias": "G6",
+				  "order": 6,
+				  "created": "2016-01-26 07:28:40",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G7",
+				  "educ_level_id": "HS",
+				  "name": "Grade 7",
+				  "alias": "G7",
+				  "order": 7,
+				  "created": "2016-01-26 07:28:50",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G8",
+				  "educ_level_id": "HS",
+				  "name": "Grade 8",
+				  "alias": "G8",
+				  "order": 8,
+				  "created": "2016-01-26 07:29:01",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "G9",
+				  "educ_level_id": "HS",
+				  "name": "Grade 9",
+				  "alias": "G9",
+				  "order": 9,
+				  "created": "2016-01-26 07:29:16",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "GX",
+				  "educ_level_id": "HS",
+				  "name": "Grade 10",
+				  "alias": "G10",
+				  "order": 10,
+				  "created": "2016-01-26 07:29:26",
+				  "modified": "2016-02-04 07:18:09"
+				},
+				{
+				  "id": "GY",
+				  "educ_level_id": "SH",
+				  "name": "Grade 11",
+				  "alias": "G11",
+				  "order": 11,
+				  "created": "2016-02-04 07:46:28",
+				  "modified": "2016-02-04 07:46:28"
+				},
+				{
+				  "id": "GZ",
+				  "educ_level_id": "SH",
+				  "name": "Grade 12",
+				  "alias": "G12",
+				  "order": 12,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				}
+			  ]
 			}
 		);
 });
