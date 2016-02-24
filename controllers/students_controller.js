@@ -13,7 +13,6 @@ define(['app','api'], function (app) {
 			$scope.init();
 			$scope.Departments=[];
 			api.GET('educ_levels',function success(response){
-				console.log(response.data);
 				$scope.Departments=response.data;	
 			});
 			$scope.Steps = [
@@ -23,7 +22,6 @@ define(['app','api'], function (app) {
 			];
 			$scope.YearLevels=[];
 			api.GET('year_levels',function success(response){
-				console.log(response.data);
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
