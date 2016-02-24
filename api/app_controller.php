@@ -109,6 +109,6 @@ class AppController extends Controller {
 		  }
 			
 	 }
-	 return json_encode($response);
+	 return json_encode($response,JSON_NUMERIC_CHECK );
   }
 }
