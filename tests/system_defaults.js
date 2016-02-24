@@ -3,6 +3,7 @@ define(['model'],function($model){
 	return new $model(
 			{
 			  "meta": {
+				"class": "SystemDefault",
 				"message": "List of System Defaults",
 				"limit": 10,
 				"next": null,
