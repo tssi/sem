@@ -1,6 +1,6 @@
 "use strict";
 define(['app','api'], function (app) {
-    app.register.controller('StudentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
+    app.register.controller('StudentController',['$scope','$rootScope','$uibModal','api', function ($scope,$rootScope,$uibModal,api) {
 		$scope.index = function(){
 			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
@@ -139,16 +139,27 @@ define(['app','api'], function (app) {
 				$scope.families.splice(index, 1);
 			};
 			$scope.sendInfo = function(){
+				$scope.SavingInquiry  = true;
 				api.POST('students',$scope.Student,function success(response){
-				console.log(response.data);
-				$scope.init();
-				$scope.clearField();
-				$scope.clearField2();
-				//reset student info and step
-				//call init
-				//clearField clearField2
-			});
-			};
+					$scope.SavingInquiry  = false;
+					$scope.openModal();
+				});
+			}
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+							animation: true,
+							size:'sm',
+							templateUrl: 'successModal.html',
+							controller: 'SuccessModalController',
+						});
+						modalInstance.result.then(function () {
+						  
+						}, function (source) {
+							$scope.init();
+							$scope.clearField();
+							$scope.clearField2();
+						});
+			}
 			$scope.clearField=function(){
 				$scope.educID = null;
 				$scope.level = null;
@@ -178,8 +189,33 @@ define(['app','api'], function (app) {
 				$scope.homeBrgy = null;
 				$scope.homeAddrs = null;
 			};
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+						animation: true,
+						size:'sm',
+						templateUrl: 'successModal.html',
+						controller: 'SuccessModalController',
+					});
+					modalInstance.result.then(function () {
+					  
+					}, function (source) {
+						$scope.init();
+					});
+			}
 		};
     }]);
+	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.dismissModal = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss('ok');
+		};
+	}]);
+	
 });
 
 
