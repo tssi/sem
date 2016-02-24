@@ -127,7 +127,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="SavingInquiry">
+				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="InquirySaving">
 				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=3,'glyphicon-ok': ActiveStep===3}" aria-hidden="true"></span>
 				</button>
 				<div class="list-group" ng-show="ActiveStep===1">
@@ -426,7 +426,7 @@
 					</div>
 					<div class="list-group-canvas">
 						<div class="list-group-item">
-							<div class="empty-state">
+							<div class="empty-state"  ng-hide="InquirySaving">
 								<div class="well">
 									<div class="empty-state-icon">
 										<i class="glyphicon glyphicon-thumbs-up"></i>
@@ -437,6 +437,16 @@
 								<div class="empty-state-help alert alert-info"> 
 									<span class="empty-state-action-icon glyphicon glyphicon-ok"></span> Click to confirm.
 								</div>
+							</div>
+							<div class="empty-state" ng-show="InquirySaving">
+								<div class="well">
+									<div class="empty-state-icon">
+										<i class="glyphicon glyphicon-floppy-disk"></i>
+									</div>
+									<h4>Saving...</h4>
+									<p class="empty-state-message">Please wait for awhile.</p>
+								</div>
+								<div class="loader fade in" ng-hide="__MODAL_OPEN"></div>
 							</div>
 						</div>
 					</div>

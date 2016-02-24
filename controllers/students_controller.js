@@ -1,6 +1,6 @@
 "use strict";
 define(['app','api'], function (app) {
-    app.register.controller('StudentController',['$scope','$rootScope','$uibModal','api', function ($scope,$rootScope,$uibModal,api) {
+    app.register.controller('StudentController',['$scope','$rootScope','$filter','$uibModal','api', function ($scope,$rootScope,$filter,$uibModal,api) {
 		$scope.index = function(){
 			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
@@ -83,7 +83,7 @@ define(['app','api'], function (app) {
 				$scope.Student.last_name=$scope.lastName;
 				$scope.Student.suffix_name=$scope.suffix;
 				$scope.Student.gender=$scope.gender;
-				$scope.Student.birthday=$scope.birthday;
+				$scope.Student.birthday=$filter('date')($scope.birthday,'yyyy-MM-dd');
 				$scope.Student.birthplace=$scope.birthPlace;
 				$scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
@@ -139,9 +139,9 @@ define(['app','api'], function (app) {
 				$scope.families.splice(index, 1);
 			};
 			$scope.sendInfo = function(){
-				$scope.SavingInquiry  = true;
+				$scope.InquirySaving  = true;
 				api.POST('students',$scope.Student,function success(response){
-					$scope.SavingInquiry  = false;
+					$scope.InquirySaving  = false;
 					$scope.openModal();
 				});
 			}
