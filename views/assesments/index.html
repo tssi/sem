@@ -1,4 +1,7 @@
 <div ng-controller="AssesmentController" ng-init="index()">
+	<a href="#/" class="btn btn-default btn-fab fixed top right">
+		<span class="glyphicon glyphicon-home"></span>
+	</a>
 	<div class="row">
 		<div class="col-md-12">
 			<ul class="nav nav-pills nav-wizard">
@@ -25,7 +28,7 @@
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">
-									<i class="glyphicon glyphicon-user"></i>
+									<i class="glyphicon glyphicon-apple"></i>
 								</div>
 								<h4>Assessment not yet started!</h4>
 								<p class="empty-state-message">Choose a student and assess.</p>
@@ -90,19 +93,19 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-if="ActiveScheme.interest_charge>0">
+								<tr ng-if="ActiveScheme.variance_amount>0">
 									<td>Interest Charge</td>
-									<td><div class="amount peso">{{ActiveScheme.interest_charge | currency}}</div></td>
+									<td><div class="amount peso">{{ActiveScheme.variance_amount | currency}}</div></td>
 								</tr>
-								<tr ng-if="ActiveScheme.interest_charge<0">
+								<tr ng-if="ActiveScheme.variance_amount<0">
 									<td>{{ActiveScheme.name}} Discount</td>
-									<td><div class="amount peso">{{ActiveScheme.interest_charge | currency}}</div></td>
+									<td><div class="amount peso">{{ActiveScheme.variance_amount | currency}}</div></td>
 								</tr>
 								<tr ng-if="TotalDiscount">
 									<td>
 									Discounts:
 									</td>
-									<td rowspan="{{ActiveDiscounts.length+1}}"><div class="amount" ng-class="{peso:!ActiveScheme.interest_charge}">{{TotalDiscount | currency}}</div></td>
+									<td rowspan="{{ActiveDiscounts.length+1}}"><div class="amount" ng-class="{peso:!ActiveScheme.variance_amount}">{{TotalDiscount | currency}}</div></td>
 								</tr>
 								<tr ng-if="TotalDiscount" ng-repeat="ActiveDiscount in ActiveDiscounts">
 									<td>
@@ -138,14 +141,20 @@
 							<thead>
 								<tr>
 									<th class="text-center">Billing Period</th>
-									<th class="text-center">Due Date</th>
 									<th class="text-center">Amount</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="schedule in ActiveScheme.schedule" ng-if="schedule.amount">
-									<td colspan="{{$first?2:1}}">{{schedule.billing_period}}</td>
-									<td ng-if="!$first">{{schedule.due_date}}</td>
+									<td>
+										<span ng-if="$first">{{schedule.billing_period}}</span>
+										<span ng-if="!$first">
+											{{schedule.bill_months[0]}}
+										<span ng-if="schedule.bill_months.length>1">
+										- {{schedule.bill_months[schedule.bill_months.length-1]}} 
+										</span>
+										</span>
+									</td>
 									<td>
 										<div class="amount pull-right" ng-class="{peso:$first}">{{schedule.amount | currency}}</div>
 									</td>
@@ -153,7 +162,7 @@
 							</tbody>
 							<tfoot> 
 								<tr ng-if="TotalAmount">
-									<td colspan="2">Total Amount</td>
+									<td>Total Amount</td>
 									<td><div class="amount peso">{{TotalAmount | currency}}</div></td>
 								</tr>
 							</tfoot>
@@ -255,17 +264,23 @@
 							<div class="col-md-6">
 								<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
 								<p class="list-group-item-text">
-									<span class="amount total peso">{{paymentScheme.amount | currency}}</span>
-									x <span>{{paymentScheme.payment_frequency}}</span>
-									<span ng-if="paymentScheme.interest_charge">
-									<span ng-show="paymentScheme.interest_charge>0">plus <span class="amount total peso">{{paymentScheme.interest_charge | currency}}</span> </span> 
-									<span ng-show="paymentScheme.interest_charge<0">less <span class="amount total peso">{{(paymentScheme.interest_charge*-1) | currency}}</span> </span> 
-									<span>{{paymentScheme.interest_charge<0?'discount':'interest'}}</span>
+									<div ng-if="paymentScheme.variance_amount">
+										<span ng-show="paymentScheme.variance_amount>0">Plus <span class="amount total peso">{{paymentScheme.variance_amount | currency}}</span> </span> 
+										<span ng-show="paymentScheme.variance_amount<0">Less <span class="amount total peso">{{(paymentScheme.variance_amount*-1) | currency}}</span> </span> 
+										<span>{{paymentScheme.variance_amount<0?'discount':'interest'}}</span>
+									</div>
+									<span ng-if="paymentScheme.schedule[1]"> 
+										<span class="amount total peso">{{paymentScheme.schedule[0].amount | currency}}</span>
+										&plus; <span class="amount total peso">{{paymentScheme.schedule[1].amount | currency }} </span>  
+										<span ng-if="paymentScheme.schedule[1].due_dates.length>1">
+										&times; <span>{{paymentScheme.schedule[1].due_dates.length}}</span>
+										</span>
 									</span>
+									
 								</p>
 							</div>
 							<div class="col-md-6">
-								<h3 class="amount total peso">{{paymentScheme.amount * paymentScheme.payment_frequency + paymentScheme.interest_charge | currency}}</h3>
+								<h3 class="amount total peso">{{paymentScheme.total_amount | currency}}</h3>
 							</div>
 						</div>
 					</div>

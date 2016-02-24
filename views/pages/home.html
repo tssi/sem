@@ -1,5 +1,89 @@
 <div class="row" ng-controller="PageController" ng-init="init()">
-	<div class="col-md-12">
-		<p>WELCOME!!</p>
+	<button class="btn btn-primary btn-fab fixed top right">
+		<span class="glyphicon glyphicon-search"></span>
+	</button>
+	<div class="row">
+		<div class="col-md-8">
+			<h2>Simplified Enrollment Module</h2>
+			<p>SEM is K to 12 Senior High ready!</p>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="list-group">
+						<div class="list-group-item list-group-thumbnail">
+							Step 1
+							<!--<span class="glyphicon glyphicon-info-sign"></span>-->
+							<img src="webroot/img/pic.jpg" alt="" />
+							<a href="#/students/index" class="btn btn-fab btn-default bottom right" style="bottom:-2.5rem;">
+								<span class="glyphicon glyphicon-user"></span>
+							</a>
+						</div>
+						<div class="list-group-item list-group-footer"> 
+							<h4>Inquiry</h4>
+							<p>Get new student's information.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="list-group">
+						<div class="list-group-item list-group-thumbnail" style="position:relative;">
+							Step 2
+							<!--<span class="glyphicon glyphicon-text-color"></span>-->
+							<img src="webroot/img/pic2.jpg" alt="" />
+							<a href="#/assesments/index" class="btn btn-fab btn-default bottom right" style="bottom:-2.5rem;">
+								<span class="glyphicon glyphicon-apple"></span>
+							</a>
+						</div>
+						
+						<div class="list-group-item list-group-footer"> 
+							<h4>Assessment</h4>
+							<p>Choose level and payment terms.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="list-group" style="margin-top:5.25rem;">
+				<div class="list-group-item list-group-header">
+					<label>Stats</label>
+				</div>
+				<div class="list-group-canvas" style="height:43rem;">
+				<div class="list-group-item"> 
+					<img src="webroot/img/pie.svg" alt="" style="margin: 0.5rem 6rem;width: 21rem;margin-bottom: 1.5rem;" />
+					<table class="table table-condensed table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">Level</th>
+								<th class="text-center">New</th>
+								<th class="text-center">Assess</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Grade 7</td>
+								<td class="text-right">5</td>
+								<td class="text-right">95</td>
+							</tr>
+							<tr>
+								<td>Grade 8</td>
+								<td class="text-right">9</td>
+								<td class="text-right">12</td>
+							</tr>
+							<tr>
+								<td>Grade 9</td>
+								<td class="text-right">27</td>
+								<td class="text-right">85</td>
+							</tr>
+							<tr>
+								<td>Grade 10</td>
+								<td class="text-right">101</td>
+								<td class="text-right">195</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			</div>
+		</div>
 	</div>
 </div>

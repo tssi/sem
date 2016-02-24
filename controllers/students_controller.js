@@ -1,6 +1,6 @@
 "use strict";
 define(['app','api'], function (app) {
-    app.register.controller('StudentController',['$scope','$rootScope','api', function ($scope,$rootScope,api) {
+    app.register.controller('StudentController',['$scope','$rootScope','$filter','$uibModal','api', function ($scope,$rootScope,$filter,$uibModal,api) {
 		$scope.index = function(){
 			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
@@ -12,8 +12,7 @@ define(['app','api'], function (app) {
 			};
 			$scope.init();
 			$scope.Departments=[];
-			api.GET('educ_levels',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('educ_levels',function success(response){
 				$scope.Departments=response.data;	
 			});
 			$scope.Steps = [
@@ -22,33 +21,27 @@ define(['app','api'], function (app) {
 				{id:3, description:"Confirmation"}
 			];
 			$scope.YearLevels=[];
-			api.GET('year_levels',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('year_levels',function success(response){
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
-			api.GET('countries',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('countries',function success(response){
 				$scope.Countries = response.data;
 			});
 			$scope.Provinces=[];
-			api.GET('provinces',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('provinces',function success(response){
 				$scope.Provinces = response.data;
 			});
 			$scope.Cities=[];
-			api.GET('cities',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('cities',function success(response){
 				$scope.Cities = response.data;
 			});
 			$scope.Religions=[];
-			api.GET('religions',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('religions',function success(response){
 				$scope.Religions = response.data;
 			});
 			$scope.Citizenships=[];
-			api.GET('citizenships',{limit:15},function success(response){
-				console.log(response.data);
+			api.GET('citizenships',function success(response){
 				$scope.Citizenships = response.data;
 			});
 			$scope.nextStep = function(){
@@ -88,7 +81,7 @@ define(['app','api'], function (app) {
 				$scope.Student.last_name=$scope.lastName;
 				$scope.Student.suffix_name=$scope.suffix;
 				$scope.Student.gender=$scope.gender;
-				$scope.Student.birthday=$scope.birthday;
+				$scope.Student.birthday=$filter('date')($scope.birthday,'yyyy-MM-dd');
 				$scope.Student.birthplace=$scope.birthPlace;
 				$scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
@@ -116,9 +109,9 @@ define(['app','api'], function (app) {
 								barangay:$scope.homeBrgy,
 								address:$scope.homeAddrs,
 								};
-				$scope.Student.addressess=[];
-				$scope.Student.addressess.push(current);
-				$scope.Student.addressess.push(permanent);
+				$scope.Student.addresses=[];
+				$scope.Student.addresses.push(current);
+				$scope.Student.addresses.push(permanent);
 				$scope.hasContactInfo = true;
 			};
 			$scope.sameAsCurrent = function(){
@@ -144,16 +137,27 @@ define(['app','api'], function (app) {
 				$scope.families.splice(index, 1);
 			};
 			$scope.sendInfo = function(){
+				$scope.InquirySaving  = true;
 				api.POST('students',$scope.Student,function success(response){
-				console.log(response.data);
-				$scope.init();
-				$scope.clearField();
-				$scope.clearField2();
-				//reset student info and step
-				//call init
-				//clearField clearField2
-			});
-			};
+					$scope.InquirySaving  = false;
+					$scope.openModal();
+				});
+			}
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+							animation: true,
+							size:'sm',
+							templateUrl: 'successModal.html',
+							controller: 'SuccessModalController',
+						});
+						modalInstance.result.then(function () {
+						  
+						}, function (source) {
+							$scope.init();
+							$scope.clearField();
+							$scope.clearField2();
+						});
+			}
 			$scope.clearField=function(){
 				$scope.educID = null;
 				$scope.level = null;
@@ -183,8 +187,33 @@ define(['app','api'], function (app) {
 				$scope.homeBrgy = null;
 				$scope.homeAddrs = null;
 			};
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+						animation: true,
+						size:'sm',
+						templateUrl: 'successModal.html',
+						controller: 'SuccessModalController',
+					});
+					modalInstance.result.then(function () {
+					  
+					}, function (source) {
+						$scope.init();
+					});
+			}
 		};
     }]);
+	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.dismissModal = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss('ok');
+		};
+	}]);
+	
 });
 
 

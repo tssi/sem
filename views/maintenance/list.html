@@ -1,5 +1,9 @@
 <!--div for controller-->
 <div ng-controller="MaintenanceController" ng-init="list()">
+	<a href="#/" class="btn btn-default btn-fab fixed top right">
+		<span class="glyphicon glyphicon-home"></span>
+	</a>
+	<button class="btn btn-primary btn-fab bottom right fixed" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
 	<div class="row">
 		<div class="col-md-4">
 			<div class="list-group">
@@ -38,11 +42,11 @@
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Columns.length}">
 							<thead>
 								<tr>
-									<th class="text-center col-md-2" ng-repeat="column in Columns" ng-hide="column==='order'">{{column}}</th>
-									<th class="text-center col-md-2"><button class="btn btn-default" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
+									<th class="text-center col-md-2" ng-repeat="column in Columns" >{{column}}</th>
+									<th class="text-center col-md-2"><button class="btn btn-default" ng-disabled="ListItems.length==0 || !List.sortable" ng-click="updateState('sort')"><span class="glyphicon glyphicon-sort"></span></button></th>
 								</tr>
 								<tr>
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
 									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -56,7 +60,7 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" ng-hide="column==='order'">
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
 									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
 									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
@@ -66,6 +70,12 @@
 									</select>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+								</tr>
+								<tr ng-if="ListItems.length==0"> 
+									<td colspan="{{Columns.length}}">
+										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add {{List.name}}.</div>
+									</td>
+									<td></td>
 								</tr>
 							</tbody>
 						</table>
@@ -85,18 +95,40 @@
 								</tr>
 							</thead>
 							<tbody ui-tree-nodes ng-model="SortItem">
-								<tr ng-repeat="listitem in SortItem" ui-tree-node >
+								<tr ng-repeat="listitem in SortItem " ui-tree-node >
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{listitem[column]}}</td>
 									<td class="text-center col-md-1"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item text-center" ng-hide="Columns.length">
-						Loading...
+					<div class="list-group-item text-center" ng-hide="Columns.length || ErrorCode">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-refresh"></i>
+								</div>
+								<h4>Loading...</h4>
+								<p class="empty-state-message">Please wait.{{ErrorCode}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item text-center" ng-show="ErrorCode&&ErrorCode!=404">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>Error {{ErrorCode}}</h4>
+								<p class="empty-state-message">{{ErrorMessage}}</p>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="list-group-canvas" ng-hide="List">
+					<div class="list-group-item list-group-header">
+						<h5>Manage list</h5>
+					</div>
 					<div class="list-group-item">
 						<div class="empty-state">
 							<div class="well">
@@ -112,4 +144,41 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/ng-template" id="MaintenanceListModal.html">
+			<div class="modal-header">
+				<h3 class="modal-title">List Information</h3>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							Details
+						</div>						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<input type="text" placeholder="Name" class="form-control" ng-model="name"/>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<input type="text" placeholder="Description" class="form-control" ng-model="description"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<input type="text" placeholder="Path" class="form-control" ng-model="path"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="button" ng-click="confirmMaintenanceList()">Confirm</button>
+				<button class="btn btn-default pull-left" type="button" ng-click="cancelMaintenanceList()">Cancel</button>
+			</div>
+		</script>
 </div>
