@@ -50,7 +50,7 @@
 								<dt>Gender</dt>
 								<dd>{{Student.gender}}</dd>
 								<dt>Birthday</dt>
-								<dd>{{Student.birthday}}</dd>
+								<dd>{{Student.birthday | date:'mediumDate'}}</dd>
 								<dt>Birth Place</dt>
 								<dd>{{Student.birthplace}}</dd>
 								<dt>Religion</dt>
@@ -127,7 +127,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()">
+				<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="SavingInquiry">
 				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=3,'glyphicon-ok': ActiveStep===3}" aria-hidden="true"></span>
 				</button>
 				<div class="list-group" ng-show="ActiveStep===1">
@@ -167,6 +167,41 @@
 								</div>
 					</div>
 					<div class="list-group-item list-group-header">
+						<h5>Academic</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-6">
+										<label for=""> Department</label>
+										<div class="btn-group btn-group-justified">
+										  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
+											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
+										  </div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<label for=""> Level</label>
+										<select name="" id="" class="form-control"  ng-model="level">
+											<option value="">Select Level</option>
+											<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-12">
+										<label for="">Previous School</label>
+										<input type="text" class="form-control" placeholder="School Name" ng-model="prevSchool"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item list-group-header">
 						<h5>Biological</h5>
 					</div>
 					<div class="list-group-item">
@@ -185,7 +220,7 @@
 								</div>
 								<div class="col-md-6">
 									<label for=""> Birthday</label>
-									<input type="text" class="form-control" placeholder="mm/dd/yyy" ng-model="birthday"/>
+									<input type="date" class="form-control" placeholder="mm/dd/yyy" ng-model="birthday"/>
 								</div>
 							</div>
 						</div>
@@ -263,41 +298,6 @@
 									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
 										<option value="">Select Citizenship</option>
 									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item list-group-header">
-						<h5>Academic</h5>
-					</div>
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="form-group">
-								<div class="row">
-									<div class="col-md-6">
-										<label for=""> Department</label>
-										<div class="btn-group btn-group-justified">
-										  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
-											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
-										  </div>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<label for=""> Level</label>
-										<select name="" id="" class="form-control"  ng-model="level">
-											<option value="">Select Level</option>
-											<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
-											</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="row">
-									<div class="col-md-12">
-										<label for="">Previous School</label>
-										<input type="text" class="form-control" placeholder="School Name" ng-model="prevSchool"/>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -443,4 +443,14 @@
 				</div>
 		</div>
 	</div>
+	<script type="text/ng-template" id="successModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
+			<h1>Success</h1>
+			<p>Student can now proceed to assessment.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
+		</div>
+	</script>
 </div>
