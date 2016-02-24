@@ -2,111 +2,90 @@
 define(['model'],function($model){
 	return new $model(
 			{
-				meta:{
-					title: 'Fees',
+			  "meta": {
+				"message": "List of Fees",
+				"limit": 10,
+				"next": 2,
+				"prev": null,
+				"last": 4,
+				"count": 31,
+				"page": 1,
+				"pages": 4,
+				"epoch": 1456274312,
+				"code": 200
+			  },
+			  "data": [
+				{
+				  "id": "TUI",
+				  "name": "Tuition Fee",
+				  "order": 1,
+				  "created": "2016-02-05 00:35:56",
+				  "modified": "2016-02-05 07:09:11"
 				},
-				data:[
-					{
-					  "id": "TUI",
-					  "name": "Tuition Fee",
-					  "order": 1
-					},
-					{
-					  "id": "REG",
-					  "name": "Registration",
-					  "order": 2
-					},
-					{
-					  "id": "MDF",
-					  "name": "Medical/Dental Fee",
-					  "order": 3
-					},
-					{
-					  "id": "GUI",
-					  "name": "Guidance Fee",
-					  "order": 4
-					},
-					{
-					  "id": "INS",
-					  "name": "Insurance",
-					  "order": 5
-					},
-					{
-					  "id": "LIB",
-					  "name": "Library",
-					  "order": 6
-					},
-					{
-					  "id": "ATH",
-					  "name": "Athletics",
-					  "order": 7
-					},
-					{
-					  "id": "LFT",
-					  "name": "Laboraty Fee-TLE",
-					  "order": 8
-					},
-					{
-					  "id": "LFS",
-					  "name": "Laboraty Fee-Science",
-					  "order": 9
-					},
-					{
-					  "id": "BSP",
-					  "name": "BSP/GSP",
-					  "order": 10
-					},
-					{
-					  "id": "IDL",
-					  "name": "ID Lamination",
-					  "order": 11
-					},
-					{
-					  "id": "REP",
-					  "name": "Report Card",
-					  "order": 12
-					},
-					{
-					  "id": "CLA",
-					  "name": "Class Picture",
-					  "order": 13
-					},
-					{
-					  "id": "INM",
-					  "name": "Instructional Materials",
-					  "order": 14
-					},
-					{
-					  "id": "SCH",
-					  "name": "School Organization",
-					  "order": 15
-					},
-					{
-					  "id": "REC",
-					  "name": "Recollection Fee",
-					  "order": 16
-					},
-					{
-					  "id": "GRA",
-					  "name": "Graduation Fee",
-					  "order": 17
-					},
-					{
-					  "id": "YEA",
-					  "name": "Yearbook",
-					  "order": 18
-					},
-					{
-					  "id": "ENE",
-					  "name": "Energy Fee",
-					  "order": 19
-					},
-					{
-					  "id": "COMP",
-					  "name": "Computer Fee",
-					  "order": 20
-					}
-				]
+				{
+				  "id": "MSC",
+				  "name": "Miscllaneous",
+				  "order": 2,
+				  "created": "2016-02-05 02:41:39",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "REG",
+				  "name": "Registration",
+				  "order": 3,
+				  "created": "2016-02-05 00:36:19",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "MDF",
+				  "name": "Medical / Dental",
+				  "order": 4,
+				  "created": "2016-02-05 00:36:35",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "GUI",
+				  "name": "Guidance",
+				  "order": 5,
+				  "created": "2016-02-05 00:36:45",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "INS",
+				  "name": "Insurance",
+				  "order": 6,
+				  "created": "2016-02-05 00:36:51",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "LIB",
+				  "name": "Library",
+				  "order": 7,
+				  "created": "2016-02-05 00:36:59",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "ATH",
+				  "name": "Athletics",
+				  "order": 8,
+				  "created": "2016-02-05 00:37:06",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "LFT",
+				  "name": "Laboratory Fee - TLE",
+				  "order": 9,
+				  "created": "2016-02-05 00:37:24",
+				  "modified": "2016-02-05 07:09:11"
+				},
+				{
+				  "id": "LFS",
+				  "name": "Laboratory Fee - Science",
+				  "order": 10,
+				  "created": "2016-02-05 00:37:38",
+				  "modified": "2016-02-05 07:09:11"
+				}
+			  ]
 			}
-		);
+	);
 });

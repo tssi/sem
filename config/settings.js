@@ -1,6 +1,6 @@
 define(function() {
   return {
-	DEMO_MODE: false,
+	DEMO_MODE: true,
 	CTRLS_DIRECTORY: '../controllers',
 	VIEWS_DIRECTORY: 'views',
 	VIEW_EXTENSION: 'html?'+ Math.random(),
@@ -10,7 +10,7 @@ define(function() {
 	TEST_DELAY: 0,
 	TEST_DIRECTORY:'../tests',
 	TEST_SUCCESS:true,
-	TEST_ERROR:true,
+	TEST_ERROR:false,
 	API_URL:'api/',
 	API_EXT:'json',
   };
