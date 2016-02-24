@@ -2,19 +2,32 @@
 define(['model'],function($model){
 	return new $model(
 			{
-				meta:{
-					title: 'Countries',
+			  "meta": {
+				"message": "List of Countries",
+				"limit": 2000,
+				"next": null,
+				"prev": null,
+				"last": 1,
+				"count": 2,
+				"page": 1,
+				"pages": 1,
+				"epoch": 1456274825,
+				"code": 200
+			  },
+			  "data": [
+				{
+				  "id": "PH",
+				  "name": "Philippines",
+				  "call_code": 63,
+				  "order": 1
 				},
-				data:[
-					  {
-						"id": "PH",
-						"name": "Philippines"
-					  },
-					  {
-						"id": "JPN",
-						"name": "Japan"
-					  }
-					]
+				{
+				  "id": "US",
+				  "name": "United States of America",
+				  "call_code": 1,
+				  "order": 2
+				}
+			  ]
 			}
 		);
 });
