@@ -1,6 +1,6 @@
 "use strict";
 define(['model'],function($model){
-	return new $model(
+	var model =  new $model(
 			{
 			  "meta": {
 				"message": "List of Tuitions",
@@ -547,6 +547,14 @@ define(['model'],function($model){
 				  ]
 				}
 			  ]
+			});
+			model.POST = function(data){
+				data.program = data.program_id;
+				data.year_level = data.year_level_id;
+				data.display_sy = data.sy+'-'+(data.sy+1);
+				data.fees = [];
+				data.discounts = [];
+				return {success:model.save(data)};
 			}
-		);
+		return model;
 });
