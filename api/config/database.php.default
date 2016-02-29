@@ -77,21 +77,50 @@ class DATABASE_CONFIG {
 		'driver' => 'mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'database_name',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'tssi_sem_160126',
 		'prefix' => '',
-		//'encoding' => 'utf8',
+		'encoding' => 'utf8',
 	);
-
-	var $test = array(
+	var $app = array(
 		'driver' => 'mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'test_database_name',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'tssi_app_160229',
 		'prefix' => '',
-		//'encoding' => 'utf8',
+		'encoding' => 'utf8',
+	);
+	var $sim = array(
+		'driver' => 'mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'tssi_sim_160229',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+	var $sas = array(
+		'driver' => 'mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'tssi_sas_160229',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+	var $sfm = array(
+		'driver' => 'mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'tssi_sfm_160229',
+		'prefix' => '',
+		'encoding' => 'utf8',
 	);
 }

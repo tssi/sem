@@ -1,6 +1,7 @@
 <?php
 class Student extends AppModel {
 	var $name = 'Student';
+	var $useDbConfig = 'sim';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
