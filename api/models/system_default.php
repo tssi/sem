@@ -1,6 +1,7 @@
 <?php
 class SystemDefault extends AppModel {
 	var $name = 'SystemDefault';
+	var $useDbConfig = 'app';
 	function sanitize($results){
 		if(isset($results[0]))
 			if(isset($results[0]['SystemDefault'])){

@@ -1,6 +1,7 @@
 <?php
 class Province extends AppModel {
 	var $name = 'Province';
+	var $useDbConfig = 'app';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $order = 'Province.order';
 	var $belongsTo = array(

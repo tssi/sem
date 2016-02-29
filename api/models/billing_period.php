@@ -1,6 +1,7 @@
 <?php
 class BillingPeriod extends AppModel {
 	var $name = 'BillingPeriod';
+	var $useDbConfig = 'sfm';
 	var $order = 'BillingPeriod.order';
 	function getDueDates($sy,$period=null){
 		$conditions = array();

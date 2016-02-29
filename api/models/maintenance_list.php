@@ -1,6 +1,7 @@
 <?php
 class MaintenanceList extends AppModel {
 	var $name = 'MaintenanceList';
+	var $useDbConfig = 'app';
 	var $order = 'order';
 	function afterFind($results){
 		if(isset($results[0]['MaintenanceList'])){

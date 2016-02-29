@@ -1,6 +1,7 @@
 <?php
 class PaymentSchemeSchedule extends AppModel {
 	var $name = 'PaymentSchemeSchedule';
+	var $useDbConfig = 'sfm';
 	var $belongsTo = array('PaymentScheme','BillingPeriod');
 	function beforeSave($options){
 		$data = $this->data['PaymentSchemeSchedule'];
