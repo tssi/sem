@@ -1,5 +1,6 @@
 <?php
 class PaymentScheme extends AppModel {
+	var $useDbConfig = 'sfm';
 	var $belongsTo = array('Tuition','Scheme');
 	var $hasMany = array('PaymentSchemeSchedule');
 	function prepareData($data){
