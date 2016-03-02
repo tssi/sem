@@ -131,5 +131,23 @@ class Assessment extends AppModel {
 		);
 		return $data;
 	}
+	
+	function afterFind($results){
+		if(isset($results[0]['Assessment'])){
+			foreach($results as $index=>$result){
+				$initial_amount = $result['AssessmentSchedule'][0]['due_amount'];
+				$results[$index]['Assessment']['initial_amount'] = $initial_amount;
+				$results[$index]['Assessment']['webhooks'] = $this->testWebhook('ASSMNT',$results[$index]);
+			}
+		}
+		return $results;
+	}
+	protected function testWebhook($channel,$data){
+		$Webhook = &ClassRegistry::init('Webhooks.Webhook');
+		$conditions = array('EventSource.channel_id'=>$channel);
+		$events = array_values($Webhook->EventSource->find('list',compact('conditions')));
+		$webhooks = $Webhook->findByEventSource($events);
+		return $webhooks['Webhook'];
+	}
 
 }
