@@ -2,6 +2,7 @@
 class Tuition extends AppModel {
 	var $name = 'Tuition';
 	var $recursive = 2;
+	var $useDbConfig = 'sfm';
 	var $virtualFields = array(
 						'code_sy'=>"RIGHT(Tuition.sy,2)",
 						'display_sy'=>"CONCAT(Tuition.sy,' - ',Tuition.sy+1)",
