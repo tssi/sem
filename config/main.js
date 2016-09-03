@@ -18,14 +18,19 @@ require.config({
 		'root': 'controllers/root_controller',
 		'directives': 'directives/bootstrap_directive',
 		'api': 'controllers/api_controller',
+        'moment':'vendors/node_modules/moment/moment',
+        'chart':'vendors/node_modules/chart.js/dist/Chart.min',
+        'angular-chart':'vendors/node_modules/angular-chart.js/dist/angular-chart',
     },
     // Add angular modules that does not support AMD out of the box, put it in a shim
     shim: {
+        angular' : {exports : 'angular'},
         'angular-route': ['angular'],
-		'angular-cookies': ['angular'],         
-		'angularAMD': ['angular'],
+        'angular-cookies': ['angular'],         
+        'angularAMD': ['angular'],
         'ui-bootstrap': ['angular'],
         'ui.tree': ['angular'],
+        'angular-chart': ['angular','chart'],
     },
     // kick start application
     deps: ['app']
