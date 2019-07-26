@@ -1,0 +1,11 @@
+<div class="row">
+	<div class="col-md-12">
+		<ul class="nav nav-pills nav-wizard">
+			<li ng-class="{active:ActiveStep===step.id}" ng-repeat="step in Steps" ng-click="updateStep(step)">
+				<div ng-if="!$first" class="nav-wedge"></div>
+				<a data-toggle="tab"><span class="badge">{{step.id}}</span> {{step.description}}</a>
+				<div ng-if="!$last" class="nav-arrow"></div>
+			</li>
+		</ul>
+	</div>
+</div>

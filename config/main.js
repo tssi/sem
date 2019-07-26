@@ -18,7 +18,8 @@ require.config({
 		'root': 'controllers/root_controller',
 		'directives': 'directives/bootstrap_directive',
 		'api': 'controllers/api_controller',
-		'students':'../controllers/students'
+		'students':'../controllers/students',
+		'assesments':'../controllers/assesments'
     },
     // Add angular modules that does not support AMD out of the box, put it in a shim
     shim: {
