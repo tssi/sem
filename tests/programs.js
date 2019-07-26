@@ -50,7 +50,40 @@ define(['model'],function($model){
 				  "order": 4,
 				  "created": "2016-02-18 07:52:41",
 				  "modified": "2016-02-18 07:53:32"
-				}
+				},
+				{
+				  "id": "BSIT",
+				  "code": "IT",
+				  "name": "BSIT",
+				  'department_id': 'TS',
+				  'college':1,
+				  "description": "Bachelor of Science in Information Technology",
+				  "order": 5,
+				  "created": "2016-02-18 07:52:41",
+				  "modified": "2016-02-18 07:53:32"
+				},
+				{
+				  "id": "BSCS",
+				  "code": "CS",
+				  "name": "BSCS",
+				  'department_id': 'TS',
+				  'college':1,
+				  "description": "Bachelor of Science in Communication Science",
+				  "order": 6,
+				  "created": "2016-02-18 07:52:41",
+				  "modified": "2016-02-18 07:53:32"
+				},
+				{
+				  "id": "LAW",
+				  "code": "LW",
+				  "name": "LAW",
+				  'department_id': 'LW',
+				  'college':1,
+				  "description": "Bachelor of Science in Law",
+				  "order": 7,
+				  "created": "2016-02-18 07:52:41",
+				  "modified": "2016-02-18 07:53:32"
+				},
 			  ]
 			}
 		);

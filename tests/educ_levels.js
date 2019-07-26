@@ -20,6 +20,7 @@ define(['model'],function($model){
 				  "name": "Preschool",
 				  "alias": "PS",
 				  "order": 1,
+				  "college": 0,
 				  "created": "2016-01-26 07:25:49",
 				  "modified": "2016-01-27 01:22:58"
 				},
@@ -28,6 +29,7 @@ define(['model'],function($model){
 				  "name": "Grade School",
 				  "alias": "GS",
 				  "order": 2,
+				  "college": 0,
 				  "created": "2016-01-26 07:25:41",
 				  "modified": "2016-01-27 01:22:50"
 				},
@@ -36,6 +38,7 @@ define(['model'],function($model){
 				  "name": "High School",
 				  "alias": "HS",
 				  "order": 3,
+				  "college": 0,
 				  "created": "2016-01-26 07:25:56",
 				  "modified": "2016-01-27 01:22:54"
 				},
@@ -44,9 +47,37 @@ define(['model'],function($model){
 				  "name": "Senior High",
 				  "alias": "SH",
 				  "order": 4,
+				  "college": 0,
 				  "created": "2016-02-04 08:20:11",
 				  "modified": "2016-02-04 08:20:11"
-				}
+				},
+				{
+				  "id": "TS",
+				  "name": "Tertiary School",
+				  "alias": "TS",
+				  "order": 5,
+				  "college": 1,
+				  "created": "2016-02-04 08:20:11",
+				  "modified": "2016-02-04 08:20:11"
+				},
+				{
+				  "id": "GD",
+				  "name": "Graduate School",
+				  "alias": "GD",
+				  "order": 6,
+				  "college": 1,
+				  "created": "2016-02-04 08:20:11",
+				  "modified": "2016-02-04 08:20:11"
+				},
+				{
+				  "id": "LW",
+				  "name": "Law School",
+				  "alias": "LW",
+				  "order": 7,
+				  "college": 1,
+				  "created": "2016-02-04 08:20:11",
+				  "modified": "2016-02-04 08:20:11"
+				},
 			  ]
 			}
 		);
