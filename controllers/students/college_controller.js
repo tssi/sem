@@ -72,7 +72,8 @@ define(['app','api'],function(app){
 		$scope.basicInfo=function(){
 			console.log($scope.department);
 			$scope.Student.program_id=$scope.program;
-			$scope.Student.educ_level_id=$scope.department;
+			$scope.Student.department_id=$scope.department.educ_level_id;
+			$scope.Student.year_level_id=$scope.department.id;
 			$scope.Student.curriculum_id=$scope.curriculum;
 			$scope.Student.first_name=$scope.firstName;
 			$scope.Student.middle_name=$scope.middleName;
@@ -124,6 +125,9 @@ define(['app','api'],function(app){
 			$scope.InquirySaving  = true;
 			api.POST('students',$scope.Student,function success(response){
 				$scope.InquirySaving  = false;
+				$scope.clearField();
+				$scope.clearField2();
+				console.log(response.data);
 				$scope.openModal();
 			});
 		}
@@ -145,6 +149,7 @@ define(['app','api'],function(app){
 		$scope.clearField=function(){
 			$scope.department = null;
 			$scope.curriculum = null;
+			$scope.program = null;
 			$scope.level = null;
 			$scope.firstName = null;
 			$scope.middleName = null;
@@ -185,6 +190,17 @@ define(['app','api'],function(app){
 					$scope.init();
 				});
 		}
+	}]);
+	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.dismissModal = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss('ok');
+		};
 	}]);
 
 });

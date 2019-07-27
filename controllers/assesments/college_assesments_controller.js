@@ -240,8 +240,8 @@ define(['app','api'], function (app) {
 				$rootScope.__MODULE_NAME = 'Assessment';
 				$scope.Steps = [
 					{id:1, title:"Student", description:"Select Student"},
-					{id:2, title:"Level", description:"Select Level"},
-					{id:3, title:"Section", description:"Select Section"},
+					{id:2, title:"Subjects", description:"Select Subjects"},
+					{id:3, title:"Schedule", description:"Select Schedule"},
 					{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
 					{id:5, title:"Discount", description:"Select Discount"},
 					{id:6, title:"Confirmation", description:"Confirmation"}
@@ -306,7 +306,7 @@ define(['app','api'], function (app) {
 				$scope.Tuitions=[];
 				$scope.PaymentSchemes=[];
 				$scope.Discounts=[];
-				api.GET('students',function success(response){
+				api.GET('college_students',function success(response){
 					$scope.Students = response.data;
 				});
 				api.GET('year_levels',function success(response){
