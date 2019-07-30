@@ -122,7 +122,106 @@ define(['model'],function($model){
 				  "order": 12,
 				  "created": "2016-02-04 07:46:53",
 				  "modified": "2016-02-04 07:46:53"
-				}
+				},
+				{
+				  "id": "T1",
+				  "educ_level_id": "TS",
+				  "name": "First Year",
+				  "alias": "1st Year",
+				  "order": 13,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "T2",
+				  "educ_level_id": "TS",
+				  "name": "Second year",
+				  "alias": "2nd Year",
+				  "order": 14,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "T3",
+				  "educ_level_id": "TS",
+				  "name": "Third Year",
+				  "alias": "3rd Year",
+				  "order": 15,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "T4",
+				  "educ_level_id": "TS",
+				  "name": "Fourth Year",
+				  "alias": "4th Year",
+				  "order": 16,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "T5",
+				  "educ_level_id": "TS",
+				  "name": "Fifth Year",
+				  "alias": "5th Year",
+				  "order": 17,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "M1",
+				  "educ_level_id": "GD",
+				  "name": "Masteral First Year",
+				  "alias": "1st Year",
+				  "order": 18,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "M2",
+				  "educ_level_id": "GD",
+				  "name": "Masteral Second Year",
+				  "alias": "2nd Year",
+				  "order": 19,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "D1",
+				  "educ_level_id": "GD",
+				  "name": "Doctoral First Year",
+				  "alias": "1st Year",
+				  "order": 20,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "D2",
+				  "educ_level_id": "GD",
+				  "name": "Doctoral Second Year",
+				  "alias": "2nd Year",
+				  "order": 21,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "L1",
+				  "educ_level_id": "LW",
+				  "name": "Law First Year",
+				  "alias": "1st Year",
+				  "order": 22,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
+				{
+				  "id": "L2",
+				  "educ_level_id": "LW",
+				  "name": "Law Second Year",
+				  "alias": "2nd Year",
+				  "order": 23,
+				  "created": "2016-02-04 07:46:53",
+				  "modified": "2016-02-04 07:46:53"
+				},
 			  ]
 			}
 		);

@@ -1,0 +1,419 @@
+<div class="row" ng-controller="CollegeInquiryController" ng-init="init()">
+	<div class="col-md-12">
+		<ul class="nav nav-pills nav-wizard">
+			<li ng-repeat="step in Steps" ng-class="{active:ActiveStep==step.id}" ng-click="SetActiveStep(step)">
+				<div class="nav-wedge" ng-if="!$first"></div>
+				<a data-toggle="tab"><span class="badge">{{step.id}}</span>{{step.description}}</a>
+				<div ng-if="!$last" class="nav-arrow"></div>
+			</li>
+		</ul>
+	</div>
+	<div class="row">		
+		<div class="col-md-6">
+			<div class="list-group"  ng-show="!NoInfo">
+				<div class="list-group-item list-group-header">
+					<label>Summary</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Student</label>
+									<div class="row">
+										<div class="col-md-12">
+											<span>{{Student.first_name}} {{Student.middle_name}} {{Student.last_name}} {{Student.suffix_name}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="">Program</label>
+									<div class="row">
+										<div class="col-md-12">
+											<span ng-repeat="prog in Programs | filter:{id:Student.program_id}">{{prog.description}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Basic Information</h5>
+					</div>
+					<div class="list-group-item">
+						<dl class="dl-horizontal">
+								<dt>Gender</dt>
+								<dd>{{Student.gender}}</dd>
+								<dt>Birthday</dt>
+								<dd>{{Student.birthday | date:'mediumDate'}}</dd>
+								<dt>Birth Place</dt>
+								<dd>{{Student.birthplace}}</dd>
+								<dt>Religion</dt>
+								<dd>{{Student.religion}}</dd>
+								<dt>Citizenship</dt>
+								<dd>{{Student.citizenship}}</dd>
+								<dt>Previous School</dt>
+								<dd>{{Student.prev_school}}</dd>
+						</dl>
+					</div>
+					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
+						<h5>Contact Information</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasContactInfo">
+						<dl class="dl-horizontal">
+							<dt>Landline</dt>
+							<dd ng-repeat="contact_number in Student.contact_numbers | filter: {type:'landline'}">{{contact_number.number}}</dd>
+							<dt>Mobile</dt>
+							<dd ng-repeat="contact_number in Student.contact_numbers | filter: {type:'mobile'}">{{contact_number.number}}</dd>
+							<dt>Current Address</dt>
+							<dd>
+								<address ng-repeat="address in Student.addresses | filter: {type:'current'}">
+									{{address.address}}, {{address.barangay}},<br/>
+									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: currentProvince}" ng-if="currentProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: currentCountry}" ng-if="currentCountry">{{country.name}}</span><br/>
+								</address>
+							</dd>
+							<dt>Home Address</dt>
+							<dd>
+								<address ng-repeat="address in Student.addresses | filter: {type:'permanent'}">
+									{{address.address}}, {{address.barangay}},<br/>
+									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: homeProvince}" ng-if="homeProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: homeCountry}" ng-if="homeCountry">{{country.name}}</span><br/>
+								</address>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="list-group" ng-show="NoInfo">
+				<div class="list-group-item list-group-header">
+					<label for="">Summary</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item" ng-if="!hasInfo">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-user"></i>
+								</div>
+								<h4>Inquiry not yet started!</h4>
+								<p class="empty-state-message">Get your student's information.</p>
+							</div>
+							<div class="empty-state-help alert alert-info"> 
+								<span class="empty-state-action-icon glyphicon glyphicon-chevron-right"></span> Click to proceed, after completing each step.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6" ng-show="ActiveStep===1">
+			<button class="btn btn-primary btn-fab top right" ng-click="NextStep()">
+				<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>
+			<div class="list-group">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+					<label>Basic Information</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>Name</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">First</label>
+									<input type="text" class="form-control" placeholder="Given name" ng-model="firstName">
+								</div>
+								<div class="col-md-6">
+									<label for="">Middle</label>
+									<input type="text" class="form-control" placeholder="Middle name" ng-model="middleName">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Last</label>
+									<input type="text" class="form-control" placeholder="Family name" ng-model="lastName">
+								</div>
+								<div class="col-md-6">
+									<label for="">Suffix</label>
+									<input type="text" class="form-control" placeholder="Jr., III" ng-model="suffix">
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="list-group-item list-group-header">
+						<h5>Academic</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-6">
+										<label for=""> Departments</label>
+										<div class="btn-group btn-group-justified">
+										  <div class="btn-group" ng-repeat="department in Departments | filter:{college:1}" ng-model="department">
+											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===ActiveDept.id}"  ng-class="{active:ActiveDept.id==department.id}" ng-click="SetActiveDept(department)">
+												{{department.id}}
+											</button>
+										  </div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<label for=""> Program</label>
+										<select name="" id="" class="form-control" ng-options="prog.id as prog.name for prog in Programs | filter:{department_id:ActiveDept.id,college:1}" ng-model="program">
+											<option value="">Select Program</option>
+											</option>
+										</select>
+									</div>
+									<div class="col-md-12">
+										<label> Curriculum</label>
+										<select class="form-control" ng-options="curri.id as curri.name for curri in Curriculums | filter:{program_id:program}" ng-model="curriculum">
+											<option value="">Select Curriculum</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-12">
+										<label for="">Previous School</label>
+										<input type="text" class="form-control" placeholder="School Name" ng-model="prevSchool"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="list-group-item list-group-header">
+						<h5>Biological</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for=""> Gender</label>
+									<div class="btn-group btn-group-justified">
+									  <div class="btn-group">
+										<button type="button" class="btn btn-default ng-class:{'btn-primary': gender===('M')}" ng-click="getGender('M')">Male</button>
+									  </div>
+									  <div class="btn-group">
+										<button type="button" class="btn btn-default ng-class:{'btn-primary': gender===('F')}" ng-click="getGender('F')">Female</button>
+									  </div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for=""> Birthday</label>
+									<input type="date" class="form-control" placeholder="mm/dd/yyy" ng-model="birthday"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<label for=""> Birth Place</label>
+									<input type="text" class="form-control" placeholder="Address" ng-model="birthPlace"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="list-group-item list-group-header">
+						<h5>Social</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for=""> Religion</label>
+									<select name="" id="" class="form-control" ng-model="religion" ng-options="religion.name as religion.name for religion in Religions">
+										<option value="">Select Religion</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for=""> Citizenship</label>
+									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
+										<option value="">Select Citizenship</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-6" ng-show="ActiveStep===2">
+			<div class="list-group">
+				<button class="btn btn-primary btn-fab top right" ng-click="NextStep()">
+					<span class="glyphicon glyphicon-chevron-right"></span>
+				</button>
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-warning" ng-click="PrevStep()"><span class="glyphicon glyphicon-chevron-left"></span></button>
+					<button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+					<label>Basic Information</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>Contact Number</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Landline</label>
+									<input type="text" class="form-control" placeholder="Landline Number" ng-model="landline"/>
+								</div>
+								<div class="col-md-6">
+									<label for="">Mobile</label>
+									<input type="text" class="form-control" placeholder="Mobile Number" ng-model="mobile"/>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>Current Address</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Country</label>
+									<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country.id as country.name for country in Countries | filter:{id:'PH'}">
+										<option value="">Select Country</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="">Province</label>
+									<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id: currentCountry}">
+										<option value="">Select Province</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">City</label>
+									<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:currentProvince}">
+										<option value="">Select City</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="">Barangay</label>
+									<input type="text" class="form-control" placeholder="Barangay" ng-model="currentBrgy"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<label for="">Address</label>
+									<input type="text" class="form-control" placeholder="Address" ng-model="currentAddrs"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5 class="pull-left">Permanent Address</h5>
+						<button class="btn btn-default btn-sm pull-right" ng-click="sameAsCurrent()">SAME AS CURRENT</button>
+						<div class="clearfix"></div>
+					</div>
+					<div class="list-group-item">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Country</label>
+									<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country.id as country.name for country in Countries">
+									  <option value="">Select Country</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="">Province</label>
+									<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id:homeCountry}">
+										<option value="">Select Province</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">City</label>
+									<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:homeProvince}">
+										<option value="">Select City</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="">Barangay</label>
+									<input type="text" class="form-control" placeholder="Barangay" ng-model="homeBrgy"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-12">
+									<label for="">Address</label>
+									<input type="text" class="form-control" placeholder="Address" ng-model="homeAddrs"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6" ng-show="ActiveStep===3">
+			<div class="list-group">
+				<button class="btn btn-primary btn-fab top right" ng-click="sendInfo()">
+					<span class="glyphicon glyphicon-ok"></span>
+				</button>
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-warning" ng-click="PrevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">Confirmation</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item">
+						<div class="empty-state"  ng-hide="InquirySaving">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-thumbs-up"></i>
+								</div>
+								<h4>Great job!</h4>
+								<p class="empty-state-message">Review your inquiry summary.</p>
+							</div>
+							<div class="empty-state-help alert alert-info"> 
+								<span class="empty-state-action-icon glyphicon glyphicon-ok"></span> Click to confirm.
+							</div>
+						</div>
+						<div class="empty-state" ng-show="InquirySaving">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-floppy-disk"></i>
+								</div>
+								<h4>Saving...</h4>
+								<p class="empty-state-message">Please wait for awhile.</p>
+							</div>
+							<div class="loader fade in" ng-hide="__MODAL_OPEN"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/ng-template" id="successModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
+			<h1>Success</h1>
+			<p>Student can now proceed to assessment.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
+		</div>
+	</script>
+</div>
