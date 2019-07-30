@@ -8,10 +8,12 @@ define(['model'],function($model){
 			},
 			'data':[
 				{
-					'id':'T1001',
+					'id':1,
 					'section_id':1,
 					'program_id':'BSIT',
 					'subject_id':1,
+					'subject':'PROGFUN',
+					'schedule_code':'T1001',
 					'sy':2019,
 					'sem':1,
 					'details':[
@@ -29,7 +31,7 @@ define(['model'],function($model){
 							'day':'W',
 							'room':'COMLAB1'
 						},
-					]
+					],
 				},
 				{
 					'id':2,
@@ -37,8 +39,9 @@ define(['model'],function($model){
 					'program_id':'BSIT',
 					'schedule_code':'T1002',
 					'subject_id':2,
+					'subject':'COPRO',
 					'sy':2019,
-					'sem':1
+					'sem':1,
 					'details':[
 						{
 							'id':3,
@@ -54,22 +57,39 @@ define(['model'],function($model){
 							'day':'W',
 							'room':'LECROM1'
 						}
-					]
+					],
 				},
 				{
 					'id':3,
 					'section_id':2,
 					'program_id':'BSIT',
-					'schedule_code':'T1001',
+					'schedule_code':'T1003',
 					'subject_id':1,
+					'subject':'PROGFUN',
 					'sy':2019,
-					'sem':1
+					'sem':1,
+					'details':[
+						{
+							'id':11,
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'M',
+							'room':'COMLAB1'
+						},
+						{
+							'id':12,
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'W',
+							'room':'COMLAB1'
+						},
+					],
 				},
 				{
 					'id':4,
 					'section_id':2,
 					'program_id':'BSIT',
-					'schedule_code':'T1002',
+					'schedule_code':'T1004',
 					'subject_id':2,
 					'sy':2019,
 					'sem':1
@@ -78,7 +98,7 @@ define(['model'],function($model){
 					'id':5,
 					'section_id':2,
 					'program_id':'BSCS',
-					'schedule_code':'T1001',
+					'schedule_code':'T1005',
 					'subject_id':2,
 					'sy':2019,
 					'sem':1
@@ -87,10 +107,11 @@ define(['model'],function($model){
 					'id':6,
 					'section_id':1,
 					'program_id':'BSIT',
-					'schedule_code':'T1001',
+					'schedule_code':'T1006',
 					'subject_id':3,
+					'subject':'PROFETH',
 					'sy':2019,
-					'sem':1
+					'sem':1,
 					'details':[
 						{
 							'id':5,
@@ -106,16 +127,17 @@ define(['model'],function($model){
 							'day':'TH',
 							'room':'LECROM2'
 						},
-					]
+					],
 				},
 				{
 					'id':7,
 					'section_id':1,
 					'program_id':'BSIT',
-					'schedule_code':'T1001',
+					'schedule_code':'T1007',
 					'subject_id':4,
+					'subject':'PHISED',
 					'sy':2019,
-					'sem':1
+					'sem':1,
 					'details':[
 						{
 							'id':7,
@@ -131,16 +153,17 @@ define(['model'],function($model){
 							'day':'TH',
 							'room':'LECROM2'
 						}
-					]
+					],
 				},
 				{
 					'id':8,
 					'section_id':1,
 					'program_id':'BSIT',
-					'schedule_code':'T1001',
+					'schedule_code':'T1008',
 					'subject_id':6,
+					'subject':'NSTP',
 					'sy':2019,
-					'sem':1
+					'sem':1,
 					'details':[
 						{
 							'id':9,
@@ -156,7 +179,7 @@ define(['model'],function($model){
 							'day':'W',
 							'room_id':'LECROM3'
 						}
-					]
+					],
 				},
 				
 				

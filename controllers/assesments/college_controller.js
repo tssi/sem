@@ -11,11 +11,21 @@ define(['app','api'], function (app) {
 				{id:5, title:"Discount", description:"Select Discount"},
 				{id:6, title:"Confirmation", description:"Confirmation"}
 			];
+			$scope.Days = [
+				{'id':'M','desc':'Mon'},
+				{'id':'T','desc':'Tues'},
+				{'id':'W','desc':'Wed'},
+				{'id':'TH','desc':'Thu'},
+				{'id':'F','desc':'Fri'},
+				{'id':'S','desc':'Sat'},
+			];
 			$scope.ActiveStep = 1;
-			$scope.ActiveStudent = [];
+			$scope.SubjectsEnrolled = [];
+			$scope.SelectedSchedule = [];
 			getStudents();
+			$scope.Customize = false;
 		};
-		
+		var Schedules = [];
 		
 		$scope.setSelectedStudent = function(stud){
 			$scope.SelectedStudent = stud;
@@ -26,14 +36,27 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep<$scope.Steps.length){
 				$scope.ActiveStep++;
 				if($scope.ActiveStep===2){
+					$scope.ActiveStudent = $scope.SelectedStudent;
 					getSubjects();
 				}
 				if($scope.ActiveStep===3){
+					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
+					console.log($scope.SubjectsEnrolled);
+					$scope.SelectedSubjects = [];
 					getSections();
+					getSchedule();
+				}
+				if($scope.ActiveStep===4){
+					$scope.SelectedSchedule = Schedules;
+					console.log($scope.SelectedSchedule);
+					Schedules = [];
+					
 				}
 			}
 		};
-		
+		$scope.prevStep = function(){
+			$scope.ActiveStep--;
+		};
 		$scope.SelectedSubjects = [];
 		$scope.PickSubjects = function(subject,index){
 			subject['active']=1;
@@ -42,9 +65,28 @@ define(['app','api'], function (app) {
 		
 		$scope.SetSection = function(sec){
 			$scope.ActiveSection = sec;
-			getSchedule();
+			angular.forEach($scope.ClassSchedules, function(sched){
+				if($scope.ActiveSection.id==sched.section_id)
+					Schedules.push(sched);
+			});
+			console.log($scope.SelectedSchedule);
 		};
 		
+		$scope.SetCustomSched = function(sched,detail){
+			var schedule = {};
+			schedule['id']=sched.id;
+			schedule['subject']=sched.subject;
+			schedule['detail'] = detail;
+			Schedules.push(schedule);
+		};
+		
+		$scope.CustomizeSched = function(){
+			$scope.Customize = true;
+			$scope.SelectedSchedule = [];
+		};
+		$scope.Block = function(){
+			$scope.Customize = false;
+		};
 		$scope.SearchStudent = function(){
 			var data = {
 				keyword:$scope.SearchWord,
@@ -80,7 +122,6 @@ define(['app','api'], function (app) {
 		
 		function getSections(){
 			var success = function(response){
-				console.log(response.data);
 				$scope.Sections = response.data;
 			};
 			var error = function(response){
@@ -94,8 +135,15 @@ define(['app','api'], function (app) {
 		
 		function getSchedule(){
 			var success = function(response){
-				console.log(resopnse.data);
-				$scope.ClassSchedules = response.data;
+				var scheds = response.data;
+				$scope.ClassSchedules = [];
+				angular.forEach(scheds, function(sched){
+					angular.forEach($scope.SubjectsEnrolled, function(sub){
+						if(sub.id===sched.subject_id){
+							$scope.ClassSchedules.push(sched);
+						}
+					});
+				});
 			};
 			var error = function(){
 				

@@ -57,7 +57,7 @@ define(['model'],function($model){
 					'description':'Software Engineering',
 					'name':'Software Engineering',
 					'units':4,
-					'year_level_id':'T1',
+					'year_level_id':'T2',
 					'lec':3,
 					'lab':4,
 					'tuition_hours':4
