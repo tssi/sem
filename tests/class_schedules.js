@@ -8,19 +8,26 @@ define(['model'],function($model){
 			},
 			'data':[
 				{
-					'id':1,
+					'id':'T1001',
 					'section_id':1,
 					'program_id':'BSIT',
-					'schedule_code':'T1001',
 					'subject_id':1,
 					'sy':2019,
 					'sem':1,
 					'details':[
 						{
+							'id':1,
 							'start_time':'06:00',
 							'end_time':'09:00',
-							'day':'MW',
-							'room_id':1
+							'day':'M',
+							'room':'COMLAB1'
+						},
+						{
+							'id':2,
+							'start_time':'06:00',
+							'end_time':'09:00',
+							'day':'W',
+							'room':'COMLAB1'
 						},
 					]
 				},
@@ -34,10 +41,18 @@ define(['model'],function($model){
 					'sem':1
 					'details':[
 						{
+							'id':3,
 							'start_time':'09:00',
 							'end_time':'12:00',
-							'day':'MW',
-							'room_id':5
+							'day':'M',
+							'room':'LECROM1'
+						},
+						{
+							'id':4,
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'W',
+							'room':'LECROM1'
 						}
 					]
 				},
@@ -78,11 +93,19 @@ define(['model'],function($model){
 					'sem':1
 					'details':[
 						{
+							'id':5,
 							'start_time':'09:00',
 							'end_time':'12:00',
-							'day':'TTH',
-							'room_id':6
-						}
+							'day':'T',
+							'room':'LECROM2'
+						},
+						{
+							'id':6,
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'TH',
+							'room':'LECROM2'
+						},
 					]
 				},
 				{
@@ -95,10 +118,18 @@ define(['model'],function($model){
 					'sem':1
 					'details':[
 						{
+							'id':7,
 							'start_time':'01:00',
 							'end_time':'03:00',
-							'day':'TTH',
-							'room_id':6
+							'day':'T',
+							'room':'LECROM2'
+						},
+						{
+							'id':8,
+							'start_time':'01:00',
+							'end_time':'03:00',
+							'day':'TH',
+							'room':'LECROM2'
 						}
 					]
 				},
@@ -112,10 +143,18 @@ define(['model'],function($model){
 					'sem':1
 					'details':[
 						{
+							'id':9,
 							'start_time':'03:00',
 							'end_time':'05:00',
-							'day':'MW',
-							'room_id':7
+							'day':'M',
+							'room':'LECROM3'
+						},
+						{
+							'id':10,
+							'start_time':'03:00',
+							'end_time':'05:00',
+							'day':'W',
+							'room_id':'LECROM3'
 						}
 					]
 				},

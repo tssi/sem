@@ -46,7 +46,7 @@ define(['model'],function($model){
 				{
 					'id':7,
 					'name': 'Room 3',
-					'code': 'LECROM2',
+					'code': 'LECROM3',
 					'type':'lec'
 				},
 			]

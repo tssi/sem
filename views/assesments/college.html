@@ -37,7 +37,7 @@
 						<div class="col-md-8">
 							<dd>
 								<dt>Student</dt>
-								<dd>{{SelectedStudent.id}} | {{SelectedStudent.name}}</dd>
+								<dd>{{SelectedStudent.id}} | {{SelectedStudent.name}}</dd><br />
 								<dt>Subjects</dt>
 								<dd ng-repeat="sub in SelectedSubjects">{{sub.name}}</dd>
 							</dd>
@@ -89,18 +89,19 @@
 						<span>{{subject.code}}</span>
 					</div>
 					
-					<div class="list-group-item" ng-repeat="section in Sections | filter:{program_id:SelectedStudent.program_id}"
+					<div class="list-group-item" ng-repeat="section in Sections"
 						ng-show="ActiveStep===3"
 						ng-click="SelectSectionSched(section)">
 						<h4 class="list-group-item-header">{{section.name}}</h4>
 						<span></span>
-						<div class="list-group-item list-group-header" ng-show="ActiveSection">
-							<label>Class Schedule</label>
-						</div>
-						<div class="list-group-item" ng-repeat="sched in ClassSchedules | filter:{section_id:ActiveSection.id}" ng-show="ActiveSection"
-							>
-							<h4 class="list-group-item-header">{{sched.name}}</h4>
-						</div>
+						
+					</div>
+					<div class="list-group-item list-group-header" ng-show="ActiveSection">
+						<label>Class Schedule</label>
+					</div>
+					<div class="list-group-item" ng-repeat="sched in ClassSchedules | filter:{section_id:ActiveSection.id}" ng-show="ActiveSection"
+						>
+						<h4 class="list-group-item-header">{{sched.program_id}}</h4>
 					</div>
 				</div>
 				<div style="padding:10px;" ng-show="ActiveStep===1">

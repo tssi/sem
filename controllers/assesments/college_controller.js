@@ -94,13 +94,14 @@ define(['app','api'], function (app) {
 		
 		function getSchedule(){
 			var success = function(response){
+				console.log(resopnse.data);
 				$scope.ClassSchedules = response.data;
 			};
 			var error = function(){
 				
 			};
 			var data = {
-				
+				program_id: $scope.SelectedStudent.program_id
 			};
 			api.GET('class_schedules', data, success, error);
 		};
