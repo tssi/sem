@@ -40,6 +40,11 @@ define(['app','api'], function (app) {
 			$scope.SelectedSubjects.push(subject);
 		};
 		
+		$scope.SelectSectionSched = function(sec){
+			$scope.ActiveSection = sec;
+			getSchedule();
+		};
+		
 		$scope.SearchStudent = function(){
 			var data = {
 				keyword:$scope.SearchWord,
@@ -69,17 +74,12 @@ define(['app','api'], function (app) {
 			var error = function(response){
 				
 			};
-			var data = {
-				
-			};
-			api.GET('college_subjects',data, success, error);
+		
+			api.GET('college_subjects', success, error);
 		};
 		
 		function getSections(){
 			var success = function(response){
-				
-				console.log(response.data);
-				console.log($scope.SelectedStudent.program_id);
 				$scope.Sections = response.data;
 			};
 			var error = function(response){
@@ -88,8 +88,7 @@ define(['app','api'], function (app) {
 			var data = {
 				program_id : $scope.SelectedStudent.program_id
 			};
-			console.log(data);
-			api.GET('college_sections', data, success, error);
+			api.GET('college_sections', success, error);
 		};
 		
 		function getSchedule(){
@@ -100,7 +99,7 @@ define(['app','api'], function (app) {
 				
 			};
 			var data = {
-				program_id:$scope.SelectedStudent.program_id
+				
 			};
 			api.GET('class_schedules', data, success, error);
 		};
