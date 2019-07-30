@@ -72,7 +72,7 @@
 						<div class="loader"></div>
 					</div>
 					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
-						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
+						<h4 class="list-group-item-heading">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{student.department_id}}</span> | <span>{{student.program_id}}</span></p>
 					</div>

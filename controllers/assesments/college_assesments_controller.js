@@ -307,6 +307,7 @@ define(['app','api'], function (app) {
 				$scope.PaymentSchemes=[];
 				$scope.Discounts=[];
 				api.GET('college_students',function success(response){
+					console.log(response.data);
 					$scope.Students = response.data;
 				});
 				api.GET('year_levels',function success(response){

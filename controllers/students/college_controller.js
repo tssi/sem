@@ -72,8 +72,7 @@ define(['app','api'],function(app){
 		$scope.basicInfo=function(){
 			console.log($scope.department);
 			$scope.Student.program_id=$scope.program;
-			$scope.Student.department_id=$scope.department.educ_level_id;
-			$scope.Student.year_level_id=$scope.department.id;
+			$scope.Student.department_id=$scope.department;
 			$scope.Student.curriculum_id=$scope.curriculum;
 			$scope.Student.first_name=$scope.firstName;
 			$scope.Student.middle_name=$scope.middleName;
@@ -123,7 +122,7 @@ define(['app','api'],function(app){
 		}
 		$scope.sendInfo = function(){
 			$scope.InquirySaving  = true;
-			api.POST('students',$scope.Student,function success(response){
+			api.POST('college_students',$scope.Student,function success(response){
 				$scope.InquirySaving  = false;
 				$scope.clearField();
 				$scope.clearField2();
