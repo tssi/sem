@@ -1,4 +1,4 @@
-<div class="row" ng-controller="AssesmentController" ng-init="index()">
+<div class="row" ng-controller="CollegeAssesmentController" ng-init="init()">
 	<div class="col-md-12">
 		<ul class="nav nav-pills nav-wizard">
 			<li ng-class="{active:ActiveStep===step.id}" ng-repeat="step in Steps" ng-click="updateStep(step)">
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="list-group-canvas">
-				<div class="list-group-item" ng-if="!hasInfo">
+				<div class="list-group-item" ng-show="!SelectedStudent">
 					<div class="empty-state">
 						<div class="well">
 							<div class="empty-state-icon">
@@ -32,56 +32,73 @@
 						</div>
 					</div>
 				</div>
-				<div class="list-group-item" ng-show="hasStudentInfo || hasLevelInfo">
+				<div class="list-group-item" ng-show="SelectedStudent">
 					<div class="row">
 						<div class="col-md-8">
-							<dl>
+							<dd>
 								<dt>Student</dt>
-								<dd>{{ActiveStudent.id}} <span ng-if="ActiveStudent.id">| {{ActiveStudent.name}}</span></dd>
-								<dt ng-if="hasLevelInfo">Level / Section</dt>
-								<dd ng-if="hasLevelInfo">{{ActiveLevel.name}} <span ng-if="ActiveSection.id">- {{ActiveSection.name}}</span></dd>
-								<dt ng-if="hasSchemeInfo">Payment Scheme</dt>
-								<dd ng-if="hasSchemeInfo">{{ActiveScheme.name}}</dd>	
-							</dl>
+								<dd>{{SelectedStudent.id}} | {{SelectedStudent.name}}</dd>
+								<dt>Subjects</dt>
+								<dd ng-repeat="sub in SelectedSubjects">{{sub.name}}</dd>
+							</dd>
 						</div>
-						<div class="col-md-4 amount amount-total">
+						<div class="col-md-4">
 							<label>Total</label>
-							<h3><div class="amount total peso">{{TotalAmount | currency}}</div></h3>
+							<h3>
+								<div class="amount total pes"></div>
+							</h3>
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div class="list-group">
-			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="AssesmentSaving">
+			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="AssesmentSaving||!SelectedStudent">
 				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}"  aria-hidden="true"></span>
 			</button>
-			<div class="list-group" ng-show="ActiveStep===1">
+			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('student')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-					<label>{{Steps[0].title}}</label>
+					<label>{{Steps[ActiveStep-1].title}}</label>
 				</div>
-				<div class="list-group-canvas list-group-search-results">
+				<div class="list-group-canvas ng-class:{'list-group-search-results':ActiveStep===1}">
 					<div class="list-group-item list-group-header">
-						<h5>{{Steps[0].description}}</h5>
+						<h5>{{Steps[ActiveStep-1].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Students.length">
 						<div class="preloader-message">Loading...</div>
 						<div class="loader"></div>
 					</div>
-					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
+					
+					
+					<div  ng-show="ActiveStep===1" class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
 						<h4 class="list-group-item-heading">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{student.department_id}}</span> | <span>{{student.program_id}}</span></p>
 					</div>
+					
+					
+					<div class="list-group-item ng-class:{active:subject.active===1}" 
+						ng-show="ActiveStep===2" 
+						ng-repeat="subject in Subjects"
+						ng-click="PickSubjects(subject,$index)">
+						<h4 class="list-group-item-header">{{subject.description}}</h4>
+						<span>{{subject.code}}</span>
+					</div>
+					
+					<div class="list-group-item" ng-repeat="section in Sections"
+						ng-show="ActiveStep===3"
+						>
+						<h4 class="list-group-item-header">{{section.name}}</h4>
+					</div>
 				</div>
-				<div class="list-group-item list-group-search-box">
-					<div class="input-group"> 
-						<div class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></div>
-						<input type="text" class="form-control" placeholder="Search" ng-model="searchStudent" focus="ActiveStep===1&&!__SIDEBAR_OPEN"/>
-						<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearchStudent()"><span class="glyphicon glyphicon-remove"></span></button></div>
+				<div style="padding:10px;" ng-show="ActiveStep===1">
+					<div class="input-group col-md-12">
+						<input type="text" class="form-control" placeholder="Search by name" 
+						ng-change="SearchStudent()" ng-model="SearchWord" />
 					</div>
 				</div>
 			</div>

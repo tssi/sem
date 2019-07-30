@@ -41,7 +41,7 @@ define(['model'],function($model){
 					'tuition_hours':4
 				},
 				{
-					'id':3,
+					'id':4,
 					'code':'PHISED',
 					'description':'Physical Educations',
 					'name':'P.E.',
@@ -52,7 +52,7 @@ define(['model'],function($model){
 					'tuition_hours':4
 				},
 				{
-					'id':4,
+					'id':5,
 					'code':'SOFTWEN',
 					'description':'Software Engineering',
 					'name':'Software Engineering',
@@ -63,7 +63,7 @@ define(['model'],function($model){
 					'tuition_hours':4
 				},
 				{
-					'id':5,
+					'id':6,
 					'code':'NSTP',
 					'description':'National Service Training Program',
 					'name':'NSTP1',

@@ -9,20 +9,118 @@ define(['model'],function($model){
 			'data':[
 				{
 					'id':1,
-					'section_id':'',
+					'section_id':1,
 					'program_id':'BSIT',
+					'schedule_code':'T1001',
+					'subject_id':1,
+					'sy':2019,
+					'sem':1,
+					'details':[
+						{
+							'start_time':'06:00',
+							'end_time':'09:00',
+							'day':'MW',
+							'room_id':1
+						},
+					]
+				},
+				{
+					'id':2,
+					'section_id':1,
+					'program_id':'BSIT',
+					'schedule_code':'T1002',
+					'subject_id':2,
+					'sy':2019,
+					'sem':1
+					'details':[
+						{
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'MW',
+							'room_id':5
+						}
+					]
+				},
+				{
+					'id':3,
+					'section_id':2,
+					'program_id':'BSIT',
+					'schedule_code':'T1001',
 					'subject_id':1,
 					'sy':2019,
 					'sem':1
 				},
 				{
-					'id':2,
-					'section_id':'',
+					'id':4,
+					'section_id':2,
 					'program_id':'BSIT',
+					'schedule_code':'T1002',
 					'subject_id':2,
 					'sy':2019,
 					'sem':1
 				},
+				{
+					'id':5,
+					'section_id':2,
+					'program_id':'BSCS',
+					'schedule_code':'T1001',
+					'subject_id':2,
+					'sy':2019,
+					'sem':1
+				},
+				{
+					'id':6,
+					'section_id':1,
+					'program_id':'BSIT',
+					'schedule_code':'T1001',
+					'subject_id':3,
+					'sy':2019,
+					'sem':1
+					'details':[
+						{
+							'start_time':'09:00',
+							'end_time':'12:00',
+							'day':'TTH',
+							'room_id':6
+						}
+					]
+				},
+				{
+					'id':7,
+					'section_id':1,
+					'program_id':'BSIT',
+					'schedule_code':'T1001',
+					'subject_id':4,
+					'sy':2019,
+					'sem':1
+					'details':[
+						{
+							'start_time':'01:00',
+							'end_time':'03:00',
+							'day':'TTH',
+							'room_id':6
+						}
+					]
+				},
+				{
+					'id':8,
+					'section_id':1,
+					'program_id':'BSIT',
+					'schedule_code':'T1001',
+					'subject_id':6,
+					'sy':2019,
+					'sem':1
+					'details':[
+						{
+							'start_time':'03:00',
+							'end_time':'05:00',
+							'day':'MW',
+							'room_id':7
+						}
+					]
+				},
+				
+				
 			]
 		}
 	)

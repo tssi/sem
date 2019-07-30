@@ -10,8 +10,8 @@ define(['model'],function($model){
 				{
 					'id':1,
 					'student_id': 1,
-					'subject_id': '1',
-					'schedule_id':''
+					'subject_id': 1,
+					'schedule_id':1
 				}
 			]
 		}
