@@ -3,7 +3,7 @@ define(['model'],function($model){
 	return new $model(
 			{
 			  "meta": {
-				"message": "List of Students",
+				"message": "List of College Students",
 				"limit": 10,
 				"next": null,
 				"prev": null,
@@ -17,12 +17,14 @@ define(['model'],function($model){
 			  "data": [
 				{
 				  "id": 1,
-				  "educ_level_id": "HS",
-				  "year_level_id": "G7",
-				  "first_name": "Juan",
-				  "middle_name": "Masipag",
-				  "last_name": "Dela Cruz",
-				  "suffix_name": "II",
+				  "department_id": "TS",
+				  "program_id": "BSIT",
+				  "year_level_id": "T1",
+				  "curriculum_id": "IT2019",
+				  "first_name": "Bien",
+				  "middle_name": "Chong",
+				  "last_name": "Dee",
+				  "suffix_name": "III",
 				  "gender": "M",
 				  "birthday": "1998-09-29",
 				  "birthplace": "Batangas",
@@ -33,22 +35,25 @@ define(['model'],function($model){
 				  "modified": "2016-02-24 00:29:27"
 				},
 				{
-				  "id": 7,
-				  "educ_level_id": "GS",
-				  "year_level_id": "G5",
-				  "first_name": "Juanita",
-				  "middle_name": "Masipag",
-				  "last_name": "Dela Cruz",
-				  "suffix_name": null,
+				  "id": 2,
+				  "department_id": "TS",
+				  "program_id": "BSCS",
+				  "year_level_id": "T1",
+				  "curriculum_id": "CS2019",
+				  "first_name": "Jose",
+				  "middle_name": "Protacio",
+				  "last_name": "Rizal",
+				  "suffix_name": "Jr",
 				  "gender": "M",
-				  "birthday": "2000-11-11",
+				  "birthday": "1998-09-29",
 				  "birthplace": "Batangas",
 				  "religion": "Iglesia ni Cristo",
 				  "citizenship": "Filipino",
 				  "prev_school": "Basic Education School",
-				  "created": "2016-02-24 00:34:56",
-				  "modified": "2016-02-24 00:34:56"
-				}
+				  "created": "2016-02-24 00:29:27",
+				  "modified": "2016-02-24 00:29:27"
+				},
+				
 			  ]
 			}
 		);
