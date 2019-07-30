@@ -80,6 +80,7 @@ define(['app','api'], function (app) {
 		
 		function getSections(){
 			var success = function(response){
+				console.log(response.data);
 				$scope.Sections = response.data;
 			};
 			var error = function(response){
