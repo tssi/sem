@@ -40,7 +40,7 @@ define(['app','api'], function (app) {
 			$scope.SelectedSubjects.push(subject);
 		};
 		
-		$scope.SelectSectionSched = function(sec){
+		$scope.SetSection = function(sec){
 			$scope.ActiveSection = sec;
 			getSchedule();
 		};
