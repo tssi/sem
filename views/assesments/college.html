@@ -47,26 +47,51 @@
 							</h3>
 						</div>
 					</div>
-					<div class="row" ng-show="SubjectsEnrolled">
-						<table class="table table-bordered table-condensed">
+				</div>
+				<div class="list-group-item list-group-header" ng-show="level2">
+					<label>Subject and Schedule</label>
+				</div>
+				<div class="list-group-item" ng-show="level2">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th>Subjects</th>
+										<th colspan="2">Schedule</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="sub in SubjectsEnrolled">
+										<td>{{sub.code}}</td>
+										<td ng-show="SelectedSchedule" ng-repeat="sched in SelectedSchedule | filter:{subject:sub.code}">{{sched.detail.day}} | {{sched.detail.start_time}} - {{sched.detail.end_time}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item list-group-header">
+					<label>Tuition Breakdown</label>
+				</div>
+				<div class="list-group-item">
+					<div class="row">
+					<div class="col-md-12">
+						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<th>Subjects</th>
-									<th ng-repeat="day in Days">{{day.desc}}</th>
+									<th>Description</th>
+									<th>Amount</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="sub in SubjectsEnrolled">
-									<td>{{sub.code}}</td>
-									<td ng-repeat="day in Days">{{}}</td>
+								<tr>
+									<td></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="row">
-						<span class="badge" ng-repeat="sched in SelectedSchedule">{{sched.detail.day}} | {{sched.detail.start_time}} - {{sched.detail.end_time}}</span>
 					</div>
-					
 				</div>
 			</div>
 		</div>
@@ -97,7 +122,7 @@
 					
 					
 					<div  ng-show="ActiveStep===1" class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
-						<h4 class="list-group-item-heading">{{student.first_name}}, {{student.last_name}}, {{student.middle_name}} {{student.suffix_name}}</h4>
+						<h4 class="list-group-item-heading">{{student.last_name}}, {{student.first_name}}, {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{student.department_id}}</span> | <span>{{student.program_id}}</span></p>
 					</div>
@@ -121,7 +146,7 @@
 					<div class="list-group-item list-group-header" ng-show="Customize">
 						<label>Class Schedule</label>
 					</div>
-					<div class="list-group-item" ng-repeat="sched in ClassSchedules | filter:{program_id:SelectedStudent.program_id}" 
+					<div class="list-group-item" ng-repeat="sched in ClassSchedules" 
 						ng-show="Customize">
 						<h4 class="list-group-item-header">{{sched.schedule_code}}</h4>
 						<span>{{sched.subject}}</span><br />

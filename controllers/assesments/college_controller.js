@@ -20,13 +20,13 @@ define(['app','api'], function (app) {
 				{'id':'S','desc':'Sat'},
 			];
 			$scope.ActiveStep = 1;
-			$scope.SubjectsEnrolled = [];
-			$scope.SelectedSchedule = [];
+			
 			getStudents();
 			$scope.Customize = false;
 		};
 		var Schedules = [];
-		
+		$scope.SubjectsEnrolled = [];
+		$scope.SelectedSchedule = [];
 		$scope.setSelectedStudent = function(stud){
 			$scope.SelectedStudent = stud;
 			$scope.SelectedStudent.name = stud.first_name +' '+ stud.middle_name +' '+ stud.last_name +' '+ stud.suffix_name;
@@ -41,16 +41,14 @@ define(['app','api'], function (app) {
 				}
 				if($scope.ActiveStep===3){
 					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
-					console.log($scope.SubjectsEnrolled);
+					$scope.level2 = true;
 					$scope.SelectedSubjects = [];
 					getSections();
 					getSchedule();
 				}
 				if($scope.ActiveStep===4){
 					$scope.SelectedSchedule = Schedules;
-					console.log($scope.SelectedSchedule);
 					Schedules = [];
-					
 				}
 			}
 		};
@@ -65,11 +63,19 @@ define(['app','api'], function (app) {
 		
 		$scope.SetSection = function(sec){
 			$scope.ActiveSection = sec;
+			var sch = {};
 			angular.forEach($scope.ClassSchedules, function(sched){
-				if($scope.ActiveSection.id==sched.section_id)
-					Schedules.push(sched);
+				if(sec.id==sched.section_id){
+					angular.forEach(sched.details,function(detail){
+						sch['id']=sched.id;
+						sch['subject']=sched.subject;
+						sch['detail']=detail;
+						Schedules.push(sch);
+						sch = {};
+					});
+				}
 			});
-			console.log($scope.SelectedSchedule);
+			console.log(Schedules);
 		};
 		
 		$scope.SetCustomSched = function(sched,detail){
@@ -122,6 +128,7 @@ define(['app','api'], function (app) {
 		
 		function getSections(){
 			var success = function(response){
+				console.log(response.data);
 				$scope.Sections = response.data;
 			};
 			var error = function(response){
@@ -130,7 +137,7 @@ define(['app','api'], function (app) {
 			var data = {
 				program_id : $scope.SelectedStudent.program_id
 			};
-			api.GET('college_sections', success, error);
+			api.GET('college_sections', data, success, error);
 		};
 		
 		function getSchedule(){
