@@ -38,12 +38,14 @@
 							<dd>
 								<dt>Student</dt>
 								<dd>{{SelectedStudent.id}} | {{SelectedStudent.name}}</dd><br />
+								<span>{{SelectedStudent.program_id}}</span> |
+								<span ng-show="ActiveSection">{{ActiveSection.name}}</span>
 							</dd>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-4 amount amount-total">
 							<label>Total</label>
 							<h3>
-								<div class="amount total pes"></div>
+								<div class="amount total peso">{{TotalFee}}</div>
 							</h3>
 						</div>
 					</div>
@@ -56,41 +58,73 @@
 						<div class="col-md-12">
 							<table class="table table-bordered table-condensed">
 								<thead>
-									<tr>
-										<th>Subjects</th>
-										<th colspan="2">Schedule</th>
+									<tr >
+										<th class="text-center">Subjects</th>
+										<th colspan="2" class="text-center">Schedule</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr ng-repeat="sub in SubjectsEnrolled">
 										<td>{{sub.code}}</td>
 										<td ng-show="SelectedSchedule" ng-repeat="sched in SelectedSchedule | filter:{subject:sub.code}">{{sched.detail.day}} | {{sched.detail.start_time}} - {{sched.detail.end_time}}</td>
+										<td ng-show="ActiveStep===3"></td>
+										<td ng-show="ActiveStep===3"></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
-				<div class="list-group-item list-group-header">
+				<div class="list-group-item list-group-header" ng-show="ShowBreakDown">
 					<label>Tuition Breakdown</label>
 				</div>
-				<div class="list-group-item">
+				<div class="list-group-item" ng-show="ShowBreakDown">
 					<div class="row">
-					<div class="col-md-12">
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>Description</th>
-									<th>Amount</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="col-md-12">
+							<table class="table table-condensed table-bordered table-amounts">
+								<thead class="text-center">
+									<tr>
+										<th class="text-center">Description</th>
+										<th class="text-center">Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="fee in Fees">
+										<td>{{fee.desc}}</td>
+										<td class="amount">{{fee.amount}}</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td>Total Due</td>
+										<td><div class="amount peso">{{TotalFee | currency}}</div></td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
 					</div>
+				</div>
+				<div class="list-group-item list-group-header" ng-show="PaymentMethod">
+					<label>Payment Schedule</label>
+				</div>
+				<div class="list-group-item" ng-show="PaymentMethod">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th>Billing Period</th>
+										<th>Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="pm in PaymentMethod">
+										<td>{{pm.desc}}</td>
+										<td class="amount">{{pm.amount | currency}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -157,6 +191,12 @@
 								</span>
 							</button>
 						</span>
+					</div>
+					
+					<div class="list-group-item ng-class:{active:ActivePm.id==pm.id}" ng-show="ActiveStep===4"
+						ng-repeat="pm in Payments" ng-click="SelectPayment(pm)">
+						<h4 class="list-group-item-header">{{pm.desc}}</h4>
+						<span>{{pm.terms}} - time - payment</span>
 					</div>
 				</div>
 				<div style="padding:10px;" ng-show="ActiveStep===1">

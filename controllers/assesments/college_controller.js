@@ -23,10 +23,14 @@ define(['app','api'], function (app) {
 			
 			getStudents();
 			$scope.Customize = false;
+			
 		};
 		var Schedules = [];
 		$scope.SubjectsEnrolled = [];
 		$scope.SelectedSchedule = [];
+		
+		
+		
 		$scope.setSelectedStudent = function(stud){
 			$scope.SelectedStudent = stud;
 			$scope.SelectedStudent.name = stud.first_name +' '+ stud.middle_name +' '+ stud.last_name +' '+ stud.suffix_name;
@@ -38,9 +42,11 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					$scope.ActiveStudent = $scope.SelectedStudent;
 					getSubjects();
+					getFees();
 				}
 				if($scope.ActiveStep===3){
 					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
+					$scope.ComputeTuition();
 					$scope.level2 = true;
 					$scope.SelectedSubjects = [];
 					getSections();
@@ -49,6 +55,10 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===4){
 					$scope.SelectedSchedule = Schedules;
 					Schedules = [];
+					getPaymentScheme();
+				}
+				if($scope.ActiveStep===5){
+					
 				}
 			}
 		};
@@ -62,6 +72,7 @@ define(['app','api'], function (app) {
 		};
 		
 		$scope.SetSection = function(sec){
+			Schedules = [];
 			$scope.ActiveSection = sec;
 			var sch = {};
 			angular.forEach($scope.ClassSchedules, function(sched){
@@ -75,7 +86,6 @@ define(['app','api'], function (app) {
 					});
 				}
 			});
-			console.log(Schedules);
 		};
 		
 		$scope.SetCustomSched = function(sched,detail){
@@ -108,6 +118,43 @@ define(['app','api'], function (app) {
 			};
 			api.GET('college_students',data,success,error);
 		};
+		
+		$scope.ComputeTuition = function(){
+			var SubjectAmount = 0;
+			var total = 0;
+			$scope.TotalFee =0;
+			angular.forEach($scope.SelectedSubjects, function(sub){
+				var SubjectAmount = 400 * sub.tuition_hours;
+				total = total + SubjectAmount;
+			});
+			$scope.Fees.push({'desc':'Tuition fee','amount':total});
+			angular.forEach($scope.Fees, function(fee){
+				$scope.TotalFee = $scope.TotalFee + fee.amount;
+			});
+			$scope.ShowBreakDown = true;
+			console.log($scope.TotalFee);
+		};
+		
+		$scope.SelectPayment = function(pm){
+			$scope.ActivePm = pm;
+			$scope.PaymentMethod = [];
+			if(pm.id==1){
+				$scope.PaymentMethod.push({'Cash Payment':$scope.TotalFee});
+			}
+			if(pm.id==2){
+				var terms = ['Downpayment','Prelim','Midterm','Semi-final','Final'];
+				var devided = $scope.TotalFee/pm.terms;
+				angular.forEach(terms,function(term){
+					var pair = {};
+					pair['desc'] = term;
+					pair['amount']=devided;
+					console.log(pair);
+					$scope.PaymentMethod.push(pair);
+				});
+			}
+			console.log($scope.PaymentMethod);
+		};
+		
 		
 		function getStudents(){
 			api.GET('college_students',function success(response){
@@ -161,17 +208,16 @@ define(['app','api'], function (app) {
 			api.GET('class_schedules', data, success, error);
 		};
 		
-		function getScheduleDetails(){
-			var success = function(response){
-				
-			};
-			var error = function(){
-				
-			};
-			var data = {
-				
-			};
-			api.GET('class_sched_details', data, success, error);
+		function getFees(){
+			api.GET('college_tuitions',function success(response){
+				$scope.Fees = response.data;
+			});
+		};
+		
+		function getPaymentScheme(){
+			api.GET('college_payment_schemes',function success(response){
+				$scope.Payments = response.data;
+			});
 		};
 		
     }]);
