@@ -45,7 +45,8 @@
 						<div class="col-md-4 amount amount-total">
 							<label>Total</label>
 							<h3>
-								<div class="amount total peso">{{TotalFee}}</div>
+								<div class="amount total peso" ng-show="!TotalDiscounted">{{TotalFee}}</div>
+								<div class="amount total peso" ng-show="TotalDiscounted">{{TotalDiscounted}}</div>
 							</h3>
 						</div>
 					</div>
@@ -122,6 +123,11 @@
 										<td>{{pm.desc}}</td>
 										<td class="amount">{{pm.amount | currency}}</td>
 									</tr>
+									<tr>
+										<td>Total</td>
+										<td class="amount" ng-show="!TotalDiscounted">{{TotalFee  | currency}}</td>
+										<td class="amount" ng-show="TotalDiscounted">{{TotalDiscounted | currency}}</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -197,6 +203,12 @@
 						ng-repeat="pm in Payments" ng-click="SelectPayment(pm)">
 						<h4 class="list-group-item-header">{{pm.desc}}</h4>
 						<span>{{pm.terms}} - time - payment</span>
+					</div>
+					<div class="list-group-item ng-class:{active:ActiveDiscount.id==dc.id}" ng-show="ActiveStep===5"
+						ng-repeat="dc in Discounts"
+						ng-click="ChooseDiscount(dc)">
+						<h4 class="list-group-item-header">{{dc.desc}}</h4>
+						<span class="list-group-item-text">{{dc.disc}}% Discount on all fees</span>
 					</div>
 				</div>
 				<div style="padding:10px;" ng-show="ActiveStep===1">

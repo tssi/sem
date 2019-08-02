@@ -19,6 +19,11 @@ define(['app','api'], function (app) {
 				{'id':'F','desc':'Fri'},
 				{'id':'S','desc':'Sat'},
 			];
+			$scope.Discounts = [
+				{'id':1,'disc':25,'desc':'Academic Scholarship'},
+				{'id':2,'disc':50,'desc':'Athletic Scholarship'},
+				{'id':3,'disc':100,'desc':'Full Academic Scholarship'},
+			];
 			$scope.ActiveStep = 1;
 			
 			getStudents();
@@ -59,6 +64,10 @@ define(['app','api'], function (app) {
 				}
 				if($scope.ActiveStep===5){
 					
+				}
+				if($scope.ActiveStep===6){
+					$scope.TotalDiscounted = $scope.Discount;
+					$scope.ComputeBreakdown();
 				}
 			}
 		};
@@ -137,13 +146,21 @@ define(['app','api'], function (app) {
 		
 		$scope.SelectPayment = function(pm){
 			$scope.ActivePm = pm;
+			$scope.ComputeBreakdown();
+		};
+		
+		$scope.ComputeBreakdown = function(){
+			
 			$scope.PaymentMethod = [];
-			if(pm.id==1){
+			if($scope.ActivePm.id==1){
 				$scope.PaymentMethod.push({'Cash Payment':$scope.TotalFee});
 			}
-			if(pm.id==2){
+			if($scope.ActivePm.id==2){
 				var terms = ['Downpayment','Prelim','Midterm','Semi-final','Final'];
-				var devided = $scope.TotalFee/pm.terms;
+				if(!$scope.TotalDiscounted)
+					var devided = $scope.TotalFee/$scope.ActivePm.terms;
+				if($scope.TotalDiscounted)
+					var devided = $scope.TotalDiscounted/$scope.ActivePm.terms;
 				angular.forEach(terms,function(term){
 					var pair = {};
 					pair['desc'] = term;
@@ -152,9 +169,12 @@ define(['app','api'], function (app) {
 					$scope.PaymentMethod.push(pair);
 				});
 			}
-			console.log($scope.PaymentMethod);
 		};
 		
+		$scope.ChooseDiscount = function(dc){
+			$scope.ActiveDiscount = dc;
+			$scope.Discount = $scope.TotalFee - (($scope.TotalFee * dc.disc) / 100);
+		};
 		
 		function getStudents(){
 			api.GET('college_students',function success(response){
