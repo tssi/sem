@@ -28,11 +28,12 @@ define(['app','api'], function (app) {
 			
 			getStudents();
 			$scope.Customize = false;
-			
+		
+			$scope.SubjectsEnrolled = [];
+			$scope.SelectedSchedule = [];
+			$scope.SelectedStudent = [];
 		};
 		var Schedules = [];
-		$scope.SubjectsEnrolled = [];
-		$scope.SelectedSchedule = [];
 		
 		
 		
@@ -42,7 +43,7 @@ define(['app','api'], function (app) {
 		};
 		
 		$scope.nextStep = function(){
-			if($scope.ActiveStep<$scope.Steps.length){
+			if($scope.ActiveStep<=$scope.Steps.length){
 				$scope.ActiveStep++;
 				if($scope.ActiveStep===2){
 					$scope.ActiveStudent = $scope.SelectedStudent;
@@ -68,6 +69,11 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===6){
 					$scope.TotalDiscounted = $scope.Discount;
 					$scope.ComputeBreakdown();
+				}
+				if($scope.ActiveStep===7){
+					$scope.openModal();
+					console.log($scope.ActiveStep);
+					$scope.Reset();
 				}
 			}
 		};
@@ -141,7 +147,6 @@ define(['app','api'], function (app) {
 				$scope.TotalFee = $scope.TotalFee + fee.amount;
 			});
 			$scope.ShowBreakDown = true;
-			console.log($scope.TotalFee);
 		};
 		
 		$scope.SelectPayment = function(pm){
@@ -165,7 +170,6 @@ define(['app','api'], function (app) {
 					var pair = {};
 					pair['desc'] = term;
 					pair['amount']=devided;
-					console.log(pair);
 					$scope.PaymentMethod.push(pair);
 				});
 			}
@@ -174,6 +178,30 @@ define(['app','api'], function (app) {
 		$scope.ChooseDiscount = function(dc){
 			$scope.ActiveDiscount = dc;
 			$scope.Discount = $scope.TotalFee - (($scope.TotalFee * dc.disc) / 100);
+		};
+		
+		$scope.openModal=function(){
+			var modalInstance = $uibModal.open({
+					animation: true,
+					size:'sm',
+					templateUrl: 'successModal.html',
+					controller: 'SuccessModalController',
+				});
+				modalInstance.result.then(function () {
+				  
+				}, function (source) {
+					$scope.init();
+				});
+		}
+		
+		$scope.Reset = function(){
+			$scope.SubjectsEnrolled = '';
+			$scope.SelectedSchedule = '';
+			$scope.ActiveStudent = '';
+			$scope.ActiveStep = 1;
+			$scope.level2 = 0;
+			$scope.ShowBreakDown = 0;
+			$scope.PaymentMethod = 0;
 		};
 		
 		function getStudents(){
@@ -195,7 +223,6 @@ define(['app','api'], function (app) {
 		
 		function getSections(){
 			var success = function(response){
-				console.log(response.data);
 				$scope.Sections = response.data;
 			};
 			var error = function(response){
