@@ -168,12 +168,20 @@
 					</div>
 					
 					
-					<div class="list-group-item ng-class:{active:subject.active===1}" 
+					<div class="list-group-item" 
 						ng-show="ActiveStep===2" 
-						ng-repeat="subject in Subjects | filter:{year_level_id:'T1'}"
-						ng-click="PickSubjects(subject,$index)">
-						<h4 class="list-group-item-header">{{subject.description}}</h4>
-						<span>{{subject.code}}</span>
+						ng-repeat="subject in Subjects | filter:{year_level_id:'T1'}">
+						<div class="checkbox checkbox-lg">
+							<label for="">
+								<input type="checkbox" ng-checked="subject.active==1" />
+								<span class="cr" ng-click="PickSubjects(subject,$index)"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+							</label>
+							<div class="description">
+								<h4 class="list-group-item-heading">{{subject.name}}</h4>
+								<span>{{subject.description}}</span>
+							</div>
+						</div>
+						
 					</div>
 					
 					<div class="list-group-item ng-class:{active:ActiveSection.id===section.id}" ng-repeat="section in Sections | filter:{program_id:SelectedStudent.program_id}"

@@ -77,13 +77,25 @@ define(['app','api'], function (app) {
 				}
 			}
 		};
+		
 		$scope.prevStep = function(){
 			$scope.ActiveStep--;
 		};
+		
 		$scope.SelectedSubjects = [];
 		$scope.PickSubjects = function(subject,index){
-			subject['active']=1;
-			$scope.SelectedSubjects.push(subject);
+			if($scope.SelectedSubjects.indexOf(subject)===-1){
+				subject['active']=1;
+				$scope.SelectedSubjects.push(subject);
+			}
+			else{
+				subject['active']=0;
+				$scope.SelectedSubjects.splice($scope.SelectedSubjects.indexOf(subject), 1);
+			}
+			console.log(subject,index);
+			
+			
+			console.log($scope.SelectedSubjects);	
 		};
 		
 		$scope.SetSection = function(sec){
