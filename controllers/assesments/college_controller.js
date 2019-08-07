@@ -108,11 +108,12 @@ define(['app','api'], function (app) {
 						sch['id']=sched.id;
 						sch['subject']=sched.subject;
 						sch['detail']=detail;
-						Schedules.push(sch);
+						$scope.SelectedSchedule.push(sch);
 						sch = {};
 					});
 				}
 			});
+			console.log($scope.SelectedSchedule);
 		};
 		
 		$scope.SetCustomSched = function(sched,detail){

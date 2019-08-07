@@ -38,8 +38,10 @@
 							<dd>
 								<dt>Student</dt>
 								<dd>{{SelectedStudent.id}} | {{SelectedStudent.name}}</dd><br />
-								<span>{{SelectedStudent.program_id}}</span> |
-								<span ng-show="ActiveSection">{{ActiveSection.name}}</span>
+								<dt>Program</dt>
+								<dd>{{SelectedStudent.program_id}}</dd>
+								<dt>Section</dt>								
+								<dd>{{ActiveSection.name}}</dd>
 							</dd>
 						</div>
 						<div class="col-md-4 amount amount-total">
@@ -60,17 +62,19 @@
 							<table class="table table-bordered table-condensed">
 								<thead>
 									<tr >
-										<th class="text-center">Subjects</th>
-										<th colspan="2" class="text-center">Schedule</th>
+										<th class="text-center col-md-4">Subjects</th>
+										<th class="text-center col-md-8">Schedule</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="sub in SubjectsEnrolled">
-										<td>{{sub.code}}</td>
-										<td ng-show="SelectedSchedule" ng-repeat="sched in SelectedSchedule | filter:{subject:sub.code}">{{sched.detail.day}} | {{sched.detail.start_time}} - {{sched.detail.end_time}}</td>
-										<td ng-show="ActiveStep===3"></td>
-										<td ng-show="ActiveStep===3"></td>
+									<tr ng-repeat="sub in SubjectsEnrolled" >
+										<td rowspan="{{SelectedSchedule.length}}">{{sub.code}}</td>
+										<td>{{SelectedSchedule[0].subject}} {{SelectedSchedule[0].detail.room}} {{SelectedSchedule[0].subject.day}}</td>
+										<td></td>
 									</tr>
+									<!-- <tr ng-repeat="det in SelectedSchedule">
+										<td rowspan="1">{{det.subject}} {{det.detail.room}} {{det.subject.day}}</td>
+									</tr> -->
 								</tbody>
 							</table>
 						</div>
