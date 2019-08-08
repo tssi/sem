@@ -24,14 +24,15 @@ define(['app','api'], function (app) {
 				{'id':2,'disc':50,'desc':'Athletic Scholarship'},
 				{'id':3,'disc':100,'desc':'Full Academic Scholarship'},
 			];
+			//$scope.DemoSubs = ['Programming Fundamentals','English 1','Ethics','P.E.','NSTP1'];
 			$scope.ActiveStep = 1;
-			
 			getStudents();
 			$scope.Customize = false;
 		
 			$scope.SubjectsEnrolled = [];
 			$scope.SelectedSchedule = [];
 			$scope.SelectedStudent = [];
+			$scope.DemoMode = true;
 		};
 		var Schedules = [];
 		
@@ -46,19 +47,20 @@ define(['app','api'], function (app) {
 			if($scope.ActiveStep<=$scope.Steps.length){
 				$scope.ActiveStep++;
 				if($scope.ActiveStep===2){
+					$scope.SelectedSubjects = [];
 					$scope.ActiveStudent = $scope.SelectedStudent;
 					getSubjects();
 					getFees();
 				}
 				if($scope.ActiveStep===3){
 					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
-					$scope.ComputeTuition();
 					$scope.level2 = true;
-					$scope.SelectedSubjects = [];
 					getSections();
 					getSchedule();
 				}
 				if($scope.ActiveStep===4){
+					$scope.ComputeTuition();
+					$scope.ShowBreakDown = true;
 					$scope.SelectedSchedule = Schedules;
 					Schedules = [];
 					getPaymentScheme();
@@ -72,8 +74,8 @@ define(['app','api'], function (app) {
 				}
 				if($scope.ActiveStep===7){
 					$scope.openModal();
-					console.log($scope.ActiveStep);
 					$scope.Reset();
+					$scope.init();
 				}
 			}
 		};
@@ -94,8 +96,22 @@ define(['app','api'], function (app) {
 			}
 			console.log(subject,index);
 			
-			
-			console.log($scope.SelectedSubjects);	
+		};
+		
+		$scope.SelectAll = function(){
+			$scope.Select = true;
+			angular.forEach($scope.Subjects,function(sub){
+				sub['active']=1;
+				$scope.SelectedSubjects.push(sub);
+			});
+		};
+		
+		$scope.UnSelect = function(){
+			$scope.Select = false;
+			$scope.SelectedSubjects = [];
+			angular.forEach($scope.Subjects,function(sub){
+				sub['active']=0;
+			});
 		};
 		
 		$scope.SetSection = function(sec){
@@ -113,7 +129,6 @@ define(['app','api'], function (app) {
 					});
 				}
 			});
-			console.log($scope.SelectedSchedule);
 		};
 		
 		$scope.SetCustomSched = function(sched,detail){
@@ -155,11 +170,14 @@ define(['app','api'], function (app) {
 				var SubjectAmount = 400 * sub.tuition_hours;
 				total = total + SubjectAmount;
 			});
-			$scope.Fees.push({'desc':'Tuition fee','amount':total});
+			var t = $scope.TotalFee.length + 1;
+			$scope.Fees.splice(0, 0, t);
+			$scope.Fees[0]={'desc':'Tuition fee','amount':total};
 			angular.forEach($scope.Fees, function(fee){
 				$scope.TotalFee = $scope.TotalFee + fee.amount;
 			});
-			$scope.ShowBreakDown = true;
+			
+			console.log($scope.Fees);
 		};
 		
 		$scope.SelectPayment = function(pm){
@@ -201,16 +219,25 @@ define(['app','api'], function (app) {
 					controller: 'SuccessModalController',
 				});
 				modalInstance.result.then(function () {
-				  
+					
 				}, function (source) {
 					$scope.init();
 				});
 		}
 		
 		$scope.Reset = function(){
+			$scope.SelectedStudent = '';
 			$scope.SubjectsEnrolled = '';
+			$scope.SelectedSubjects = '';
 			$scope.SelectedSchedule = '';
 			$scope.ActiveStudent = '';
+			$scope.Fees = '';
+			$scope.TotalDiscounted = '';
+			$scope.TotalFee = '';
+			$scope.ActiveSection = '';
+			$scope.ActivePm = '';
+			$scope.ActiveDiscount = '';
+			$scope.Select = false;
 			$scope.ActiveStep = 1;
 			$scope.level2 = 0;
 			$scope.ShowBreakDown = 0;
