@@ -48,7 +48,7 @@
 							<label>Total</label>
 							<h3>
 								<div class="amount total peso" ng-show="!TotalDiscounted">{{TotalFee}}</div>
-								<div class="amount total peso" ng-show="TotalDiscounted">{{TotalDiscounted}}</div>
+								<div class="amount total peso" ng-show="TotalDiscounted">{{TotalDiscounted | currency}}</div>
 							</h3>
 						</div>
 					</div>
@@ -59,7 +59,19 @@
 				<div class="list-group-item" ng-show="level2">
 					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-bordered table-condensed">
+							<table class="table table-bordered table-condensed" ng-show="DemoMode">
+								<tr class="text-center">
+									<th class="col-md-4">Subjects</th>
+									<th class="col-md-8">Schedule</th>
+								</tr>
+								<tbody>
+									<tr ng-repeat="sub in SelectedSubjects">
+										<td>{{sub.name}}</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="table table-bordered table-condensed" ng-show="!DemoMode">
 								<thead>
 									<tr class="text-center">
 										<th class="col-md-4">Subjects</th>
@@ -114,7 +126,7 @@
 								<tbody>
 									<tr ng-repeat="fee in Fees">
 										<td>{{fee.desc}}</td>
-										<td class="amount">{{fee.amount}}</td>
+										<td class="amount">{{fee.amount | currency}}</td>
 									</tr>
 								</tbody>
 								<tfoot>
@@ -147,8 +159,35 @@
 									</tr>
 									<tr>
 										<td>Total</td>
-										<td class="amount" ng-show="!TotalDiscounted">{{TotalFee  | currency}}</td>
-										<td class="amount" ng-show="TotalDiscounted">{{TotalDiscounted | currency}}</td>
+										<td ng-show="!TotalDiscounted"><div class="amount peso">{{TotalFee  | currency}}</div></td>
+										<td ng-show="TotalDiscounted"><div class="amount peso">{{TotalDiscounted | currency}}</div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item list-group-header" ng-show="ActiveDiscount">
+					<label for="">Adjustments</label>
+				</div>
+				<div class="list-group-item" ng-show="ActiveDiscount">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th>Description</th>
+										<th>Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="dc in AppliedDiscounts">
+										<td>{{dc.desc}}</td>
+										<td class="amount">{{dc.amount | currency}}</td>
+									</tr>
+									<tr>
+										<td>Total Adjustment</td>
+										<td><div class="amount peso">{{TotalAppliedDiscount | currency}}</div></td>
 									</tr>
 								</tbody>
 							</table>

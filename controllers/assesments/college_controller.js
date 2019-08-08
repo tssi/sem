@@ -61,6 +61,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===4){
 					$scope.ComputeTuition();
 					$scope.ShowBreakDown = true;
+					$scope.DemoMode = false;
 					$scope.SelectedSchedule = Schedules;
 					Schedules = [];
 					getPaymentScheme();
@@ -69,8 +70,12 @@ define(['app','api'], function (app) {
 					
 				}
 				if($scope.ActiveStep===6){
+					$scope.TotalAppliedDiscount = 0;
 					$scope.TotalDiscounted = $scope.Discount;
 					$scope.ComputeBreakdown();
+					angular.forEach($scope.AppliedDiscounts,function(dc){
+						$scope.TotalAppliedDiscount = $scope.TotalAppliedDiscount + dc.amount;
+					});
 				}
 				if($scope.ActiveStep===7){
 					$scope.openModal();
@@ -186,7 +191,6 @@ define(['app','api'], function (app) {
 		};
 		
 		$scope.ComputeBreakdown = function(){
-			
 			$scope.PaymentMethod = [];
 			if($scope.ActivePm.id==1){
 				$scope.PaymentMethod.push({'Cash Payment':$scope.TotalFee});
@@ -200,15 +204,19 @@ define(['app','api'], function (app) {
 				angular.forEach(terms,function(term){
 					var pair = {};
 					pair['desc'] = term;
-					pair['amount']=devided;
+					pair['amount']= devided;
 					$scope.PaymentMethod.push(pair);
 				});
 			}
 		};
 		
 		$scope.ChooseDiscount = function(dc){
+			$scope.AppliedDiscounts = [];
 			$scope.ActiveDiscount = dc;
-			$scope.Discount = $scope.TotalFee - (($scope.TotalFee * dc.disc) / 100);
+			var disc = ($scope.TotalFee * dc.disc) / 100;
+			$scope.Discount = $scope.TotalFee - disc;
+			$scope.AppliedDiscounts.push({'desc':dc.desc,'amount':disc});
+			console.log($scope.AppliedDiscounts);
 		};
 		
 		$scope.openModal=function(){
