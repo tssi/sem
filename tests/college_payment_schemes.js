@@ -9,14 +9,20 @@ define(['model'],function($model){
 			'data':[
 				{
 					'id':1,
-					'desc':'Cash Payment',
-					'terms':1
+					'desc':'Cash',
+					'terms':1,
+					'discount':500
+					'upon_enrollment':null,
+					'due_date': null
 				},
 				{
 					'id':2,
-					'desc':'Monthly Payment',
+					'desc':'Installment',
 					'terms':5
-				},
+					'discount': 0 ,
+					'upon_enrollment':2500,
+					'due_date': "July-Nov"
+				}
 				
 			]
 		}
