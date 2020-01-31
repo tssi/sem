@@ -11,14 +11,14 @@ define(['model'],function($model){
 					'id':1,
 					'desc':'Cash',
 					'terms':1,
-					'discount':500
+					'discount':500,
 					'upon_enrollment':null,
 					'due_date': null
 				},
 				{
 					'id':2,
 					'desc':'Installment',
-					'terms':5
+					'terms':5,
 					'discount': 0 ,
 					'upon_enrollment':2500,
 					'due_date': "July-Nov"

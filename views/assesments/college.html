@@ -212,9 +212,9 @@
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[ActiveStep-1].description}}</h5>
 						<button class="btn btn-xm btn-success" ng-show="ActiveStep===3&&!Customize"
-							ng-click="CustomizeSched()">customize</button>
+							ng-click="CustomizeSched()">Customize</button>
 						<button class="btn btn-xm btn-success" ng-show="ActiveStep===3&&Customize"
-							ng-click="Block()">block section</button>
+							ng-click="Block()">Block Section</button>
 						<button class="btn btn-xm btn-primary" ng-show="ActiveStep===2&&!Select"
 							ng-click="SelectAll()">Select All</button>
 						<button class="btn btn-xm btn-primary" ng-show="ActiveStep===2&&Select"
@@ -232,7 +232,7 @@
 						<span>{{student.department_id}}</span> | <span>{{student.program_id}}</span></p>
 					</div>
 					
-					
+
 					<div class="list-group-item" 
 						ng-show="ActiveStep===2" 
 						ng-repeat="subject in Subjects | filter:{year_level_id:'T1'}">
@@ -250,27 +250,38 @@
 					</div>
 					
 					<div class="list-group-item ng-class:{active:ActiveSection.id===section.id}" ng-repeat="section in Sections | filter:{program_id:SelectedStudent.program_id}"
-						ng-show="ActiveStep===3&&!Customize"
+						ng-show="ActiveStep===3"
 						ng-click="SetSection(section)">
 						<h4 class="list-group-item-header">{{section.name}}</h4>
 						<span></span>
 						
 					</div>
-					<div class="list-group-item list-group-header" ng-show="Customize">
+					<div class="list-group-item list-group-header" ng-show="ActiveStep===3&&Customize">
 						<label>Class Schedule</label>
 					</div>
 					<div class="list-group-item" ng-repeat="sched in ClassSchedules" 
-						ng-show="Customize">
+						ng-show="ActiveStep===3&&Customize">
 						<h4 class="list-group-item-header">{{sched.schedule_code}}</h4>
 						<span>{{sched.subject}}</span><br />
 						<span ng-repeat="detail in sched.details">
-							<button class="btn btn-default btn-xs" ng-click="SetCustomSched(sched,detail)">
-								<span >
-									{{detail.day}} : {{detail.room}} | {{detail.start_time}}-{{detail.end_time}}
-								</span>
-							</button>
+							<span>{{detail.day}} : {{detail.room}} | {{detail.start_time}}-{{detail.end_time}}</span>
+							
 						</span>
 					</div>
+					
+					<div class="list-group-item ng-class:{active:ActivePm.id==pm.id}" ng-show="ActiveStep===4"
+						ng-repeat="pm in Payments" ng-click="SelectPayment(pm)">
+						<h4 class="list-group-item-header">{{pm.desc}}</h4>
+						<span>{{pm.terms}} - time - payment</span>
+					</div>
+					
+					<div class="list-group-item ng-class:{active:ActiveDiscount.id==dc.id}" ng-show="ActiveStep===5"
+						ng-repeat="dc in Discounts"
+						ng-click="ChooseDiscount(dc)">
+						<h4 class="list-group-item-header">{{dc.desc}}</h4>
+						<span class="list-group-item-text">{{dc.disc}}% Discount on all fees</span>
+					</div>
+					
 					<div class="list-group-item" ng-show="ActiveStep===6">
 						<div class="empty-state" ng-hide="AssesmentSaving">
 							<div class="well">
@@ -295,18 +306,8 @@
 							<div class="loader fade in" ng-hide="__MODAL_OPEN"></div>
 						</div>
 					</div>
-					<div class="list-group-item ng-class:{active:ActivePm.id==pm.id}" ng-show="ActiveStep===4"
-						ng-repeat="pm in Payments" ng-click="SelectPayment(pm)">
-						<h4 class="list-group-item-header">{{pm.desc}}</h4>
-						<span>{{pm.terms}} - time - payment</span>
-					</div>
-					<div class="list-group-item ng-class:{active:ActiveDiscount.id==dc.id}" ng-show="ActiveStep===5"
-						ng-repeat="dc in Discounts"
-						ng-click="ChooseDiscount(dc)">
-						<h4 class="list-group-item-header">{{dc.desc}}</h4>
-						<span class="list-group-item-text">{{dc.disc}}% Discount on all fees</span>
-					</div>
 				</div>
+				
 				
 				<div style="padding:10px;" ng-show="ActiveStep===1">
 					<div class="input-group col-md-12">

@@ -99,7 +99,7 @@ define(['app','api'], function (app) {
 				subject['active']=0;
 				$scope.SelectedSubjects.splice($scope.SelectedSubjects.indexOf(subject), 1);
 			}
-			console.log(subject,index);
+			//console.log(subject,index);
 			
 		};
 		
@@ -182,7 +182,7 @@ define(['app','api'], function (app) {
 				$scope.TotalFee = $scope.TotalFee + fee.amount;
 			});
 			
-			console.log($scope.Fees);
+			//console.log($scope.Fees);
 		};
 		
 		$scope.SelectPayment = function(pm){
@@ -193,7 +193,7 @@ define(['app','api'], function (app) {
 		$scope.ComputeBreakdown = function(){
 			$scope.PaymentMethod = [];
 			if($scope.ActivePm.id==1){
-				$scope.PaymentMethod.push({'Cash Payment':$scope.TotalFee});
+				$scope.PaymentMethod.push({'desc':'Down/Cash Payment','amount':$scope.TotalFee});
 			}
 			if($scope.ActivePm.id==2){
 				var terms = ['Downpayment','Prelim','Midterm','Semi-final','Final'];
@@ -216,7 +216,7 @@ define(['app','api'], function (app) {
 			var disc = ($scope.TotalFee * dc.disc) / 100;
 			$scope.Discount = $scope.TotalFee - disc;
 			$scope.AppliedDiscounts.push({'desc':dc.desc,'amount':disc});
-			console.log($scope.AppliedDiscounts);
+			//console.log($scope.AppliedDiscounts);
 		};
 		
 		$scope.openModal=function(){
@@ -312,6 +312,7 @@ define(['app','api'], function (app) {
 		function getPaymentScheme(){
 			api.GET('college_payment_schemes',function success(response){
 				$scope.Payments = response.data;
+				console.log(response.data);
 			});
 		};
 		
