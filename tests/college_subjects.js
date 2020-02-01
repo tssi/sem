@@ -73,6 +73,39 @@ define(['model'],function($model){
 					'lab':0,
 					'tuition_hours':3
 				},
+				{
+					'id':7,
+					'code':'ABM110',
+					'description':'ABM 110',
+					'name':'ABM 110',
+					'units':3,
+					'year_level_id':'T1',
+					'lec':3,
+					'lab':0,
+					'tuition_hours':3
+				},
+				{
+					'id':8,
+					'code':'ABM114',
+					'description':'ABM 114',
+					'name':'ABM 115',
+					'units':3,
+					'year_level_id':'T2',
+					'lec':3,
+					'lab':0,
+					'tuition_hours':3
+				},
+				{
+					'id':9,
+					'code':'ABM118',
+					'description':'ABM 118',
+					'name':'ABM 118',
+					'units':3,
+					'year_level_id':'T2',
+					'lec':3,
+					'lab':0,
+					'tuition_hours':3
+				},
 			]
 		}
 	)

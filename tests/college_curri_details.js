@@ -96,6 +96,33 @@ define(['model'],function($model){
 				'pre_req':'N',
 				'co_req':'N'
 			},
+			{
+				'id':11,
+				'curriculum_id':'IT2019',
+				'subject_id':7,
+				'year_level_id':'T1',
+				'sem':1,
+				'pre_req':'N',
+				'co_req':'N'
+			},
+			{
+				'id':12,
+				'curriculum_id':'IT2019',
+				'subject_id':8,
+				'year_level_id':'T2',
+				'sem':1,
+				'pre_req':'Y',
+				'co_req':'Y'
+			},
+			{
+				'id':13,
+				'curriculum_id':'IT2019',
+				'subject_id':9,
+				'year_level_id':'T2',
+				'sem':1,
+				'pre_req':'Y',
+				'co_req':'Y'
+			},
 		
 		]
 	)
