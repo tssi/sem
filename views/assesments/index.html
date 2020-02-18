@@ -250,6 +250,95 @@
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[4].title}}</label>
+				</div>
+				<div class="list-group-item list-group-header">
+					<label for="">{{Steps[4].description}}</label>
+				</div>
+				<div class="list-group-item list-group-canvas">
+					<table class="table table-bordered table-condensed text-center">
+						<thead>
+							<tr>
+								<th>Subject</th>
+								<th>Section</th>
+								<th class="col-md-4">Schedule</th>
+								<th class="col-md-1"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>English</td>
+								<td rowspan="4">A11-A</td>
+								<td>MWF | 06:00AM - 08:00AM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+							<tr>
+								<td>Math</td>
+								<td>MWF | 08:00AM - 10:00AM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+							<tr>
+								<td>Filipino</td>
+								<td>MWF | 10:30AM - 11:00AM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+							<tr>
+								<td>Science</td>
+								<td>MWF | 01:00PM - 3:00PM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+							<tr>
+								<td>Accounting</td>
+								<td rowspan="2">A12-B</td>
+								<td>TTH | 08:00AM - 10:00AM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+							<tr>
+								<td>Entrep</td>
+								<td>TTH | 12:00PM - 2:00PM</td>
+								<td>
+									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td>
+									<select name="" id="" class="form-control">
+										<option value="">Select Subject</option>
+										<option value="">English</option>
+										<option value="">Math</option>
+									</select>
+								</td>
+								<td colspan="2">
+									<select name="" id="" class="form-control">
+										<option value="">Select Section</option>
+										<option value="">A11-A MWF | 10:30AM - 11:00AM</option>
+										<option value="">A11-B MWF | 02:00PM - 03:30PM</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===5">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">{{Steps[3].title}}</label>
 				</div>
 				<div class="list-group-canvas">
@@ -286,7 +375,7 @@
 					</div>
 				</div>
 			</div>			
-			<div class="list-group" ng-show="ActiveStep===5">
+			<div class="list-group" ng-show="ActiveStep===6">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('discount')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
@@ -320,7 +409,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="list-group" ng-show="ActiveStep===6">
+			<div class="list-group" ng-show="ActiveStep===7">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>

@@ -42,12 +42,17 @@ define(['app','api'], function (app) {
 					$scope.Discounts=$scope.ActiveTuition.discounts;
 					$scope.TotalAmount=$scope.TotalDue;
 				};
+				
 				if($scope.ActiveStep===4){
+					alert('Sched');
+				};
+				
+				if($scope.ActiveStep===5){
 					$scope.ActiveScheme= $scope.SelectedScheme;
 					$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.variance_amount;
 					$scope.TotalAdjustment = $scope.ActiveScheme.variance_amount;
 				}
-				if($scope.ActiveStep===5){
+				if($scope.ActiveStep===6){
 					$scope.ActiveDiscounts= [];
 					for(var i in $scope.Discounts){
 						var dsc =$scope.Discounts[i];
@@ -90,7 +95,7 @@ define(['app','api'], function (app) {
 					$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.variance_amount;
 					$scope.TotalAmount=$scope.TotalDue + $scope.TotalAdjustment;
 				}
-				if($scope.ActiveStep===6){
+				if($scope.ActiveStep===7){
 					var schedules = [];
 					for(var i in $scope.ActiveScheme.schedule){
 						var sched = $scope.ActiveScheme.schedule[i]
@@ -242,9 +247,10 @@ define(['app','api'], function (app) {
 					{id:1, title:"Student", description:"Select Student"},
 					{id:2, title:"Level", description:"Select Level"},
 					{id:3, title:"Section", description:"Select Section"},
-					{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
-					{id:5, title:"Discount", description:"Select Discount"},
-					{id:6, title:"Confirmation", description:"Confirmation"}
+					{id:4, title:"Subject/Schedule", description:"Select Subject & Schedule"},
+					{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
+					{id:6, title:"Discount", description:"Select Discount"},
+					{id:7, title:"Confirmation", description:"Confirmation"}
 				];
 				
 				$scope.$watch('hasStudentInfo',updateHasInfo);

@@ -253,7 +253,7 @@ define(['app','api'], function (app) {
 		};
 		
 		function getStudents(){
-			api.GET('college_students',function success(response){
+			api.GET('college_inquiries',function success(response){
 				$scope.Students = response.data;
 			});
 		};

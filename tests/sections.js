@@ -102,7 +102,39 @@ define(['model'],function($model){
 				  "modified": "2016-02-24 00:53:25",
 				  "program": "Science",
 				  "year_level": "Grade 10"
-				}
+				},
+				{
+				  "id": 10,
+				  "year_level_id": "GY",
+				  "name": "A11-A",
+				  "program_id": "ABM",
+				  "order": 10,
+				  "created": "2016-02-24 00:53:13",
+				  "modified": "2016-02-24 00:53:25",
+				  "program": "ABM",
+				  "year_level": "Grade 10"
+				},
+				{
+				  "id": 11,
+				  "year_level_id": "GY",
+				  "name": "A11-B",
+				  "program_id": "ABM",
+				  "order": 11,
+				  "created": "2016-02-24 00:53:13",
+				  "modified": "2016-02-24 00:53:25",
+				  "program": "ABM",
+				  "year_level": "Grade 10"
+				},{
+				  "id": 12,
+				  "year_level_id": "GY",
+				  "name": "A11-C",
+				  "program_id": "ABM",
+				  "order": 12,
+				  "created": "2016-02-24 00:53:13",
+				  "modified": "2016-02-24 00:53:25",
+				  "program": "ABM",
+				  "year_level": "Grade 10"
+				},
 			  ]
 			}
 	);

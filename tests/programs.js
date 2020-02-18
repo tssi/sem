@@ -52,6 +52,15 @@ define(['model'],function($model){
 				  "modified": "2016-02-18 07:53:32"
 				},
 				{
+				  "id": "ABM",
+				  "code": "AB",
+				  "name": "ABM",
+				  "description": "Administration and Business Management",
+				  "order": 5,
+				  "created": "2016-02-18 07:52:41",
+				  "modified": "2016-02-18 07:53:32"
+				},
+				{
 				  "id": "BSIT",
 				  "code": "IT",
 				  "name": "BSIT",
@@ -60,7 +69,7 @@ define(['model'],function($model){
 				  'prefix_sched':'T',
 				  'prefix_tuition':'T',
 				  "description": "Bachelor of Science in Information Technology",
-				  "order": 5,
+				  "order": 6,
 				  "created": "2016-02-18 07:52:41",
 				  "modified": "2016-02-18 07:53:32"
 				},
@@ -73,7 +82,7 @@ define(['model'],function($model){
 				  'prefix_tuition':'T',
 				  'college':1,
 				  "description": "Bachelor of Science in Communication Science",
-				  "order": 6,
+				  "order": 7,
 				  "created": "2016-02-18 07:52:41",
 				  "modified": "2016-02-18 07:53:32"
 				},
@@ -86,7 +95,7 @@ define(['model'],function($model){
 				  'prefix_tuition':'L',
 				  'college':1,
 				  "description": "Bachelor of Science in Law",
-				  "order": 7,
+				  "order": 8,
 				  "created": "2016-02-18 07:52:41",
 				  "modified": "2016-02-18 07:53:32"
 				},

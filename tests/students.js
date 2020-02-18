@@ -18,7 +18,7 @@ define(['model'],function($model){
 				{
 				  "id": 1,
 				  "educ_level_id": "HS",
-				  "year_level_id": "G7",
+				  "year_level_id": "GX",
 				  "first_name": "Juan",
 				  "middle_name": "Masipag",
 				  "last_name": "Dela Cruz",

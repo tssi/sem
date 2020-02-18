@@ -122,7 +122,7 @@ define(['app','api'],function(app){
 		}
 		$scope.sendInfo = function(){
 			$scope.InquirySaving  = true;
-			api.POST('college_students',$scope.Student,function success(response){
+			api.POST('college_inquiries',$scope.Student,function success(response){
 				$scope.InquirySaving  = false;
 				$scope.clearField();
 				$scope.clearField2();
