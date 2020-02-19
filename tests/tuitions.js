@@ -20,7 +20,7 @@ define(['model'],function($model){
 				  "name": "G11 Tuition Fee",
 				  "description": "Grade 11 Tuition",
 				  "sy": 2020,
-				  "year_level_id": "GY",
+				  "year_level_id": "GZ",
 				  "program_id": "ABM",
 				  "amount": 18970,
 				  "created": "2016-02-05 01:06:25",

@@ -105,8 +105,9 @@ define(['model'],function($model){
 				},
 				{
 				  "id": 10,
-				  "year_level_id": "GY",
-				  "name": "A11-A",
+				  "year_level_id": "GZ",
+				  "year_level": "Grade 12",
+				  "name": "A12-A",
 				  "program_id": "ABM",
 				  "order": 10,
 				  "created": "2016-02-24 00:53:13",
@@ -116,8 +117,9 @@ define(['model'],function($model){
 				},
 				{
 				  "id": 11,
-				  "year_level_id": "GY",
-				  "name": "A11-B",
+				  "year_level_id": "GZ",
+				  "year_level": "Grade 12",
+				  "name": "A12-B",
 				  "program_id": "ABM",
 				  "order": 11,
 				  "created": "2016-02-24 00:53:13",
@@ -126,8 +128,9 @@ define(['model'],function($model){
 				  "year_level": "Grade 10"
 				},{
 				  "id": 12,
-				  "year_level_id": "GY",
-				  "name": "A11-C",
+				  "year_level_id": "GZ",
+				  "year_level": "Grade 12",
+				  "name": "A12-C",
 				  "program_id": "ABM",
 				  "order": 12,
 				  "created": "2016-02-24 00:53:13",
