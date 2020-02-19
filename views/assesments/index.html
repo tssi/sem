@@ -145,18 +145,19 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="schedule in ActiveScheme.schedule" ng-if="schedule.amount">
+								<tr ng-repeat-start="(index,schedule) in ActiveScheme.schedule" ng-if="schedule.amount && $first">
 									<td>
-										<span ng-if="$first">{{schedule.billing_period}}</span>
-										<span ng-if="!$first">
-											{{schedule.bill_months[0]}}
-										<span ng-if="schedule.bill_months.length>1">
-										- {{schedule.bill_months[schedule.bill_months.length-1]}} 
-										</span>
-										</span>
+										<span ng-if="$first">Upon Enrollment</span>
 									</td>
 									<td>
 										<div class="amount pull-right" ng-class="{peso:$first}">{{schedule.amount | currency}}</div>
+									</td>
+								</tr>
+								<tr ng-repeat-end ng-repeat="bill_month in schedule.bill_months" ng-if="index>0">
+									<td>{{bill_month}}</td>
+
+									<td>
+										<div class="amount pull-right">{{schedule.amount | currency}}</div>
 									</td>
 								</tr>
 							</tbody>
@@ -189,10 +190,15 @@
 						<div class="preloader-message">Loading...</div>
 						<div class="loader"></div>
 					</div>
-					<div class="list-group-item ng-class:{active:student.id===SelectedStudent.id}" ng-repeat="student in Students | filter:filterStudent" ng-click="setSelectedStudent(student)">
+					<div class="list-group-item" ng-class="{active:student.id===SelectedStudent.id,
+					disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:filterStudent" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
+						
 						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{student.id}}</span> | <span>{{student.year_level_id}}</span></p>
+						<span>{{student.sno}}</span> | <span>{{student.year_level}}</span>
+						<span ng-if="student.status=='for-clearance'">| <span class="label label-danger">For Clearance</span> </span>
+						
+					</p>
 					</div>
 				</div>
 				<div class="list-group-item list-group-search-box">
@@ -216,13 +222,15 @@
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel" ng-click="setSelectedLevel(yearLevel)">
+					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
 						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
 						<p class="list-group-item-text">
 						<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
 						<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1">Promoted</span>
+						<!--
 						<span class="label label-success" ng-if="yearLevel.order==ActiveOrder+2">Accelerated</span>
 						</p>
+						-->
 					</div>
 				</div>
 			</div>
@@ -242,100 +250,11 @@
 					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}" ng-click="setSelectedSection(section)">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{section.year_level_id}}</span> | <span>{{section.program}}</span></p>
+						<span>{{section.program}}</span></p>
 					</div>
 				</div>
 			</div>
 			<div class="list-group" ng-show="ActiveStep===4">
-				<div class="list-group-item list-group-header">
-					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-					<label for="">{{Steps[4].title}}</label>
-				</div>
-				<div class="list-group-item list-group-header">
-					<label for="">{{Steps[4].description}}</label>
-				</div>
-				<div class="list-group-item list-group-canvas">
-					<table class="table table-bordered table-condensed text-center">
-						<thead>
-							<tr>
-								<th>Subject</th>
-								<th>Section</th>
-								<th class="col-md-4">Schedule</th>
-								<th class="col-md-1"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>English</td>
-								<td rowspan="4">A11-A</td>
-								<td>MWF | 06:00AM - 08:00AM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-							<tr>
-								<td>Math</td>
-								<td>MWF | 08:00AM - 10:00AM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-							<tr>
-								<td>Filipino</td>
-								<td>MWF | 10:30AM - 11:00AM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-							<tr>
-								<td>Science</td>
-								<td>MWF | 01:00PM - 3:00PM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-							<tr>
-								<td>Accounting</td>
-								<td rowspan="2">A12-B</td>
-								<td>TTH | 08:00AM - 10:00AM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-							<tr>
-								<td>Entrep</td>
-								<td>TTH | 12:00PM - 2:00PM</td>
-								<td>
-									<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td>
-									<select name="" id="" class="form-control">
-										<option value="">Select Subject</option>
-										<option value="">English</option>
-										<option value="">Math</option>
-									</select>
-								</td>
-								<td colspan="2">
-									<select name="" id="" class="form-control">
-										<option value="">Select Section</option>
-										<option value="">A11-A MWF | 10:30AM - 11:00AM</option>
-										<option value="">A11-B MWF | 02:00PM - 03:30PM</option>
-									</select>
-								</td>
-								<td>
-									<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-			<div class="list-group" ng-show="ActiveStep===5">
 				<div class="list-group-item list-group-header">
 					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
@@ -344,6 +263,143 @@
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[3].description}}</h5>
+					</div>
+					<div class="list-group-item">
+						<table class="table table-bordered table-condensed text-center">
+							<thead>
+								<tr>
+									<th>Subject</th>
+									<th>Section</th>
+									<th class="col-md-4">Schedule</th>
+									<th class="col-md-1"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="align-middle">English</td>
+									<td class="align-middle" rowspan="4">A12-A</td>
+									<td class="align-middle">MWF | 06:00AM - 08:00AM</td>
+									<td class="align-middle">
+										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
+								</tr>
+								<tr>
+									<td class="align-middle">Math</td>
+									<td class="align-middle">MWF | 08:00AM - 10:00AM</td>
+									<td class="align-middle">
+										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
+								</tr>
+								<tr>
+									<td class="align-middle">Filipino</td>
+									<td class="align-middle">MWF | 10:30AM - 11:00AM</td>
+									<td class="align-middle">
+										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
+								</tr>
+								<tr class="active">
+									<td class="align-middle">
+										Calculus
+										<span class="label label-danger">Failed Pre-Requiste</span>
+									</td>
+									<td class="align-middle">MWF | 01:00PM - 3:00PM</td>
+									<td class="align-middle">
+										<button class="btn btn-danger" disabled><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item list-group-header">
+						<h5>CUSTOMIZE SCHEDULE</h5>
+					</div>
+					<div class="list-group-item">
+						<div class="row">
+							<div class="col-md-12">
+								<label for="">Subject</label>
+								<select name="" id="" class="form-control" ng-model="CustomSubjSched">
+									<option value="">Select Subject </option>
+									<option value="ALGEB">Algebra </option>
+									<option value="BIO">Biology </option>
+								</select>
+							</div>
+
+						</div>
+						<div class="row"  ng-show="CustomSubjSched=='ALGEB'">
+							<div class="col-md-12">
+								<br>
+								<label for="">Available Schedules</label>
+								<table class="table table-bordered table-condensed text-center">
+									<thead>
+										<tr>
+											<th>Section</th>
+											<th class="col-md-4">Schedule</th>
+											<th class="col-md-1"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>A11-A</td>
+											<td>MWF | 06:00AM - 08:00AM</td>
+											<td>
+												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+											</td>
+										</tr>
+										<tr>
+											<td>A11-B</td>
+											<td>THS | 06:00AM - 08:00AM</td>
+											<td>
+												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row"  ng-show="CustomSubjSched=='BIO'">
+							<div class="col-md-12">
+								<br>
+								<label for="">Available Schedules</label>
+								<table class="table table-bordered table-condensed text-center">
+									<thead>
+										<tr>
+											<th>Section</th>
+											<th class="col-md-4">Schedule</th>
+											<th class="col-md-1"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>A11-F</td>
+											<td>THS | 10:00AM - 11:00AM</td>
+											<td>
+												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+											</td>
+										</tr>
+										<tr>
+											<td>A11-G</td>
+											<td>MWF | 09:00AM - 10:00AM</td>
+											<td>
+												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="list-group" ng-show="ActiveStep===5">
+				<div class="list-group-item list-group-header">
+					<button class="btn btn-xs btn-danger" ng-click="resetField('scheme')"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<label for="">{{Steps[4].title}}</label>
+				</div>
+				<div class="list-group-canvas">
+					<div class="list-group-item list-group-header">
+						<h5>{{Steps[4].description}}</h5>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
@@ -452,6 +508,21 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
+		</div>
+	</script>
+
+	<script type="text/ng-template" id="clearanceModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-danger btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-alert"></span></button>
+			<h1>For Clearance</h1>
+			<ul class="text-left">
+				<li>Registrar</li>
+				<li>Accounting</li>
+				<li>Library</li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-danger btn-block" type="button" ng-click="dismissModal()">OK</button>
 		</div>
 	</script>
 </div>

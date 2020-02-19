@@ -113,29 +113,29 @@ define(['model'],function($model){
 				  "created": "2016-02-24 00:53:13",
 				  "modified": "2016-02-24 00:53:25",
 				  "program": "ABM",
-				  "year_level": "Grade 10"
+				  "year_level": "Grade 12"
 				},
 				{
 				  "id": 11,
 				  "year_level_id": "GZ",
 				  "year_level": "Grade 12",
-				  "name": "A12-B",
-				  "program_id": "ABM",
+				  "name": "S12-B",
+				  "program_id": "STEM",
 				  "order": 11,
 				  "created": "2016-02-24 00:53:13",
 				  "modified": "2016-02-24 00:53:25",
-				  "program": "ABM",
-				  "year_level": "Grade 10"
+				  "program": "STEM",
+				  "year_level": "Grade 12"
 				},{
 				  "id": 12,
 				  "year_level_id": "GZ",
 				  "year_level": "Grade 12",
-				  "name": "A12-C",
-				  "program_id": "ABM",
+				  "name": "H12-C",
+				  "program_id": "HUMSS",
 				  "order": 12,
 				  "created": "2016-02-24 00:53:13",
 				  "modified": "2016-02-24 00:53:25",
-				  "program": "ABM",
+				  "program": "HUMSS",
 				  "year_level": "Grade 10"
 				},
 			  ]

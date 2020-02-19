@@ -44,7 +44,7 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===4){
-					alert('Sched');
+					
 				};
 				
 				if($scope.ActiveStep===5){
@@ -166,6 +166,20 @@ define(['app','api'], function (app) {
 			$scope.updateStep=function(step){
 				$scope.ActiveStep = step.id;
 			};
+
+			$scope.openClearance = function(student){
+				var modalInstance = $uibModal.open({
+						animation: true,
+						size:'sm',
+						templateUrl: 'clearanceModal.html',
+						controller: 'ClearanceModalController',
+					});
+					modalInstance.result.then(function () {
+					  
+					}, function (source) {
+						$scope.init();
+					});
+			}
 			$scope.setSelectedStudent=function(student){
 				$scope.SelectedStudent = {
 										 id:student.id,
@@ -174,7 +188,7 @@ define(['app','api'], function (app) {
 				                         };
 			};
 			$scope.filterYearLevel = function(yearlevel){
-				return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+2;
+				return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+1;
 			}
 			$scope.setSelectedLevel=function(yearLevel){
 				$scope.SelectedLevel = {
@@ -247,7 +261,7 @@ define(['app','api'], function (app) {
 					{id:1, title:"Student", description:"Select Student"},
 					{id:2, title:"Level", description:"Select Level"},
 					{id:3, title:"Section", description:"Select Section"},
-					{id:4, title:"Subject/Schedule", description:"Select Subject & Schedule"},
+					{id:4, title:"Schedule", description:"Select Schedule"},
 					{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
 					{id:6, title:"Discount", description:"Select Discount"},
 					{id:7, title:"Confirmation", description:"Confirmation"}
@@ -364,6 +378,18 @@ define(['app','api'], function (app) {
 		};
     }]);
 	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.dismissModal = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss('ok');
+		};
+	}]);
+
+	app.register.controller('ClearanceModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
 		$rootScope.__MODAL_OPEN = true;
 		$timeout(function(){
 			$scope.ShowButton = true;
