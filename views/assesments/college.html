@@ -211,14 +211,11 @@
 				<div class="list-group-canvas ng-class:{'list-group-search-results':ActiveStep===1}">
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[ActiveStep-1].description}}</h5>
-						<button class="btn btn-xm btn-success" ng-show="ActiveStep===3&&!Customize"
+						<button class="btn btn-xm btn-success" ng-show="ActiveStep===4&&!Customize"
 							ng-click="CustomizeSched()">Customize</button>
-						<button class="btn btn-xm btn-success" ng-show="ActiveStep===3&&Customize"
+						<button class="btn btn-xm btn-success" ng-show="ActiveStep===4&&Customize"
 							ng-click="Block()">Block Section</button>
-						<button class="btn btn-xm btn-primary" ng-show="ActiveStep===2&&!Select"
-							ng-click="SelectAll()">Select All</button>
-						<button class="btn btn-xm btn-primary" ng-show="ActiveStep===2&&Select"
-							ng-click="UnSelect()">Unselect All</button>
+						
 					</div>
 					<div class="list-group-item text-center" ng-if="!Students.length">
 						<div class="preloader-message">Loading...</div>
@@ -232,9 +229,14 @@
 						<span>{{student.department_id}}</span> | <span>{{student.program_id}}</span></p>
 					</div>
 					
+					<div  ng-show="ActiveStep===2" class="list-group-item ng-class:{active:section_type.id===SelectedSectionType.id}" ng-repeat="section_type in SectionTypes" ng-click="setSelectedSectionType(section_type)">
+						<h4 class="list-group-item-heading">{{section_type.name}}</h4>
+						<p class="list-group-item-text">
+						<span>{{section_type.description}}</span></p>
+					</div>
 
 					<div class="list-group-item" 
-						ng-show="ActiveStep===2" 
+						ng-show="ActiveStep===3 && SelectedSectionType.id=='irreg'" 
 						ng-repeat="subject in Subjects | filter:{year_level_id:'T1'}">
 						<div class="checkbox checkbox-lg">
 							<label for="">
@@ -250,17 +252,70 @@
 					</div>
 					
 					<div class="list-group-item ng-class:{active:ActiveSection.id===section.id}" ng-repeat="section in Sections | filter:{program_id:SelectedStudent.program_id}"
-						ng-show="ActiveStep===3"
-						ng-click="SetSection(section)">
-						<h4 class="list-group-item-header">{{section.name}}</h4>
-						<span></span>
+						ng-show="ActiveStep===3  && SelectedSectionType.id=='block'" ng-mouseover="PreviewSection=section.id" ng-mouseout="PreviewSection=null">
+						<h4 class="list-group-item-header pull-left"> {{section.name}}</h4>
 						
+						<button ng-show=" !ActiveSection && PreviewSection!=RevealSectionSched && (PreviewSection==section.id   || !RevealSectionSched )" class="btn btn-default pull-right" ng-click="revealSched(section.id)">VIEW SCHED  </button>
+						
+						<div class=" pull-right" ng-show="!ActiveSection && RevealSectionSched==section.id ">
+						
+						<button  class="btn btn-primary" ng-click="SetSection(section)">SELECT SCHED</button>
+						<button  class="btn btn-default" ng-click="RevealSectionSched=null">HIDE SCHED</button>
+						
+						</div>
+						<div class="clearfix"></div>
+				<table class="table table-condensed table-bordered" ng-show="RevealSectionSched==section.id">
+							<thead>
+								<tr>
+									<th>Subject {{section.id}}</th>
+									<th>Day</th>
+									<th>Time</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>ENG {{section.id}}01</td>
+									<td>M W F</td>
+									<td>10:30AM - 11:00AM</td>
+								</tr>
+								<tr>
+									<td>FIL {{section.id*3}}21</td>
+									<td>M W F</td>
+									<td>12:30PM - 1:00PM</td>
+								</tr>
+							</tbody>
+						</table>
+
 					</div>
-					<div class="list-group-item list-group-header" ng-show="ActiveStep===3&&Customize">
+					<div class="list-group-item list-group-header" ng-show="ActiveStep===4">
+						<table class="table table-condensed table-bordered" >
+							<thead>
+								<tr>
+									<th>Subject </th>
+									<th>Day</th>
+									<th>Time</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>ENG 01</td>
+									<td>M W F</td>
+									<td>10:30AM - 11:00AM</td>
+								</tr>
+								<tr>
+									<td>FIL 21</td>
+									<td>M W F</td>
+									<td>12:30PM - 1:00PM</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					</div>
+					<div class="list-group-item list-group-header" ng-show="ActiveStep===4&&Customize">
 						<label>Class Schedule</label>
 					</div>
 					<div class="list-group-item" ng-repeat="sched in ClassSchedules" 
-						ng-show="ActiveStep===3&&Customize">
+						ng-show="ActiveStep===4&&Customize">
 						<h4 class="list-group-item-header">{{sched.schedule_code}}</h4>
 						<span>{{sched.subject}}</span><br />
 						<span ng-repeat="detail in sched.details">
@@ -269,20 +324,20 @@
 						</span>
 					</div>
 					
-					<div class="list-group-item ng-class:{active:ActivePm.id==pm.id}" ng-show="ActiveStep===4"
+					<div class="list-group-item ng-class:{active:ActivePm.id==pm.id}" ng-show="ActiveStep===5"
 						ng-repeat="pm in Payments" ng-click="SelectPayment(pm)">
 						<h4 class="list-group-item-header">{{pm.desc}}</h4>
 						<span>{{pm.terms}} - time - payment</span>
 					</div>
 					
-					<div class="list-group-item ng-class:{active:ActiveDiscount.id==dc.id}" ng-show="ActiveStep===5"
+					<div class="list-group-item ng-class:{active:ActiveDiscount.id==dc.id}" ng-show="ActiveStep===6"
 						ng-repeat="dc in Discounts"
 						ng-click="ChooseDiscount(dc)">
 						<h4 class="list-group-item-header">{{dc.desc}}</h4>
 						<span class="list-group-item-text">{{dc.disc}}% Discount on all fees</span>
 					</div>
 					
-					<div class="list-group-item" ng-show="ActiveStep===6">
+					<div class="list-group-item" ng-show="ActiveStep===7">
 						<div class="empty-state" ng-hide="AssesmentSaving">
 							<div class="well">
 								<div class="empty-state-icon">

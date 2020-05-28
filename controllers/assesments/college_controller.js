@@ -5,11 +5,17 @@ define(['app','api'], function (app) {
 			$rootScope.__MODULE_NAME = 'College Assesment';
 			$scope.Steps = [
 				{id:1, title:"Student", description:"Select Student"},
-				{id:2, title:"Subjects", description:"Select Subjects"},
+				{id:2, title:"Section", description:"Select Section"},
 				{id:3, title:"Schedule", description:"Select Schedule"},
-				{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
-				{id:5, title:"Discount", description:"Select Discount"},
-				{id:6, title:"Confirmation", description:"Confirmation"}
+				{id:4, title:"Schedule", description:"Select Schedule"},
+				{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
+				{id:6, title:"Discount", description:"Select Discount"},
+				{id:7, title:"Confirmation", description:"Confirmation"}
+			];
+
+			$scope.SectionTypes = [
+				{id:'block', name:"Block", description:"Fixed subject offering"},
+				{id:'irreg', name:"Irregular", description:"Customized subjects"}
 			];
 			$scope.Days = [
 				{'id':'M','desc':'Mon'},
@@ -24,6 +30,7 @@ define(['app','api'], function (app) {
 				{'id':2,'disc':50,'desc':'Athletic Scholarship'},
 				{'id':3,'disc':100,'desc':'Full Academic Scholarship'},
 			];
+
 			//$scope.DemoSubs = ['Programming Fundamentals','English 1','Ethics','P.E.','NSTP1'];
 			$scope.ActiveStep = 1;
 			getStudents();
@@ -42,7 +49,13 @@ define(['app','api'], function (app) {
 			$scope.SelectedStudent = stud;
 			$scope.SelectedStudent.name = stud.first_name +' '+ stud.middle_name +' '+ stud.last_name +' '+ stud.suffix_name;
 		};
-		
+		$scope.setSelectedSectionType =  function(type){
+			$scope.SelectedSectionType =  type;
+		}
+
+		$scope.revealSched = function(section_id){
+			$rootScope.RevealSectionSched = section_id;
+		}
 		$scope.nextStep = function(){
 			if($scope.ActiveStep<=$scope.Steps.length){
 				$scope.ActiveStep++;
@@ -52,13 +65,19 @@ define(['app','api'], function (app) {
 					getSubjects();
 					getFees();
 				}
+
 				if($scope.ActiveStep===3){
-					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
-					$scope.level2 = true;
+					$scope.PreviewSection = null; 
 					getSections();
-					getSchedule();
+					
 				}
 				if($scope.ActiveStep===4){
+					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
+					$scope.level2 = true;
+					
+					getSchedule();
+				}
+				if($scope.ActiveStep===5){
 					$scope.ComputeTuition();
 					$scope.ShowBreakDown = true;
 					$scope.DemoMode = false;
@@ -66,10 +85,10 @@ define(['app','api'], function (app) {
 					Schedules = [];
 					getPaymentScheme();
 				}
-				if($scope.ActiveStep===5){
+				if($scope.ActiveStep===6){
 					
 				}
-				if($scope.ActiveStep===6){
+				if($scope.ActiveStep===7){
 					$scope.TotalAppliedDiscount = 0;
 					$scope.TotalDiscounted = $scope.Discount;
 					$scope.ComputeBreakdown();
