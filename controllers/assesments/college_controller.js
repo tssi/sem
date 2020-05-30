@@ -5,7 +5,7 @@ define(['app','api'], function (app) {
 			$rootScope.__MODULE_NAME = 'College Assesment';
 			$scope.Steps = [
 				{id:1, title:"Student", description:"Select Student"},
-				{id:2, title:"Section", description:"Select Section"},
+				{id:2, title:"Type", description:"Select Type"},
 				{id:3, title:"Schedule", description:"Select Schedule"},
 				{id:4, title:"Schedule", description:"Select Schedule"},
 				{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
@@ -284,8 +284,10 @@ define(['app','api'], function (app) {
 			var error = function(response){
 				
 			};
-		
-			api.GET('college_subjects', success, error);
+			var data = {
+				id:$scope.SelectedStudent.curriculum_id,
+			}
+			api.GET('curriculums', success, error);
 		};
 		
 		function getSections(){

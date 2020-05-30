@@ -1,6 +1,3 @@
 [submodule "app"]
 	path = app
 	url = https://github.com/tssi/app.git
-[submodule "api/plugins/queue"]
-	path = api/plugins/queue
-	url = https://github.com/MSeven/cakephp_queue.git

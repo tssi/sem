@@ -1,10 +1,17 @@
 <?php
 class Section extends AppModel {
 	var $name = 'Section';
-	var $useDbConfig = 'sas';
+	var $displayField = 'name';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
+		'Department' => array(
+			'className' => 'Department',
+			'foreignKey' => 'department_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'YearLevel' => array(
 			'className' => 'YearLevel',
 			'foreignKey' => 'year_level_id',
@@ -20,18 +27,53 @@ class Section extends AppModel {
 			'order' => ''
 		)
 	);
-	function afterFind($results){
-		if(isset($results[0]['Section'])){
-			//pr($results);
-			$BillingPeriod  = &ClassRegistry::init('BillingPeriod');
-			foreach($results as $index=>$result){
-				if(isset($result['Program']['name']))
-					$results[$index]['Section']['program']=$result['Program']['name'];
-				if(isset($result['YearLevel']['name']))
-			$results[$index]['Section']['year_level']=$result['YearLevel']['name'];
-			
-			}
-		}
-		return $results;
-	}
+
+	var $hasMany = array(
+		'Schedule' => array(
+			'className' => 'Schedule',
+			'foreignKey' => 'section_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Student' => array(
+			'className' => 'Student',
+			'foreignKey' => 'section_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
+
+	var $hasAndBelongsToMany = array(
+		'Curriculum' => array(
+			'className' => 'Curriculum',
+			'joinTable' => 'curriculum_sections',
+			'foreignKey' => 'section_id',
+			'associationForeignKey' => 'curriculum_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);
+
 }

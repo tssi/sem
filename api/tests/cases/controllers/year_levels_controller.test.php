@@ -1,5 +1,5 @@
 <?php
-/* YearLevels Test cases generated on: 2016-01-26 06:52:53 : 1453791173*/
+/* YearLevels Test cases generated on: 2020-05-29 10:56:50 : 1590721010*/
 App::import('Controller', 'YearLevels');
 
 class TestYearLevelsController extends YearLevelsController {
@@ -11,7 +11,7 @@ class TestYearLevelsController extends YearLevelsController {
 }
 
 class YearLevelsControllerTestCase extends CakeTestCase {
-	var $fixtures = array('app.year_level', 'app.educ_level', 'app.student', 'app.family');
+	var $fixtures = array('app.year_level', 'app.department', 'app.program', 'app.section', 'app.student', 'app.user', 'app.user_type', 'app.user_grant', 'app.master_module');
 
 	function startTest() {
 		$this->YearLevels =& new TestYearLevelsController();

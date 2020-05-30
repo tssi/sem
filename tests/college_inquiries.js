@@ -51,6 +51,24 @@ define(['model'],function($model){
 				  "created": "2016-02-24 00:29:27",
 				  "modified": "2016-02-24 00:29:27"
 				},
+				{
+				  "id": 3,
+				  "department_id": "SH",
+				  "program_id": "IE",
+				  "curriculum_id": "IE19S1",
+				  "first_name": "Loid",
+				  "middle_name": "A",
+				  "last_name": "Kup",
+				  "suffix_name": "Jr",
+				  "gender": "M",
+				  "birthday": "1998-09-29",
+				  "birthplace": "Batangas",
+				  "religion": "Iglesia ni Cristo",
+				  "citizenship": "Filipino",
+				  "prev_school": "Basic Education School",
+				  "created": "2016-02-24 00:29:27",
+				  "modified": "2016-02-24 00:29:27"
+				},
 				
 			  ]
 			}

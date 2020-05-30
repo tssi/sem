@@ -32,31 +32,22 @@
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
-		Router::connect(
-			"/webhooks/:controller",
-			array("plugin" => "webhooks")
-		);
-	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+	
 	Router::connect(
-			"/:controller/add",
-			array("action" => "add")
-		);
+			"/reports/test_reportcard",
+			array("controller"=>"reports","action"=>"test_reportcard", "[method]" => "GET")
+	);
 	Router::connect(
-			"/:controller",
-			array("action" => "index", "[method]" => "GET")
-		);
+			"/reports/test_spr",
+			array("controller"=>"reports","action"=>"test_spr", "[method]" => "GET")
+	);	
+	App::import('Lib', 'Api.SlugRoute');
+	//Custom API Routing
+	Configure::write('Api.MASTER_ROUTES','educ_levels|system_defaults|modules');
+	App::import('Vendor', 'Api.routes');
+	
 	Router::connect(
-			"/:controller/:id",
-			array("action" => "view", "[method]" => "GET"),
-			array("pass"=>array("id"))
-		);
-	Router::connect(
-			"/:controller",
-			array("action" => "add", "[method]" => "POST")
-		);
-	App::import('Lib', 'routes/SlugRoute');
-	Router::connect(
-			"/:controller",
-			array("action"=>"delete", "[method]" => array("DELETE","PUT")),array('routeClass' => 'SlugRoute')
-		);
-	Router::parseExtensions('json');
+			"/reports/:action",
+			array("controller"=>"reports", "[method]" => "POST")
+	);

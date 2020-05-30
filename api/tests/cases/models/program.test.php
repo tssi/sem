@@ -1,9 +1,9 @@
 <?php
-/* Program Test cases generated on: 2016-02-18 07:47:10 : 1455781630*/
+/* Program Test cases generated on: 2020-05-29 10:51:43 : 1590720703*/
 App::import('Model', 'Program');
 
 class ProgramTestCase extends CakeTestCase {
-	var $fixtures = array('app.program');
+	var $fixtures = array('app.program', 'app.department', 'app.section', 'app.user', 'app.year_level');
 
 	function startTest() {
 		$this->Program =& ClassRegistry::init('Program');

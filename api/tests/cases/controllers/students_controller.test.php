@@ -1,5 +1,5 @@
 <?php
-/* Students Test cases generated on: 2016-01-26 06:52:53 : 1453791173*/
+/* Students Test cases generated on: 2020-05-29 10:56:01 : 1590720961*/
 App::import('Controller', 'Students');
 
 class TestStudentsController extends StudentsController {
@@ -11,7 +11,7 @@ class TestStudentsController extends StudentsController {
 }
 
 class StudentsControllerTestCase extends CakeTestCase {
-	var $fixtures = array('app.student', 'app.educ_level', 'app.year_level', 'app.family');
+	var $fixtures = array('app.student', 'app.year_level', 'app.department', 'app.program', 'app.section', 'app.user', 'app.user_type', 'app.user_grant', 'app.master_module');
 
 	function startTest() {
 		$this->Students =& new TestStudentsController();

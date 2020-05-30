@@ -19,15 +19,15 @@ class YearLevelsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->YearLevel->create();
-			if ($this->YearLevel->saveAll($this->data)) {
+			if ($this->YearLevel->save($this->data)) {
 				$this->Session->setFlash(__('The year level has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The year level could not be saved. Please, try again.', true));
 			}
 		}
-		$educLevels = $this->YearLevel->EducLevel->find('list');
-		$this->set(compact('educLevels'));
+		$departments = $this->YearLevel->Department->find('list');
+		$this->set(compact('departments'));
 	}
 
 	function edit($id = null) {
@@ -46,8 +46,8 @@ class YearLevelsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->YearLevel->read(null, $id);
 		}
-		$educLevels = $this->YearLevel->EducLevel->find('list');
-		$this->set(compact('educLevels'));
+		$departments = $this->YearLevel->Department->find('list');
+		$this->set(compact('departments'));
 	}
 
 	function delete($id = null) {

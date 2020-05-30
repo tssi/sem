@@ -19,15 +19,17 @@ class SectionsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Section->create();
-			if ($this->Section->saveAll($this->data)) {
+			if ($this->Section->save($this->data)) {
 				$this->Session->setFlash(__('The section has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The section could not be saved. Please, try again.', true));
 			}
 		}
+		$departments = $this->Section->Department->find('list');
 		$yearLevels = $this->Section->YearLevel->find('list');
-		$this->set(compact('yearLevels'));
+		$programs = $this->Section->Program->find('list');
+		$this->set(compact('departments', 'yearLevels', 'programs'));
 	}
 
 	function edit($id = null) {
@@ -46,8 +48,10 @@ class SectionsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Section->read(null, $id);
 		}
+		$departments = $this->Section->Department->find('list');
 		$yearLevels = $this->Section->YearLevel->find('list');
-		$this->set(compact('yearLevels'));
+		$programs = $this->Section->Program->find('list');
+		$this->set(compact('departments', 'yearLevels', 'programs'));
 	}
 
 	function delete($id = null) {

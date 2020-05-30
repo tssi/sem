@@ -3,18 +3,20 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('educ_level_id');?></th>
+			<th><?php echo $this->Paginator->sort('sno');?></th>
+			<th><?php echo $this->Paginator->sort('lrn');?></th>
 			<th><?php echo $this->Paginator->sort('year_level_id');?></th>
+			<th><?php echo $this->Paginator->sort('section_id');?></th>
 			<th><?php echo $this->Paginator->sort('first_name');?></th>
 			<th><?php echo $this->Paginator->sort('middle_name');?></th>
 			<th><?php echo $this->Paginator->sort('last_name');?></th>
-			<th><?php echo $this->Paginator->sort('suffix_name');?></th>
+			<th><?php echo $this->Paginator->sort('prefix');?></th>
+			<th><?php echo $this->Paginator->sort('suffix');?></th>
 			<th><?php echo $this->Paginator->sort('gender');?></th>
 			<th><?php echo $this->Paginator->sort('birthday');?></th>
-			<th><?php echo $this->Paginator->sort('birthplace');?></th>
+			<th><?php echo $this->Paginator->sort('nationality');?></th>
 			<th><?php echo $this->Paginator->sort('religion');?></th>
-			<th><?php echo $this->Paginator->sort('citizenship');?></th>
-			<th><?php echo $this->Paginator->sort('prev_school');?></th>
+			<th><?php echo $this->Paginator->sort('status');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -29,22 +31,24 @@
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $student['Student']['id']; ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($student['EducLevel']['name'], array('controller' => 'educ_levels', 'action' => 'view', $student['EducLevel']['id'])); ?>
-		</td>
+		<td><?php echo $student['Student']['sno']; ?>&nbsp;</td>
+		<td><?php echo $student['Student']['lrn']; ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($student['YearLevel']['name'], array('controller' => 'year_levels', 'action' => 'view', $student['YearLevel']['id'])); ?>
+		</td>
+		<td>
+			<?php echo $this->Html->link($student['Section']['name'], array('controller' => 'sections', 'action' => 'view', $student['Section']['id'])); ?>
 		</td>
 		<td><?php echo $student['Student']['first_name']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['middle_name']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['last_name']; ?>&nbsp;</td>
-		<td><?php echo $student['Student']['suffix_name']; ?>&nbsp;</td>
+		<td><?php echo $student['Student']['prefix']; ?>&nbsp;</td>
+		<td><?php echo $student['Student']['suffix']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['gender']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['birthday']; ?>&nbsp;</td>
-		<td><?php echo $student['Student']['birthplace']; ?>&nbsp;</td>
+		<td><?php echo $student['Student']['nationality']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['religion']; ?>&nbsp;</td>
-		<td><?php echo $student['Student']['citizenship']; ?>&nbsp;</td>
-		<td><?php echo $student['Student']['prev_school']; ?>&nbsp;</td>
+		<td><?php echo $student['Student']['status']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['created']; ?>&nbsp;</td>
 		<td><?php echo $student['Student']['modified']; ?>&nbsp;</td>
 		<td class="actions">
@@ -73,11 +77,9 @@
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Student', true), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Educ Levels', true), array('controller' => 'educ_levels', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Educ Level', true), array('controller' => 'educ_levels', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Year Levels', true), array('controller' => 'year_levels', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Year Level', true), array('controller' => 'year_levels', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Families', true), array('controller' => 'families', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Family', true), array('controller' => 'families', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Sections', true), array('controller' => 'sections', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Section', true), array('controller' => 'sections', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

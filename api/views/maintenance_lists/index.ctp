@@ -6,6 +6,7 @@
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('description');?></th>
 			<th><?php echo $this->Paginator->sort('path');?></th>
+			<th><?php echo $this->Paginator->sort('order');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -23,6 +24,7 @@
 		<td><?php echo $maintenanceList['MaintenanceList']['name']; ?>&nbsp;</td>
 		<td><?php echo $maintenanceList['MaintenanceList']['description']; ?>&nbsp;</td>
 		<td><?php echo $maintenanceList['MaintenanceList']['path']; ?>&nbsp;</td>
+		<td><?php echo $maintenanceList['MaintenanceList']['order']; ?>&nbsp;</td>
 		<td><?php echo $maintenanceList['MaintenanceList']['created']; ?>&nbsp;</td>
 		<td><?php echo $maintenanceList['MaintenanceList']['modified']; ?>&nbsp;</td>
 		<td class="actions">

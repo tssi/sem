@@ -1,5 +1,5 @@
 <?php
-/* Sections Test cases generated on: 2016-02-05 04:13:29 : 1454645609*/
+/* Sections Test cases generated on: 2020-05-29 10:55:45 : 1590720945*/
 App::import('Controller', 'Sections');
 
 class TestSectionsController extends SectionsController {
@@ -11,7 +11,7 @@ class TestSectionsController extends SectionsController {
 }
 
 class SectionsControllerTestCase extends CakeTestCase {
-	var $fixtures = array('app.section', 'app.year_level', 'app.educ_level', 'app.student', 'app.address', 'app.contact_number', 'app.family');
+	var $fixtures = array('app.section', 'app.department', 'app.program', 'app.user', 'app.user_type', 'app.user_grant', 'app.master_module', 'app.year_level', 'app.student');
 
 	function startTest() {
 		$this->Sections =& new TestSectionsController();

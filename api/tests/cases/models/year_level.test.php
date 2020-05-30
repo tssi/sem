@@ -1,9 +1,9 @@
 <?php
-/* YearLevel Test cases generated on: 2016-01-26 06:52:46 : 1453791166*/
+/* YearLevel Test cases generated on: 2020-05-29 10:53:18 : 1590720798*/
 App::import('Model', 'YearLevel');
 
 class YearLevelTestCase extends CakeTestCase {
-	var $fixtures = array('app.year_level', 'app.educ_level', 'app.student', 'app.family');
+	var $fixtures = array('app.year_level', 'app.department', 'app.program', 'app.section', 'app.student', 'app.user', 'app.user_type');
 
 	function startTest() {
 		$this->YearLevel =& ClassRegistry::init('YearLevel');

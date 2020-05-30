@@ -19,13 +19,15 @@ class ProgramsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Program->create();
-			if ($this->Program->saveAll($this->data)) {
+			if ($this->Program->save($this->data)) {
 				$this->Session->setFlash(__('The program has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The program could not be saved. Please, try again.', true));
 			}
 		}
+		$departments = $this->Program->Department->find('list');
+		$this->set(compact('departments'));
 	}
 
 	function edit($id = null) {
@@ -44,6 +46,8 @@ class ProgramsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Program->read(null, $id);
 		}
+		$departments = $this->Program->Department->find('list');
+		$this->set(compact('departments'));
 	}
 
 	function delete($id = null) {

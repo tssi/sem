@@ -30,5 +30,6 @@
  * @package       cake
  * @subpackage    cake.app
  */
+ App::import('Model','Api.ApiAppModel');
 class AppModel extends Model {
 }

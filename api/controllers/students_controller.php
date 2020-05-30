@@ -19,16 +19,16 @@ class StudentsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Student->create();
-			if ($this->Student->saveAll($this->data)) {
+			if ($this->Student->save($this->data)) {
 				$this->Session->setFlash(__('The student has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The student could not be saved. Please, try again.', true));
 			}
 		}
-		$educLevels = $this->Student->EducLevel->find('list');
 		$yearLevels = $this->Student->YearLevel->find('list');
-		$this->set(compact('educLevels', 'yearLevels'));
+		$sections = $this->Student->Section->find('list');
+		$this->set(compact('yearLevels', 'sections'));
 	}
 
 	function edit($id = null) {
@@ -47,9 +47,9 @@ class StudentsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Student->read(null, $id);
 		}
-		$educLevels = $this->Student->EducLevel->find('list');
 		$yearLevels = $this->Student->YearLevel->find('list');
-		$this->set(compact('educLevels', 'yearLevels'));
+		$sections = $this->Student->Section->find('list');
+		$this->set(compact('yearLevels', 'sections'));
 	}
 
 	function delete($id = null) {

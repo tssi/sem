@@ -3,9 +3,11 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('code');?></th>
+			<th><?php echo $this->Paginator->sort('department_id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
 			<th><?php echo $this->Paginator->sort('description');?></th>
+			<th><?php echo $this->Paginator->sort('alias');?></th>
+			<th><?php echo $this->Paginator->sort('order');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -20,9 +22,13 @@
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $program['Program']['id']; ?>&nbsp;</td>
-		<td><?php echo $program['Program']['code']; ?>&nbsp;</td>
+		<td>
+			<?php echo $this->Html->link($program['Department']['name'], array('controller' => 'departments', 'action' => 'view', $program['Department']['id'])); ?>
+		</td>
 		<td><?php echo $program['Program']['name']; ?>&nbsp;</td>
 		<td><?php echo $program['Program']['description']; ?>&nbsp;</td>
+		<td><?php echo $program['Program']['alias']; ?>&nbsp;</td>
+		<td><?php echo $program['Program']['order']; ?>&nbsp;</td>
 		<td><?php echo $program['Program']['created']; ?>&nbsp;</td>
 		<td><?php echo $program['Program']['modified']; ?>&nbsp;</td>
 		<td class="actions">
@@ -51,5 +57,9 @@
 	<h3><?php __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Program', true), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Departments', true), array('controller' => 'departments', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Department', true), array('controller' => 'departments', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Sections', true), array('controller' => 'sections', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Section', true), array('controller' => 'sections', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

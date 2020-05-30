@@ -99,6 +99,19 @@ define(['model'],function($model){
 				  "created": "2016-02-18 07:52:41",
 				  "modified": "2016-02-18 07:53:32"
 				},
+				{
+				  "id": "IE",
+				  "code": "IE",
+				  "name": "Industrial Engineering",
+				  'department_id': 'SH',
+				  'prefix_sched':'L',
+				  'prefix_tuition':'L',
+				  'college':1,
+				  "description": "Industrial Engineering",
+				  "order": 8,
+				  "created": "2016-02-18 07:52:41",
+				  "modified": "2016-02-18 07:53:32"
+				},
 			  ]
 			}
 		);

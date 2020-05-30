@@ -6,6 +6,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('description');
 		echo $this->Form->input('path');
+		echo $this->Form->input('order');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

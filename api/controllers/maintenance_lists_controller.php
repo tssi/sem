@@ -2,6 +2,7 @@
 class MaintenanceListsController extends AppController {
 
 	var $name = 'MaintenanceLists';
+
 	function index() {
 		$this->MaintenanceList->recursive = 0;
 		$this->set('maintenanceLists', $this->paginate());
@@ -18,9 +19,7 @@ class MaintenanceListsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->MaintenanceList->create();
-			if ($this->MaintenanceList->saveAll($this->data)) {
-				if(isset($this->data['MaintenanceList']['path']))
-					$this->data['MaintenanceList']['schema'] = $this->MaintenanceList->getSchema($this->data['MaintenanceList']['path']);
+			if ($this->MaintenanceList->save($this->data)) {
 				$this->Session->setFlash(__('The maintenance list has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
