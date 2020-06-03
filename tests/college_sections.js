@@ -16,41 +16,31 @@ define(['model'],function($model){
 			  },
 			  "data": [
 				{
-				  "id": 1,
-				  "program_id": "BSIT",
-				  "name": "BT101P",
-				  "year_level_id": "T1",
-				  "order": 1,
-				  "created": "2016-02-22 04:59:02",
-				  "modified": "2016-02-22 04:59:08",
+					id: 1000,
+					department_id: "SH",
+					year_level_id: "GZ",
+					program_id: "IE",
+					name: "IE-2A",
+					description: "IE-2A",
+					alias: "IE-2A",
+					esp: 2019,
+					order: 1,
+					created: null,
+					modified: null
 				},
 				{
-				  "id": 2,
-				  "program_id": "BSIT",
-				  "name": "BT101A",
-				  "year_level_id": "T1",
-				  "order": 2,
-				  "created": "2016-02-22 04:59:02",
-				  "modified": "2016-02-22 04:59:08",
-				},
-				{
-				  "id": 3,
-				  "program_id": "BSCS",
-				  "name": "BS101A",
-				  "year_level_id": "T1",
-				  "order": 3,
-				  "created": "2016-02-22 04:59:02",
-				  "modified": "2016-02-22 04:59:08"
-				},
-				{
-				  "id": 4,
-				  "program_id": "BSCS",
-				  "name": "BS101P",
-				  "year_level_id": "T1",
-				  "order": 4,
-				  "created": "2016-02-22 04:59:02",
-				  "modified": "2016-02-22 04:59:08"
-				},
+					id: 1001,
+					department_id: "SH",
+					year_level_id: "GZ",
+					program_id: "IE",
+					name: "Try",
+					description: "Try",
+					alias: "Try",
+					esp: 2019,
+					order: 2,
+					created: null,
+					modified: null
+				}
 				
 			  ]
 			}

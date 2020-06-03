@@ -59,52 +59,23 @@
 				<div class="list-group-item" ng-show="level2">
 					<div class="row">
 						<div class="col-md-12">
-							<table class="table table-bordered table-condensed" ng-show="DemoMode">
-								<tr class="text-center">
-									<th class="col-md-4">Subjects</th>
-									<th class="col-md-8">Schedule</th>
-								</tr>
-								<tbody>
-									<tr ng-repeat="sub in SelectedSubjects">
-										<td>{{sub.name}}</td>
-										<td></td>
-									</tr>
-								</tbody>
-							</table>
-							<table class="table table-bordered table-condensed" ng-show="!DemoMode">
+							<table class="table table-condensed table-bordered">
 								<thead>
-									<tr class="text-center">
-										<th class="col-md-4">Subjects</th>
-										<th class="col-md-8">Schedule</th>
+									<tr>
+										<th>Subject</th>
+										<th>Day</th>
+										<th>Time</th>
+										<th>Room</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td rowspan="2">English 1</td>
-										<td>MW | 06:00 - 09:00 AM | Room 1</td>
+									<tr ng-repeat="sched in SelectedSchedule">
+										<td>{{sched.subject}}</td>
+										<td>{{sched.day}}</td>
+										<td>{{sched.start_time}} - {{sched.end_time}}</td>
+										<td>{{sched.room_id}}</td>
 									</tr>
-									<tr>
-										<td>F | 01:00 - 03:00 PM | Room 5</td>
-									</tr>
-									<tr>
-										<td rowspan="2">Programming Fundamentals</td>
-										<td>MW | 09:00 - 12:00 PM | ComLab 1</td>
-									</tr>
-									<tr>
-										<td>S | 06:00 - 09:00 AM | ComLab 1</td>
-									</tr>
-									<tr>
-										<td>Ethics</td>
-										<td>TTH | 01:00 - 03:00 PM | Room 2</td>
-									</tr>
-									<tr>
-										<td>P.E.</td>
-										<td>TTHS | 03:00 - 04:30 PM | Gym</td>
-									</tr>
-									<tr>
-										<td>NSTP1</td>
-										<td>TTHS | 04:30 - 05:00 PM | Room 3</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -259,32 +230,63 @@
 						
 						<div class=" pull-right" ng-show="!ActiveSection && RevealSectionSched==section.id ">
 						
-						<button  class="btn btn-primary" ng-click="SetSection(section)">SELECT SCHED</button>
-						<button  class="btn btn-default" ng-click="RevealSectionSched=null">HIDE SCHED</button>
-						
+							<button  class="btn btn-primary" ng-click="SetSection(section)">SELECT SCHED</button>
+							<button  class="btn btn-default" ng-click="RevealSectionSched=null">HIDE SCHED</button>
+							
 						</div>
 						<div class="clearfix"></div>
-				<table class="table table-condensed table-bordered" ng-show="RevealSectionSched==section.id">
+						<table class="table table-condensed table-bordered" ng-show="RevealSectionSched==section.id&&Schedule_details.length">
 							<thead>
 								<tr>
-									<th>Subject {{section.id}}</th>
+									<th>Subject</th>
 									<th>Day</th>
 									<th>Time</th>
+									<th>Room</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>ENG {{section.id}}01</td>
-									<td>M W F</td>
-									<td>10:30AM - 11:00AM</td>
+								<tr ng-repeat="sched in Schedule_details">
+									<td rowspan="{{sched.span}}">{{sched.subject}}</td>
+									<td>{{sched.day}}</td>
+									<td>{{sched.start_time}} - {{sched.end_time}}</td>
+									<td>{{sched.room_id}}</td>
 								</tr>
-								<tr>
-									<td>FIL {{section.id*3}}21</td>
-									<td>M W F</td>
-									<td>12:30PM - 1:00PM</td>
-								</tr>
+								
 							</tbody>
 						</table>
+
+					</div>
+					<div class="list-group-item" ng-repeat="subject in Subjects"
+						ng-show="ActiveStep===3  && SelectedSectionType.id=='irreg'" ng-mouseover="PreviewSubject=subject.subject_id" ng-mouseout="PreviewSubject=null">
+						<h4 class="list-group-item-header pull-left"> {{subject.code}}</h4>
+						
+						<button ng-show=" !ActiveSubject && PreviewSubject!=ActiveSubject && (PreviewSubject==subject.subject_id   || !ActiveSubject )" class="btn btn-default pull-right" ng-click="revealSched(subject.subject_id)">VIEW SCHED  </button>
+						
+						<div class=" pull-right" ng-show="ActiveSubject && ActiveSubject==subject.subject_id ">
+						
+							<button  class="btn btn-default" ng-click="ActiveSubject=null">HIDE SCHED</button>
+							
+						</div>
+						<div class="clearfix"></div>
+						<!-- <table class="table table-condensed table-bordered" ng-show="SubjectSched==subject.id&&Schedule_details.length">
+							<thead>
+								<tr>
+									<th>Section</th>
+									<th>Day</th>
+									<th>Time</th>
+									<th>Room</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="sched in Schedule_details">
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								
+							</tbody>
+						</table> -->
 
 					</div>
 					<div class="list-group-item list-group-header" ng-show="ActiveStep===4">

@@ -28,5 +28,23 @@ class Schedule extends AppModel {
 			'counterQuery' => ''
 		)
 	);
-
+	function beforeFind($queryData){
+		if($conds=$queryData['conditions']){
+			foreach($conds as $i=>$cond){
+				$keys =  array_keys($cond);
+				$search = 'Schedule.program_id';
+				if(in_array($search,$keys)){
+					$value = $cond[$search];
+					$sections = $this->Section->findByProgramId($value);
+					$section_ids = array_keys($sections);
+					unset($cond[$search]);
+					$cond['Schedule.section_id']=$section_ids;
+				}
+				$conds[$i]=$cond;
+			}
+			//pr($conds); exit();
+			$queryData['conditions']=$conds;
+		}
+		return $queryData;
+	}
 }

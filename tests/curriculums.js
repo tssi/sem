@@ -17,7 +17,6 @@ define(['model'],function($model){
 					esp: 2019.25,
 					created: null,
 					modified: null,
-					section_id: 1000,
 					subjects: [
 						{
 							subject_id: "2UENVIXX",

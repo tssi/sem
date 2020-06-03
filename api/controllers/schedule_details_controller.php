@@ -5,6 +5,7 @@ class ScheduleDetailsController extends AppController {
 
 	function index() {
 		$this->ScheduleDetail->recursive = 0;
+		pr($this->paginate());
 		$this->set('scheduleDetails', $this->paginate());
 	}
 

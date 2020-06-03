@@ -75,5 +75,10 @@ class Section extends AppModel {
 			'insertQuery' => ''
 		)
 	);
-
+	
+	function findByProgramId($prog_id){
+		$sections = $this->find('list',array('conditions'=>array('Section.program_id'=>$prog_id)));
+		//pr($sections); exit();
+		return $sections;
+	}
 }

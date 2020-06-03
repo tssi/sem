@@ -7,7 +7,6 @@ define(['app','api'], function (app) {
 				{id:1, title:"Student", description:"Select Student"},
 				{id:2, title:"Type", description:"Select Type"},
 				{id:3, title:"Schedule", description:"Select Schedule"},
-				{id:4, title:"Schedule", description:"Select Schedule"},
 				{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
 				{id:6, title:"Discount", description:"Select Discount"},
 				{id:7, title:"Confirmation", description:"Confirmation"}
@@ -53,8 +52,13 @@ define(['app','api'], function (app) {
 			$scope.SelectedSectionType =  type;
 		}
 
-		$scope.revealSched = function(section_id){
-			$rootScope.RevealSectionSched = section_id;
+		$scope.revealSched = function(data){
+			if($scope.SelectedSectionType.id=='block'){
+				$scope.RevealSectionSched = data;
+				BuildSchedule(data);
+			}else{
+				$scope.ActiveSubject = data;
+			}
 		}
 		$scope.nextStep = function(){
 			if($scope.ActiveStep<=$scope.Steps.length){
@@ -62,19 +66,24 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					$scope.SelectedSubjects = [];
 					$scope.ActiveStudent = $scope.SelectedStudent;
-					getSubjects();
 					getFees();
 				}
 
 				if($scope.ActiveStep===3){
 					$scope.PreviewSection = null; 
-					getSections();
+					$scope.PreviewSubject = null;
+					if($scope.SelectedSectionType.id=='irreg'){
+						getCurriculum();
+					}else{
+						getSections();
+					}
+					
 					
 				}
 				if($scope.ActiveStep===4){
 					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
 					$scope.level2 = true;
-					
+					$scope.SelectedSchedule = $scope.Schedule_details;
 					getSchedule();
 				}
 				if($scope.ActiveStep===5){
@@ -141,18 +150,8 @@ define(['app','api'], function (app) {
 		$scope.SetSection = function(sec){
 			Schedules = [];
 			$scope.ActiveSection = sec;
-			var sch = {};
-			angular.forEach($scope.ClassSchedules, function(sched){
-				if(sec.id==sched.section_id){
-					angular.forEach(sched.details,function(detail){
-						sch['id']=sched.id;
-						sch['subject']=sched.subject;
-						sch['detail']=detail;
-						$scope.SelectedSchedule.push(sch);
-						sch = {};
-					});
-				}
-			});
+			
+			
 		};
 		
 		$scope.SetCustomSched = function(sched,detail){
@@ -272,27 +271,32 @@ define(['app','api'], function (app) {
 		};
 		
 		function getStudents(){
-			api.GET('college_inquiries',function success(response){
+			api.GET('students',function success(response){
 				$scope.Students = response.data;
 			});
 		};
-		
-		function getSubjects(){
+		function getCurriculum(){
 			var success = function(response){
-				$scope.Subjects = response.data;
-			};
+				var curr = response.data[0];
+				$scope.Subjects = [];
+				angular.forEach(curr.subjects, function(sub){
+					$scope.Subjects.push(sub);
+				});
+				console.log($scope.Subjects);
+			}
 			var error = function(response){
 				
-			};
-			var data = {
-				id:$scope.SelectedStudent.curriculum_id,
 			}
-			api.GET('curriculums', success, error);
-		};
+			var data = {
+				id: $scope.SelectedStudent.curriculum_id
+			}
+			api.GET('curriculums', data, success, error);
+		}
 		
 		function getSections(){
 			var success = function(response){
 				$scope.Sections = response.data;
+				getSchedule();
 			};
 			var error = function(response){
 				
@@ -300,29 +304,68 @@ define(['app','api'], function (app) {
 			var data = {
 				program_id : $scope.SelectedStudent.program_id
 			};
-			api.GET('college_sections', data, success, error);
+			api.GET('sections', data, success, error);
 		};
 		
-		function getSchedule(){
+		function getSchedule(section_id){
 			var success = function(response){
-				var scheds = response.data;
-				$scope.ClassSchedules = [];
-				angular.forEach(scheds, function(sched){
-					angular.forEach($scope.SubjectsEnrolled, function(sub){
-						if(sub.id===sched.subject_id){
-							$scope.ClassSchedules.push(sched);
-						}
-					});
-				});
+				$scope.Schedules = response.data;
 			};
 			var error = function(){
 				
 			};
 			var data = {
-				program_id: $scope.SelectedStudent.program_id
+				section_id: section_id
 			};
-			api.GET('class_schedules', data, success, error);
+			api.GET('schedules', data, success, error);
 		};
+		
+		function getIrregSchedules(){
+			var success = function(response){
+				$scope.Schedules = response.data;
+			}
+			var error = function(response){
+				
+			}
+			var data = {
+				limit:'less',
+			}
+			api.GET('schedule_details',data, success, error);
+		}
+		
+		function BuildSchedule(section_id){
+			var schedule = [];
+			angular.forEach($scope.Schedules, function(sched){
+				if(sched.section_id==section_id){
+					schedule.push(sched);
+				}
+			});
+			$scope.Schedule_details = [];
+			var sched_dtl = [];
+			angular.forEach(schedule[0].schedule_details, function(detail){
+				if(sched_dtl.indexOf(detail.subject_id)===-1){
+					sched_dtl.push(detail.subject_id);
+					$scope.Schedule_details.push(detail);
+				}else{
+					detail.subject='';
+					$scope.Schedule_details.push(detail);
+				}
+				
+			});
+			sched_dtl = [];
+			for(var i in $scope.Schedule_details){
+				var subid = $scope.Schedule_details[i].subject_id;
+				if(sched_dtl.indexOf(subid)===-1){
+					sched_dtl.push(subid);
+					$scope.Schedule_details[i]['span']=1;
+				}else{
+					var span = $scope.Schedule_details[i].span;
+					console.log(span)
+					$scope.Schedule_details[i]['span'] = parseInt(span) +1;
+				}
+			}
+			console.log($scope.Schedule_details);
+		}
 		
 		function getFees(){
 			api.GET('college_tuitions',function success(response){

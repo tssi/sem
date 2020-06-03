@@ -1,6 +1,7 @@
 <?php
 class ScheduleDetail extends AppModel {
 	var $name = 'ScheduleDetail';
+	var $recursive = 2;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(

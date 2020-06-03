@@ -2,7 +2,7 @@
 class SchedulesController extends AppController {
 
 	var $name = 'Schedules';
-	var $uses = array('Schedule','Section','ScheduleDetail');
+	var $uses = array('Schedule','Section','ScheduleDetail','Subject');
 
 	function index() {
 		$this->Schedule->recursive = 0;
@@ -19,10 +19,43 @@ class SchedulesController extends AppController {
 				$section = $this->Section->find('all',array('recursive'=>0,'conditions'=>array('Section.id'=>$sec_id)));
 				$sched['Schedule']['section'] = $section[0]['Section']['name'];
 				$sched_details = array();
-				foreach($details as $d=>$detail){
-					array_push($sched_details,$detail);
+				$subjects = array();
+				foreach($details as $s=>$d){
+					$subject = array();
+					$subject['subject_id'] = $d['subject_id'];
+					$subject['start_time'] = $d['start_time'];
+					$subject['end_time'] = $d['end_time'];
+					$subject['room_id'] = $d['room_id'];
+					$sub = $this->Subject->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>$d['subject_id'])));
+					$subject['subject'] = $sub[0]['Subject']['alias'];
+					$details[$s]['subject'] = $sub[0]['Subject']['alias'];
+					if(!in_array($subject,$subjects)){
+						array_push($subjects,$subject);
+					}
 				}
-				$sched['Schedule']['schedule_details'] = $sched_details;
+				foreach($subjects as $s=>$sub){
+					$days = array();
+					foreach($details as $x=>$d){
+						$cond = array(
+							'subject_id'=>$d['subject_id'],
+							'start_time'=>$d['start_time'],
+							'end_time'=>$d['end_time'],
+							'room_id'=>$d['room_id'],
+							'subject'=>$d['subject'],
+						);
+						if($cond==$sub){
+							array_push($days,$d['day']);
+						}
+						$subjects[$s]['day'] = implode(' ',$days);
+						
+					}
+					
+				}
+				foreach($subjects as $s=>$sub){
+					$subjects[$s]['start_time'] = date("g:i a", strtotime($sub['start_time']));
+					$subjects[$s]['end_time'] = date("g:i a", strtotime($sub['end_time']));
+				}
+				$sched['Schedule']['schedule_details'] = $subjects;
 				$schedules[$i] = $sched;
 			}
 		}
