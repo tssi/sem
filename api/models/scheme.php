@@ -1,6 +1,23 @@
 <?php
 class Scheme extends AppModel {
 	var $name = 'Scheme';
-	var $useDbConfig = 'sfm';
-	var $order = 'Scheme.order';
+	var $displayField = 'name';
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+	var $hasMany = array(
+		'PaymentDueDate' => array(
+			'className' => 'PaymentDueDate',
+			'foreignKey' => 'scheme_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 }

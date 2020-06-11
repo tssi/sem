@@ -74,15 +74,11 @@ define(['app','api'], function (app) {
 					if($scope.SelectedSectionType.id=='block'){
 						$scope.SelectedSchedules = $scope.Schedule_details;
 					}
-					
 					console.log($scope.SelectedSchedules);
 					computeTuition();
+					getSchemes();
 				}
 				if($scope.ActiveStep===5){
-					$scope.ShowBreakDown = true;
-					$scope.DemoMode = false;
-					$scope.SelectedSchedule = Schedules;
-					Schedules = [];
 					getPaymentScheme();
 				}
 				if($scope.ActiveStep===6){
@@ -204,6 +200,11 @@ define(['app','api'], function (app) {
 				$scope.RevealSectionSched = null;
 			}
 		}
+		
+		$scope.SetActiveScheme = function(scheme){
+			$scope.ActiveScheme = scheme;
+		};
+		
 		function getStudents(){
 			api.GET('students',function success(response){
 				$scope.Students = response.data;
@@ -353,7 +354,26 @@ define(['app','api'], function (app) {
 			});
 			
 		}
-		
+		function getSchemes(){
+			var data = {
+				sy:2020
+			}
+			
+			return api.GET('schemes',data,function success(response){
+				$scope.Schemes = [];
+				angular.forEach(response.data, function(scheme){
+					switch(scheme.id){
+						case 'CASH':
+							scheme['period'] = 'Upon Enrollment'; break;
+						case 'SEMI':
+							scheme['period'] = 'Upon Enrollment & Mid-year/semester'; break;
+						case 'MONT':
+							scheme['period'] = 'Monthly'; break;
+					}
+					$scope.Schemes.push(scheme);
+				});
+			});
+		}
     }]);
 	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
 		$rootScope.__MODAL_OPEN = true;

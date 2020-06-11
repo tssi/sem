@@ -1,9 +1,9 @@
 <?php
-/* Scheme Test cases generated on: 2016-02-05 01:00:16 : 1454634016*/
+/* Scheme Test cases generated on: 2020-06-11 11:35:47 : 1591846547*/
 App::import('Model', 'Scheme');
 
 class SchemeTestCase extends CakeTestCase {
-	var $fixtures = array('app.scheme');
+	var $fixtures = array('app.scheme', 'app.payment_due_date');
 
 	function startTest() {
 		$this->Scheme =& ClassRegistry::init('Scheme');

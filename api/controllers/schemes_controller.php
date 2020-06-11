@@ -19,7 +19,7 @@ class SchemesController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Scheme->create();
-			if ($this->Scheme->saveAll($this->data)) {
+			if ($this->Scheme->save($this->data)) {
 				$this->Session->setFlash(__('The scheme has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
