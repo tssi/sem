@@ -28,6 +28,7 @@ class SchedulesController extends AppController {
 					$subject['room_id'] = $d['room_id'];
 					$sub = $this->Subject->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>$d['subject_id'])));
 					$subject['subject'] = $sub[0]['Subject']['alias'];
+					$subject['units'] = $sub[0]['Subject']['units'];
 					$details[$s]['subject'] = $sub[0]['Subject']['alias'];
 					if(!in_array($subject,$subjects)){
 						array_push($subjects,$subject);

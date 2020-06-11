@@ -53,27 +53,37 @@
 						</div>
 					</div>
 				</div>
-				<div class="list-group-item list-group-header" ng-show="level2">
+				<div class="list-group-item list-group-header" ng-show="SelectedSchedules.length">
 					<label>Subject and Schedule</label>
 				</div>
-				<div class="list-group-item" ng-show="level2">
+				<div class="list-group-item" ng-show="SelectedSchedules.length">
 					<div class="row">
 						<div class="col-md-12">
 							<table class="table table-condensed table-bordered">
 								<thead>
 									<tr>
 										<th>Subject</th>
+										<th ng-show="SelectedSectionType.id=='irreg'">Section</th>
 										<th>Day</th>
 										<th>Time</th>
 										<th>Room</th>
+										<th class="col-md-1">Units</th>
+										<th class="col-md-1" ng-hide="ActiveStep>3"></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="sched in SelectedSchedule">
+									<tr ng-repeat="sched in SelectedSchedules">
 										<td>{{sched.subject}}</td>
+										<td ng-show="SelectedSectionType.id=='irreg'">{{sched.section}}</td>
 										<td>{{sched.day}}</td>
 										<td>{{sched.start_time}} - {{sched.end_time}}</td>
 										<td>{{sched.room_id}}</td>
+										<td>{{sched.units}}</td>
+										<td ng-hide="ActiveStep>3">
+											<button class="btn btn-danger" ng-click="RemoveSched(sched)">
+												<span class="glyphicon glyphicon-minus"></span>
+											</button>
+										</td>
 									</tr>
 									
 								</tbody>
@@ -81,10 +91,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="list-group-item list-group-header" ng-show="ShowBreakDown">
+				<div class="list-group-item list-group-header" ng-show="!ComputingTuition">
 					<label>Tuition Breakdown</label>
 				</div>
-				<div class="list-group-item" ng-show="ShowBreakDown">
+				<div class="list-group-item" ng-show="ActiveStep>3">
 					<div class="row">
 						<div class="col-md-12">
 							<table class="table table-condensed table-bordered table-amounts">
@@ -95,8 +105,8 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="fee in Fees">
-										<td>{{fee.desc}}</td>
+									<tr ng-repeat="fee in Tuition.fee_breakdowns">
+										<td>{{fee.description}}</td>
 										<td class="amount">{{fee.amount | currency}}</td>
 									</tr>
 								</tbody>
@@ -224,14 +234,14 @@
 					
 					<div class="list-group-item ng-class:{active:ActiveSection.id===section.id}" ng-repeat="section in Sections | filter:{program_id:SelectedStudent.program_id}"
 						ng-show="ActiveStep===3  && SelectedSectionType.id=='block'" ng-mouseover="PreviewSection=section.id" ng-mouseout="PreviewSection=null">
-						<h4 class="list-group-item-header pull-left"> {{section.name}}</h4>
+						<h4 class="list-group-item-heading pull-left"> {{section.name}}</h4>
 						
 						<button ng-show=" !ActiveSection && PreviewSection!=RevealSectionSched && (PreviewSection==section.id   || !RevealSectionSched )" class="btn btn-default pull-right" ng-click="revealSched(section.id)">VIEW SCHED  </button>
 						
 						<div class=" pull-right" ng-show="!ActiveSection && RevealSectionSched==section.id ">
 						
 							<button  class="btn btn-primary" ng-click="SetSection(section)">SELECT SCHED</button>
-							<button  class="btn btn-default" ng-click="RevealSectionSched=null">HIDE SCHED</button>
+							<button  class="btn btn-default" ng-click="HideSched()">HIDE SCHED</button>
 							
 						</div>
 						<div class="clearfix"></div>
@@ -256,63 +266,48 @@
 						</table>
 
 					</div>
-					<div class="list-group-item" ng-repeat="subject in Subjects"
+					<div class="list-group-item" ng-repeat="subject in Subjects | orderBy:'order'"
 						ng-show="ActiveStep===3  && SelectedSectionType.id=='irreg'" ng-mouseover="PreviewSubject=subject.subject_id" ng-mouseout="PreviewSubject=null">
-						<h4 class="list-group-item-header pull-left"> {{subject.code}}</h4>
+						<h4 class="list-group-item-heading pull-left"> {{subject.code}} </h4> 
 						
 						<button ng-show=" !ActiveSubject && PreviewSubject!=ActiveSubject && (PreviewSubject==subject.subject_id   || !ActiveSubject )" class="btn btn-default pull-right" ng-click="revealSched(subject.subject_id)">VIEW SCHED  </button>
 						
+						
 						<div class=" pull-right" ng-show="ActiveSubject && ActiveSubject==subject.subject_id ">
 						
-							<button  class="btn btn-default" ng-click="ActiveSubject=null">HIDE SCHED</button>
+							<button  class="btn btn-default" ng-click="HideSched()">HIDE SCHED</button>
 							
 						</div>
+						<br /><h5>{{subject.name}}</h5>
 						<div class="clearfix"></div>
-						<!-- <table class="table table-condensed table-bordered" ng-show="SubjectSched==subject.id&&Schedule_details.length">
+						<table class="table table-condensed table-bordered" ng-show="ActiveSubject==subject.subject_id&&IrregSched.length">
 							<thead>
 								<tr>
 									<th>Section</th>
 									<th>Day</th>
 									<th>Time</th>
 									<th>Room</th>
+									<th class="col-md-1"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="sched in Schedule_details">
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+								<tr ng-repeat="sched in IrregSched | filter:{subject_id:ActiveSubject}" ng-class="{'bg-primary':ActiveRow==sched}">
+									<td>{{sched.section}}</td>
+									<td>{{sched.day}}</td>
+									<td>{{sched.start_time}} - {{sched.end_time}}</td>
+									<td>{{sched.room}}</td>
+									<td>
+										<button class="btn btn-success" ng-click="SelectIrregSched(sched)">
+											<span class="glyphicon glyphicon-check"></span>
+										</button>
+									</td>
 								</tr>
 								
 							</tbody>
-						</table> -->
+						</table>
 
 					</div>
-					<div class="list-group-item list-group-header" ng-show="ActiveStep===4">
-						<table class="table table-condensed table-bordered" >
-							<thead>
-								<tr>
-									<th>Subject </th>
-									<th>Day</th>
-									<th>Time</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ENG 01</td>
-									<td>M W F</td>
-									<td>10:30AM - 11:00AM</td>
-								</tr>
-								<tr>
-									<td>FIL 21</td>
-									<td>M W F</td>
-									<td>12:30PM - 1:00PM</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					</div>
+					
 					<div class="list-group-item list-group-header" ng-show="ActiveStep===4&&Customize">
 						<label>Class Schedule</label>
 					</div>

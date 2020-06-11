@@ -4,9 +4,9 @@
 		<legend><?php __('Add Tuition'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
+		echo $this->Form->input('description');
 		echo $this->Form->input('sy');
 		echo $this->Form->input('year_level_id');
-		echo $this->Form->input('program');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

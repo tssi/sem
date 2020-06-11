@@ -4,11 +4,9 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
+			<th><?php echo $this->Paginator->sort('description');?></th>
 			<th><?php echo $this->Paginator->sort('sy');?></th>
 			<th><?php echo $this->Paginator->sort('year_level_id');?></th>
-			<th><?php echo $this->Paginator->sort('program');?></th>
-			<th><?php echo $this->Paginator->sort('created');?></th>
-			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
@@ -22,13 +20,11 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $tuition['Tuition']['id']; ?>&nbsp;</td>
 		<td><?php echo $tuition['Tuition']['name']; ?>&nbsp;</td>
+		<td><?php echo $tuition['Tuition']['description']; ?>&nbsp;</td>
 		<td><?php echo $tuition['Tuition']['sy']; ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($tuition['YearLevel']['name'], array('controller' => 'year_levels', 'action' => 'view', $tuition['YearLevel']['id'])); ?>
 		</td>
-		<td><?php echo $tuition['Tuition']['program']; ?>&nbsp;</td>
-		<td><?php echo $tuition['Tuition']['created']; ?>&nbsp;</td>
-		<td><?php echo $tuition['Tuition']['modified']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $tuition['Tuition']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit', true), array('action' => 'edit', $tuition['Tuition']['id'])); ?>

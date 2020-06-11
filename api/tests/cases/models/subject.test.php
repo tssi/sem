@@ -1,5 +1,5 @@
 <?php
-/* Subject Test cases generated on: 2020-05-30 12:20:03 : 1590812403*/
+/* Subject Test cases generated on: 2020-06-08 15:56:17 : 1591602977*/
 App::import('Model', 'Subject');
 
 class SubjectTestCase extends CakeTestCase {

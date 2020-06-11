@@ -14,5 +14,7 @@
 	<ul>
 
 		<li><?php echo $this->Html->link(__('List Fees', true), array('action' => 'index'));?></li>
+		<li><?php echo $this->Html->link(__('List Fee Breakdowns', true), array('controller' => 'fee_breakdowns', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Fee Breakdown', true), array('controller' => 'fee_breakdowns', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

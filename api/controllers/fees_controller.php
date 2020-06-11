@@ -19,7 +19,7 @@ class FeesController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Fee->create();
-			if ($this->Fee->saveAll($this->data)) {
+			if ($this->Fee->save($this->data)) {
 				$this->Session->setFlash(__('The fee has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {

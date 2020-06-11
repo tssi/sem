@@ -21,6 +21,7 @@ class CurriculumsController extends AppController {
 					$dd['year_level_id']=$detail['year_level_id'];
 					$dd['name']=$subject['name'];
 					$dd['code']=$subject['alias'];
+					$dd['order']=$detail['order'];
 					array_push($subjects,$dd);
 				}
 				$curri['Curriculum']['subjects'] = $subjects;

@@ -7,29 +7,17 @@ define(['app','api'], function (app) {
 				{id:1, title:"Student", description:"Select Student"},
 				{id:2, title:"Type", description:"Select Type"},
 				{id:3, title:"Schedule", description:"Select Schedule"},
-				{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
-				{id:6, title:"Discount", description:"Select Discount"},
-				{id:7, title:"Confirmation", description:"Confirmation"}
+				{id:4, title:"Payment Scheme", description:"Select Payment Scheme"},
+				{id:5, title:"Discount", description:"Select Discount"},
+				{id:6, title:"Confirmation", description:"Confirmation"}
 			];
 
 			$scope.SectionTypes = [
 				{id:'block', name:"Block", description:"Fixed subject offering"},
 				{id:'irreg', name:"Irregular", description:"Customized subjects"}
 			];
-			$scope.Days = [
-				{'id':'M','desc':'Mon'},
-				{'id':'T','desc':'Tues'},
-				{'id':'W','desc':'Wed'},
-				{'id':'TH','desc':'Thu'},
-				{'id':'F','desc':'Fri'},
-				{'id':'S','desc':'Sat'},
-			];
-			$scope.Discounts = [
-				{'id':1,'disc':25,'desc':'Academic Scholarship'},
-				{'id':2,'disc':50,'desc':'Athletic Scholarship'},
-				{'id':3,'disc':100,'desc':'Full Academic Scholarship'},
-			];
-
+			$scope.ComputingTuition = true;
+			
 			//$scope.DemoSubs = ['Programming Fundamentals','English 1','Ethics','P.E.','NSTP1'];
 			$scope.ActiveStep = 1;
 			getStudents();
@@ -49,6 +37,7 @@ define(['app','api'], function (app) {
 			$scope.SelectedStudent.name = stud.first_name +' '+ stud.middle_name +' '+ stud.last_name +' '+ stud.suffix_name;
 		};
 		$scope.setSelectedSectionType =  function(type){
+			$scope.SelectedSchedules = [];
 			$scope.SelectedSectionType =  type;
 		}
 
@@ -58,6 +47,7 @@ define(['app','api'], function (app) {
 				BuildSchedule(data);
 			}else{
 				$scope.ActiveSubject = data;
+				
 			}
 		}
 		$scope.nextStep = function(){
@@ -66,7 +56,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					$scope.SelectedSubjects = [];
 					$scope.ActiveStudent = $scope.SelectedStudent;
-					getFees();
+					getTuition();
 				}
 
 				if($scope.ActiveStep===3){
@@ -81,13 +71,14 @@ define(['app','api'], function (app) {
 					
 				}
 				if($scope.ActiveStep===4){
-					$scope.SubjectsEnrolled = $scope.SelectedSubjects;
-					$scope.level2 = true;
-					$scope.SelectedSchedule = $scope.Schedule_details;
-					getSchedule();
+					if($scope.SelectedSectionType.id=='block'){
+						$scope.SelectedSchedules = $scope.Schedule_details;
+					}
+					
+					console.log($scope.SelectedSchedules);
+					computeTuition();
 				}
 				if($scope.ActiveStep===5){
-					$scope.ComputeTuition();
 					$scope.ShowBreakDown = true;
 					$scope.DemoMode = false;
 					$scope.SelectedSchedule = Schedules;
@@ -117,58 +108,7 @@ define(['app','api'], function (app) {
 			$scope.ActiveStep--;
 		};
 		
-		$scope.SelectedSubjects = [];
-		$scope.PickSubjects = function(subject,index){
-			if($scope.SelectedSubjects.indexOf(subject)===-1){
-				subject['active']=1;
-				$scope.SelectedSubjects.push(subject);
-			}
-			else{
-				subject['active']=0;
-				$scope.SelectedSubjects.splice($scope.SelectedSubjects.indexOf(subject), 1);
-			}
-			//console.log(subject,index);
-			
-		};
 		
-		$scope.SelectAll = function(){
-			$scope.Select = true;
-			angular.forEach($scope.Subjects,function(sub){
-				sub['active']=1;
-				$scope.SelectedSubjects.push(sub);
-			});
-		};
-		
-		$scope.UnSelect = function(){
-			$scope.Select = false;
-			$scope.SelectedSubjects = [];
-			angular.forEach($scope.Subjects,function(sub){
-				sub['active']=0;
-			});
-		};
-		
-		$scope.SetSection = function(sec){
-			Schedules = [];
-			$scope.ActiveSection = sec;
-			
-			
-		};
-		
-		$scope.SetCustomSched = function(sched,detail){
-			var schedule = {};
-			schedule['id']=sched.id;
-			schedule['subject']=sched.subject;
-			schedule['detail'] = detail;
-			Schedules.push(schedule);
-		};
-		
-		$scope.CustomizeSched = function(){
-			$scope.Customize = true;
-			$scope.SelectedSchedule = [];
-		};
-		$scope.Block = function(){
-			$scope.Customize = false;
-		};
 		$scope.SearchStudent = function(){
 			var data = {
 				keyword:$scope.SearchWord,
@@ -185,57 +125,6 @@ define(['app','api'], function (app) {
 			api.GET('college_students',data,success,error);
 		};
 		
-		$scope.ComputeTuition = function(){
-			var SubjectAmount = 0;
-			var total = 0;
-			$scope.TotalFee =0;
-			angular.forEach($scope.SelectedSubjects, function(sub){
-				var SubjectAmount = 400 * sub.tuition_hours;
-				total = total + SubjectAmount;
-			});
-			var t = $scope.TotalFee.length + 1;
-			$scope.Fees.splice(0, 0, t);
-			$scope.Fees[0]={'desc':'Tuition fee','amount':total};
-			angular.forEach($scope.Fees, function(fee){
-				$scope.TotalFee = $scope.TotalFee + fee.amount;
-			});
-			
-			//console.log($scope.Fees);
-		};
-		
-		$scope.SelectPayment = function(pm){
-			$scope.ActivePm = pm;
-			$scope.ComputeBreakdown();
-		};
-		
-		$scope.ComputeBreakdown = function(){
-			$scope.PaymentMethod = [];
-			if($scope.ActivePm.id==1){
-				$scope.PaymentMethod.push({'desc':'Down/Cash Payment','amount':$scope.TotalFee});
-			}
-			if($scope.ActivePm.id==2){
-				var terms = ['Downpayment','Prelim','Midterm','Semi-final','Final'];
-				if(!$scope.TotalDiscounted)
-					var devided = $scope.TotalFee/$scope.ActivePm.terms;
-				if($scope.TotalDiscounted)
-					var devided = $scope.TotalDiscounted/$scope.ActivePm.terms;
-				angular.forEach(terms,function(term){
-					var pair = {};
-					pair['desc'] = term;
-					pair['amount']= devided;
-					$scope.PaymentMethod.push(pair);
-				});
-			}
-		};
-		
-		$scope.ChooseDiscount = function(dc){
-			$scope.AppliedDiscounts = [];
-			$scope.ActiveDiscount = dc;
-			var disc = ($scope.TotalFee * dc.disc) / 100;
-			$scope.Discount = $scope.TotalFee - disc;
-			$scope.AppliedDiscounts.push({'desc':dc.desc,'amount':disc});
-			//console.log($scope.AppliedDiscounts);
-		};
 		
 		$scope.openModal=function(){
 			var modalInstance = $uibModal.open({
@@ -269,7 +158,52 @@ define(['app','api'], function (app) {
 			$scope.ShowBreakDown = 0;
 			$scope.PaymentMethod = 0;
 		};
+		$scope.RemovedSubjects = [];
+		$scope.SelectIrregSched = function(data){
+			console.log(data);
+			angular.forEach($scope.Subjects, function(sub){
+				if(data.subject_id==sub.subject_id)
+					$scope.RemovedSubjects.push(sub);
+			});
+			angular.forEach($scope.IrregSched, function(sched){
+				if(data.subject_id==sched.subject_id&&
+					data.section_id==sched.section_id){
+						sched['units']=data.units;
+					$scope.SelectedSchedules.push(sched);
+				}
+			});
+			
+			$scope.Subjects = $scope.Subjects.filter(function(sub){
+				return sub.subject_id!==data.subject_id;
+			});
+			console.log($scope.Subjects);
+			$scope.ActiveSubject = null;
+		}
 		
+		$scope.SetSection = function(section){
+			$scope.ActiveSection = section;
+			
+		}
+		
+		$scope.RemoveSched = function(data){
+			//console.log($scope.RemovedSubjects);
+			angular.forEach($scope.RemovedSubjects, function(sub){
+				if(data.subject_id==sub.subject_id)
+					$scope.Subjects.push(sub);
+			});
+			$scope.SelectedSchedules = $scope.SelectedSchedules.filter(function(sched){
+				return sched.subject_id!==data.subject_id;
+			});
+		}
+		
+		$scope.HideSched = function(){
+			if($scope.SelectedSectionType.id=='irreg'){
+				$scope.ActiveSubject = null;
+				$scope.ActiveRow = null;
+			}else{
+				$scope.RevealSectionSched = null;
+			}
+		}
 		function getStudents(){
 			api.GET('students',function success(response){
 				$scope.Students = response.data;
@@ -282,7 +216,8 @@ define(['app','api'], function (app) {
 				angular.forEach(curr.subjects, function(sub){
 					$scope.Subjects.push(sub);
 				});
-				console.log($scope.Subjects);
+				getIrregSchedules();
+				
 			}
 			var error = function(response){
 				
@@ -321,13 +256,19 @@ define(['app','api'], function (app) {
 		};
 		
 		function getIrregSchedules(){
+			var subs = [];
+			angular.forEach($scope.Subjects,function(sub){
+				subs.push(sub.subject_id);
+			});
+			subs = subs.join(',');
 			var success = function(response){
-				$scope.Schedules = response.data;
+				$scope.IrregSched = response.data;
 			}
 			var error = function(response){
 				
 			}
 			var data = {
+				subject_id:subs,
 				limit:'less',
 			}
 			api.GET('schedule_details',data, success, error);
@@ -359,26 +300,59 @@ define(['app','api'], function (app) {
 					sched_dtl.push(subid);
 					$scope.Schedule_details[i]['span']=1;
 				}else{
+					
 					var span = $scope.Schedule_details[i].span;
 					console.log(span)
 					$scope.Schedule_details[i]['span'] = parseInt(span) +1;
 				}
 			}
-			console.log($scope.Schedule_details);
 		}
 		
-		function getFees(){
-			api.GET('college_tuitions',function success(response){
-				$scope.Fees = response.data;
+		function computeTuition(){
+			$scope.ComputingTuition = true;
+			var subs = [];
+			var fees = [];
+			angular.forEach($scope.SelectedSchedules, function(sched){
+				subs.push(sched.subject_id);
 			});
-		};
-		
-		function getPaymentScheme(){
-			api.GET('college_payment_schemes',function success(response){
-				$scope.Payments = response.data;
-				console.log(response.data);
+			api.GET('subjects',function success(response){
+				angular.forEach(response.data, function(sub){
+					if(subs.indexOf(sub.id)!==-1){
+						fees.push(sub);
+					}
+				});
+				var total_tuition = 0;
+				angular.forEach(fees, function(fee){
+					total_tuition = total_tuition + parseInt(fee.lec*$scope.Base) + parseInt(fee.lab*$scope.Base);
+				
+				});
+				$scope.TotalFee = 0;
+				angular.forEach($scope.Tuition['fee_breakdowns'], function(fee){
+					if(fee.fee_id==='TUI'){
+						fee.amount = total_tuition;
+					}
+					$scope.TotalFee = $scope.TotalFee + fee.amount;
+				});
+				
 			});
-		};
+			$scope.ComputingTuition = false;
+		}
+		function getTuition(){
+			var data = {
+				sy:2020,
+				year_level_id:$scope.SelectedStudent.year_level_id
+			}
+			return api.GET('tuitions', function success(response){
+				$scope.Tuition = response.data[0];
+				angular.forEach(response.data[0]['fee_breakdowns'], function(fee){
+					if(fee.fee_id==='TUI'){
+						$scope.Base = fee.amount;
+						console.log($scope.Base);
+					}
+				});
+			});
+			
+		}
 		
     }]);
 	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){

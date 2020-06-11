@@ -4,8 +4,26 @@ class TuitionsController extends AppController {
 	var $name = 'Tuitions';
 
 	function index() {
-		$this->Tuition->recursive = 0;
-		$this->set('tuitions', $this->paginate());
+		$this->Tuition->recursive = 2;
+		$tuitions = $this->paginate();
+		if($this->isAPIRequest()){
+			foreach($tuitions as $i=>$tui){
+				//pr($tui);
+				$tuition = $tui['Tuition'];
+				$fees = $tui['FeeBreakdown'];
+				$fee_breakdowns = array();
+				foreach($fees as $f=>$fee){
+					$fe['fee_id'] = $fee['fee_id'];
+					$fe['amount'] = $fee['amount'];
+					$fe['description'] = $fee['Fee']['name'];
+					array_push($fee_breakdowns,$fe);
+				}
+				$tuition['fee_breakdowns'] = $fee_breakdowns;
+				$tuitions[$i]['Tuition'] = $tuition;
+
+			}
+		}
+		$this->set('tuitions', $tuitions);
 	}
 
 	function view($id = null) {
@@ -19,8 +37,7 @@ class TuitionsController extends AppController {
 	function add() {
 		if (!empty($this->data)) {
 			$this->Tuition->create();
-			if ($this->Tuition->saveAll($this->data)) {
-				$this->data = $this->Tuition->findById($this->Tuition->id);
+			if ($this->Tuition->save($this->data)) {
 				$this->Session->setFlash(__('The tuition has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
