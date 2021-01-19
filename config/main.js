@@ -5,7 +5,7 @@ require.config({
     // Alias libraries paths
     paths: {     
         'settings': '../config/settings',
-        'app': 'config/app',
+        'app': '../config/app',
         'demo': 'config/demo',
         'model': 'config/model',
         'angular': 'bower_components/angular/angular.min',
@@ -25,6 +25,8 @@ require.config({
 		'students':'../controllers/students',
 		'assesments':'../controllers/assesments',
         'custom-window':'vendors/custom_window',
+		'atomic':'vendors/atomic_design',
+		'util':'../config/util',
     },
     // Add angular modules that does not support AMD out of the box, put it in a shim
     shim: {
