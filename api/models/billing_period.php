@@ -1,8 +1,23 @@
 <?php
 class BillingPeriod extends AppModel {
 	var $name = 'BillingPeriod';
-	var $useDbConfig = 'sfm';
+	//var $useDbConfig = 'sfm';
 	var $order = 'BillingPeriod.order';
+	var $hasMany = array(
+		'PaymentSchemeSchedule' => array(
+			'className' => 'PaymentSchemeSchedule',
+			'foreignKey' => 'billing_period_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
 	function getDueDates($sy,$period=null){
 		$conditions = array();
 		if($period)

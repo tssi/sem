@@ -68,13 +68,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="fee in ActiveTuition.fees">
-									<td>{{fee.name}}</td>
+								<tr ng-repeat="fee in ActiveTuition.fee_breakdowns | orderBy:'order'">
+									<td>{{fee.description}}</td>
 									<td><div class="amount" ng-class="{peso:$first}">{{fee.amount | currency: ''}}</div></td>
 								</tr>
 							</tbody>
 							<tfoot> 
-								<tr ng-if="ActiveTuition.fees.length">
+								<tr ng-if="ActiveTuition.fee_breakdowns.length">
 									<td>Total Due</td>
 									<td><div class="amount peso">{{TotalDue | currency}}</div></td>
 								</tr>
@@ -101,12 +101,12 @@
 									<td>{{ActiveScheme.name}} Discount</td>
 									<td><div class="amount peso">{{ActiveScheme.variance_amount | currency}}</div></td>
 								</tr>
-								<tr ng-if="TotalDiscount">
+								<!-- <tr ng-if="TotalDiscount">
 									<td>
 									Discounts:
 									</td>
 									<td rowspan="{{ActiveDiscounts.length+1}}"><div class="amount" ng-class="{peso:!ActiveScheme.variance_amount}">{{TotalDiscount | currency}}</div></td>
-								</tr>
+								</tr> 
 								<tr ng-if="TotalDiscount" ng-repeat="ActiveDiscount in ActiveDiscounts">
 									<td>
 										<div class="row">
@@ -123,15 +123,41 @@
 											</div>
 										</div>
 									</td>
+								</tr>-->
+								<tr ng-repeat="disc in ActiveDiscounts">
+									<td>Discount: {{disc.name}}</td>
+									<td class="amount total peso">{{disc.amount}}</td>
 								</tr>
 							</tbody>
 							<tfoot> 
-								<tr ng-if="TotalAdjustment">
+								<tr ng-if="TotalDiscount">
 									<td>Total Adjustment</td>
-									<td><div class="amount peso">{{TotalAdjustment | currency}}</div></td>
+									<td><div class="amount peso">{{TotalDiscount | currency}}</div></td>
 								</tr>
 							</tfoot>
 						</table>
+					</div>
+					<div class="list-group-canvas" ng-show="HasSched">
+						<div class="list-group-item list-group-header">
+							<h5>Class Schedule</h5>
+						</div>
+						<div class="list-group-item">
+							<table class="table table-bordered table-condensed text-center align-middle">
+								<thead>
+									<tr>
+										<th class="col-md-5">Subject</th>
+										<th>Schedule</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="sched in ActiveSchedule.schedule_details">
+										<td>{{sched.subject}}</td>
+										<td>{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+										
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div class="list-group-item list-group-header" ng-show="hasScheduleInfo">
 						<h5>Payment Schedule</h5>
@@ -145,21 +171,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat-start="(index,schedule) in ActiveScheme.schedule" ng-if="schedule.amount && $first">
+								<tr ng-repeat="sched in ActiveScheme.schedule">
+									<td>{{sched.description}}</td>
 									<td>
-										<span ng-if="$first">Upon Enrollment</span>
-									</td>
-									<td>
-										<div class="amount pull-right" ng-class="{peso:$first}">{{schedule.amount | currency}}</div>
+										<div class="amount pull-right peso">{{sched.amount | currency}}</div>
 									</td>
 								</tr>
-								<tr ng-repeat-end ng-repeat="bill_month in schedule.bill_months" ng-if="index>0">
-									<td>{{bill_month}}</td>
-
-									<td>
-										<div class="amount pull-right">{{schedule.amount | currency}}</div>
-									</td>
-								</tr>
+								
 							</tbody>
 							<tfoot> 
 								<tr ng-if="TotalAmount">
@@ -191,7 +209,7 @@
 						<div class="loader"></div>
 					</div>
 					<div class="list-group-item" ng-class="{active:student.id===SelectedStudent.id,
-					disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:filterStudent" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
+					disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:{full_name:SearchWord}" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
 						
 						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
 						<p class="list-group-item-text">
@@ -203,9 +221,9 @@
 				</div>
 				<div class="list-group-item list-group-search-box">
 					<div class="input-group"> 
-						<div class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></div>
-						<input type="text" class="form-control" placeholder="Search" ng-model="searchStudent" focus="ActiveStep===1&&!__SIDEBAR_OPEN"/>
-						<div class="input-group-btn"><button class="btn btn-default" ng-click="clearSearchStudent()"><span class="glyphicon glyphicon-remove"></span></button></div>
+						<div class="input-group-btn"><button class="btn btn-default" ng-click="SearchStudent()" ><span class="glyphicon glyphicon-search"></span></button></div>
+						<input type="text" class="form-control" placeholder="Search" ng-model="SearchWord" focus="ActiveStep===1&&!__SIDEBAR_OPEN"/>
+						<div class="input-group-btn"><button class="btn btn-default" ng-click="ClearSearch()"><span class="glyphicon glyphicon-remove"></span></button></div>
 					</div>
 				</div>
 			</div>
@@ -223,14 +241,12 @@
 						Loading...
 					</div>
 					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
-						<h4 class="list-group-item-heading">{{yearLevel.name}}</h4>
+						<h4 class="list-group-item-heading">{{yearLevel.description}}</h4>
 						<p class="list-group-item-text">
-						<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
-						<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1">Promoted</span>
-						<!--
-						<span class="label label-success" ng-if="yearLevel.order==ActiveOrder+2">Accelerated</span>
+							<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
+							<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1">Promoted</span>
+							<span class="label label-warning" ng-if="yearLevel.id=='IR'">Irregular</span>
 						</p>
-						-->
 					</div>
 				</div>
 			</div>
@@ -247,10 +263,10 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections | filter: {year_level_id: ActiveLevel.id}" ng-click="setSelectedSection(section)">
+					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections" ng-click="setSelectedSection(section)">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
-						<span>{{section.program}}</span></p>
+						<span>{{section.program_id}}</span></p>
 					</div>
 				</div>
 			</div>
@@ -262,134 +278,39 @@
 				</div>
 				<div class="list-group-canvas">
 					<div class="list-group-item list-group-header">
-						<h5>{{Steps[3].description}}</h5>
+						<h5 ng-show="ActiveSection.program_id=='MIXED'">{{Steps[3].description}}</h5>
+						<h5 ng-show="ActiveSection.program_id!='MIXED'">{{ActiveSection.name}} Class Schedule</h5>
 					</div>
-					<div class="list-group-item">
-						<table class="table table-bordered table-condensed text-center">
+					<div class="list-group-item" ng-show="ActiveSection.program_id!='MIXED'">
+						<table class="table table-bordered table-condensed text-center align-middle">
 							<thead>
 								<tr>
 									<th>Subject</th>
-									<th>Section</th>
-									<th class="col-md-4">Schedule</th>
+									<!-- <th class="col-md-2">Section</th> -->
+									<th class="col-md-5">Schedule</th>
 									<th class="col-md-1"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td class="align-middle">English</td>
-									<td class="align-middle" rowspan="4">A12-A</td>
-									<td class="align-middle">MWF | 06:00AM - 08:00AM</td>
-									<td class="align-middle">
-										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-									</td>
-								</tr>
-								<tr>
-									<td class="align-middle">Math</td>
-									<td class="align-middle">MWF | 08:00AM - 10:00AM</td>
-									<td class="align-middle">
-										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-									</td>
-								</tr>
-								<tr>
-									<td class="align-middle">Filipino</td>
-									<td class="align-middle">MWF | 10:30AM - 11:00AM</td>
-									<td class="align-middle">
-										<button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-									</td>
-								</tr>
-								<tr class="active">
-									<td class="align-middle">
-										Calculus
-										<span class="label label-danger">Failed Pre-Requiste</span>
-									</td>
-									<td class="align-middle">MWF | 01:00PM - 3:00PM</td>
-									<td class="align-middle">
-										<button class="btn btn-danger" disabled><span class="glyphicon glyphicon-remove"></span></button>
+								<tr ng-repeat="sched in ActiveSchedule.schedule_details">
+									<td>{{sched.subject}}</td>
+									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
+									<td>{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td>
+										<button class="btn btn-danger" ng-disabled="ActiveDept=='HS'" ><span class="glyphicon glyphicon-remove"></span></button>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item list-group-header">
-						<h5>CUSTOMIZE SCHEDULE</h5>
+					<div class="list-group-item" ng-show="ActiveSection.program_id=='MIXED'">
+						<label for="">Section</label>
+						<select name="" id="" class="form-control" ng-options="sc.id as sc.section for sc in ClassSchedules" ng-model="sec.id">
+							<option value="">Select section</option>
+						</select>
 					</div>
-					<div class="list-group-item">
-						<div class="row">
-							<div class="col-md-12">
-								<label for="">Subject</label>
-								<select name="" id="" class="form-control" ng-model="CustomSubjSched">
-									<option value="">Select Subject </option>
-									<option value="ALGEB">Algebra </option>
-									<option value="BIO">Biology </option>
-								</select>
-							</div>
-
-						</div>
-						<div class="row"  ng-show="CustomSubjSched=='ALGEB'">
-							<div class="col-md-12">
-								<br>
-								<label for="">Available Schedules</label>
-								<table class="table table-bordered table-condensed text-center">
-									<thead>
-										<tr>
-											<th>Section</th>
-											<th class="col-md-4">Schedule</th>
-											<th class="col-md-1"></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>A11-A</td>
-											<td>MWF | 06:00AM - 08:00AM</td>
-											<td>
-												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-											</td>
-										</tr>
-										<tr>
-											<td>A11-B</td>
-											<td>THS | 06:00AM - 08:00AM</td>
-											<td>
-												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="row"  ng-show="CustomSubjSched=='BIO'">
-							<div class="col-md-12">
-								<br>
-								<label for="">Available Schedules</label>
-								<table class="table table-bordered table-condensed text-center">
-									<thead>
-										<tr>
-											<th>Section</th>
-											<th class="col-md-4">Schedule</th>
-											<th class="col-md-1"></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>A11-F</td>
-											<td>THS | 10:00AM - 11:00AM</td>
-											<td>
-												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-											</td>
-										</tr>
-										<tr>
-											<td>A11-G</td>
-											<td>MWF | 09:00AM - 10:00AM</td>
-											<td>
-												<button class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-
 				</div>
+				
 			</div>
 			<div class="list-group" ng-show="ActiveStep===5">
 				<div class="list-group-item list-group-header">
@@ -418,7 +339,7 @@
 										<span class="amount total peso">{{paymentScheme.schedule[0].amount | currency}}</span>
 										&plus; <span class="amount total peso">{{paymentScheme.schedule[1].amount | currency }} </span>  
 										<span ng-if="paymentScheme.schedule[1].due_dates.length>1">
-										&times; <span>{{paymentScheme.schedule[1].due_dates.length}}</span>
+										&times; <span>{{paymentScheme.schedule.length-1}}</span>
 										</span>
 									</span>
 									

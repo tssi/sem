@@ -2,6 +2,8 @@
 class Department extends AppModel {
 	var $name = 'Department';
 	var $displayField = 'name';
+	var $useDbConfig = 'ser';
+	var $recursive = 1;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $hasMany = array(

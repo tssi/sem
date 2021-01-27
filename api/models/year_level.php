@@ -2,6 +2,8 @@
 class YearLevel extends AppModel {
 	var $name = 'YearLevel';
 	var $displayField = 'name';
+	var $useDbConfig = 'ser';
+	//var $recursive = 2;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(

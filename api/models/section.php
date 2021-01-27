@@ -2,6 +2,8 @@
 class Section extends AppModel {
 	var $name = 'Section';
 	var $displayField = 'name';
+	var $useDbConfig = 'ser';
+	var $recursive = 0;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -79,6 +81,11 @@ class Section extends AppModel {
 	function findByProgramId($prog_id){
 		$sections = $this->find('list',array('conditions'=>array('Section.program_id'=>$prog_id)));
 		//pr($sections); exit();
+		return $sections;
+	}
+	
+	function findByDeptId($dept_id){
+		$sections = $this->find('list',array('conditions'=>array('Section.department_id'=>$dept_id)));
 		return $sections;
 	}
 }

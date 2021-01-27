@@ -2,6 +2,8 @@
 class Fee extends AppModel {
 	var $name = 'Fee';
 	var $displayField = 'name';
+	var $useDbConfig = 'srp';
+	var $recursive = 2;
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -19,6 +21,6 @@ class Fee extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		)
-	);
+	); 
 
 }
