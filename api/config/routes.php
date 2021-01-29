@@ -35,13 +35,10 @@
 Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 	
 	Router::connect(
-			"/reports/test_reportcard",
-			array("controller"=>"reports","action"=>"test_reportcard", "[method]" => "GET")
+			"/student_registration_form",
+			array("controller"=>"reports","action"=>"student_registration_form")
 	);
-	Router::connect(
-			"/reports/test_spr",
-			array("controller"=>"reports","action"=>"test_spr", "[method]" => "GET")
-	);	
+	
 	App::import('Lib', 'Api.SlugRoute');
 	//Custom API Routing
 	Configure::write('Api.MASTER_ROUTES','educ_levels|system_defaults|modules');
@@ -51,3 +48,5 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			"/reports/:action",
 			array("controller"=>"reports", "[method]" => "POST")
 	);
+	
+	
