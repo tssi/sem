@@ -4,6 +4,7 @@ App::import('Vendor','student_registration_form');
 
 $pr= new StudentRegistrationForm();
 $pr->hdr();
+$pr->data();
 
 $pr->output();
 ?>
