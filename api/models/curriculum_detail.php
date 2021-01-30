@@ -1,6 +1,10 @@
 <?php
 class CurriculumDetail extends AppModel {
 	var $name = 'CurriculumDetail';
+	
+	var $useDbConfig = 'ser';
+	var $recursive = 0;
+	var $usePaginationCache = true;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -24,6 +28,9 @@ class CurriculumDetail extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
 	);
+	
+	
+	
 }

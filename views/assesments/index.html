@@ -137,28 +137,29 @@
 							</tfoot>
 						</table>
 					</div>
-					<div class="list-group-canvas" ng-show="HasSched">
-						<div class="list-group-item list-group-header">
-							<h5>Class Schedule</h5>
-						</div>
-						<div class="list-group-item">
-							<table class="table table-bordered table-condensed text-center align-middle">
-								<thead>
-									<tr>
-										<th class="col-md-5">Subject</th>
-										<th>Schedule</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="sched in ActiveSchedule.schedule_details">
-										<td>{{sched.subject}}</td>
-										<td>{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
-										
-									</tr>
-								</tbody>
-							</table>
-						</div>
+					
+					<div class="list-group-item list-group-header" ng-show="HasSched">
+						<h5>Class Schedule</h5>
 					</div>
+					<div class="list-group-item" ng-show="HasSched">
+						<table class="table table-bordered table-condensed text-center align-middle">
+							<thead>
+								<tr>
+									<th class="col-md-5">Subject</th>
+									<th>Schedule</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="sched in ActiveSchedule.schedule_details">
+									<td>{{sched.subject}}</td>
+									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="sched.no_sched">Schedule not set</td>
+									
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
 					<div class="list-group-item list-group-header" ng-show="hasScheduleInfo">
 						<h5>Payment Schedule</h5>
 					</div>
@@ -203,6 +204,9 @@
 				<div class="list-group-canvas list-group-search-results">
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[0].description}}</h5>
+						<ul class="nav nav-pills">
+							<li ng-repeat="opt in Options" ng-class="{active:ActiveOpt==opt}" ng-click="setActiveOpt(opt)"><a>{{opt}}</a></li>
+						</ul>
 					</div>
 					<div class="list-group-item text-center" ng-if="!Students.length">
 						<div class="preloader-message">Loading...</div>
@@ -240,7 +244,7 @@
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
+					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | filter:{'department_id':ActiveDept} | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
 						<h4 class="list-group-item-heading">{{yearLevel.description}}</h4>
 						<p class="list-group-item-text">
 							<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
@@ -263,7 +267,7 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections" ng-click="setSelectedSection(section)">
+					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections" ng-click="setSelectedSection(section)" ng-hide="ActiveLevel.id!=='IR'&&section.program_id=='MIXED'">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.program_id}}</span></p>
@@ -287,17 +291,40 @@
 								<tr>
 									<th>Subject</th>
 									<!-- <th class="col-md-2">Section</th> -->
-									<th class="col-md-5">Schedule</th>
-									<th class="col-md-1"></th>
+									<th class="col-md-7">Schedule</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="sched in ActiveSchedule.schedule_details">
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
-									<td>{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="sched.no_sched">Schedule not set</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="list-group-item list-group-header" ng-show="CustomizedScheds.length">
+						<h5>Selected Schedules</h5>
+					</div>
+					<div class="list-group-item" ng-show="CustomizedScheds.length" sytle="margin-bottom:30px;">
+						<table class="table table-bordered table-condensed text-center align-middle">
+							<thead>
+								<tr>
+									<th>Subject</th>
+									<!-- <th class="col-md-2">Section</th> -->
+									<th class="col-md-5">Schedule</th>
+									<th class="col-md-1"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="sched in CustomizedScheds">
+									<td>{{sched.subject}}</td>
+									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
+									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="sched.no_sched">Schedule not set</td>
 									<td>
-										<button class="btn btn-danger" ng-disabled="ActiveDept=='HS'" ><span class="glyphicon glyphicon-remove"></span></button>
+										<button class="btn btn-danger" ng-click="removeSched(sched,$index)" ><span class="glyphicon glyphicon-minus"></span></button>
 									</td>
 								</tr>
 							</tbody>
@@ -305,10 +332,38 @@
 					</div>
 					<div class="list-group-item" ng-show="ActiveSection.program_id=='MIXED'">
 						<label for="">Section</label>
-						<select name="" id="" class="form-control" ng-options="sc.id as sc.section for sc in ClassSchedules" ng-model="sec.id">
-							<option value="">Select section</option>
+						<select name="" id="" class="form-control" ng-options="sc as sc.name group by sc.year_level for sc in Sections | filter:{program_id:'!'+'MIXED'} | orderBy:'year_level_id' " ng-model="sec">
+							<option value="" ng-show="!LoadingSec">Select section</option>
+							<option value="" ng-show="LoadingSec">Loading Sections...</option>
 						</select>
 					</div>
+					<div class="list-group-item list-group-header" ng-show="sec">
+						<h5>{{sec.name}}  Class Schedules</h5>
+					</div>
+					<div class="list-group-item" ng-show="sec">
+						<table class="table table-bordered table-condensed text-center align-middle">
+							<thead>
+								<tr>
+									<th>Subject</th>
+									<!-- <th class="col-md-2">Section</th> -->
+									<th class="col-md-5">Schedule</th>
+									<th class="col-md-1"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="sched in sec.schedule_details">
+									<td>{{sched.subject}}</td>
+									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
+									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="sched.no_sched">Schedule not set</td>
+									<td>
+										<button class="btn btn-success" ng-click="AddSched(sched,$index,sec)"><span class="glyphicon glyphicon-plus"></span></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
 				</div>
 				
 			</div>

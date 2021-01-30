@@ -4,7 +4,6 @@ define(['app','api'], function (app) {
 		$scope.index = function(){
 			bootstrap();
 			$scope.init = function(){
-				$scope.ActiveDept = 'HS';
 				initAssessment();
 				initDataSource();
 			};
@@ -12,6 +11,9 @@ define(['app','api'], function (app) {
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
 					$scope.ActiveStudent = $scope.SelectedStudent;
+					$scope.ActiveDept = $scope.ActiveStudent.department_id;
+					$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
+					getCurriculum($scope.ActiveStudent.department_id);
 					$scope.ActiveOrder = null;
 					for(var i in $scope.YearLevels){
 						var y = $scope.YearLevels[i];
@@ -26,7 +28,16 @@ define(['app','api'], function (app) {
 					getSections($scope.ActiveLevel);
 				}
 				if($scope.ActiveStep===3){
+					$scope.CustomizedScheds = [];
 					$scope.ActiveSection = $scope.SelectedSection;
+					$scope.Subjects = [];
+					angular.forEach($scope.Curriculum.subjects, function(sub){
+						if($scope.ActiveSection.program_id!=='MIXED'){
+							if(sub.year_level_id==$scope.ActiveSection.year_level_id)
+								$scope.Subjects.push(sub);
+						}else
+							$scope.Subjects.push(sub);
+					});
 					getFees();
 					getSchedules();
 					$scope.TotalDue=0;	
@@ -34,10 +45,15 @@ define(['app','api'], function (app) {
 				
 				if($scope.ActiveStep===4){
 					$scope.HasSched = true;
+					if($scope.ActiveSection.program_id=='MIXED'){
+						$scope.ActiveSchedule = {};
+						$scope.ActiveSchedule['schedule_details'] = $scope.CustomizedScheds;
+					}
 				};
 				
 				if($scope.ActiveStep===5){
 					$scope.ActiveScheme= $scope.SelectedScheme;
+					
 					//$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.variance_amount;
 					//$scope.TotalAdjustment = $scope.ActiveScheme.variance_amount;
 				}
@@ -80,12 +96,13 @@ define(['app','api'], function (app) {
 						}
 						$scope.ActiveDiscounts[index]= discount;
 					} */
-					
+					console.log($scope.ActiveScheme);
 					angular.forEach($scope.ActiveDiscounts, function(dsc){
 						if(dsc.type=='peso'){
 							if($scope.ActiveScheme.scheme_id=='CASH'){
 								$scope.ActiveScheme.schedule[0] -= dsc.amount;
 								$scope.TotalAmount = $scope.ActiveScheme.schedule[0];
+								console.log('dumaan');
 							}else{
 								var total = 0;
 								angular.forEach($scope.ActiveScheme.schedule, function(sched,index){
@@ -109,13 +126,15 @@ define(['app','api'], function (app) {
 					/* $scope.TotalDiscount = $scope.TotalDiscount*-1;
 					$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.variance_amount;
 					$scope.TotalAmount=$scope.TotalDue + $scope.TotalAdjustment; */
-					console.log($scope.ActiveScheme.schedule);
+					/* console.log($scope.ActiveScheme.schedule);
 					$scope.$watchCollection('ActiveScheme.schedule', function(newVal,oldval){
 						console.log(newVal);
-					});
+					}); */
 				}
+				
 				if($scope.ActiveStep===7){
-					var schedules = [];
+					
+					/* var schedules = [];
 					for(var i in $scope.ActiveScheme.schedule){
 						var sched = $scope.ActiveScheme.schedule[i]
 						var amount  = sched.amount;
@@ -144,8 +163,6 @@ define(['app','api'], function (app) {
 							var adjustment = {item:{code:item_code,flag:'-'},amount:amount};
 							adjustments.push(adjustment);
 						}
-						
-						
 					}
 					
 					$scope.Assesment={
@@ -172,6 +189,28 @@ define(['app','api'], function (app) {
 					$scope.AssesmentSaving = true;
 					api.POST('assessments',$scope.Assesment,function success(response){
 						$scope.openModal();
+					}); */
+					
+					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
+					$scope.ActiveStudent.assessment_total = $scope.TotalAmount + $scope.TotalDiscount;
+					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
+					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
+					$scope.Assessment = {
+						assessment:$scope.ActiveStudent,
+						paysched:$scope.ActiveScheme.schedule,
+						fees:$scope.ActiveTuition.fee_breakdowns
+					};
+					if($scope.ActiveSection.program_id=='MIXED')
+						$scope.Assessment.schedule = $scope.CustomizedScheds;
+					else
+						$scope.Assessment.schedule = $scope.ActiveSchedule.schedule_details;
+					if($scope.ActiveDiscounts.length){
+						$scope.Assessment.discounts = $scope.ActiveDiscounts;
+						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
+					}
+					api.POST('assessments',$scope.Assessment, function success(response){
+						initAssessment();
+						initDataSource();
 					});
 				}
 				if($scope.ActiveStep<$scope.Steps.length){
@@ -204,7 +243,8 @@ define(['app','api'], function (app) {
 				$scope.SelectedStudent = {
 										 id:student.id,
 										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" "+student.suffix_name,
-										 yearlevel:student.year_level_id
+										 yearlevel:student.year_level_id,
+										 department_id:student.department_id
 				                         };
 			};
 			$scope.filterYearLevel = function(yearlevel){
@@ -283,7 +323,6 @@ define(['app','api'], function (app) {
 					keyword:$scope.SearchWord,
 					fields:['first_name','middle_name','last_name','id'],
 					limit:'less',
-					department_id:$scope.ActiveDept
 				}
 				var success = function(response){
 					$scope.Students = response.data;
@@ -298,11 +337,28 @@ define(['app','api'], function (app) {
 				$scope.Search = 0;
 				$scope.SearchWord = '';
 				$scope.Students = '';
-				var data = {department_id:$scope.ActiveDept};
 				api.GET('students',data, function success(response) {
 					$scope.Students = response.data;
 				});
 			}
+			
+			$scope.AddSched = function(subject,index,sec){
+				subject.section_id = sec.id;
+				$scope.CustomizedScheds.push(subject);
+				$scope.sec.schedule_details.splice(index,1);
+			}
+			
+			$scope.removeSched = function(subject,index){
+				$scope.CustomizedScheds.splice(index,1);
+				$scope.sec.schedule_details.push(subject);
+			}
+			
+			$scope.setActiveOpt = function(opt){
+				$scope.Students = '';
+				$scope.ActiveOpt = opt;
+				getStudents();
+			}
+			
 			
 			function bootstrap(){
 				$rootScope.__MODULE_NAME = 'Assessment';
@@ -340,34 +396,38 @@ define(['app','api'], function (app) {
 				});
 			}
 			function initAssessment(){
-					$scope.Student={};
-					$scope.hasBasicInfo=false;
-					$scope.hasContactInfo=false;
-					$scope.ActiveStep=1;
-					$scope.SelectedStudent={};
-					$scope.ActiveStudent={};
-					$scope.SelectedLevel={};
-					$scope.ActiveLevel={};
-					$scope.SelectedSection={};
-					$scope.ActiveSection={};
-					$scope.SelectedScheme={};
-					$scope.ActiveScheme={};
-					$scope.ActiveDiscounts=[];
-					$scope.SelectedDiscounts={};
-					$scope.ActiveOrder = null;
-					$scope.TotalAmount = 0;
-					$scope.TotalDue = 0;
-					$scope.TotalAdjustment = 0;
-					$scope.TotalDiscount = 0;
-					$scope.hasInfo = false;
-					$scope.hasStudentInfo = false;
-					$scope.hasLevelInfo = false;
-					$scope.hasSectionInfo = false;
-					$scope.hasSchemeInfo = false;
-					$scope.hasScheduleInfo = false;
-					$scope.hasAdjustmentInfo = false;
-					$scope.AssesmentSaving = false;
-				};
+				$scope.Options = ['Old','New'];
+				$scope.ActiveOpt = 'Old';
+				$scope.Student={};
+				$scope.hasBasicInfo=false;
+				$scope.hasContactInfo=false;
+				$scope.ActiveStep=1;
+				$scope.SelectedStudent={};
+				$scope.ActiveStudent={};
+				$scope.SelectedLevel={};
+				$scope.ActiveLevel={};
+				$scope.SelectedSection={};
+				$scope.ActiveSection={};
+				$scope.SelectedScheme={};
+				$scope.ActiveScheme={};
+				$scope.ActiveDiscounts=[];
+				$scope.SelectedDiscounts={};
+				$scope.ActiveSchedule = {};
+				$scope.ActiveOrder = null;
+				$scope.TotalAmount = 0;
+				$scope.TotalDue = 0;
+				$scope.TotalAdjustment = 0;
+				$scope.TotalDiscount = 0;
+				$scope.hasInfo = false;
+				$scope.hasStudentInfo = false;
+				$scope.hasLevelInfo = false;
+				$scope.hasSectionInfo = false;
+				$scope.hasSchemeInfo = false;
+				$scope.hasScheduleInfo = false;
+				$scope.hasAdjustmentInfo = false;
+				$scope.AssesmentSaving = false;
+				$scope.HasSched = false;
+			};
 			function initDataSource(){
 				/* $scope.Students=[];
 				$scope.YearLevels=[];
@@ -375,8 +435,9 @@ define(['app','api'], function (app) {
 				$scope.Tuitions=[];
 				$scope.PaymentSchemes=[];
 				$scope.Discounts=[];
-				getStudents();
 				getBillingPeriods();
+				getStudents();
+				getYearLevels();
 			}	
 			
 			function computePaymentSchedule(){
@@ -416,29 +477,27 @@ define(['app','api'], function (app) {
 			};
 			
 			function getStudents(){
-				var data = {
-					department_id:$scope.ActiveDept
+				if($scope.ActiveOpt=='Old'){
+					api.GET('students', function success(response){
+						$scope.Students = response.data;
+					});
 				}
-				api.GET('students',data, function success(response){
-					$scope.Students = response.data;
-					getYearLevels();
-				});
 			}
 			
 			function getSections(filter){
 				if(filter.id!='IR')
 					var data = {limit:'less',year_level_id:$scope.ActiveLevel.id};
 				else
-					var data = {program_id:'MIXED'};
+					var data = {program_id:'MIXED',department_id:$scope.ActiveDept};
 				api.GET('sections',data, function success(response){
 					$scope.Sections = response.data;
+					
 				});
 			}
 			function getYearLevels(){
-				var data = {department_id:'HS'};
-				api.GET('YearLevels',data, function success(response){
+				var data = {limit:'less'};
+				api.GET('year_levels',data, function success(response){
 					$scope.YearLevels = response.data;
-					$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1});
 				});
 			}
 			
@@ -476,13 +535,56 @@ define(['app','api'], function (app) {
 				else
 					var data = {limit:'less'}
 				api.GET('schedules',data, function success(response){
-					$scope.ActiveSchedule = response.data[0];
-					$scope.ClassSchedules = response.data;
+					if(response.data.length==1){
+						$scope.ActiveSchedule = response.data[0];
+						angular.forEach($scope.ActiveSchedule.schedule_details,function(sched){
+							
+						});
+					}else{
+						$scope.LoadingSec = true;
+						$scope.ClassSchedules = response.data;
+						var filter = {department_id:$scope.ActiveDept,limit:'less'}
+						api.GET('sections',filter, function success(response){
+							$scope.Sections = response.data;
+							angular.forEach($scope.ClassSchedules, function(sched){
+								angular.forEach($scope.Sections, function(sec){
+									if(sec.id==sched.section_id){
+										sec.schedule_details = sched.schedule_details;
+									}
+								})
+							});
+							angular.forEach($scope.Sections, function(sec){
+								if(!sec.schedule_details){
+									var details = [];
+									angular.forEach($scope.Subjects, function(sub){
+										if(sec.year_level_id==sub.year_level_id)
+											details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'year_level_id':sub.year_level_id});
+									});
+									sec.schedule_details = details;
+								}
+							});
+							$scope.LoadingSec = false;
+						});
+					}
+				}, function error(response){
+					$scope.ActiveSchedule = {};
+					var details = [];
+					angular.forEach($scope.Subjects, function(sub){
+						details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+					});
+					$scope.ActiveSchedule.schedule_details = details;
+					console.log($scope.ActiveSchedule);
 				});
 			}
 			
-			function getCurriculum(){
-				
+			function getCurriculum(dept){
+				var data ={
+					esp: 2020.25,
+					department_id:dept
+				}
+				api.GET('curriculums',data, function success(response){
+					$scope.Curriculum = response.data[0];
+				});
 			}
 		};
     }]);

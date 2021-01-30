@@ -43,7 +43,8 @@ class SchedulesController extends AppController {
 						$subjects[$sub]['times'] =  $d['start_time'].' - '.$d['end_time'];
 					
 					//$subjects[$sub]['times'] =  $d['start_time'].' - '.$d['end_time'];
-					$subjects[$sub]['subject'] = $ss[0]['Subject']['alias'];
+					$subjects[$sub]['subject'] = $ss[0]['Subject']['name'];
+					$subjects[$sub]['subject_id'] = $sub;
 					$subjects[$sub]['units'] = $ss[0]['Subject']['units'];
 				}
 				/* pr($subjects); exit();

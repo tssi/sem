@@ -2,33 +2,62 @@
 class CurriculumsController extends AppController {
 
 	var $name = 'Curriculums';
-	var $uses = array('Curriculum','CurriculumSection','CurriculumDetail','Subject');
-
+	var $uses =  array('Curriculum','MasterConfig');
 	function index() {
 		$this->Curriculum->recursive = 0;
 		$curriculums = $this->paginate();
-		
+		//pr($curriculums);exit;
 		if($this->isAPIRequest()){
-			foreach($curriculums as $c=>$curri){
-				$details = $curri['CurriculumDetail'];
-				$section = $curri['CurriculumSection'];
-				$curri['Curriculum']['section_id'] = $section[0]['section_id'];
+			
+			
+			foreach($curriculums as $ci=>$curriculum){
+				
+				$all = array();
+				$count = 0;
+				$C =  $curriculum['Curriculum'];
+				$details = $curriculum['CurriculumDetail'];
+				$sec = $curriculum['CurriculumSection'];
+				//pr($curriculum);
+
 				$subjects = array();
-				foreach($details as $d=>$detail){
-					$sub = $this->Subject->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>$detail['subject_id'])));
-					$subject = $sub[0]['Subject'];
-					$dd['subject_id']=$subject['id'];
-					$dd['year_level_id']=$detail['year_level_id'];
-					$dd['name']=$subject['name'];
-					$dd['code']=$subject['alias'];
-					$dd['order']=$detail['order'];
-					array_push($subjects,$dd);
+				foreach($details as $detail){
+					
+					$year_level = $detail['year_level_id'];
+					$code = $detail['subject_id'];
+					$alt = $detail['alt_subject_id'];
+					if($alt):
+						$detail['Subject'] =  $detail['AlternateSubject'];
+					endif;
+					$name = $detail['Subject']['name'];
+					$desc = $detail['Subject']['description']; 
+					$alias = $detail['Subject']['alias']; 
+					 
+
+					$under = $detail['under'];
+					$weight= $detail['weight'];
+					$child = !$detail['is_parent'];
+					$indention = $detail['indention'];
+					$subject = array(
+						'year_level_id'=>$year_level,
+						'code'=>$code,
+						'name'=>$name,
+						'description'=>$desc,
+						'alias'=>$alias,
+						'under'=>$under,
+						'weight'=>$weight,
+						'child'=>$child,
+						'indention'=>$indention,
+						'order'=>$detail['order']
+					);
+					
+					array_push($subjects,$subject);
+					
 				}
-				$curri['Curriculum']['subjects'] = $subjects;
-				$curriculums[$c] = $curri;
+				$C['subjects']=$subjects;
+				$curriculums[$ci]['Curriculum']=$C;
 			}
+			
 		}
-		//pr($curriculums); exit();
 		$this->set('curriculums', $curriculums);
 	}
 

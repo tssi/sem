@@ -1,36 +1,12 @@
 <?php
-class Assessment extends AppModel {
-	var $name = 'Assessment';
+class AssessmentSubject extends AppModel {
+	var $name = 'AssessmentSubject';
 	var $displayField = 'name';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
-		'Student' => array(
-			'className' => 'Student',
-			'foreignKey' => 'id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => array(
-				'Student.sno',
-				'Student.gender',
-				'Student.short_name',
-				'Student.full_name',
-				'Student.class_name',
-				'Student.status',
-				'Student.year_level_id',
-				'Student.section_id',
-			),
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-	);
-	var $hasMany = array(
-		'AssessmentPaysched' => array(
-			'className' => 'AssessmentPaysched',
+		'Assessment' => array(
+			'className' => 'Assessment',
 			'foreignKey' => 'assessment_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -42,9 +18,9 @@ class Assessment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'AssessmentFee' => array(
-			'className' => 'AssessmentFee',
-			'foreignKey' => 'assessment_id',
+		'Subject' => array(
+			'className' => 'Subject',
+			'foreignKey' => 'subject_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
@@ -55,9 +31,22 @@ class Assessment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'AssessmentSubject' => array(
-			'className' => 'AssessmentSubject',
-			'foreignKey' => 'assessment_id',
+		'Section' => array(
+			'className' => 'Section',
+			'foreignKey' => 'section_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Schedule' => array(
+			'className' => 'Schedule',
+			'foreignKey' => 'schedule_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
@@ -70,6 +59,7 @@ class Assessment extends AppModel {
 		),
 		
 	);
+	
 	
 
 }
