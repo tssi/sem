@@ -22,7 +22,8 @@ class AssessmentsController extends AppController {
 			//pr($this->data); exit();
 			$assessment = $this->data['Assessment'];
 			$assessment['account_type']='student';
-			$assessment['student_id']=$assessment['id'];
+			if(!isset($assessment['student_id']))
+				$assessment['student_id']=$assessment['id'];
 			$assessment['id']=null;
 			$paysched = $this->data['Paysched'];
 			$fee = $this->data['Fee'];
@@ -50,7 +51,7 @@ class AssessmentsController extends AppController {
 				$sc['assessment_id'] = $assess_id;
 				$schedule[$i] = $sc;
 			}
-			pr($schedule);
+			//pr($schedule);
 			$this->AssessmentSubject->saveAll($schedule);
 			
 			

@@ -208,19 +208,28 @@
 							<li ng-repeat="opt in Options" ng-class="{active:ActiveOpt==opt}" ng-click="setActiveOpt(opt)"><a>{{opt}}</a></li>
 						</ul>
 					</div>
-					<div class="list-group-item text-center" ng-if="!Students.length">
+					<div class="list-group-item text-center" ng-if="!Students.length&&!NoInquiries">
 						<div class="preloader-message">Loading...</div>
 						<div class="loader"></div>
 					</div>
 					<div class="list-group-item" ng-class="{active:student.id===SelectedStudent.id,
-					disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:{full_name:SearchWord}" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
-						
-						<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
-						<p class="list-group-item-text">
-						<span>{{student.sno}}</span> | <span>{{student.year_level}}</span>
-						<span ng-if="student.status=='for-clearance'">| <span class="label label-danger">For Clearance</span> </span>
-						
-					</p>
+						disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:{full_name:SearchWord}" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
+							
+							<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
+							<p class="list-group-item-text">
+								<span ng-show="student.sno">{{student.sno}}</span> <span ng-show="!student.sno">Student number not issued </span>| <span>{{student.year_level}}</span>
+								<span ng-if="student.status=='for-clearance'">| <span class="label label-danger">For Clearance</span> </span>
+							</p>
+					</div>
+					<div class="list-group-item" ng-show="NoInquiries">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>No Inquiries yet!</h4>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="list-group-item list-group-search-box">

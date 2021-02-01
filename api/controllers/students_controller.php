@@ -7,8 +7,10 @@ class StudentsController extends AppController {
 		$this->Student->recursive = 0;
 		$students = $this->paginate();
 		foreach($students as $i=>$s){
+			
 			if(isset($s['YearLevel']['Section'][0]['department_id']))
 				$s['Student']['department_id'] = $s['YearLevel']['Section'][0]['department_id'];
+			$s['Student']['year_level'] = $s['YearLevel']['name'];
 			
 			$students[$i]=$s;
 		}

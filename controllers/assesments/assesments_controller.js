@@ -244,7 +244,8 @@ define(['app','api'], function (app) {
 										 id:student.id,
 										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" "+student.suffix_name,
 										 yearlevel:student.year_level_id,
-										 department_id:student.department_id
+										 department_id:student.department_id,
+										 student_id:student.student_id
 				                         };
 			};
 			$scope.filterYearLevel = function(yearlevel){
@@ -355,6 +356,7 @@ define(['app','api'], function (app) {
 			
 			$scope.setActiveOpt = function(opt){
 				$scope.Students = '';
+				$scope.NoInquiries = 0;
 				$scope.ActiveOpt = opt;
 				getStudents();
 			}
@@ -480,6 +482,13 @@ define(['app','api'], function (app) {
 				if($scope.ActiveOpt=='Old'){
 					api.GET('students', function success(response){
 						$scope.Students = response.data;
+					});
+				}else{
+					api.GET('inquiries', function success(response){
+						$scope.NoInquiries = 0;
+						$scope.Students = response.data;
+					}, function error(response){
+						$scope.NoInquiries = 1;
 					});
 				}
 			}

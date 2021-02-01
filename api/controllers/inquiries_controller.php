@@ -6,7 +6,13 @@ class InquiriesController extends AppController {
 
 	function index() {
 		$this->Inquiry->recursive = 0;
-		$this->set('inquiries', $this->paginate());
+		$students = $this->paginate();
+		foreach($students as $i=>$s){
+			$s['Inquiry']['year_level'] = $s['YearLevel']['name'];
+			//pr($s);
+			$students[$i]=$s;
+		}
+		$this->set('inquiries', $students);
 	}
 
 	function view($id = null) {
