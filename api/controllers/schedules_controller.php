@@ -21,6 +21,7 @@ class SchedulesController extends AppController {
 				$sched_details = array();
 				$subjects = array();
 				foreach($details as $s=>$d){
+					
 					$sub = $d['subject_id'];
 					$ss = $this->Subject->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>$d['subject_id'])));
 					$room = $this->Room->find('all',array('recursive'=>0,'conditions'=>array('Room.id'=>$d['room_id'])));
@@ -46,6 +47,7 @@ class SchedulesController extends AppController {
 					$subjects[$sub]['subject'] = $ss[0]['Subject']['name'];
 					$subjects[$sub]['subject_id'] = $sub;
 					$subjects[$sub]['units'] = $ss[0]['Subject']['units'];
+					$subjects[$sub]['schedule_id'] = $sched['Schedule']['id'];
 				}
 				/* pr($subjects); exit();
 				foreach($details as $s=>$d){

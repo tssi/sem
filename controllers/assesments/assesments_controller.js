@@ -96,13 +96,12 @@ define(['app','api'], function (app) {
 						}
 						$scope.ActiveDiscounts[index]= discount;
 					} */
-					console.log($scope.ActiveScheme);
+					
 					angular.forEach($scope.ActiveDiscounts, function(dsc){
 						if(dsc.type=='peso'){
 							if($scope.ActiveScheme.scheme_id=='CASH'){
-								$scope.ActiveScheme.schedule[0] -= dsc.amount;
-								$scope.TotalAmount = $scope.ActiveScheme.schedule[0];
-								console.log('dumaan');
+								$scope.TotalAmount = $scope.ActiveScheme.total_amount-dsc.amount;
+								$scope.ActiveScheme.schedule[0].amount = $scope.ActiveScheme.total_amount-dsc.amount;
 							}else{
 								var total = 0;
 								angular.forEach($scope.ActiveScheme.schedule, function(sched,index){
