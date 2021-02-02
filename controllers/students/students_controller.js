@@ -12,7 +12,7 @@ define(['app','api'], function (app) {
 			};
 			$scope.init();
 			$scope.Departments=[];
-			api.GET('educ_levels',function success(response){
+			api.GET('departments',function success(response){
 				$scope.Departments=response.data;	
 			});
 			$scope.Steps = [
@@ -21,7 +21,7 @@ define(['app','api'], function (app) {
 				{id:3, description:"Confirmation"}
 			];
 			$scope.YearLevels=[];
-			api.GET('year_levels',function success(response){
+			api.GET('year_levels',{limit:'less'},function success(response){
 				$scope.YearLevels = response.data;
 			});
 			$scope.Countries=[];
@@ -36,10 +36,10 @@ define(['app','api'], function (app) {
 			api.GET('cities',function success(response){
 				$scope.Cities = response.data;
 			});
-			$scope.Religions=[];
+			/* $scope.Religions=[];
 			api.GET('religions',function success(response){
 				$scope.Religions = response.data;
-			});
+			}); */
 			$scope.Citizenships=[];
 			api.GET('citizenships',function success(response){
 				$scope.Citizenships = response.data;
@@ -63,10 +63,11 @@ define(['app','api'], function (app) {
 					$scope.ActiveStep--;
 				};
 			};
-			$scope.getId = function(department){
-				$scope.educID=department.id;
-				//console.log($scope.educID);
-			};
+			
+			$scope.setActiveDept = function(dept){
+				$scope.ActiveDepartment = dept;
+			}
+			
 			$scope.getGender=function(gender){
 				$scope.gender = gender;
 			};
@@ -74,8 +75,8 @@ define(['app','api'], function (app) {
 				$scope.ActiveStep = step.id;
 			};
 			$scope.basicInfo=function(){
-				$scope.Student.educ_level_id=$scope.educID;
-				$scope.Student.year_level_id=$scope.level;
+				$scope.Student.department_id=$scope.ActiveDepartment.id;
+				$scope.Student.year_level_id=$scope.level.id;
 				$scope.Student.first_name=$scope.firstName;
 				$scope.Student.middle_name=$scope.middleName;
 				$scope.Student.last_name=$scope.lastName;
@@ -83,35 +84,30 @@ define(['app','api'], function (app) {
 				$scope.Student.gender=$scope.gender;
 				$scope.Student.birthday=$filter('date')($scope.birthday,'yyyy-MM-dd');
 				$scope.Student.birthplace=$scope.birthPlace;
-				$scope.Student.religion=$scope.religion;
+				/* $scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
-				$scope.Student.family=$scope.families;
+				$scope.Student.family=$scope.families; */
 				$scope.Student.prev_school=$scope.prevSchool;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
-				$scope.Student.contact_numbers=[];
-				var landline = {type:'landline', number:$scope.landline};
-				var mobile = {type:'mobile', number:$scope.mobile};
-				$scope.Student.contact_numbers.push(landline);
-				$scope.Student.contact_numbers.push(mobile);
-				var current = {	type:'current',
-								country:$scope.currentCountry,
-								province:$scope.currentProvince,
-								city:$scope.currentCity,
-								barangay:$scope.currentBrgy,
-								address:$scope.currentAddrs,
-								};
-				var permanent = {type:'permanent',
-								country:$scope.homeCountry,
-								province:$scope.homeProvince,
-								city:$scope.homeCity,
-								barangay:$scope.homeBrgy,
-								address:$scope.homeAddrs,
-								};
+				$scope.Student.landline=$scope.landline;
+				$scope.Student.mobile=$scope.mobile;
+				$scope.Student.c_country=$scope.currentCountry,
+				$scope.Student.c_province=$scope.currentProvince,
+				$scope.Student.c_city=$scope.currentCity,
+				$scope.Student.c_barangay=$scope.currentBrgy,
+				$scope.Student.c_address=$scope.currentAddrs,
+				
+				$scope.Student.country=$scope.homeCountry,
+				$scope.Student.province=$scope.homeProvince,
+				$scope.Student.city=$scope.homeCity,
+				$scope.Student.barangay=$scope.homeBrgy,
+				$scope.Student.address=$scope.homeAddrs,
+			/* 					
 				$scope.Student.addresses=[];
 				$scope.Student.addresses.push(current);
-				$scope.Student.addresses.push(permanent);
+				$scope.Student.addresses.push(permanent); */
 				$scope.hasContactInfo = true;
 			};
 			$scope.sameAsCurrent = function(){
@@ -138,28 +134,28 @@ define(['app','api'], function (app) {
 			};
 			$scope.sendInfo = function(){
 				$scope.InquirySaving  = true;
-				api.POST('students',$scope.Student,function success(response){
+				api.POST('inquiries',$scope.Student,function success(response){
 					$scope.InquirySaving  = false;
 					$scope.openModal();
+					$scope.clearField();
+					$scope.clearField2();
 				});
 			}
 			$scope.openModal=function(){
 				var modalInstance = $uibModal.open({
-							animation: true,
-							size:'sm',
-							templateUrl: 'successModal.html',
-							controller: 'SuccessModalController',
-						});
-						modalInstance.result.then(function () {
-						  
-						}, function (source) {
-							$scope.init();
-							$scope.clearField();
-							$scope.clearField2();
-						});
+					animation: true,
+					size:'sm',
+					templateUrl: 'successModal.html',
+					controller: 'SuccessModalController',
+				});
+				modalInstance.result.then(function (source) {
+					$scope.init();
+				}, function (source) {
+					$scope.init();
+				});
 			}
 			$scope.clearField=function(){
-				$scope.educID = null;
+				$scope.ActiveDepartment = null;
 				$scope.level = null;
 				$scope.firstName = null;
 				$scope.middleName = null;

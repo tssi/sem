@@ -49,4 +49,8 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			array("controller"=>"reports", "[method]" => "POST")
 	);
 	
-	
+
+	App::import('Lib', 'Api.SlugRoute');
+	//Custom API Routing
+	Configure::write('Api.MASTER_ROUTES','educ_levels|system_defaults|modules');
+	App::import('Vendor', 'Api.routes');

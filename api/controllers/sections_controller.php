@@ -4,8 +4,19 @@ class SectionsController extends AppController {
 	var $name = 'Sections';
 
 	function index() {
-		$this->Section->recursive = 0;
-		$this->set('sections', $this->paginate());
+		$this->Section->recursive = 2;
+		$sections = $this->paginate();
+		if($this->isAPIRequest()){
+			foreach($sections as $i=>$sec){
+				$sec['Section']['year_level'] = $sec['YearLevel']['name'];
+				$sc = $sec['Section'];
+				$sc['year_level'] = $sec['YearLevel']['name'];
+				
+				$sections[$i]['Section'] = $sc;
+			}
+		}
+		//exit();
+		$this->set('sections', $sections);
 	}
 
 	function view($id = null) {

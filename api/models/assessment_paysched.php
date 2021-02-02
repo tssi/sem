@@ -1,25 +1,13 @@
 <?php
-class Program extends AppModel {
-	var $name = 'Program';
+class AssessmentPaysched extends AppModel {
+	var $name = 'AssessmentPaysched';
 	var $displayField = 'name';
-	var $useDbConfig = 'ser';
-	var $recursive = 2;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
-		'Department' => array(
-			'className' => 'Department',
-			'foreignKey' => 'department_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);
-
-	var $hasMany = array(
-		'Section' => array(
-			'className' => 'Section',
-			'foreignKey' => 'program_id',
+		'Assessment' => array(
+			'className' => 'Assessment',
+			'foreignKey' => 'assessment_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
@@ -31,5 +19,7 @@ class Program extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+	
+	
 
 }

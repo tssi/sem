@@ -5,7 +5,16 @@ class StudentsController extends AppController {
 
 	function index() {
 		$this->Student->recursive = 0;
-		$this->set('students', $this->paginate());
+		$students = $this->paginate();
+		foreach($students as $i=>$s){
+			
+			if(isset($s['YearLevel']['Section'][0]['department_id']))
+				$s['Student']['department_id'] = $s['YearLevel']['Section'][0]['department_id'];
+			$s['Student']['year_level'] = $s['YearLevel']['name'];
+			
+			$students[$i]=$s;
+		}
+		$this->set('students', $students);
 	}
 
 	function view($id = null) {

@@ -11,14 +11,38 @@ class TuitionsController extends AppController {
 				//pr($tui);
 				$tuition = $tui['Tuition'];
 				$fees = $tui['FeeBreakdown'];
+				$pschemes = $tui['PaymentScheme'];
+				$discount = $tui['Discount'];
 				$fee_breakdowns = array();
+				$schemes = array();
 				foreach($fees as $f=>$fee){
+					//pr($fee);
 					$fe['fee_id'] = $fee['fee_id'];
 					$fe['amount'] = $fee['amount'];
 					$fe['description'] = $fee['Fee']['name'];
+					$fe['order'] = $fee['Fee']['order'];
 					array_push($fee_breakdowns,$fe);
 				}
+				foreach($pschemes as $p=>$scheme){
+					//pr($scheme);
+					$sch['id'] = $scheme['id'];
+					$sch['name'] = $scheme['Scheme']['name'];
+					$sch['scheme_id'] = $scheme['scheme_id'];
+					$sch['total_amount'] = $scheme['total_amount'];
+					$sch['payment_frequency'] = $scheme['Scheme']['payment_frequency'];
+					$schedules = array();
+					$sched = $scheme['PaymentSchemeSchedule'];
+					foreach($sched as $s=>$sc){
+						array_push($schedules,$sc);
+					}
+					$sch['schedule'] = $schedules;
+					array_push($schemes,$sch);
+				}
+				
+				//pr($tui); exit();
 				$tuition['fee_breakdowns'] = $fee_breakdowns;
+				$tuition['schemes'] = $schemes;
+				$tuition['discounts'] = $discount;
 				$tuitions[$i]['Tuition'] = $tuition;
 
 			}

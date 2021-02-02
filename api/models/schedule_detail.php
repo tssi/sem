@@ -18,6 +18,16 @@ class ScheduleDetail extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Subject' => array(
+			'className' => 'Subject',
+			'foreignKey' => 'subject_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
+		
 	);
+	
+	
 }

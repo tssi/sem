@@ -1,8 +1,56 @@
 <?php
 class PaymentScheme extends AppModel {
-	var $useDbConfig = 'sfm';
-	var $belongsTo = array('Tuition','Scheme');
-	var $hasMany = array('PaymentSchemeSchedule');
+	//var $useDbConfig = 'sfm';
+	var $name = 'PaymentScheme';
+	//var $belongsTo = array('Tuition','Scheme');
+	///var $hasMany = array('PaymentSchemeSchedule');
+	
+	
+	var $belongsTo = array(
+		'Tuition' => array(
+			'className' => 'Tuition',
+			'foreignKey' => 'tuition_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Scheme' => array(
+			'className' => 'Scheme',
+			'foreignKey' => 'scheme_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
+	
+	var $hasMany = array(
+		'PaymentSchemeSchedule' => array(
+			'className' => 'PaymentSchemeSchedule',
+			'foreignKey' => 'payment_scheme_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
+	
 	function prepareData($data){
 		$data = $data['PaymentScheme'];
 		if(isset($data[0])){

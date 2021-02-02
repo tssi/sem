@@ -1,14 +1,12 @@
 <?php
-class FeeBreakdown extends AppModel {
-	var $name = 'FeeBreakdown';
-	var $displayField = 'name';
-	var $recursive = 2;
+class AssessmentFee extends AppModel {
+	var $name = 'AssessmentFee';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
-		'Tuition' => array(
-			'className' => 'Tuition',
-			'foreignKey' => 'tuition_id',
+		'Assessment' => array(
+			'className' => 'Assessment',
+			'foreignKey' => 'assessment_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

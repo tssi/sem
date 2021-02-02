@@ -60,7 +60,7 @@
 								<dt>Previous School</dt>
 								<dd>{{Student.prev_school}}</dd>
 						</dl>
-						<table class="table table-condensed table-bordered">
+						<!-- <table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
 									<th class="text-center">Relationship</th>
@@ -75,7 +75,7 @@
 									<td>{{family.occupation}}</td>
 								</tr>
 							</tbody>
-						</table>
+						</table> -->
 					</div>
 					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
 						<h5>Contact Information</h5>
@@ -177,16 +177,15 @@
 										<label for=""> Department</label>
 										<div class="btn-group btn-group-justified">
 										  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
-											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===educID}" ng-click="getId(department)">{{department.alias}}</button>
+											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===ActiveDepartment.id}" ng-click="setActiveDept(department)">{{department.alias}}</button>
 										  </div>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<label for=""> Level</label>
-										<select name="" id="" class="form-control"  ng-model="level">
+										<select name="" id="" class="form-control" ng-options="yl as yl.description for yl in YearLevels | filter:{department_id:ActiveDepartment.id} | orderBy:'order'"
+										ng-model="level" ng-disabled="!ActiveDepartment">
 											<option value="">Select Level</option>
-											<option value="{{yearlevel.id}}" ng-repeat="yearlevel in YearLevels | filter:{ educ_level_id: educID}">{{yearlevel.name}}
-											</option>
 										</select>
 									</div>
 								</div>
@@ -232,7 +231,7 @@
 								</div>
 							</div>
 						</div>
-						<table class="table table-condensed table-bordered">
+						<!-- <table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
 									<th class="text-center">Relationship</th>
@@ -279,9 +278,9 @@
 									</td>
 								</tr>
 							</tfoot>
-						</table>
+						</table> -->
 					</div>
-					<div class="list-group-item list-group-header">
+					<!-- <div class="list-group-item list-group-header">
 						<h5>Social</h5>
 					</div>
 					<div class="list-group-item">
@@ -301,7 +300,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 				</div>
 				<div class="list-group" ng-show="ActiveStep===2">

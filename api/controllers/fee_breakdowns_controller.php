@@ -5,7 +5,16 @@ class FeeBreakdownsController extends AppController {
 
 	function index() {
 		$this->FeeBreakdown->recursive = 0;
-		$this->set('feeBreakdowns', $this->paginate());
+		$breakdowns = $this->paginate();
+		
+		foreach($breakdowns as $i=>$b){
+			$b['FeeBreakdown']['fee'] = $b['Fee']['name'];
+			$b['FeeBreakdown']['type'] = $b['Fee']['type'];
+			$b['FeeBreakdown']['order'] = $b['Fee']['order'];
+			$breakdowns[$i] = $b;
+		}
+		
+		$this->set('feeBreakdowns', $breakdowns);
 	}
 
 	function view($id = null) {

@@ -1,8 +1,39 @@
 <?php
 class PaymentSchemeSchedule extends AppModel {
 	var $name = 'PaymentSchemeSchedule';
-	var $useDbConfig = 'sfm';
-	var $belongsTo = array('PaymentScheme','BillingPeriod');
+	//var $useDbConfig = 'sfm';
+	//var $belongsTo = array('PaymentScheme','BillingPeriod');
+	
+	var $belongsTo = array(
+		'PaymentScheme' => array(
+			'className' => 'PaymentScheme',
+			'foreignKey' => 'payment_scheme_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'BillingPeriod' => array(
+			'className' => 'BillingPeriod',
+			'foreignKey' => 'billing_period_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
+	
+	
 	function beforeSave($options){
 		$data = $this->data['PaymentSchemeSchedule'];
 		if(isset($data[0])){
