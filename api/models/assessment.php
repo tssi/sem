@@ -27,6 +27,19 @@ class Assessment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Inquiry' => array(
+			'className' => 'Inquiry',
+			'foreignKey' => 'id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 	);
 	var $hasMany = array(
 		'AssessmentPaysched' => array(
@@ -48,7 +61,7 @@ class Assessment extends AppModel {
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => 'order',
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',
