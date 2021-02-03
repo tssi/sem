@@ -16,7 +16,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function hdr(){
+	function hdr($data){
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -42,15 +42,13 @@ class StudentRegistrationForm extends Formsheet{
 		$this->rightText(5,$y++,'NAME:','','b');
 		
 		$y=6;
-		$this->leftText(5.5,$y,rand(),'','');
-		$this->leftText(20.5,$y++,'XXX','','');
-		$this->leftText(5.5,$y++,'Juan Dela Cruz','','');
+		$this->leftText(5.5,$y,$data['id'],'','');
+		$this->leftText(20.5,$y++,$data['year_level_id'].'/'.$data['section_id'],'','');
+		$this->leftText(5.5,$y++,$data['print_name'],'','');
 		$this->drawBox(0,5,38,2.5);
-		
-	
 	}
 	
-	function data(){
+	function data($data){
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.5,
@@ -68,51 +66,52 @@ class StudentRegistrationForm extends Formsheet{
 		$this->centerText(20,$y,'DAY',2,'b');
 		$this->centerText(22,$y,'TIME',4,'b');
 		$this->leftText(26.2,$y++,'TEACHER','','b');
-		
+		//pr($data);exit;
 
-		$amount = '99,999.99';
-		for($i=1;$i<10;$i++){
-			$this->leftText(0.2,$y,'SUB'.$i,'','');
-			$this->leftText(3.2,$y,'SUBJECT '.$i,'','');
-			$this->centerText(13,$y,'1.0',2,'');
-			$this->leftText(15.2,$y,'Section '.$i,'','');
-			$int= mt_rand(1262055681,1272509157);
-			$randomDate = date("D",$int);
-			$randomTime = date("h:i A",$int);
-			$this->centerText(20,$y,strtoupper($randomDate),2,'');
-			$this->centerText(22,$y,strtoupper($randomTime),4,'');
-			$this->leftText(26.2,$y,'Teacher '.$i,'','');
+		//ASSESSMENT
+		foreach($data['AssessmentSubject'] as $d){
+			$this->leftText(0.2,$y,$d['subject_id'],'','');
+			$this->leftText(3.2,$y,'--','','');
+			$this->centerText(13,$y,'xx',2,'');
+			$this->leftText(15.2,$y,$d['section_id'],'','');
+			$this->centerText(20,$y,'xx',2,'');
+			$this->centerText(22,$y,'xx',4,'');
+			$this->leftText(26.2,$y,'xx','','');
 			$y++;
 		}
 		$this->drawLine($y-0.6,'h');
-		$this->leftText(0.2,$y,'Total No. of Subject: 9','','b');
-		$this->centerText(13,$y,'9.0',2,'b');
+		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
+		$this->centerText(13,$y,'xx',2,'b');
 		$end = $y+3;
 		
 		//FEE BREAKDOWN
 		$y=$end;
+		$total=0;
 		$this->leftText(0.2,$y++,'FEE BREAKDOWN','','b');
-		for($i=1;$i<10;$i++){
-			$this->leftText(0.2,$y,'FEE '.$i,'','');
-			$this->centerText(13,$y,$amount,2,'');
+		foreach($data['AssessmentFee'] as $d){
+			$this->leftText(0.2,$y,$d['fee_id'],'','');
+			$this->rightText(15,$y,number_format($d['due_amount'],2),'','');
+			$total+=$d['due_amount'];
 			$y++;
 		}
 		$this->drawLine($y-0.6,'h',array(0,16));
 		$this->leftText(0.2,$y,'Total','','b');
-		$this->centerText(13,$y,$amount,2,'b');
+		$this->rightText(15,$y,number_format($total,2),'','b');
 		
 		//PAYMENT SCHED
 		$y=$end;
+		$totaldue=0;
 		$this->leftText(22.2,$y++,'PAYMENT SCHEDULE','','b');
-		for($i=1;$i<10;$i++){
-			$int= mt_rand(1262055681,1272509157);
-			$randomDate = date("M d,Y",$int);
-			$this->leftText(22.2,$y,strtoupper($randomDate),'','');
-			$this->rightText(30,$y,$amount,3,'');
+		foreach($data['AssessmentPaysched'] as $d){
+			$this->leftText(22.2,$y,date("M d, Y", strtotime($d['due_date'])),'','');
+			if($d['due_amount']) $this->rightText(30,$y,number_format($d['due_amount'],2),3,'');
+			else $this->rightText(30,$y,'--',3,'');
+			$totaldue+=$d['due_amount'];
 			$y++;
 		}
+	
 		$this->drawLine($y-0.6,'h',array(22,11));
-		$this->rightText(30,$y,$amount,3,'b');
+		$this->rightText(30,$y,number_format($totaldue,2),3,'b');
 		
 		
 		//NOTE

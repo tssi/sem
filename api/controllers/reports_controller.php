@@ -1,10 +1,12 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = null;
+	var $uses = array('Assessment','Student');
 
 	function student_registration_form(){
-		$data = array();
+		$this->Assessment->bindModel(array('belongsTo' => array('Student')));
+		$data = $this->Assessment->find('first');
+		//pr($data);exit;
 		$this->set(compact('data'));
 	}
 	
