@@ -70,7 +70,7 @@
 							<tbody>
 								<tr ng-repeat="fee in ActiveTuition.fee_breakdowns | orderBy:'order'">
 									<td>{{fee.description}}</td>
-									<td><div class="amount" ng-class="{peso:$first}">{{fee.amount | currency: ''}}</div></td>
+									<td><div class="amount" >{{fee.amount | currency: ''}}</div></td>
 								</tr>
 							</tbody>
 							<tfoot> 
@@ -160,10 +160,10 @@
 						</table>
 					</div>
 					
-					<div class="list-group-item list-group-header" ng-show="hasScheduleInfo">
+					<div class="list-group-item list-group-header" ng-show="ActiveScheme.schedule.length">
 						<h5>Payment Schedule</h5>
 					</div>
-					<div class="list-group-item" ng-show="hasScheduleInfo"> 
+					<div class="list-group-item" ng-show="ActiveScheme.schedule.length"> 
 						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
@@ -231,6 +231,16 @@
 							</div>
 						</div>
 					</div>
+					<!-- <div class="list-group-item" ng-show="SearchWord&&!Students">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-info-sign"></i>
+								</div>
+								<h4>Click search button</h4>
+							</div>
+						</div>
+					</div> -->
 				</div>
 				<div class="list-group-item list-group-search-box">
 					<div class="input-group"> 

@@ -2,7 +2,7 @@
 class CurriculumsController extends AppController {
 
 	var $name = 'Curriculums';
-	var $uses =  array('Curriculum','MasterConfig');
+	var $uses =  array('Curriculum','MasterConfig','Program');
 	function index() {
 		$this->Curriculum->recursive = 0;
 		$curriculums = $this->paginate();
@@ -17,11 +17,16 @@ class CurriculumsController extends AppController {
 				$C =  $curriculum['Curriculum'];
 				$details = $curriculum['CurriculumDetail'];
 				$sec = $curriculum['CurriculumSection'];
-				//pr($curriculum);
-
+				//$C['program_id'] = $curriculum['Department']['Section'][0]['program_id'];
+				if(isset($_GET['department_id'])){
+					$sec_ids = array();
+					foreach($sec as $x=>$s){
+						array_push($sec_ids,$s['section_id']);
+					}
+					$C['section_id'] = $sec_ids;
+				}
 				$subjects = array();
 				foreach($details as $detail){
-					
 					$year_level = $detail['year_level_id'];
 					$code = $detail['subject_id'];
 					$alt = $detail['alt_subject_id'];

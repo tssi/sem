@@ -1,6 +1,6 @@
 "use strict";
 define(['app','api'], function (app) {
-    app.register.controller('AssesmentController',['$scope','$rootScope','$uibModal','api', function ($scope,$rootScope,$uibModal,api) {
+    app.register.controller('AssesmentController',['$scope','$rootScope','$uibModal','api', '$filter', function ($scope,$rootScope,$uibModal,api,$filter) {
 		$scope.index = function(){
 			bootstrap();
 			$scope.init = function(){
@@ -34,12 +34,18 @@ define(['app','api'], function (app) {
 					$scope.CustomizedScheds = [];
 					$scope.ActiveSection = $scope.SelectedSection;
 					$scope.Subjects = [];
-					angular.forEach($scope.Curriculum.subjects, function(sub){
-						if($scope.ActiveSection.program_id!=='MIXED'){
-							if(sub.year_level_id==$scope.ActiveSection.year_level_id)
-								$scope.Subjects.push(sub);
-						}else
-							$scope.Subjects.push(sub);
+					angular.forEach($scope.Curriculum, function(curri){
+						angular.forEach(curri.subjects, function(sub){
+							sub.sec_id = curri.section_id;
+							if($scope.ActiveSection.program_id!=='MIXED'){
+								if(sub.year_level_id==$scope.ActiveSection.year_level_id)
+									$scope.Subjects.push(sub);
+							}else{
+								if(sub.year_level_id==$scope.ActiveSection.year_level_id)
+									$scope.Subjects.push(sub);
+							}
+						});
+						
 					});
 					getFees();
 					getSchedules();
@@ -54,10 +60,12 @@ define(['app','api'], function (app) {
 						$scope.ActiveSchedule['schedule_details'] = $scope.CustomizedScheds;
 					}
 					$scope.Disabled = 1;
+					ComputeSubjects();
 				};
 				
 				if($scope.ActiveStep===5){
 					$scope.ActiveScheme = $scope.SelectedScheme;
+					console.log($scope.ActiveScheme);
 					$scope.TotalAmount = $scope.ActiveScheme.total_amount;
 					//$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.variance_amount;
 					//$scope.TotalAdjustment = $scope.ActiveScheme.variance_amount;
@@ -225,7 +233,6 @@ define(['app','api'], function (app) {
 			}
 			
 			$scope.SearchStudent = function(){
-				$scope.Search = 1;
 				$scope.Students = '';
 				var data = {
 					keyword:$scope.SearchWord,
@@ -242,10 +249,9 @@ define(['app','api'], function (app) {
 			}
 			
 			$scope.ClearSearch = function(){
-				$scope.Search = 0;
 				$scope.SearchWord = '';
 				$scope.Students = '';
-				api.GET('students',data, function success(response) {
+				api.GET('students', function success(response) {
 					$scope.Students = response.data;
 				});
 			}
@@ -305,6 +311,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			function initAssessment(){
+				$scope.SearchWord = '';
 				$scope.Options = ['Old','New'];
 				$scope.ActiveOpt = 'Old';
 				$scope.Student={};
@@ -348,6 +355,100 @@ define(['app','api'], function (app) {
 				getStudents();
 				getYearLevels();
 			}	
+			
+			function ComputeSubjects(){
+				var subjects = [];
+				angular.forEach($scope.CustomizedScheds,function(sub){
+					subjects.push(sub.subject_id);
+				});
+				api.GET('fee_tuihr_subjects',{subject_id:subjects,limit:'less'},function success(response){
+					var tuition = 0;
+					angular.forEach(response.data, function(sub){
+						tuition += sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr;
+					});
+					$scope.TotalDue+=tuition;
+					$scope.ActiveTuition.fee_breakdowns.push({fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1});
+					getSpecialFees(subjects);
+				})
+				
+			}
+			
+			function getSpecialFees(subjects){
+				api.GET('fee_special_subjects',{subject_id:subjects,limit:'less'}, function success(response){
+					var fees = [];
+					angular.forEach(response.data,function(sub){
+						fees.push(sub.fee_id);
+					});
+					angular.forEach($scope.OrigFees, function(fee){
+						if(fees.indexOf(fee.fee_id)!==-1){
+							$scope.TotalDue+=fee.amount;
+							$scope.ActiveTuition.fee_breakdowns.push(fee);
+						}
+						if(fee.fee_id=='REG'){
+							$scope.ActiveTuition.fee_breakdowns.push(fee);
+							$scope.TotalDue+=fee.amount;
+						}
+					});
+					
+					IrregPaymentScheme();
+				},function error(response){
+					IrregPaymentScheme();
+				});
+				
+			}
+			
+			function IrregPaymentScheme(){
+				$scope.TotalAmount=$scope.TotalDue;
+				var uponnrol = 0;
+				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
+					if(fee.type=='MSC')
+						uponnrol+=fee.amount;
+				});
+				var assess_date = new Date('2021-01-15');
+				var year = assess_date.getFullYear();
+				var nextMonth = assess_date.getMonth()+2;
+				var day = assess_date.getDate();
+				var lastDate = '';
+				angular.forEach($scope.ActiveTuition.schemes, function(sc){
+					if(sc.scheme_id=='MONT')
+						lastDate = new Date(sc.schedule[sc.schedule.length-1].due_dates);
+				});
+				var lastMonth = lastDate.getMonth()+1;
+				var count = 1;
+				var schedules = [];
+				for(var i=nextMonth-1;i!=lastMonth;i++){
+					if(i==13)
+						i=1;
+					count++;
+				}
+				var distribute = ($scope.TotalAmount-uponnrol)/(count-1);
+				count = 1;
+				for(var i=nextMonth-1;i!=lastMonth+1;i++){
+					if(i==13){
+						i=1;
+						year++;
+					}
+					var due_date = new Date(year+'-'+i+'-'+day);
+					var mo = due_date.toLocaleString('en-us', { month: 'short' });
+					var sched = {
+						amount:distribute,
+						due_dates:year+'-'+i+'-'+day,
+						billing_period_id:mo+year
+					};
+					if(count==1){
+						sched.amount = uponnrol;
+						sched.billing_period_id = 'UPONNROL';
+					}
+					sched.billing_period_id = sched.billing_period_id.toUpperCase();
+					angular.forEach($scope.BillingPeriods, function(bill){
+						if(sched.billing_period_id==bill.id)
+							sched.description = bill.name;
+					});
+					schedules.push(sched);
+					count++;
+				}
+				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
+			}
 			
 			function computePaymentSchedule(){
 				var totalDiscount = angular.copy($scope.TotalDiscount)*-1;
@@ -421,21 +522,35 @@ define(['app','api'], function (app) {
 				var data = {year_level_id:$scope.ActiveSection.year_level_id}
 				api.GET('tuitions',data, function success(response){
 					$scope.ActiveTuition = response.data[0];
-					for(var i in $scope.ActiveTuition.fee_breakdowns){
-						var a = $scope.ActiveTuition.fee_breakdowns[i]
-						$scope.TotalDue += a.amount;
-					};
-					$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
-					$scope.Discounts=$scope.ActiveTuition.discounts;
-					$scope.TotalAmount=$scope.TotalDue; 
-					angular.forEach($scope.ActiveTuition.schemes, function(scheme){
-						angular.forEach(scheme.schedule, function(sched){
-							angular.forEach($scope.BillingPeriods, function(per){
-								if(per.id==sched.billing_period_id)
-									sched.description = per.name;
+					
+					if($scope.ActiveSection.program_id=='MIXED'){
+						var breakdown = [];
+						$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
+						angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
+							if(fee.type=='MSC'){
+								breakdown.push(fee);
+								$scope.TotalDue += fee.amount;
+							}
+						});
+						$scope.TotalAmount=$scope.TotalDue;
+						$scope.ActiveTuition.fee_breakdowns = breakdown;
+					}else{
+						for(var i in $scope.ActiveTuition.fee_breakdowns){
+							var a = $scope.ActiveTuition.fee_breakdowns[i]
+							$scope.TotalDue += a.amount;
+						};
+						$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
+						$scope.Discounts=$scope.ActiveTuition.discounts;
+						$scope.TotalAmount=$scope.TotalDue; 
+						angular.forEach($scope.ActiveTuition.schemes, function(scheme){
+							angular.forEach(scheme.schedule, function(sched){
+								angular.forEach($scope.BillingPeriods, function(per){
+									if(per.id==sched.billing_period_id)
+										sched.description = per.name;
+								});
 							});
 						});
-					});
+					}
 				});
 			}
 			
@@ -446,6 +561,7 @@ define(['app','api'], function (app) {
 			}
 			
 			function getSchedules(){
+				
 				if($scope.ActiveSection.program_id!='MIXED')
 					var data = {section_id:$scope.ActiveSection.id};
 				else
@@ -473,7 +589,9 @@ define(['app','api'], function (app) {
 								if(!sec.schedule_details){
 									var details = [];
 									angular.forEach($scope.Subjects, function(sub){
-										if(sec.year_level_id==sub.year_level_id)
+										if($scope.ActiveDept!='SH'&&sec.year_level_id==sub.year_level_id)
+											details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'year_level_id':sub.year_level_id});
+										if($scope.ActiveDept=='SH'&&sub.sec_id.indexOf(sec.id)!==-1&&sec.year_level_id==sub.year_level_id)
 											details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'year_level_id':sub.year_level_id});
 									});
 									sec.schedule_details = details;
@@ -482,11 +600,13 @@ define(['app','api'], function (app) {
 							$scope.LoadingSec = false;
 						});
 					}
+					
 				}, function error(response){
 					$scope.ActiveSchedule = {};
 					var details = [];
 					angular.forEach($scope.Subjects, function(sub){
-						details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+						if($scope.ActiveDept=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveSection.year_level_id==sub.year_level_id)
+							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
 					});
 					$scope.ActiveSchedule.schedule_details = details;
 					console.log($scope.ActiveSchedule);
@@ -499,7 +619,7 @@ define(['app','api'], function (app) {
 					department_id:dept
 				}
 				api.GET('curriculums',data, function success(response){
-					$scope.Curriculum = response.data[0];
+					$scope.Curriculum = response.data;
 				});
 			}
 		};

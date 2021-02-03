@@ -20,6 +20,7 @@ class TuitionsController extends AppController {
 					$fe['fee_id'] = $fee['fee_id'];
 					$fe['amount'] = $fee['amount'];
 					$fe['description'] = $fee['Fee']['name'];
+					$fe['type'] = $fee['Fee']['type'];
 					$fe['order'] = $fee['Fee']['order'];
 					array_push($fee_breakdowns,$fe);
 				}

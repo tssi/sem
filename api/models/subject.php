@@ -3,6 +3,7 @@ class Subject extends AppModel {
 	var $name = 'Subject';
 	var $displayField = 'name';
 	var $useDbConfig = 'ser';
+	var $recursive = 2;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -48,7 +49,33 @@ class Subject extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),
+		'FeeSpecialSubject' => array(
+			'className' => 'FeeSpecialSubject',
+			'foreignKey' => 'subject_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'FeeTuihrSubject' => array(
+			'className' => 'FeeTuihrSubject',
+			'foreignKey' => 'subject_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 	);
 
 }
