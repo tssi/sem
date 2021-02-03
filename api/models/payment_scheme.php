@@ -2,6 +2,7 @@
 class PaymentScheme extends AppModel {
 	//var $useDbConfig = 'sfm';
 	var $name = 'PaymentScheme';
+	var $order = 'order';
 	//var $belongsTo = array('Tuition','Scheme');
 	///var $hasMany = array('PaymentSchemeSchedule');
 	

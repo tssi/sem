@@ -192,8 +192,8 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="AssesmentSaving">
-				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=6,'glyphicon-ok': ActiveStep===6}"  aria-hidden="true"></span>
+			<button class="btn btn-primary btn-fab top right" ng-click="nextStep()" ng-disabled="Disabled">
+				<span class="glyphicon " ng-class="{'glyphicon-chevron-right':ActiveStep!=Steps.length,'glyphicon-ok': ActiveStep==Steps.length}"  aria-hidden="true"></span>
 			</button>
 			<div class="list-group" ng-show="ActiveStep===1">
 				<div class="list-group-item list-group-header">
@@ -256,8 +256,8 @@
 					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | filter:{'department_id':ActiveDept} | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
 						<h4 class="list-group-item-heading">{{yearLevel.description}}</h4>
 						<p class="list-group-item-text">
-							<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder">Repeater</span>
-							<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1">Promoted</span>
+							<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder" ng-show="ActiveOpt=='Old'">Repeater</span>
+							<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1" ng-show="ActiveOpt=='Old'">Promoted</span>
 							<span class="label label-warning" ng-if="yearLevel.id=='IR'">Irregular</span>
 						</p>
 					</div>
@@ -426,10 +426,10 @@
 					<div class="list-group-item list-group-header">
 						<h5>{{Steps[4].description}}</h5>
 					</div>
-					<div class="list-group-item text-center" ng-if="!Discounts.length">
+					<!-- <div class="list-group-item text-center" ng-if="!Discounts.length">
 						Loading...
-					</div>
-					<div class="list-group-item" ng-repeat="discount in Discounts">
+					</div> -->
+					<div class="list-group-item" ng-repeat="discount in Discounts" ng-show="ActiveDept!='SH'">
 						<div class="checkbox checkbox-lg">
 							<label >
 							<input type="checkbox" ng-checked="SelectedDiscounts[discount.id] &&  isEmpty(SelectedDiscounts)">
@@ -445,6 +445,16 @@
 								<span ng-if="!$last"> ,</span>
 								</span>
 								</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item" ng-show="!Discounts.length">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-info-sign"></i>
+								</div>
+								<h4>No Discount available</h4>
 							</div>
 						</div>
 					</div>
