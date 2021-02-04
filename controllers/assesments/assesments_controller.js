@@ -115,6 +115,7 @@ define(['app','api'], function (app) {
 						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
 					}
 					api.POST('assessments',$scope.Assessment, function success(response){
+						$scope.AssessmentId = response.data.id;
 						$scope.openModal();
 					});
 				}
@@ -127,8 +128,13 @@ define(['app','api'], function (app) {
 				var modalInstance = $uibModal.open({
 					animation: true,
 					size:'sm',
-					templateUrl: 'successModal.html',
-					controller: 'SuccessModalController',
+					templateUrl: 'successAssessModal.html',
+					controller: 'SuccessAssessModalController',
+					resolve:{
+						assessmentId:function(){
+							return $scope.AssessmentId;
+						}
+					}
 				});
 				modalInstance.result.then(function (source) {
 					initAssessment();
@@ -160,6 +166,7 @@ define(['app','api'], function (app) {
 						size:'sm',
 						templateUrl: 'clearanceModal.html',
 						controller: 'ClearanceModalController',
+						
 					});
 					modalInstance.result.then(function () {
 					  
@@ -238,20 +245,21 @@ define(['app','api'], function (app) {
 			$scope.toggleSelectDiscount=function(id){
 				$scope.SelectedDiscounts[id] = !$scope.SelectedDiscounts[id]; 
 			}
-			$scope.openModal=function(){
+			/* $scope.openModal=function(){
 				var modalInstance = $uibModal.open({
-						animation: true,
-						size:'sm',
-						templateUrl: 'successModal.html',
-						controller: 'SuccessModalController',
-					});
-					modalInstance.result.then(function () {
-					  
-					}, function (source) {
-						$scope.init();
-					});
+					animation: true,
+					size:'sm',
+					templateUrl: 'successModal.html',
+					controller: 'SuccessModalController',
+					
+				});
+				modalInstance.result.then(function () {
+				  
+				}, function (source) {
+					$scope.init();
+				});
 			}
-			
+			 */
 			$scope.SearchStudent = function(){
 				$scope.Students = '';
 				var data = {
@@ -653,14 +661,16 @@ define(['app','api'], function (app) {
 			}
 		};
     }]);
-	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+	app.register.controller('SuccessAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api','assessmentId', function ($scope,$rootScope,$timeout, $uibModalInstance, api,assessmentId){
+		$scope.AssessmentId = assessmentId;
 		$rootScope.__MODAL_OPEN = true;
 		$timeout(function(){
 			$scope.ShowButton = true;
 		},333);
 		//Dismiss modal
-		$scope.dismissModal = function(){
+		$scope.dismissAssesment = function(){
 			$rootScope.__MODAL_OPEN = false;
+			document.getElementById('PrintAssess').submit();
 			$uibModalInstance.dismiss('ok');
 		};
 	}]);
