@@ -5,9 +5,9 @@
 	<div class="row">
 		<div class="col-md-12">
 			<ul class="nav nav-pills nav-wizard">
-				<li ng-class="{active:ActiveStep===step.id}" ng-repeat="step in Steps" ng-click="updateStep(step)">
+				<li ng-class="{active:ActiveStep===step.id}" ng-repeat="step in Steps" disabled>
 					<div ng-if="!$first" class="nav-wedge"></div>
-					<a data-toggle="tab"><span class="badge">{{step.id}}</span> {{step.description}}</a>
+					<a data-toggle="tab"><span class="badge" disabled >{{step.id}}</span> {{step.description}}</a>
 					<div ng-if="!$last" class="nav-arrow"></div>
 				</li>
 			</ul>
@@ -56,10 +56,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="list-group-item list-group-header" ng-show="hasSectionInfo">
-						<h5>Fee Breakdown</h5>
+					<div class="list-group-item list-group-header" ng-show="ActiveTuition.fee_breakdowns">
+						<ul class="nav nav-pills">
+							<li ng-repeat="tab in Tabs" ng-class="{active:ActiveTab.id==tab.id}" 
+								ng-click="setActiveTab(tab)"><a>{{tab.description}}</a>
+							</li>
+						</ul>
 					</div>
-					<div class="list-group-item" ng-show="hasSectionInfo">
+					<div class="list-group-item" ng-show="ActiveTab.id==1&&ShowInfo&&ActiveTuition.fee_breakdowns.length">
 						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
@@ -81,10 +85,7 @@
 							</tfoot>
 						</table>
 					</div>
-					<div class="list-group-item list-group-header" ng-show="hasAdjustmentInfo">
-						<h5>Adjustments</h5>
-					</div>
-					<div class="list-group-item" ng-show="hasAdjustmentInfo">
+					<div class="list-group-item" ng-show="ActiveTab.id==4&&ActiveScheme.variance_amount">
 						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
@@ -98,32 +99,9 @@
 									<td><div class="amount peso">{{ActiveScheme.variance_amount | currency}}</div></td>
 								</tr>
 								<tr ng-if="ActiveScheme.variance_amount<0">
-									<td>{{ActiveScheme.name}} Discount</td>
+									<td>{{ActiveScheme.name}} Subsidy</td>
 									<td><div class="amount peso">{{ActiveScheme.variance_amount | currency}}</div></td>
 								</tr>
-								<!-- <tr ng-if="TotalDiscount">
-									<td>
-									Discounts:
-									</td>
-									<td rowspan="{{ActiveDiscounts.length+1}}"><div class="amount" ng-class="{peso:!ActiveScheme.variance_amount}">{{TotalDiscount | currency}}</div></td>
-								</tr> 
-								<tr ng-if="TotalDiscount" ng-repeat="ActiveDiscount in ActiveDiscounts">
-									<td>
-										<div class="row">
-											<div class="col-md-5 col-md-offset-1">
-												<span ng-if="ActiveDiscount.type==='percent'"> {{ActiveDiscount.amount}}%</span>
-												<span class="amount total peso" ng-if="ActiveDiscount.type==='peso'">{{ActiveDiscount.amount | currency}}</span> 
-												<span ng-repeat="fee in ActiveDiscount.fees_applicable">{{fee}} 
-												<span ng-if="fee==='all'">fees</span>
-												<span ng-if="!$last"> ,</span>
-												</span>
-											</div>
-											<div class="col-md-4 col-md-offset-2">
-												<div class="amount pull-right" ng-class="{peso:$first}">{{ActiveDiscount.computed_amount | currency}}</div>
-											</div>
-										</div>
-									</td>
-								</tr>-->
 								<tr ng-repeat="disc in ActiveDiscounts">
 									<td>Discount: {{disc.name}}</td>
 									<td class="amount total peso">{{disc.amount}}</td>
@@ -137,11 +115,17 @@
 							</tfoot>
 						</table>
 					</div>
-					
-					<div class="list-group-item list-group-header" ng-show="HasSched">
-						<h5>Class Schedule</h5>
-					</div>
-					<div class="list-group-item" ng-show="HasSched">
+					<div class="list-group-item" ng-show="ActiveTab.id==4&&!ActiveScheme.variance_amount">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>No Adjustment</h4>
+							</div>
+						</div>
+					</div> 
+					<div class="list-group-item" ng-show="ActiveTab.id==2&&ShowInfo&&ActiveSchedule.schedule_details">
 						<table class="table table-bordered table-condensed text-center align-middle">
 							<thead>
 								<tr>
@@ -160,10 +144,7 @@
 						</table>
 					</div>
 					
-					<div class="list-group-item list-group-header" ng-show="ActiveScheme.schedule.length">
-						<h5>Payment Schedule</h5>
-					</div>
-					<div class="list-group-item" ng-show="ActiveScheme.schedule.length"> 
+					<div class="list-group-item" ng-show="ActiveTab.id==3&&ShowInfo&&ActiveScheme.schedule.length"> 
 						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>

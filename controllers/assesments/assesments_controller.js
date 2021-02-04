@@ -7,6 +7,7 @@ define(['app','api'], function (app) {
 				initAssessment();
 				initDataSource();
 				$scope.Disabled = 1;
+				$scope.ShowInfo = 0;
 			};
 			$scope.init();
 			$scope.nextStep = function(){
@@ -41,7 +42,7 @@ define(['app','api'], function (app) {
 								if(sub.year_level_id==$scope.ActiveSection.year_level_id)
 									$scope.Subjects.push(sub);
 							}else{
-								if(sub.year_level_id==$scope.ActiveSection.year_level_id)
+								//if(sub.year_level_id==$scope.ActiveSection.year_level_id&&$scope.ActiveDept=='SH')
 									$scope.Subjects.push(sub);
 							}
 						});
@@ -50,7 +51,7 @@ define(['app','api'], function (app) {
 					getFees();
 					getSchedules();
 					$scope.TotalDue=0;	
-					
+					$scope.ShowInfo = 1;
 				};
 				
 				if($scope.ActiveStep===4){
@@ -99,6 +100,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.assessment_total = $scope.TotalAmount + $scope.TotalDiscount;
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
+					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,
 						paysched:$scope.ActiveScheme.schedule,
@@ -113,14 +115,32 @@ define(['app','api'], function (app) {
 						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
 					}
 					api.POST('assessments',$scope.Assessment, function success(response){
-						initAssessment();
-						initDataSource();
+						$scope.openModal();
 					});
 				}
 				if($scope.ActiveStep<$scope.Steps.length){
 					$scope.ActiveStep++;
 				}
 			};
+			
+			$scope.openModal=function(){
+				var modalInstance = $uibModal.open({
+					animation: true,
+					size:'sm',
+					templateUrl: 'successModal.html',
+					controller: 'SuccessModalController',
+				});
+				modalInstance.result.then(function (source) {
+					initAssessment();
+					initDataSource();
+					$scope.Disabled = 1;
+				}, function (source) {
+					initAssessment();
+					initDataSource();
+					$scope.Disabled = 1;
+				});
+			}
+			
 			$scope.prevStep = function(){
 				if($scope.ActiveStep>1)
 					$scope.ActiveStep--;
@@ -274,6 +294,9 @@ define(['app','api'], function (app) {
 				getStudents();
 			}
 			
+			$scope.setActiveTab = function(tab){
+				$scope.ActiveTab = tab;
+			}
 			
 			function bootstrap(){
 				$rootScope.__MODULE_NAME = 'Assessment';
@@ -343,6 +366,8 @@ define(['app','api'], function (app) {
 				$scope.hasAdjustmentInfo = false;
 				$scope.AssesmentSaving = false;
 				$scope.HasSched = false;
+				$scope.Tabs = [{id:1,description:'Fees'},{id:2,description:'Class Schedule'},{id:3,description:'Payment Schedule'},{id:4,description:'Adjustments'},];
+				$scope.ActiveTab = {id:1,description:'Fee Breakdown'};
 			};
 			function initDataSource(){
 				/* $scope.Students=[];
@@ -597,6 +622,8 @@ define(['app','api'], function (app) {
 									sec.schedule_details = details;
 								}
 							});
+							console.log($scope.Sections);
+							console.log($scope.Subjects);
 							$scope.LoadingSec = false;
 						});
 					}
@@ -606,6 +633,8 @@ define(['app','api'], function (app) {
 					var details = [];
 					angular.forEach($scope.Subjects, function(sub){
 						if($scope.ActiveDept=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveSection.year_level_id==sub.year_level_id)
+							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+						if($scope.ActiveDept!='SH')
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
 					});
 					$scope.ActiveSchedule.schedule_details = details;

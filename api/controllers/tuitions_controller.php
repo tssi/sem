@@ -31,6 +31,7 @@ class TuitionsController extends AppController {
 					$sch['scheme_id'] = $scheme['scheme_id'];
 					$sch['total_amount'] = $scheme['total_amount'];
 					$sch['payment_frequency'] = $scheme['Scheme']['payment_frequency'];
+					$sch['variance_amount'] = $scheme['variance_amount'];
 					$schedules = array();
 					$sched = $scheme['PaymentSchemeSchedule'];
 					foreach($sched as $s=>$sc){
