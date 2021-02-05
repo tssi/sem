@@ -342,6 +342,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			function initAssessment(){
+				$scope.ActiveTuition = '';
 				$scope.SearchWord = '';
 				$scope.Options = ['Old','New'];
 				$scope.ActiveOpt = 'Old';

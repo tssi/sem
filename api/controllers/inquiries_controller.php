@@ -8,8 +8,10 @@ class InquiriesController extends AppController {
 		$this->Inquiry->recursive = 0;
 		$students = $this->paginate();
 		foreach($students as $i=>$s){
+			//pr($s); exit();
+			$student = $s['Inquiry'];
 			$s['Inquiry']['year_level'] = $s['YearLevel']['name'];
-			//pr($s);
+			$s['Inquiry']['full_name'] = $student['first_name'] .' '. $student['middle_name'] .' '. $student['last_name'];
 			$students[$i]=$s;
 		}
 		$this->set('inquiries', $students);
