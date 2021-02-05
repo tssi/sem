@@ -38,13 +38,15 @@ class StudentRegistrationForm extends Formsheet{
 		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR 2020-2021',38,'');
 		$y=6;
 		$this->rightText(5,$y,'STUDENT ID:','','b');
-		$this->leftText(15,$y,'LEVEL/COURSE:','','b');
-		$this->leftText(25,$y++,'DATE/TIME:','','b');
-		$this->rightText(5,$y++,'NAME:','','b');
+		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
+		$this->rightText(5,$y,'NAME:','','b');
+		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
-		$this->leftText(5.5,$y,$data['id'],'','');
-		$this->leftText(20.5,$y++,$data['year_level_id'].'/'.$data['section_id'],'','');
-		$this->leftText(5.5,$y++,$data['print_name'],'','');
+		//pr($data);exit;
+		$this->leftText(5.5,$y,$data['sno'],'','');
+		$this->leftText(20.5,$y++,$data['YearLevel']['description'],'','');
+		$this->leftText(5.5,$y,$data['print_name'],'','');
+		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);
 	}
 	
@@ -70,14 +72,14 @@ class StudentRegistrationForm extends Formsheet{
 		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR 2020-2021',38,'');
 		$y=6;
 		$this->rightText(5,$y,'STUDENT ID:','','b');
-		$this->leftText(15,$y,'LEVEL/COURSE:','','b');
-		$this->leftText(25,$y++,'DATE/TIME:','','b');
-		$this->rightText(5,$y++,'NAME:','','b');
+		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
+		$this->rightText(5,$y,'NAME:','','b');
+		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
-		$this->leftText(5.5,$y,$data['student_id'],'','');
-		$this->leftText(20.5,$y,'','','');
-		$this->leftText(29,$y++,date("M d,Y h:i:s A"),'','');
-		$this->leftText(5.5,$y++,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
+		$this->leftText(5.5,$y,isset($data['sno']),'','');
+		$this->leftText(20.5,$y++,isset($data['YearLevel']['description']),'','');
+		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
+		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);
 	}
 	

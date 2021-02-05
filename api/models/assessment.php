@@ -40,6 +40,19 @@ class Assessment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Section' => array(
+			'className' => 'Section',
+			'foreignKey' => 'id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 	);
 	var $hasMany = array(
 		'AssessmentPaysched' => array(

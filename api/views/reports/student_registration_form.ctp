@@ -3,13 +3,12 @@ App::import('Vendor','student_registration_form');
 
 
 $pr= new StudentRegistrationForm();
-
-if(!empty($data['Inquiry'])){
-	$pr->newstudent($data['Inquiry']);
-}else{
+//pr($data);exit;
+if(!empty($data['Student'])){
 	$pr->hdr($data['Student']);
+}else{
+	$pr->newstudent($data['Inquiry']);
 }
-
 $pr->data($data);
 $pr->output();
 ?>
