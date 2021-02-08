@@ -38,6 +38,9 @@ class AssessmentsController extends AppController {
 				$sched['bill_month'] = $sched['billing_period_id'];
 				$sched['due_date'] = $sched['due_dates'];
 				$sched['due_amount'] = $sched['amount'];
+				$sched['order'] =$i+1;
+				$sched['status'] ='NONE';
+				$sched['transaction_type_id'] =$i==0?'INIPY':'SBQPY';
 				$paysched[$i] = $sched;
 			}
 			$this->AssessmentPaysched->saveAll($paysched);
