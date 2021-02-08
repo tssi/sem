@@ -59,9 +59,9 @@ define(['app','api'], function (app) {
 					if($scope.ActiveSection.program_id=='MIXED'){
 						$scope.ActiveSchedule = {};
 						$scope.ActiveSchedule['schedule_details'] = $scope.CustomizedScheds;
+						ComputeSubjects();
 					}
 					$scope.Disabled = 1;
-					ComputeSubjects();
 				};
 				
 				if($scope.ActiveStep===5){
@@ -153,6 +153,10 @@ define(['app','api'], function (app) {
 				switch($scope.ActiveStep){
 					case 1: $scope.init(); break;
 					case 2: $scope.ActiveLevel=''; break;
+					case 5:
+						if($scope.ActiveSection.program_id=='MIXED')
+							getFees();
+						break;
 					case 6: $scope.ActiveDiscounts=[]; $scope.SelectedDiscount = {}; break;
 				}
 			};
@@ -288,11 +292,15 @@ define(['app','api'], function (app) {
 				subject.section_id = sec.id;
 				$scope.CustomizedScheds.push(subject);
 				$scope.sec.schedule_details.splice(index,1);
+				if($scope.Disabled==1)
+					$scope.Disabled = 0;
 			}
 			
 			$scope.removeSched = function(subject,index){
 				$scope.CustomizedScheds.splice(index,1);
 				$scope.sec.schedule_details.push(subject);
+				if($scope.Disabled==1)
+					$scope.Disabled = 0;
 			}
 			
 			$scope.setActiveOpt = function(opt){

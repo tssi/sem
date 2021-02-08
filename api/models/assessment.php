@@ -7,29 +7,7 @@ class Assessment extends AppModel {
 	var $belongsTo = array(
 		'Student' => array(
 			'className' => 'Student',
-			'foreignKey' => 'id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => array(
-				'Student.sno',
-				'Student.gender',
-				'Student.short_name',
-				'Student.full_name',
-				'Student.class_name',
-				'Student.status',
-				'Student.year_level_id',
-				'Student.section_id',
-			),
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Inquiry' => array(
-			'className' => 'Inquiry',
-			'foreignKey' => 'id',
+			'foreignKey' => 'student_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
@@ -40,9 +18,22 @@ class Assessment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Inquiry' => array(
+			'className' => 'Inquiry',
+			'foreignKey' => false,
+			'dependent' => false,
+			'conditions' => array('Inquiry.student_id=Assessment.student_id'),
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'Section' => array(
 			'className' => 'Section',
-			'foreignKey' => 'id',
+			'foreignKey' => 'section_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

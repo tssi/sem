@@ -169,6 +169,16 @@
 							</tfoot>
 						</table>
 					</div>
+					<div class="list-group-item" ng-show="ActiveTab.id==3&&!ActiveScheme.schedule.length">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-exclamation-sign"></i>
+								</div>
+								<h4>No Payment Scheme selected!</h4>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

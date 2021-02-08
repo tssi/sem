@@ -4,11 +4,14 @@ define(['app','api'], function (app) {
 		$scope.index = function(){
 			$rootScope.__MODULE_NAME = 'Inquiry';
 			$scope.init = function(){
-			$scope.Student={};
-			$scope.families=[];
-			$scope.hasBasicInfo=false;
-			$scope.hasContactInfo=false;
-			$scope.ActiveStep=1;
+				$scope.Student={};
+				$scope.families=[];
+				$scope.hasBasicInfo=false;
+				$scope.hasContactInfo=false;
+				$scope.ActiveStep=1;
+				$scope.Countries=['Philippines'];
+				$scope.Provinces=['Batangas'];
+				$scope.Cities=['Balayan'];
 			};
 			$scope.init();
 			$scope.Departments=[];
@@ -24,18 +27,18 @@ define(['app','api'], function (app) {
 			api.GET('year_levels',{limit:'less'},function success(response){
 				$scope.YearLevels = response.data;
 			});
-			$scope.Countries=[];
+			/* 
 			api.GET('countries',function success(response){
 				$scope.Countries = response.data;
 			});
-			$scope.Provinces=[];
+			
 			api.GET('provinces',function success(response){
 				$scope.Provinces = response.data;
 			});
-			$scope.Cities=[];
+			
 			api.GET('cities',function success(response){
 				$scope.Cities = response.data;
-			});
+			}); */
 			/* $scope.Religions=[];
 			api.GET('religions',function success(response){
 				$scope.Religions = response.data;

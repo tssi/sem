@@ -52,11 +52,11 @@
 								<dt>Birthday</dt>
 								<dd>{{Student.birthday | date:'mediumDate'}}</dd>
 								<dt>Birth Place</dt>
-								<dd>{{Student.birthplace}}</dd>
+								<dd>{{Student.birthplace}}</dd><!-- 
 								<dt>Religion</dt>
 								<dd>{{Student.religion}}</dd>
 								<dt>Citizenship</dt>
-								<dd>{{Student.citizenship}}</dd>
+								<dd>{{Student.citizenship}}</dd> -->
 								<dt>Previous School</dt>
 								<dd>{{Student.prev_school}}</dd>
 						</dl>
@@ -83,21 +83,19 @@
 					<div class="list-group-item" ng-show="hasContactInfo">
 						<dl class="dl-horizontal">
 							<dt>Landline</dt>
-							<dd ng-repeat="contact_number in Student.contact_numbers | filter: {type:'landline'}">{{contact_number.number}}</dd>
+							<dd>{{Student.landline}}</dd>
 							<dt>Mobile</dt>
-							<dd ng-repeat="contact_number in Student.contact_numbers | filter: {type:'mobile'}">{{contact_number.number}}</dd>
+							<dd>{{Student.mobile}}</dd>
 							<dt>Current Address</dt>
 							<dd>
-								<address ng-repeat="address in Student.addresses | filter: {type:'current'}">
-									{{address.address}}, {{address.barangay}},<br/>
-									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: currentProvince}" ng-if="currentProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: currentCountry}" ng-if="currentCountry">{{country.name}}</span><br/>
+								<address>
+									{{Student.address}}, brgy. {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
 								</address>
 							</dd>
 							<dt>Home Address</dt>
 							<dd>
-								<address ng-repeat="address in Student.addresses | filter: {type:'permanent'}">
-									{{address.address}}, {{address.barangay}},<br/>
-									{{address.city}}, <span ng-repeat="province in Provinces | filter: {id: homeProvince}" ng-if="homeProvince">{{province.name}}</span>, <span ng-repeat="country in Countries | filter: {id: homeCountry}" ng-if="homeCountry">{{country.name}}</span><br/>
+								<address>
+									{{Student.address}}, brgy. {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
 								</address>
 							</dd>
 						</dl>
@@ -176,7 +174,7 @@
 									<div class="col-md-6">
 										<label for=""> Department</label>
 										<div class="btn-group btn-group-justified">
-										  <div class="btn-group" ng-repeat="department in Departments" ng-model="department">
+										  <div class="btn-group" ng-repeat="department in Departments | orderBy:'order'" ng-model="department">
 											<button type="button" class="btn btn-default  ng-class:{'btn-primary': department.id===ActiveDepartment.id}" ng-click="setActiveDept(department)">{{department.alias}}</button>
 										  </div>
 										</div>
@@ -335,13 +333,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country.id as country.name for country in Countries | filter:{id:'PH'}">
+											<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country as country for country in Countries">
 												<option value="">Select Country</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id: currentCountry}">
+											<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province as province for province in Provinces">
 												<option value="">Select Province</option>
 											</select>
 										</div>
@@ -351,8 +349,8 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:currentProvince}">
-												<option value="">Select City</option>
+											<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city as city for city in Cities">
+												<option value="">Select City/Municipality</option>
 											</select>
 										</div>
 										<div class="col-md-6">
@@ -380,13 +378,13 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country.id as country.name for country in Countries">
+											<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country as country for country in Countries">
 											  <option value="">Select Country</option>
 											</select>
 										</div>
 										<div class="col-md-6">
 											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province.id as province.name for province in Provinces | filter:{country_id:homeCountry}">
+											<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province as province for province in Provinces">
 												<option value="">Select Province</option>
 											</select>
 										</div>
@@ -396,7 +394,7 @@
 									<div class="row">
 										<div class="col-md-6">
 											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city.name as city.name for city in Cities | filter:{province_id:homeProvince}">
+											<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city as city for city in Cities">
 												<option value="">Select City</option>
 											</select>
 										</div>
