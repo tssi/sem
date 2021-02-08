@@ -4,9 +4,9 @@ class ReportsController extends AppController{
 	var $uses = array('Assessment','Student');
 
 	function student_registration_form(){
-		//$this->Assessment->bindModel(array('belongsTo' => array('Student','Inquiry')));
+	
 		$this->Assessment->recursive=2;
-		$data = $this->Assessment->findById(4);
+		$data = $this->Assessment->findById($_POST['AssessmentId']);
 		//pr($data);exit;
 		$this->set(compact('data'));
 	}
