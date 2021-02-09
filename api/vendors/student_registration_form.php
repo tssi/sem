@@ -51,6 +51,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function newstudent($data){
+		//pr($data);exit;
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -76,8 +77,8 @@ class StudentRegistrationForm extends Formsheet{
 		$this->rightText(5,$y,'NAME:','','b');
 		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
-		$this->leftText(5.5,$y,isset($data['sno']),'','');
-		$this->leftText(20.5,$y++,isset($data['YearLevel']['description']),'','');
+		$this->leftText(5.5,$y,'','','');
+		$this->leftText(20.5,$y++,$data['YearLevel']['description'],'','');
 		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);
@@ -94,8 +95,9 @@ class StudentRegistrationForm extends Formsheet{
 			'rows'=> 4,	
 		);
 		$this->section($metrics);
+		$this->GRID['font_size']=7;
 		$y=0;
-		$this->leftText(4,$y,'SUBJECTS',10,'b');
+		$this->leftText(0,$y,'SUBJECTS',10,'b');
 		$this->centerText(15,$y,'UNITS',2,'b');
 		$this->leftText(17.2,$y,'SECTION','','b');
 		$this->centerText(22,$y,'DAY',2,'b');
@@ -106,8 +108,8 @@ class StudentRegistrationForm extends Formsheet{
 		//ASSESSMENT
 		$totalunits=0;
 		foreach($data['AssessmentSubject'] as $d){
-			$this->leftText(0.2,$y,$d['subject_id'],'','');
-			$this->leftText(4.2,$y,$d['Subject']['name'],'','');
+			//$this->leftText(0.2,$y,$d['subject_id'],'','');
+			$this->leftText(0,$y,$d['Subject']['name'],'','');
 			$this->centerText(15,$y,$d['Subject']['units'],2,'');
 			$this->leftText(17.2,$y,isset($d['Section']['name']),'','');
 			$this->centerText(22,$y,'--',2,'');
