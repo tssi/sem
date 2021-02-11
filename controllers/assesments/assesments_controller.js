@@ -8,6 +8,11 @@ define(['app','api'], function (app) {
 				initDataSource();
 				$scope.Disabled = 1;
 				$scope.ShowInfo = 0;
+				$rootScope.$watch('_APP', function(data){
+					$scope.Defaults = data;
+					console.log($scope.Defaults);
+				});
+				//console.log($rootScope);
 			};
 			$scope.init();
 			$scope.nextStep = function(){
