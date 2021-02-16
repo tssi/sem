@@ -206,7 +206,7 @@
 					<div class="list-group-item" ng-class="{active:student.id===SelectedStudent.id,
 						disabled:student.status==='for-clearance'}" ng-repeat="student in Students | filter:{full_name:SearchWord}" ng-click="student.status==='for-clearance'?openClearance(student):setSelectedStudent(student)">
 							
-							<h4 class="list-group-item-heading">{{student.first_name}} {{student.last_name}} {{student.middle_name}} {{student.suffix_name}}</h4>
+							<h4 class="list-group-item-heading">{{student.first_name}} {{student.middle_name}} {{student.last_name}} {{student.suffix}}</h4>
 							<p class="list-group-item-text">
 								<span ng-show="student.sno">{{student.sno}}</span> <span ng-show="!student.sno">Student number not issued </span>| <span>{{student.year_level}}</span>
 								<span ng-if="student.status=='for-clearance'">| <span class="label label-danger">For Clearance</span> </span>

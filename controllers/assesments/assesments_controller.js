@@ -9,8 +9,17 @@ define(['app','api'], function (app) {
 				$scope.Disabled = 1;
 				$scope.ShowInfo = 0;
 				$rootScope.$watch('_APP', function(data){
-					$scope.Defaults = data;
-					console.log($scope.Defaults);
+					if(data){
+						angular.forEach(data, function(item){
+							switch(item.sys_key){
+								case 'ACTIVE_SY': $scope.ActiveSy = item.sys_value; break;
+								case 'DEFAULT_': $scope.Defaults = JSON.parse(item.sys_value); break;
+							}
+						});
+						console.log($scope.Defaults.SEMESTER);
+						console.log($scope.ActiveSy);
+						$scope.ActiveSem = $scope.Defaults.SEMESTER
+					}
 				});
 				//console.log($rootScope);
 			};
@@ -187,11 +196,13 @@ define(['app','api'], function (app) {
 				$scope.Disabled = 0;
 				$scope.SelectedStudent = {
 										 id:student.id,
-										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" "+student.suffix_name,
+										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" ",
 										 yearlevel:student.year_level_id,
 										 department_id:student.department_id,
 										 student_id:student.student_id
 				                         };
+				if(student.suffix)
+					$scope.SelectedStudent.name += student.suffix;
 			};
 			$scope.filterYearLevel = function(yearlevel){
 				if($scope.ActiveOpt=='Old')
@@ -666,7 +677,7 @@ define(['app','api'], function (app) {
 			
 			function getCurriculum(dept){
 				var data ={
-					esp: 2020.25,
+					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
 					department_id:dept
 				}
 				api.GET('curriculums',data, function success(response){
