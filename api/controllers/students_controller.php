@@ -2,7 +2,6 @@
 class StudentsController extends AppController {
 
 	var $name = 'Students';
-
 	function index() {
 		$this->Student->recursive = 0;
 		$students = $this->paginate();
@@ -27,17 +26,55 @@ class StudentsController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
+			//pr($this->data);exit;
+			$student = $this->data['Student'];
 			$this->Student->create();
+			if(!isset($student['id'])){
+				$SID_CODE ='X';
+				if(!isset($student['section_id'])):
+					$student['section_id'] = 9999;
+					$student['program_id'] = 'MIXED';
+					$student['year_level_id'] = 'GZ';
+				else:
+					$sectObj = $this->Student->Section->findById($student['section_id'])['Section'];
+					$student['year_level_id'] =$sectObj['year_level_id'];
+					$student['program_id'] =$sectObj['program_id'];
+					
+					switch($sectObj['department_id']){
+						case 'SH': $SID_CODE='S'; break;
+						case 'HS': $SID_CODE='J'; break;
+						case 'GS': $SID_CODE='G'; break;
+						case 'PS': $SID_CODE='P'; break;
+					}
+
+				endif;
+
+				$student['id'] = $this->Student->generateSID('LS',$SID_CODE);
+				if(!isset($student['suffix']))
+					$student['suffix'] = '';
+				if(!isset($student['prefix']))
+					$student['prefix'] = '';
+			}
+			$this->data['Student'] = $student;
 			if ($this->Student->save($this->data)) {
+				if(isset($this->data['Student']['classroom_user_id']))
+					$this->data['Student']['classroom_user_id'] = '_'.$this->data['Student']['classroom_user_id'];
+				if(isset($this->data['Student']['__add_to_block'])):
+					$CLB =  array(
+								'student_id'=>$this->Student->id,
+								'esp'=>2019.3,
+								'section_id'=>999,
+								'status'=>'ACT'
+								);
+
+					$this->Student->ClasslistBlock->save($CLB);
+				endif;
 				$this->Session->setFlash(__('The student has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The student could not be saved. Please, try again.', true));
 			}
 		}
-		$yearLevels = $this->Student->YearLevel->find('list');
-		$sections = $this->Student->Section->find('list');
-		$this->set(compact('yearLevels', 'sections'));
 	}
 
 	function edit($id = null) {
