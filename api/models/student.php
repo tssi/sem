@@ -32,6 +32,8 @@ class Student extends AppModel {
 	);
 	function beforeFind($queryData){
 		//pr($queryData); exit();
+		parent::beforeFind($queryData);
+
 		if($conds=$queryData['conditions']){
 			foreach($conds as $i=>$cond){
 				if(!is_array($cond))
@@ -52,6 +54,7 @@ class Student extends AppModel {
 			
 			$queryData['conditions']=$conds;
 		}
+
 		return $queryData;
 	}
 	 
