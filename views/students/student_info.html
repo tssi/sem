@@ -1,0 +1,93 @@
+<div ng-controller="StudentInfoController as SI" ng-init="SI.init()">
+	<a-fab ng-click="SI.openModal()"></a-fab>
+	<a-module>
+		<a-container>
+			<a-header>
+				<div class="pull-left">
+					<h4>Students</h4>
+				</div>
+				<div class="pull-right">
+					<a-pager meta="SI.Meta" on-navigate="SI.goToPage"></a-pager>
+				</div>
+				<div class="clearfix"></div>
+			</a-header>
+			<a-header>
+				<a-searchbox ng-model="SI.Searchbox" on-search="SI.search" on-clear="SI.clearSearch" is-large="true"></a-searchbox>
+			</a-header>
+			<a-canvas>
+				<a-content>
+					<a-table headers="SI.Headers" props="SI.Props" data="SI.Students"  ng-model="SI.Active" on-row-click="SI.openModal" search-by="SI.SearchBy" search-word="SI.Searchbox"></a-table>
+				</a-content>
+			</a-canvas>
+		</a-container>
+	</a-module>
+	<a-modal id="StudentInfoModal" title="{{SI.ModalLabel}}">
+		<a-modal-body>
+			<a-row>
+				<a-col>
+					<uib-tabset active="SI.ActiveTab">
+						<uib-tab index="0" heading="Basic Info">
+							<a-row>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.lrn" label="LRN"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.sno" label="SNO"></m-formgroup>
+								</a-col>
+							</a-row>	
+							<a-row>
+								<a-col size="12">
+									<m-formgroup ng-model="SI.ActiveStudent.last_name" label="Last Name"></m-formgroup>
+								</a-col>
+							</a-row>	
+							<a-row>
+								<a-col size="12">
+									<m-formgroup ng-model="SI.ActiveStudent.first_name" label="First Name"></m-formgroup>
+								</a-col>
+							</a-row>	
+							<a-row>
+								<a-col size="9">
+									<m-formgroup ng-model="SI.ActiveStudent.middle_name" label="Middle Name"></m-formgroup>
+								</a-col>
+								<a-col size="3">
+									<m-formgroup ng-model="SI.ActiveStudent.suffix" label="Suffix"></m-formgroup>
+								</a-col>
+							</a-row>
+						</uib-tab>
+						<uib-tab index="1" heading="Academic">
+							<a-row>
+								<a-col size="4">
+									<m-formgroup ng-model="SI.ActiveStudent.entry_status" label="Entry Status" options="SI.entryStats" option-label="name" ></m-formgroup>
+								</a-col>
+								<a-col size="4">
+									<m-formgroup ng-model="SI.ActiveStudent.entry_sy" label="Entry SY"  ></m-formgroup>
+								</a-col>
+								<a-col size="4">
+									<m-formgroup ng-model="SI.ActiveStudent.entry_period" label="Entry Period" options="SI.entryPeriods" option-label="name" ></m-formgroup>
+								</a-col>
+							</a-row>
+							<a-row>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.department_id" label="Department" options="SI.entryDepts" option-label="name" ></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.section_id" label="Section" options="(SI.entrySections | filter: {department_id:SI.ActiveStudent.department_id})" option-label="name" option-group="year_level"  ></m-formgroup>
+								</a-col>
+							</a-row>
+							
+						</uib-tab>
+						
+					</uib-tabset>
+				</a-col>
+			</a-row>
+		</a-modal-body>
+		<a-modal-footer>
+			<a-button opt-class="pull-left" ng-click="SI.closeModal()" > Close</a-button>
+			<a-button ng-disabled="SI.saving || SI.isGatheringData" type="primary" ng-click="SI.confirmModal()">
+				<span ng-if="!SI.saving">Confirm</span>
+				<span ng-if="SI.saving">Saving...</span>
+			</a-button>
+		</a-modal-footer>
+	</a-modal>
+	
+</div>
