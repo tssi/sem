@@ -680,6 +680,8 @@ define(['app','api'], function (app) {
 					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
 					department_id:dept
 				}
+				if(dept!='SH')
+					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){
 					$scope.Curriculum = response.data;
 				});
