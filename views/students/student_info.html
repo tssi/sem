@@ -1,5 +1,5 @@
 <div ng-controller="StudentInfoController as SI" ng-init="SI.init()">
-	<a-fab ng-click="SI.openModal()"></a-fab>
+	<a-fab ng-click="SI.openModal()" ng-disable="!SI.isReady"></a-fab>
 	<a-module>
 		<a-container>
 			<a-header>
@@ -70,8 +70,9 @@
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.department_id" label="Department" options="SI.entryDepts" option-label="name" ></m-formgroup>
 								</a-col>
+								
 								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.section_id" label="Section" options="(SI.entrySections | filter: {department_id:SI.ActiveStudent.department_id})" option-label="name" option-group="year_level"  ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.section_id" label="Section" options="SI.entrySections" option-label="name" option-group="year_level"  ></m-formgroup>
 								</a-col>
 							</a-row>
 							

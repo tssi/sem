@@ -24,8 +24,13 @@ define(['app','api','atomic/bomb'],function(app){
 					$scope.entryPeriod =atomic.SelectedPeriod.id;
 					$scope.entryPeriods = atomic.Periods;
 					$scope.entryDepts =  atomic.Departments;
-					$scope.entrySections =  atomic.Sections;
-					console.log(atomic);
+					$scope.isReady =  true;
+					// Filter section dropdown by student department id
+					$selfScope.$watch('SI.ActiveStudent.department_id',function(deptId){
+						 var sections =  $filter('filter')(atomic.Sections,{department_id:deptId});
+						 $scope.entrySections = sections;
+
+					});
 				});
 				loadStudents(1);
 			};
