@@ -16,8 +16,8 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.SearchBy = ['lrn','full_name'];// Fields you can search from the items 			
 				
 				$scope.entryStats = [{id:"RETURN",name:'Returnee'},{id:"TRNSIN",name:"Transfer In"},{id:"REGLAR",name:"Regular"}];
-
-
+				$scope.Types = ['Old','New'];
+				$scope.ActiveTyp = 'Old';
 				atomic.ready(function(){
 					// Map defaults and options
 					$scope.entrySY = atomic.ActiveSY;
@@ -46,7 +46,10 @@ define(['app','api','atomic/bomb'],function(app){
 					$scope.Students =  response.data;
 					$scope.CurrentPage =  $scope.Meta.page;
 				}
-				api.GET("students",filter,success);
+				if($scope.ActiveTyp=='Old')
+					api.GET("students",filter,success);
+				else
+					api.GET("inquiries",filter,success);
 			}
 			
 			//SEARCH
@@ -60,6 +63,13 @@ define(['app','api','atomic/bomb'],function(app){
 					loadStudents(page);
 				}
 			}
+			
+			$scope.setActiveTyp = function(type){
+				$scope.Students = '';
+				$scope.ActiveTyp = type;
+				loadStudents()
+			}
+			
 			$scope.search = function(keyword){//Catch the search event to handle loading of items, go to first page
 				$scope.Students = '';
 				var fields =  $scope.SearchBy;
@@ -74,12 +84,12 @@ define(['app','api','atomic/bomb'],function(app){
 			
 			//MODAL
 			$scope.openModal = function(student){
+				console.log(student);
 				$scope.saving = false;
 				$scope.ActiveTab = 0;
 				$scope.Active = {};
-				$scope.ActiveStudent = {};
+				$scope.ActiveStudent = '';
 				aModal.open('StudentInfoModal');  
-				
 				if(student) {
 					delete student.classroom_user_id;
 					
@@ -112,15 +122,32 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.confirmModal = function(){
 				$scope.saving = true;
 				var data = $scope.ActiveStudent;
-				api.POST('students',data,function(response){
-					aModal.close("StudentInfoModal");
-					if(!$scope.ActiveStudent.id){
-						$scope.CurrentPage = $scope.Meta.last;
-					}
-				
-					$scope.goToPage($scope.CurrentPage);
-					$scope.Active = response.data;
-				});
+				var yl = $filter('filter')(atomic.Sections,{id:data.section_id});
+				data.year_level_id = yl[0].year_level_id;
+				console.log(yl);
+				console.log(data);
+				return;
+				if(data.sno){
+					api.POST('students',data,function(response){
+						aModal.close("StudentInfoModal");
+						if(!$scope.ActiveStudent.id){
+							$scope.CurrentPage = $scope.Meta.last;
+						}
+					
+						$scope.goToPage($scope.CurrentPage);
+						$scope.Active = response.data;
+					});
+				}else{
+					api.POST('inquiries',data,function(response){
+						aModal.close("StudentInfoModal");
+						if(!$scope.ActiveStudent.id){
+							$scope.CurrentPage = $scope.Meta.last;
+						}
+					
+						$scope.goToPage($scope.CurrentPage);
+						$scope.Active = response.data;
+					});
+				}
 			}
 			
 			
