@@ -92,16 +92,16 @@ define(['app','api','atomic/bomb'],function(app){
 				aModal.open('StudentInfoModal');  
 				if(student) {
 					delete student.classroom_user_id;
-					
 					var mLbl = student.first_name[0]+'.' +student.last_name;
 					if(student.lrn)	mLbl +=  ' '+ student.lrn;
 					$scope.ModalLabel = mLbl;
-					
+					$scope.Mode = 'edit';
 				
 					$scope.ActiveStudent = student;
 					
 					
 				}else{
+					$scope.Mode = 'add';
 					$scope.ModalLabel='New Student';
 					$scope.ActiveStudent.entry_sy =  $scope.entrySY;
 					$scope.ActiveStudent.entry_period =  $scope.entryPeriod;
@@ -124,7 +124,6 @@ define(['app','api','atomic/bomb'],function(app){
 				var data = $scope.ActiveStudent;
 				var yl = $filter('filter')(atomic.Sections,{id:data.section_id});
 				data.year_level_id = yl[0].year_level_id;
-				console.log(yl);
 				console.log(data);
 				return;
 				if(data.sno){
