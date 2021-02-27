@@ -26,8 +26,24 @@
 				<a-searchbox ng-model="SI.Searchbox" on-search="SI.search" on-clear="SI.clearSearch" is-large="true"></a-searchbox>
 			</a-header>
 			<a-canvas>
-				<a-content>
-					<a-table headers="SI.Headers" props="SI.Props" data="SI.Students"  ng-model="SI.Active" on-row-click="SI.openModal" search-by="SI.SearchBy" search-word="SI.Searchbox"></a-table>
+				<a-content >
+					<a-row ng-show="SI.Students.length">
+						<a-col>
+							<a-table headers="SI.Headers" props="SI.Props" data="SI.Students"  ng-model="SI.Active" on-row-click="SI.openModal" search-by="SI.SearchBy" search-word="SI.Searchbox"></a-table>
+						</a-col>
+					</a-row>
+					<a-row ng-show="SI.NoStudents">
+						<a-col>
+							<div class="empty-state">
+								<div class="well">
+									<div class="empty-state-icon">
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+									</div>
+									<h4>No Students!</h4>
+								</div>
+							</div>
+						</a-col>
+					</a-row>
 				</a-content>
 			</a-canvas>
 		</a-container>

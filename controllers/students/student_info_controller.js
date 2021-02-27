@@ -45,11 +45,15 @@ define(['app','api','atomic/bomb'],function(app){
 					$scope.Meta =  response.meta;
 					$scope.Students =  response.data;
 					$scope.CurrentPage =  $scope.Meta.page;
+					$scope.NoStudents = false;
+				}
+				var error = function(response){
+					$scope.NoStudents = true;
 				}
 				if($scope.ActiveTyp=='Old')
-					api.GET("students",filter,success);
+					api.GET("students",filter,success,error);
 				else
-					api.GET("inquiries",filter,success);
+					api.GET("inquiries",filter,success,error);
 			}
 			
 			//SEARCH
