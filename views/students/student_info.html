@@ -38,7 +38,7 @@
 				<a-col>
 					<uib-tabset active="SI.ActiveTab">
 						<uib-tab index="0" heading="Basic Info">
-							<a-row ng-show="SI.ActiveTyp=='New'">
+							<a-row >
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.lrn" label="LRN"></m-formgroup>
 								</a-col>
@@ -46,17 +46,17 @@
 									<m-formgroup ng-model="SI.ActiveStudent.sno" label="SNO"></m-formgroup>
 								</a-col>
 							</a-row>	
-							<a-row ng-show="SI.ActiveTyp=='New'">
+							<a-row >
 								<a-col size="12">
 									<m-formgroup ng-model="SI.ActiveStudent.last_name" label="Last Name"></m-formgroup>
 								</a-col>
 							</a-row>	
-							<a-row ng-show="SI.ActiveTyp=='New'">
+							<a-row >
 								<a-col size="12">
 									<m-formgroup ng-model="SI.ActiveStudent.first_name" label="First Name"></m-formgroup>
 								</a-col>
 							</a-row>	
-							<a-row ng-show="SI.ActiveTyp=='New'">
+							<a-row >
 								<a-col size="9">
 									<m-formgroup ng-model="SI.ActiveStudent.middle_name" label="Middle Name"></m-formgroup>
 								</a-col>
@@ -64,19 +64,7 @@
 									<m-formgroup ng-model="SI.ActiveStudent.suffix" label="Suffix"></m-formgroup>
 								</a-col>
 							</a-row>
-							<a-row ng-show="SI.ActiveTyp=='Old'">
-								<a-col style="margin-bottom: 10px;">
-									<label for="" ng-show="SI.Mode=='add'" >Name</label>
-									<m-search-student ng-model="SI.ActiveStudent" ng-show="SI.Mode=='add'" ></m-search-student>	
-									<m-formgroup ng-model="SI.ActiveStudent.full_name" label="Name" ng-show="SI.Mode=='edit'" ></m-formgroup>
-								</a-col>
-								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.sno" label="Sno" ng-disabled="true" ></m-formgroup>
-								</a-col>
-								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.lrn" label="Lrn"></m-formgroup>
-								</a-col>
-							</a-row>
+							
 						</uib-tab>
 						<uib-tab index="1" heading="Academic">
 							<a-row>
