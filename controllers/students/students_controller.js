@@ -27,26 +27,7 @@ define(['app','api'], function (app) {
 			api.GET('year_levels',{limit:'less'},function success(response){
 				$scope.YearLevels = response.data;
 			});
-			/* 
-			api.GET('countries',function success(response){
-				$scope.Countries = response.data;
-			});
 			
-			api.GET('provinces',function success(response){
-				$scope.Provinces = response.data;
-			});
-			
-			api.GET('cities',function success(response){
-				$scope.Cities = response.data;
-			}); */
-			/* $scope.Religions=[];
-			api.GET('religions',function success(response){
-				$scope.Religions = response.data;
-			}); */
-			$scope.Citizenships=[];
-			api.GET('citizenships',function success(response){
-				$scope.Citizenships = response.data;
-			});
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
 					$scope.basicInfo();
@@ -87,9 +68,7 @@ define(['app','api'], function (app) {
 				$scope.Student.gender=$scope.gender;
 				$scope.Student.birthday=$filter('date')($scope.birthday,'yyyy-MM-dd');
 				$scope.Student.birthplace=$scope.birthPlace;
-				/* $scope.Student.religion=$scope.religion;
 				$scope.Student.citizenship=$scope.citizenship;
-				$scope.Student.family=$scope.families; */
 				$scope.Student.prev_school=$scope.prevSchool;
 				$scope.hasBasicInfo = true;
 			};
