@@ -1,5 +1,5 @@
 <div ng-controller="StudentInfoController as SI" ng-init="SI.init()">
-	<a-fab ng-click="SI.openModal()" ng-disable="!SI.isReady"></a-fab>
+	<a-fab ng-click="SI.openModal()" ng-disabled="SI.ActiveTyp=='New'" ></a-fab>
 	<a-module>
 		<a-container>
 			<a-header>
@@ -111,11 +111,14 @@
 		</a-modal-body>
 		<a-modal-footer>
 			<a-button opt-class="pull-left" ng-click="SI.closeModal()" > Close</a-button>
+			<a-button ng-show="SI.ActiveTyp=='New'" ng-click="SI.printInfoSheet()" > Print</a-button>
 			<a-button ng-disabled="SI.saving || SI.isGatheringData" type="primary" ng-click="SI.confirmModal()">
 				<span ng-if="!SI.saving">Confirm</span>
 				<span ng-if="SI.saving">Saving...</span>
 			</a-button>
 		</a-modal-footer>
 	</a-modal>
-	
+	<form action="api/info_sheet" id="PrintInfoSheet" method="POST" target="_blank">
+		<input type="hidden" id="InquiryID" name="InquiryID" value="{{SI.ActiveStudent.id}}">
+	</form>
 </div>

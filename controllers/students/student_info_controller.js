@@ -17,7 +17,7 @@ define(['app','api','atomic/bomb'],function(app){
 				
 				$scope.entryStats = [{id:"RETURN",name:'Returnee'},{id:"TRNSIN",name:"Transfer In"},{id:"REGLAR",name:"Regular"}];
 				$scope.Types = ['Old','New'];
-				$scope.ActiveTyp = 'Old';
+				$scope.setActiveTyp('New');
 				atomic.ready(function(){
 					// Map defaults and options
 					$scope.entrySY = atomic.ActiveSY;
@@ -71,6 +71,13 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.setActiveTyp = function(type){
 				$scope.Students = '';
 				$scope.ActiveTyp = type;
+				if(type=='New'){
+					$scope.Headers[0] = 'Ref No';
+					$scope.Props[0] = 'id';
+				}else{
+					$scope.Headers[0] = 'LRN';
+					$scope.Props[0] = 'lrn';
+				}
 				loadStudents()
 			}
 			
@@ -99,6 +106,8 @@ define(['app','api','atomic/bomb'],function(app){
 					var mLbl = student.first_name[0]+'.' +student.last_name;
 					if(student.lrn)	mLbl +=  ' '+ student.lrn;
 					$scope.ModalLabel = mLbl;
+					if($scope.ActiveTyp=='New')
+						$scope.ModalLabel = student.id;
 					$scope.ActiveStudent = student;
 					
 					
@@ -147,6 +156,10 @@ define(['app','api','atomic/bomb'],function(app){
 						$scope.Active = response.data;
 					});
 				}
+			}
+
+			$scope.printInfoSheet = function(){
+				document.getElementById('PrintInfoSheet').submit();
 			}
 			
 			
