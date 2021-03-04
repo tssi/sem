@@ -39,4 +39,10 @@ class ReportsController extends AppController{
 		$this->set(compact('data'));
 	}
 	
+	function student_inquiry_information_sheet(){
+		$data =  array();
+		$this->set(compact('data'));
+	}
+	
+	
 }

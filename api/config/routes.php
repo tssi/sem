@@ -38,6 +38,10 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			"/student_registration_form",
 			array("controller"=>"reports","action"=>"student_registration_form")
 	);
+	Router::connect(
+			"/student_inquiry_information_sheet",
+			array("controller"=>"reports","action"=>"student_inquiry_information_sheet")
+	);
 	
 	App::import('Lib', 'Api.SlugRoute');
 	//Custom API Routing
