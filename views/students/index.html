@@ -54,9 +54,11 @@
 								<dt>Birth Place</dt>
 								<dd>{{Student.birthplace}}</dd><!-- 
 								<dt>Religion</dt>
-								<dd>{{Student.religion}}</dd>
+								<dd>{{Student.religion}}</dd> -->
 								<dt>Citizenship</dt>
-								<dd>{{Student.citizenship}}</dd> -->
+								<dd>{{Student.citizenship}}</dd>
+								<dt>Sivil Status</dt>
+								<dd>{{Student.sivil}}</dd>
 								<dt>Previous School</dt>
 								<dd>{{Student.prev_school}}</dd>
 						</dl>
@@ -100,6 +102,22 @@
 							</dd>
 						</dl>
 					</div>
+					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
+						<h5>Guardian Information</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasContactInfo">
+						<dl class="dl-horizontal">
+							<dt>Guardian Name</dt>
+							<dd>{{Student.g_first_name}} {{Student.g_middle_name}} {{Student.g_last_name}} {{Student.g_suffix}} </dd>
+							<dt>Relationship</dt>
+							<dd>{{Student.g_rel}}</dd>
+							<dt>Contact No</dt>
+							<dd>{{Student.g_contact_no}}</dd>
+							<dt>Occupation</dt>
+							<dd>{{Student.g_occupation}}</dd>
+							
+						</dl>
+					</div>
 				</div>
 			</div>
 			<div class="list-group" ng-hide="hasBasicInfo || hasContactInfo">
@@ -140,29 +158,29 @@
 					</div>
 					<div class="list-group-item">
 						<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">First</label>
-											<input type="text" class="form-control" placeholder="Given name" ng-model="firstName">
-										</div>
-										<div class="col-md-6">
-											<label for="">Middle</label>
-											<input type="text" class="form-control" placeholder="Middle name" ng-model="middleName">
-										</div>
-									</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">First</label>
+									<input type="text" class="form-control" placeholder="Given name" ng-model="firstName">
 								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">Last</label>
-											<input type="text" class="form-control" placeholder="Family name" ng-model="lastName">
-										</div>
-										<div class="col-md-6">
-											<label for="">Suffix</label>
-											<input type="text" class="form-control" placeholder="Jr., III" ng-model="suffix">
-										</div>
-									</div>
+								<div class="col-md-6">
+									<label for="">Middle</label>
+									<input type="text" class="form-control" placeholder="Middle name" ng-model="middleName">
 								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="">Last</label>
+									<input type="text" class="form-control" placeholder="Family name" ng-model="lastName">
+								</div>
+								<div class="col-md-6">
+									<label for="">Suffix</label>
+									<input type="text" class="form-control" placeholder="Jr., III" ng-model="suffix">
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="list-group-item list-group-header">
 						<h5>Academic</h5>
@@ -199,11 +217,11 @@
 						</div>
 					</div>
 					<div class="list-group-item list-group-header">
-						<h5>Biological</h5>
+						<h5>Biological / Legal</h5>
 					</div>
 					<div class="list-group-item">
 						<div class="form-group">
-							<div class="row">
+							<div class="row" style="margin-bottom: 10px;" >
 								<div class="col-md-6">
 									<label for=""> Gender</label>
 									<div class="btn-group btn-group-justified">
@@ -216,89 +234,30 @@
 									</div>
 								</div>
 								<div class="col-md-6">
+									<label for=""> Civil Status</label>
+									<input type="text" class="form-control" ng-model="sivil" />
+								</div>
+							</div>
+							<div class="row" style="margin-bottom: 10px;" >
+								<div class="col-md-6">
 									<label for=""> Birthday</label>
 									<input type="date" class="form-control" placeholder="mm/dd/yyy" ng-model="birthday"/>
 								</div>
+								<div class="col-md-6">
+									<label for=""> Citizenship</label>
+									<input type="text" class="form-control" placeholder="Filipino" ng-model="citizenship"/>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<div class="row">
+							<div class="row" style="margin-bottom: 10px;" >
 								<div class="col-md-12">
 									<label for=""> Birth Place</label>
 									<input type="text" class="form-control" placeholder="Address" ng-model="birthPlace"/>
 								</div>
 							</div>
 						</div>
-						<!-- <table class="table table-condensed table-bordered">
-							<thead>
-								<tr>
-									<th class="text-center">Relationship</th>
-									<th class="text-center">Name</th>
-									<th class="text-center">Occupation</th>
-									<th class="text-center">&nbsp;</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="family in families">
-									<td>
-										<select name="" id="" class="form-control" ng-model="family.type">
-											<option value="">Select</option>
-											<option value="Parent">Parent</option>
-											<option value="Gaurdian">Gaurdian</option>
-										</select>
-									</td>
-									<td>
-										<input type="text" class="form-control" placeholder="Full Name" ng-model="family.name"/>
-									</td>
-									<td>
-										<input type="text" class="form-control" placeholder="Occupation" ng-model="family.occupation"/>
-									</td>
-									<td><button class="btn btn-danger btn-sm" ng-click="removeFamily($index)"><span class="glyphicon glyphicon-remove"></span></button></td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<td>
-										<select name="" id="" class="form-control" ng-model="relationship">
-											<option value="">Select Relationship</option>
-											<option value="Parent">Parent</option>
-											<option value="Gaurdian">Gaurdian</option>
-										</select>
-									</td>
-									<td>
-										<input type="text" class="form-control" placeholder="Full Name" ng-model="parentName"/>
-									</td>
-									<td>
-										<input type="text" class="form-control" placeholder="Job Title" ng-model="occupation"/>
-									</td>
-									<td>
-										<button class="btn btn-success btn-sm" ng-click="addFamily()"><span class="glyphicon glyphicon-plus"></span></button>
-									</td>
-								</tr>
-							</tfoot>
-						</table> -->
+						
 					</div>
-					<!-- <div class="list-group-item list-group-header">
-						<h5>Social</h5>
-					</div>
-					<div class="list-group-item">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-md-6">
-									<label for=""> Religion</label>
-									<select name="" id="" class="form-control" ng-model="religion" ng-options="religion.name as religion.name for religion in Religions">
-										<option value="">Select Religion</option>
-									</select>
-								</div>
-								<div class="col-md-6">
-									<label for=""> Citizenship</label>
-									<select name="" id="" class="form-control" ng-model="citizenship" ng-options="citizenship.name as citizenship.name for citizenship in Citizenships">
-										<option value="">Select Citizenship</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div> -->
+					
 				</div>
 				</div>
 				<div class="list-group" ng-show="ActiveStep===2">
@@ -331,39 +290,33 @@
 							<div class="list-group-item">
 								<div class="form-group">
 									<div class="row">
-										<div class="col-md-6">
-											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="currentCountry" ng-options="country as country for country in Countries">
-												<option value="">Select Country</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="currentProvince" ng-options="province as province for province in Provinces">
-												<option value="">Select Province</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-md-6">
-											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="currentCity" ng-options="city as city for city in Cities">
-												<option value="">Select City/Municipality</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Barangay</label>
-											<input type="text" class="form-control" placeholder="Barangay" ng-model="currentBrgy"/>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="row">
 										<div class="col-md-12">
 											<label for="">Address</label>
 											<input type="text" class="form-control" placeholder="Address" ng-model="currentAddrs"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">Barangay</label>
+											<input type="text" class="form-control" placeholder="Brgy.1" ng-model="currentBrgy" />
+										</div>
+										<div class="col-md-6">
+											<label for="">City</label>
+											<input type="text" class="form-control" placeholder="Manila" ng-model="currentCity" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">Province</label>
+											<input type="text" class="form-control" placeholder="NCR" ng-model="currentProvince" />
+										</div>
+										<div class="col-md-6">
+											<label for="">Country</label>
+											<input type="text" class="form-control" placeholder="Philippines" ng-model="currentCountry" />
 										</div>
 									</div>
 								</div>
@@ -376,39 +329,88 @@
 							<div class="list-group-item">
 								<div class="form-group">
 									<div class="row">
-										<div class="col-md-6">
-											<label for="">Country</label>
-											<select name="" id="" class="form-control" ng-model="homeCountry" ng-options="country as country for country in Countries">
-											  <option value="">Select Country</option>
-											</select>
-										</div>
-										<div class="col-md-6">
-											<label for="">Province</label>
-											<select name="" id="" class="form-control" ng-model="homeProvince" ng-options="province as province for province in Provinces">
-												<option value="">Select Province</option>
-											</select>
+										<div class="col-md-12">
+											<label for="">Address</label>
+											<input type="text" class="form-control" placeholder="Address" ng-model="homeAddrs"/>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-6">
-											<label for="">City</label>
-											<select name="" id="" class="form-control" ng-model="homeCity" ng-options="city as city for city in Cities">
-												<option value="">Select City</option>
-											</select>
+											<label for="">Barangay</label>
+											<input type="text" class="form-control" placeholder="Brgy.1" ng-model="homeBrgy" />
 										</div>
 										<div class="col-md-6">
-											<label for="">Barangay</label>
-											<input type="text" class="form-control" placeholder="Barangay" ng-model="homeBrgy"/>
+											<label for="">City</label>
+											<input type="text" class="form-control" placeholder="Manila" ng-model="homeCity" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">Province</label>
+											<input type="text" class="form-control" placeholder="NCR" ng-model="homeProvince" />
+										</div>
+										<div class="col-md-6">
+											<label for="">Country</label>
+											<input type="text" class="form-control" placeholder="Philippines" ng-model="homeCountry" />
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							<div class="list-group-item list-group-header">
+								<h5>Guardian Name</h5>
+							</div>
+							<div class="list-group-item">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">First</label>
+											<input type="text" class="form-control" placeholder="Given name" ng-model="gfirstName">
+										</div>
+										<div class="col-md-6">
+											<label for="">Middle</label>
+											<input type="text" class="form-control" placeholder="Middle name" ng-model="gmiddleName">
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">Last</label>
+											<input type="text" class="form-control" placeholder="Family name" ng-model="glastName">
+										</div>
+										<div class="col-md-6">
+											<label for="">Suffix</label>
+											<input type="text" class="form-control" placeholder="Sr." ng-model="gsuffix">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="list-group-item list-group-header">
+								<h5>Guardian Info</h5>
+							</div>
+							<div class="list-group-item">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-md-6">
+											<label for="">Relationship</label>
+											<input type="text" class="form-control" placeholder="Father/Mother" ng-model="grel">
+										</div>
+										<div class="col-md-6">
+											<label for="">Contact No</label>
+											<input type="text" class="form-control" placeholder="+639123456789" ng-model="gcontact">
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-12">
-											<label for="">Address</label>
-											<input type="text" class="form-control" placeholder="Address" ng-model="homeAddrs"/>
+											<label for="">Occupation</label>
+											<input type="text" class="form-control" placeholder="Lawyer" ng-model="goccu">
 										</div>
 									</div>
 								</div>

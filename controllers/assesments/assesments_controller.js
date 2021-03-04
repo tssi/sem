@@ -10,12 +10,14 @@ define(['app','api'], function (app) {
 				$scope.ShowInfo = 0;
 				$rootScope.$watch('_APP', function(data){
 					if(data){
-						angular.forEach(data, function(item){
+						$scope.ActiveSy  =  data.ACTIVE_SY;
+						$scope.Defaults  =  data.DEFAULT_;
+						/*angular.forEach(data, function(item){
 							switch(item.sys_key){
 								case 'ACTIVE_SY': $scope.ActiveSy = item.sys_value; break;
 								case 'DEFAULT_': $scope.Defaults = JSON.parse(item.sys_value); break;
 							}
-						});
+						});*/
 						console.log($scope.Defaults.SEMESTER);
 						console.log($scope.ActiveSy);
 						$scope.ActiveSem = $scope.Defaults.SEMESTER
@@ -680,6 +682,8 @@ define(['app','api'], function (app) {
 					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
 					department_id:dept
 				}
+				if(dept!='SH')
+					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){
 					$scope.Curriculum = response.data;
 				});

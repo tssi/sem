@@ -28,6 +28,17 @@ class Inquiry extends AppModel {
 		),
 	);
 
-	
+	function generateIID(){
+		$ID = 0;
+		$cond =  array('Inquiry.id LIKE'=>'LSN%');
+		$this->recursive=-1;
+		$inqObj = $this->find('first',array('conditions'=>$cond,'order'=>array('id'=>'desc')));
+
+		if($inqObj)
+			$ID =  (int)(str_replace('LSN', '', $inqObj['Inquiry']['id']));
+		$IID = 'LSN'.str_pad($ID+1, 5, 0, STR_PAD_LEFT);
+		
+		return $IID;
+	}
 
 }
