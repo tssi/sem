@@ -456,10 +456,13 @@
 		<div class="modal-body text-center">
 			<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
 			<h1>Success</h1>
-			<p>Student can now proceed to assessment.</p>
+			<p>Student can now pay the reservation fee at the cashier.</p>
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
 		</div>
 	</script>
+	<form action="api/info_sheet" id="PrintInfoSheet" method="POST" target="_blank">
+		<input type="hidden" id="InquiryID" value="{{preffix}}">
+	</form>
 </div>
