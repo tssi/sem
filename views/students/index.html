@@ -54,9 +54,11 @@
 								<dt>Birth Place</dt>
 								<dd>{{Student.birthplace}}</dd><!-- 
 								<dt>Religion</dt>
-								<dd>{{Student.religion}}</dd>
+								<dd>{{Student.religion}}</dd> -->
 								<dt>Citizenship</dt>
-								<dd>{{Student.citizenship}}</dd> -->
+								<dd>{{Student.citizenship}}</dd>
+								<dt>Sivil Status</dt>
+								<dd>{{Student.sivil}}</dd>
 								<dt>Previous School</dt>
 								<dd>{{Student.prev_school}}</dd>
 						</dl>
@@ -98,6 +100,22 @@
 									{{Student.address}}, brgy. {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
 								</address>
 							</dd>
+						</dl>
+					</div>
+					<div class="list-group-item list-group-header" ng-show="hasContactInfo">
+						<h5>Guardian Information</h5>
+					</div>
+					<div class="list-group-item" ng-show="hasContactInfo">
+						<dl class="dl-horizontal">
+							<dt>Guardian Name</dt>
+							<dd>{{Student.g_first_name}} {{Student.g_middle_name}} {{Student.g_last_name}} {{Student.g_suffix}} </dd>
+							<dt>Relationship</dt>
+							<dd>{{Student.g_rel}}</dd>
+							<dt>Contact No</dt>
+							<dd>{{Student.g_contact_no}}</dd>
+							<dt>Occupation</dt>
+							<dd>{{Student.g_occupation}}</dd>
+							
 						</dl>
 					</div>
 				</div>
@@ -217,7 +235,7 @@
 								</div>
 								<div class="col-md-6">
 									<label for=""> Civil Status</label>
-									<input type="text" class="form-control" />
+									<input type="text" class="form-control" ng-model="sivil" />
 								</div>
 							</div>
 							<div class="row" style="margin-bottom: 10px;" >
@@ -227,7 +245,7 @@
 								</div>
 								<div class="col-md-6">
 									<label for=""> Citizenship</label>
-									<input type="date" class="form-control" placeholder="Filipino" ng-model="citizenship"/>
+									<input type="text" class="form-control" placeholder="Filipino" ng-model="citizenship"/>
 								</div>
 							</div>
 							<div class="row" style="margin-bottom: 10px;" >
@@ -392,7 +410,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											<label for="">Occupation</label>
-											<input type="text" class="form-control" placeholder="Lawyer" ng-model="gcontact">
+											<input type="text" class="form-control" placeholder="Lawyer" ng-model="goccu">
 										</div>
 									</div>
 								</div>

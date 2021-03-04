@@ -70,6 +70,7 @@ define(['app','api'], function (app) {
 				$scope.Student.birthplace=$scope.birthPlace;
 				$scope.Student.citizenship=$scope.citizenship;
 				$scope.Student.prev_school=$scope.prevSchool;
+				$scope.Student.sivil=$scope.sivil;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
@@ -86,10 +87,13 @@ define(['app','api'], function (app) {
 				$scope.Student.city=$scope.homeCity,
 				$scope.Student.barangay=$scope.homeBrgy,
 				$scope.Student.address=$scope.homeAddrs,
-			/* 					
-				$scope.Student.addresses=[];
-				$scope.Student.addresses.push(current);
-				$scope.Student.addresses.push(permanent); */
+				$scope.Student.g_first_name = $scope.gfirstName;
+				$scope.Student.g_middle_name = $scope.gmiddleName;
+				$scope.Student.g_last_name = $scope.glastName;
+				$scope.Student.g_suffix = $scope.gsuffix;
+				$scope.Student.g_rel = $scope.grel;
+				$scope.Student.g_contact_no = $scope.gcontact;
+				$scope.Student.g_occupation = $scope.goccu;
 				$scope.hasContactInfo = true;
 			};
 			$scope.sameAsCurrent = function(){
@@ -164,6 +168,14 @@ define(['app','api'], function (app) {
 				$scope.homeCity = null;
 				$scope.homeBrgy = null;
 				$scope.homeAddrs = null;
+				$scope.gfirstName = null;
+				$scope.glastName = null;
+				$scope.gmiddleName = null;
+				$scope.gsuffix = null;
+				$scope.grel = null;
+				$scope.gcontact = null;
+				$scope.goccu = null;
+				
 			};
 			$scope.openModal=function(){
 				var modalInstance = $uibModal.open({
