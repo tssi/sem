@@ -142,21 +142,21 @@ define(['app','api'], function (app) {
 				$scope.birthPlace = null;
 				$scope.families=[];
 				$scope.religion = null;
-				$scope.citizenship = null;
+				$scope.citizenship = 'Filipino';
 				$scope.prevSchool=null;
 				$scope.civilStatus=null;
 			};
 			$scope.clearField2=function(){
 				$scope.landline = null;
 				$scope.mobile = null;
-				$scope.currentCountry = null;
-				$scope.currentProvince = null;
-				$scope.currentCity = null;
+				$scope.currentCountry = 'Philippines';
+				$scope.currentProvince = 'Laguna';
+				$scope.currentCity = 'Biñan';
 				$scope.currentBrgy = null;
 				$scope.currentAddrs = null;
-				$scope.homeCountry = null;
-				$scope.homeProvince = null;
-				$scope.homeCity = null;
+				$scope.homeCountry = 'Philippines';
+				$scope.homeProvince = 'Laguna';
+				$scope.homeCity = 'Biñan';
 				$scope.homeBrgy = null;
 				$scope.homeAddrs = null;
 				$scope.gfirstName = null;
@@ -168,6 +168,8 @@ define(['app','api'], function (app) {
 				$scope.goccu = null;
 				
 			};
+			$scope.clearField();
+			$scope.clearField2();
 			$scope.openModal=function(){
 				var modalInstance = $uibModal.open({
 						animation: true,
