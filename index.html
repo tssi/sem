@@ -57,7 +57,7 @@
                 <li>
                     <a href="#/" ng-click="__toggleSideBar()">Home</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="#/students/index" ng-click="__toggleSideBar()">Inquiry</a>
                 </li>
 				<li>
@@ -74,6 +74,32 @@
                 </li>
 				<li>
                     <a href="#/maintenance/list" ng-click="__toggleSideBar()">List Maintenance</a>
+                </li> -->
+				<li ng-repeat="Menu in __SIDEBAR_MENUS">
+					<a ng-if="!Menu.is_parent" href="#/{{Menu.link}}" ng-click="__toggleSideBar()">
+						{{ Menu.name}}
+						
+					</a>
+					<a ng-if="Menu.is_parent && Menu.is_granted" class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" ng-class="{active:ActiveMenu==Menu.id}" ng-click="__toggleSubMenu(Menu)">
+						<b class="caret"></b>
+						<span class="sidebar-title">{{Menu.name}}</span>
+						
+					</a>
+					<ul ng-if="Menu.is_parent && Menu.is_granted" ng-class="{in:ActiveMenu==Menu.id}" class="panel-collapse collapse panel-switch" role="menu">
+                        <li class="separator"></li>
+						<li ng-repeat="Submenu in Menu.children">
+							<a href="#/{{Submenu.link}}" ng-click="__loadModule(Submenu)">{{Submenu.name}}</a>
+						</li>
+                        <li class="separator"></li>
+					</ul>
+				</li>
+				<li>
+                    <a href="#/logout">
+                    <span class="sidebar-title">
+                            <span class="glyphicon glyphicon-off"></span>
+                            Logout
+                    </span>
+                    </a>
                 </li>
             </ul>
         </div>
