@@ -58,7 +58,7 @@
 								<dt>Citizenship</dt>
 								<dd>{{Student.citizenship}}</dd>
 								<dt>Civil Status</dt>
-								<dd>{{Student.civilStatus}}</dd>
+								<dd>{{Student.civil_status}}</dd>
 								<dt>Previous School</dt>
 								<dd>{{Student.prev_school}}</dd>
 						</dl>
@@ -91,13 +91,13 @@
 							<dt>Current Address</dt>
 							<dd>
 								<address>
-									{{Student.address}}, brgy. {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
+									{{Student.c_address}},{{Student.c_barangay}}, {{Student.c_city}}, {{Student.c_province}}, {{Student.c_country}}
 								</address>
 							</dd>
-							<dt>Home Address</dt>
+							<dt>Permanent Address</dt>
 							<dd>
 								<address>
-									{{Student.address}}, brgy. {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
+									{{Student.address}}, {{Student.barangay}}, {{Student.city}}, {{Student.province}}, {{Student.country}}
 								</address>
 							</dd>
 						</dl>
@@ -176,7 +176,7 @@
 									<input type="text" class="form-control" placeholder="Family name" ng-model="lastName">
 								</div>
 								<div class="col-md-6">
-									<label for="">Suffix</label>
+									<label for="">Extension</label>
 									<input type="text" class="form-control" placeholder="Jr., III" ng-model="suffix">
 								</div>
 							</div>
@@ -384,7 +384,7 @@
 											<input type="text" class="form-control" placeholder="Family name" ng-model="glastName">
 										</div>
 										<div class="col-md-6">
-											<label for="">Suffix</label>
+											<label for="">Extension</label>
 											<input type="text" class="form-control" placeholder="Sr." ng-model="gsuffix">
 										</div>
 									</div>
@@ -452,8 +452,11 @@
 				</div>
 		</div>
 	</div>
-	<script type="text/ng-template" id="successModal.html">
-		<div class="modal-body text-center">
+	<form action="api/info_sheet" id="PrintInfoSheet" method="POST" target="_blank">
+		<input type="hidden" id="InquiryID" name="InquiryID" value="{{IID}}">
+	</form>
+	<script type="text/ng-template" id="inquirySuccessModal.html">
+		<div class="modal-body text-center" ng-init="init()">
 			<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
 			<h1>Success</h1>
 			<p>Student can now pay the reservation fee at the cashier.</p>
@@ -462,7 +465,4 @@
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissModal()">OK</button>
 		</div>
 	</script>
-	<form action="api/info_sheet" id="PrintInfoSheet" method="POST" target="_blank">
-		<input type="hidden" id="InquiryID" value="{{preffix}}">
-	</form>
 </div>

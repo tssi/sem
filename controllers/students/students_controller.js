@@ -121,26 +121,16 @@ define(['app','api'], function (app) {
 			$scope.sendInfo = function(){
 				$scope.InquirySaving  = true;
 				api.POST('inquiries',$scope.Student,function success(response){
+					$scope.IID =  response.data.id;
 					$scope.InquirySaving  = false;
 					$scope.openModal();
-					$scope.clearField();
-					$scope.clearField2();
+					
 				});
 			}
-			$scope.openModal=function(){
-				var modalInstance = $uibModal.open({
-					animation: true,
-					size:'sm',
-					templateUrl: 'successModal.html',
-					controller: 'SuccessModalController',
-				});
-				modalInstance.result.then(function (source) {
-					$scope.init();
-				}, function (source) {
-					$scope.init();
-				});
-			}
+			
+			
 			$scope.clearField=function(){
+				$scope.IID = null;
 				$scope.ActiveDepartment = null;
 				$scope.level = null;
 				$scope.firstName = null;
@@ -182,26 +172,32 @@ define(['app','api'], function (app) {
 				var modalInstance = $uibModal.open({
 						animation: true,
 						size:'sm',
-						templateUrl: 'successModal.html',
-						controller: 'SuccessModalController',
+						templateUrl: 'inquirySuccessModal.html',
+						controller: 'InquirySuccessModalController',
 					});
 					modalInstance.result.then(function () {
 					  
 					}, function (source) {
 						$scope.init();
+						$scope.clearField();
+						$scope.clearField2();
 					});
 			}
 		};
     }]);
-	app.register.controller('SuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
+	app.register.controller('InquirySuccessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', function ($scope,$rootScope,$timeout, $uibModalInstance, api){
 		$rootScope.__MODAL_OPEN = true;
+		console.log(1);
 		$timeout(function(){
 			$scope.ShowButton = true;
-		},333);
+			},333);
 		//Dismiss modal
 		$scope.dismissModal = function(){
 			$rootScope.__MODAL_OPEN = false;
+			document.getElementById('PrintInfoSheet').submit();
 			$uibModalInstance.dismiss('ok');
+			
+			
 		};
 	}]);
 	
