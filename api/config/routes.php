@@ -39,7 +39,7 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			array("controller"=>"reports","action"=>"student_registration_form")
 	);
 	Router::connect(
-			"/student_inquiry_information_sheet",
+			"/info_sheet",
 			array("controller"=>"reports","action"=>"student_inquiry_information_sheet")
 	);
 	
