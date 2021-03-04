@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student');
+	var $uses = array('Assessment','Student','Inquiry');
 
 	function student_registration_form(){
 	
@@ -41,6 +41,8 @@ class ReportsController extends AppController{
 	
 	function student_inquiry_information_sheet(){
 		$data =  array();
+		$IID =  $_POST['InquiryID'];
+		$data = $this->Inquiry->findById($IID);
 		$this->set(compact('data'));
 	}
 	

@@ -16,7 +16,28 @@ class InquiryInformationSheet extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function info(){
+	function info($data=null){
+		$inquiry = null;
+		$yearlv = null;
+		$address = null;
+		$guardian = null;
+		$studentName = null;
+		if(isset($data['Inquiry']))
+			$inquiry=$data['Inquiry'];
+		if(isset($data['YearLevel']))
+			$yearlv=$data['YearLevel'];
+		if($inquiry):
+			$address = array($inquiry['address'],$inquiry['barangay'],$inquiry['city'],$inquiry['province'],$inquiry['country']);
+			$address =utf8_decode(implode(' ', $address));
+
+			$guardian = array($inquiry['g_first_name'],$inquiry['g_middle_name'],$inquiry['g_last_name'],$inquiry['g_suffix']);
+			$guardian = utf8_decode(implode(' ', $guardian));
+
+			$studentName = array($inquiry['first_name'],$inquiry['middle_name'],$inquiry['last_name'],$inquiry['suffix']);
+			$studentName = utf8_decode(implode(' ', $studentName));
+
+			
+		endif;
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.5,
@@ -40,6 +61,8 @@ class InquiryInformationSheet extends Formsheet{
 		
 		$y+=1.5;
 		$this->GRID['font_size']=8;
+		$this->leftText(31,$y-2.5,'Ref No.','','b');
+		$this->leftText(34,$y-2.5,$inquiry['id'],'','');
 		$this->leftText(0,$y++,'Name','','b');
 		
 		$this->leftText(1,$y,'Last Name','','i');
@@ -47,11 +70,18 @@ class InquiryInformationSheet extends Formsheet{
 		$this->leftText(21,$y,'Middle Name','','i');
 		$this->leftText(31,$y,'Extension','','i');
 		$y++;
-		$this->leftText(1,$y,'Dela Cruz','','');
-		$this->leftText(11,$y,'Juan','','');
-		$this->leftText(21,$y,'Santos','','');
-		$this->leftText(31,$y,'Maganda','','');
-		
+		if($inquiry):
+			if(!$inquiry['middle_name']) 
+				$inquiry['middle_name']='N/A';
+			if(!$inquiry['suffix']) 
+				$inquiry['suffix']='N/A';
+
+			$this->leftText(1,$y,$inquiry['last_name'],'','b');
+			$this->leftText(11,$y,$inquiry['first_name'],'','b');
+			$this->leftText(21,$y,$inquiry['middle_name'],'','b');
+			$this->leftText(31,$y,$inquiry['suffix'],'','b');
+
+		endif;
 		$y+=2;
 		$this->leftText(0,$y++,'BASIC INFORMATION','','b');
 		
@@ -61,32 +91,39 @@ class InquiryInformationSheet extends Formsheet{
 		$this->leftText(19,$y,'Place of Birth','','i');
 		$this->leftText(33,$y,'Citizenship','','i');
 		$y++;
-		$this->leftText(1,$y,'Male','','');
-		$this->leftText(6,$y,'Single','','');
-		$this->leftText(11,$y,'03 September 2002','','');
-		$this->leftText(19,$y,utf8_decode('Biñan City, Laguna'),'','');
-		$this->leftText(33,$y,'Filipino','','');
-		
+		if($inquiry):
+			$inquiry['gender'] = $inquiry['gender']=='M'?'Male':'Female';
+			$inquiry['birthday'] = date('d M Y', strtotime($inquiry['birthday']));
+			$this->leftText(1,$y,$inquiry['gender'],'','b');
+			$this->leftText(6,$y,$inquiry['civil_status'],'','b');
+			$this->leftText(11,$y,$inquiry['birthday'],'','b');
+			$this->leftText(19,$y,$inquiry['birthplace'],'','b');
+			$this->leftText(33,$y,$inquiry['citizenship'],'','b');
+		endif;
 		$y+=1.5;
 		$this->leftText(1,$y,'Mobile No.','','i');
 		$this->leftText(11,$y,'Landline No.','','i');
 		$y++;
-		$this->leftText(1,$y,'0999-123-9876','','');
-		$this->leftText(11,$y,'(03) 405-3338','','');
-		
+		if($inquiry):
+			$this->leftText(1,$y,$inquiry['mobile'],'','b');
+			$this->leftText(11,$y,$inquiry['landline'],'','b');
+		endif;
 		$y+=1.5;
 		$this->leftText(1,$y,'Address','','i');
 		$y++;
-		$this->leftText(1,$y,'123 A. Bonifacio St., Brgy Canlalay, Binan Laguna','','');
-		
+		if($address):
+			
+			$this->leftText(1,$y,$address,'','b');
+		endif;
 		$y+=2;
 		$this->leftText(0,$y++,'ACADEMICS','','b');
 		$this->leftText(1,$y,'Entry Level: ','','i');
 		$this->leftText(11,$y,'Last School Attended:','','i');
 		
-		$this->leftText(5,$y,'Grade 7','','');
-		$this->leftText(18,$y,'Iskul Bukol University','','');
-		
+		if($inquiry&& $yearlv):
+		$this->leftText(5,$y,$yearlv['description'],'','b');
+		$this->leftText(18,$y,$inquiry['prev_school'],'','b');
+		endif;
 		$y=22;
 		$this->leftText(0,$y++,'GUARDIAN INFORMATION','','b');
 		$y=23;
@@ -97,12 +134,13 @@ class InquiryInformationSheet extends Formsheet{
 		$this->rightText(6.1,$y++,'Relation:','','i');
 		
 		$y=23;
-		$this->leftText(6.5,$y++,'Mamang Surbetero','','');
-		$this->leftText(6.5,$y++,'123 A. Bonifacion St., Brgy Canlalay, Binan Laguna','','');
-		$this->leftText(6.5,$y++,'091712345','','');
-		$this->leftText(6.5,$y++,'Self-Employed','','');
-		$this->leftText(6.5,$y++,'Parent','','');
-			
+		if($inquiry && $address && $guardian):
+		$this->leftText(6.5,$y++,$guardian,'','b');
+		$this->leftText(6.5,$y++,$address,'','b');
+		$this->leftText(6.5,$y++,$inquiry['g_contact_no'],'','b');
+		$this->leftText(6.5,$y++,$inquiry['g_occupation'],'','b');
+		$this->leftText(6.5,$y++,$inquiry['g_rel'],'','b');
+		endif;
 
 		$dvdr ='-------------------------------------------------------------------';
 		$this->leftText(0,$y,$dvdr.$dvdr.$dvdr,'','');
@@ -113,7 +151,8 @@ class InquiryInformationSheet extends Formsheet{
 		$this->centerText(0,$y,'TERMS AND CONDITIONS',41,'b');
 		
 		$y+=1.5;
-		$this->leftText(1,$y++,'1.  Your Reference Number is LSNxxxxxxx.','','');
+		$this->leftText(1,$y,'1.  Your Reference Number is ','','');
+		$this->leftText(9.5,$y++,$inquiry['id'].'.','','b');
 		$this->leftText(1,$y++,'2.  Reservation for enrollment for School Year 2021 - 2022 is from March 5, 2021 to June 15, 2021.','','');
 		$this->leftText(1,$y++,'3.  Reservation fee is non-refundable.','','');
 		$this->leftText(1,$y++,'4.  Reservation fee is automatically deducted from the school fees for School Year 2021 - 2022.','','');
@@ -121,7 +160,7 @@ class InquiryInformationSheet extends Formsheet{
 		$this->leftText(1,$y++,'    reservation fee.','','');
 		$this->leftText(1,$y++,'6.  ESC subsidy is subject to Private Education Assistance Committee (PEAC) approval.','','');
 		$this->leftText(1,$y++,'7.  Payment of reservation fee does not guarantee approval of ESC subsidy.','','');
-		$this->leftText(1,$y++,'8.  Lake Shore Educational Institution is obliged to discuss reason(s) for the disapproval of ESC grant by PEAC. ','','');
+		$this->leftText(1,$y++,'8.  Lake Shore Educational Institution is not obliged to discuss reason(s) for the disapproval of ESC grant by PEAC. ','','');
 		$this->leftText(1,$y++,'9.  Application of ESC grant is on a first come first serve basis.  ','','');
 		$this->leftText(0.7,$y++,'10.  ESC is applicable only to NEW and incoming Grade 7 students only.','','');
 		$this->leftText(0.7,$y++,'11.  Approved ESC grant for Junior High School or presentation of QVR Voucher for Senior High School is deducted immediately from the assessed','','');
@@ -139,9 +178,11 @@ class InquiryInformationSheet extends Formsheet{
 		$this->centerText(5,$y,'Signature Over Printed Name',10,'');
 		
 		$this->centerText(25,$y,'Date',10,'');
-		$this->centerText(5,$y-1,'Juan Dela Cruz',10,'');
-		$this->centerText(25,$y-1,'mm-dd-yyyy',10,'');
-		                                 
+		$this->centerText(5,$y-1,$studentName,10,'');
+		$this->centerText(25,$y-1,' ',10,'');
+
+		$timestamp =  date('d M Y, h:i:s A',time());
+		$this->leftText(1,$y+5,'Ref No.'.$inquiry['id'] .'  Date/Time Printed:'.$timestamp,'','');
 	}
 	
 	
