@@ -64,8 +64,8 @@ class InquiryInformationSheet extends Formsheet{
 		
 		$y+=1.5;
 		$this->GRID['font_size']=8;
-		$this->leftText(31,$y-2.5,'Ref No.','','b');
-		$this->leftText(34,$y-2.5,$inquiry['id'],'','');
+		$this->leftText(31,$y-2.5,'Ref No.','','');
+		$this->leftText(34,$y-2.5,$inquiry['id'],'','b');
 		$this->leftText(0,$y++,'Name','','b');
 		
 		$this->leftText(1,$y,'Last Name','','i');
