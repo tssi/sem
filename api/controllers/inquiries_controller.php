@@ -32,7 +32,7 @@ class InquiriesController extends AppController {
 			$student['id']=$this->Inquiry->generateIID();
 			$student['student_id'] = $this->Student->generateSID('LS','X');
 			//pr($student); exit();
-			if(!isset($student['prefix'])) $student['prefix'] = "";
+			if(!isset($student['preffix'])) $student['preffix'] = "";
 			if(!isset($student['suffix'])) $student['suffix'] = "";
 			$acctObj = array('id'=>$student['id'],'account_type'=>'inquiry');
 			$this->Account->save($acctObj);
