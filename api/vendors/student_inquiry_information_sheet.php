@@ -27,6 +27,9 @@ class InquiryInformationSheet extends Formsheet{
 		if(isset($data['YearLevel']))
 			$yearlv=$data['YearLevel'];
 		if($inquiry):
+			foreach($inquiry as $key=>$value){
+				$inquiry[$key] = utf8_decode($value);
+			}
 			$address = array($inquiry['address'],$inquiry['barangay'],$inquiry['city'],$inquiry['province'],$inquiry['country']);
 			$address =utf8_decode(implode(' ', $address));
 
