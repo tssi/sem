@@ -128,7 +128,7 @@ class InquiryInformationSheet extends Formsheet{
 		if($inquiry&& $yearlv):
 			$yrLvStr =$yearlv['description'];
 			if($prog)
-				$yrLvStr .= ' / '.$prog['description'];
+				$yrLvStr .= ' / '.$prog['name'];
 		$this->leftText(5,$y,$yrLvStr,'','b');
 		$this->leftText(18,$y,$inquiry['prev_school'],'','b');
 		endif;
