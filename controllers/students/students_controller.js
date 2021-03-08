@@ -27,6 +27,10 @@ define(['app','api'], function (app) {
 			api.GET('year_levels',{limit:'less'},function success(response){
 				$scope.YearLevels = response.data;
 			});
+			$scope.Programs = [];
+			api.GET('programs',{limit:'less',department_id:'SH'},function success(response){
+				$scope.Programs = response.data;
+			});
 			
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
@@ -50,6 +54,8 @@ define(['app','api'], function (app) {
 			
 			$scope.setActiveDept = function(dept){
 				$scope.ActiveDepartment = dept;
+				if(dept!=SH)
+					$scope.program = null;
 			}
 			
 			$scope.getGender=function(gender){
@@ -61,6 +67,7 @@ define(['app','api'], function (app) {
 			$scope.basicInfo=function(){
 				$scope.Student.department_id=$scope.ActiveDepartment.id;
 				$scope.Student.year_level_id=$scope.level.id;
+				$scope.Student.program_id =  $scope.program.id;
 				$scope.Student.first_name=$scope.firstName;
 				$scope.Student.middle_name=$scope.middleName;
 				$scope.Student.last_name=$scope.lastName;
@@ -133,6 +140,7 @@ define(['app','api'], function (app) {
 				$scope.IID = null;
 				$scope.ActiveDepartment = null;
 				$scope.level = null;
+				$scope.program = null;
 				$scope.firstName = null;
 				$scope.middleName = null;
 				$scope.lastName = null;

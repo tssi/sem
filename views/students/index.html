@@ -38,6 +38,16 @@
 											<span ng-if="Student.year_level_id" ng-repeat="yearlevel in YearLevels | filter:{id: Student.year_level_id}">{{yearlevel.name}}</span>
 										</div>
 									</div>
+
+									<span ng-show="Student.department_id=='SH'">
+										<label for="">Program</label>
+										<div class="row">
+											<div class="col-md-12">
+												<span ng-if="Student.program_id" ng-repeat="program in Programs | filter:{id: Student.program_id}">{{program.description}}</span>
+											</div>
+										</div>
+
+									</span>
 								</div>
 							</div>
 						</div>
@@ -189,7 +199,7 @@
 						<div class="form-group">
 							<div class="form-group">
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-{{ActiveDepartment.id=='SH'?4:6}}"" >
 										<label for=""> Department</label>
 										<div class="btn-group btn-group-justified">
 										  <div class="btn-group" ng-repeat="department in Departments | orderBy:'order'" ng-model="department">
@@ -197,11 +207,18 @@
 										  </div>
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-{{ActiveDepartment.id=='SH'?4:6}}">
 										<label for=""> Level</label>
 										<select name="" id="" class="form-control" ng-options="yl as yl.description for yl in YearLevels | filter:{department_id:ActiveDepartment.id} | orderBy:'order'"
 										ng-model="level" ng-disabled="!ActiveDepartment">
 											<option value="">Select Level</option>
+										</select>
+									</div>
+									<div class="col-md-4" ng-show="ActiveDepartment.id=='SH'">
+										<label for=""> Program</label>
+										<select name="" id="" class="form-control" ng-options="pg as pg.description for pg in Programs | filter:{department_id:ActiveDepartment.id,description:''} | orderBy:'order'"
+										ng-model="program" ng-disabled="!ActiveDepartment">
+											<option value="">Select Program</option>
 										</select>
 									</div>
 								</div>
