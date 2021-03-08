@@ -31,7 +31,7 @@ class InquiryInformationSheet extends Formsheet{
 			$prog=$data['Program'];
 		if($inquiry):
 			foreach($inquiry as $key=>$value){
-				if(!$value) $value ='N/A';
+				if(!$value && $key!='suffix') $value ='N/A';
 				$inquiry[$key] = utf8_decode($value);
 
 			}
