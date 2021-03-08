@@ -31,7 +31,9 @@ class InquiryInformationSheet extends Formsheet{
 			$prog=$data['Program'];
 		if($inquiry):
 			foreach($inquiry as $key=>$value){
+				if(!$value) $value ='N/A';
 				$inquiry[$key] = utf8_decode($value);
+
 			}
 			$address = array($inquiry['address'],$inquiry['barangay'],$inquiry['city'],$inquiry['province'],$inquiry['country']);
 			$address =(implode(' ', $address));
