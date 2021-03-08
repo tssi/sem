@@ -19,6 +19,13 @@ class Inquiry extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		'Program' => array(
+			'className' => 'Program',
+			'foreignKey' => 'program_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Student' => array(
 			'className' => 'Student',
 			'foreignKey' => 'year_level_id',

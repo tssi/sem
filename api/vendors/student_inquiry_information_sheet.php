@@ -19,6 +19,7 @@ class InquiryInformationSheet extends Formsheet{
 	function info($data=null){
 		$inquiry = null;
 		$yearlv = null;
+		$prog = null;
 		$address = null;
 		$guardian = null;
 		$studentName = null;
@@ -26,18 +27,20 @@ class InquiryInformationSheet extends Formsheet{
 			$inquiry=$data['Inquiry'];
 		if(isset($data['YearLevel']))
 			$yearlv=$data['YearLevel'];
+		if(isset($data['Program']))
+			$prog=$data['Program'];
 		if($inquiry):
 			foreach($inquiry as $key=>$value){
 				$inquiry[$key] = utf8_decode($value);
 			}
 			$address = array($inquiry['address'],$inquiry['barangay'],$inquiry['city'],$inquiry['province'],$inquiry['country']);
-			$address =utf8_decode(implode(' ', $address));
+			$address =(implode(' ', $address));
 
 			$guardian = array($inquiry['g_first_name'],$inquiry['g_middle_name'],$inquiry['g_last_name'],$inquiry['g_suffix']);
-			$guardian = utf8_decode(implode(' ', $guardian));
+			$guardian = (implode(' ', $guardian));
 
 			$studentName = array($inquiry['first_name'],$inquiry['middle_name'],$inquiry['last_name'],$inquiry['suffix']);
-			$studentName = utf8_decode(implode(' ', $studentName));
+			$studentName = (implode(' ', $studentName));
 
 			
 		endif;
@@ -122,9 +125,11 @@ class InquiryInformationSheet extends Formsheet{
 		$this->leftText(0,$y++,'ACADEMICS','','b');
 		$this->leftText(1,$y,'Entry Level: ','','i');
 		$this->leftText(11,$y,'Last School Attended:','','i');
-		
 		if($inquiry&& $yearlv):
-		$this->leftText(5,$y,$yearlv['description'],'','b');
+			$yrLvStr =$yearlv['description'];
+			if($prog)
+				$yrLvStr .= ' / '.$prog['description'];
+		$this->leftText(5,$y,$yrLvStr,'','b');
 		$this->leftText(18,$y,$inquiry['prev_school'],'','b');
 		endif;
 		$y=22;
