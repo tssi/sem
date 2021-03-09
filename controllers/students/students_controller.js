@@ -67,7 +67,8 @@ define(['app','api'], function (app) {
 			$scope.basicInfo=function(){
 				$scope.Student.department_id=$scope.ActiveDepartment.id;
 				$scope.Student.year_level_id=$scope.level.id;
-				$scope.Student.program_id =  $scope.program.id;
+				if($scope.program)
+					$scope.Student.program_id =  $scope.program.id;
 				$scope.Student.first_name=$scope.firstName;
 				$scope.Student.middle_name=$scope.middleName;
 				$scope.Student.last_name=$scope.lastName;
