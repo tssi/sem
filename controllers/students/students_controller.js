@@ -54,7 +54,7 @@ define(['app','api'], function (app) {
 			
 			$scope.setActiveDept = function(dept){
 				$scope.ActiveDepartment = dept;
-				if(dept!=SH)
+				if(dept!='SH')
 					$scope.program = null;
 			}
 			
