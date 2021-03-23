@@ -29,15 +29,19 @@ class InquiriesController extends AppController {
 		if (!empty($this->data)) {
 			
 			$student = $this->data['Inquiry'];
-			$student['id']=$this->Inquiry->generateIID();
-			$student['student_id'] = $this->Student->generateSID('LS','X');
-			//pr($student); exit();
+			if(!isset($student['id'])):
+				$student['id']=$this->Inquiry->generateIID();
+				$student['student_id'] = $this->Student->generateSID('LS','X');
+			
+				//pr($student); exit();
+				$acctObj = array('id'=>$student['id'],'account_type'=>'inquiry');
+				$this->Account->save($acctObj);
+			endif;
+
 			if(!isset($student['preffix'])) $student['preffix'] = "";
 			if(!isset($student['suffix'])) $student['suffix'] = "";
-			$acctObj = array('id'=>$student['id'],'account_type'=>'inquiry');
-			$this->Account->save($acctObj);
 
-			if ($this->Inquiry->saveAll($student)) {
+			if ($this->Inquiry->save($student)) {
 				$this->Session->setFlash(__('The payment scheme has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
