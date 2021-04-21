@@ -85,7 +85,7 @@
 							</tfoot>
 						</table>
 					</div>
-					<div class="list-group-item" ng-show="ActiveTab.id==4&&ActiveScheme.variance_amount">
+					<div class="list-group-item" ng-show="ActiveTab.id==4&&(ActiveScheme.variance_amount||AdvancePayment)">
 						<table class="table table-condensed table-bordered table-amounts">
 							<thead>
 								<tr>
@@ -106,6 +106,10 @@
 									<td>Discount: {{disc.name}}</td>
 									<td class="amount total peso">{{disc.amount}}</td>
 								</tr>
+								<tr ng-if="AdvancePayment" ng-repeat="res in Reservations">
+									<td>{{res.description}}</td>
+									<td class="amount total peso">{{-res.amount | currency}}</td>
+								</tr>
 							</tbody>
 							<tfoot> 
 								<tr ng-if="TotalDiscount">
@@ -115,7 +119,7 @@
 							</tfoot>
 						</table>
 					</div>
-					<div class="list-group-item" ng-show="ActiveTab.id==4&&!ActiveScheme.variance_amount">
+					<div class="list-group-item" ng-show="ActiveTab.id==4&&(!ActiveScheme.variance_amount&&!AdvancePayment)">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">

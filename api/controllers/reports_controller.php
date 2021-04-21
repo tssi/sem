@@ -36,6 +36,7 @@ class ReportsController extends AppController{
 			array_push($feeSummary,$feeSum);
 		}
 		$data['AssessmentFee'] =  $feeSummary;
+		//pr($data['AssessmentFee']); exit();
 		$this->set(compact('data'));
 	}
 	

@@ -22,7 +22,7 @@ class Assessment extends AppModel {
 			'className' => 'Inquiry',
 			'foreignKey' => false,
 			'dependent' => false,
-			'conditions' => array('Inquiry.student_id=Assessment.student_id'),
+			'conditions' => array('Inquiry.id=Assessment.student_id'),
 			'fields' => '',
 			'order' => '',
 			'limit' => '',

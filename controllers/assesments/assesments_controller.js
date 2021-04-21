@@ -4,10 +4,7 @@ define(['app','api'], function (app) {
 		$scope.index = function(){
 			bootstrap();
 			$scope.init = function(){
-				initAssessment();
-				initDataSource();
-				$scope.Disabled = 1;
-				$scope.ShowInfo = 0;
+				
 				$rootScope.$watch('_APP', function(data){
 					if(data){
 						$scope.ActiveSy  =  data.ACTIVE_SY;
@@ -21,6 +18,10 @@ define(['app','api'], function (app) {
 						console.log($scope.Defaults.SEMESTER);
 						console.log($scope.ActiveSy);
 						$scope.ActiveSem = $scope.Defaults.SEMESTER
+						initAssessment();
+						initDataSource();
+						$scope.Disabled = 1;
+						$scope.ShowInfo = 0;
 					}
 				});
 				//console.log($rootScope);
@@ -43,6 +44,7 @@ define(['app','api'], function (app) {
 					$scope.Disabled = 1;
 				}
 				if($scope.ActiveStep===2){
+					getReservations();
 					$scope.ActiveLevel = $scope.SelectedLevel;
 					getSections($scope.ActiveLevel);
 					$scope.Disabled = 1;
@@ -81,11 +83,42 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===5){
-					$scope.ActiveScheme = $scope.SelectedScheme;
-					console.log($scope.ActiveScheme);
-					$scope.TotalAmount = $scope.ActiveScheme.total_amount;
-					//$scope.TotalAmount=$scope.TotalDue + $scope.ActiveScheme.variance_amount;
-					//$scope.TotalAdjustment = $scope.ActiveScheme.variance_amount;
+					$scope.ActiveScheme = angular.copy($scope.SelectedScheme);
+					$scope.PaymentTotal = 0;
+					$scope.TotalAmount = 0;
+					var total = 0;
+					if($scope.Reservations.length){
+						angular.forEach($scope.Reservations, function(res){
+							total += res.amount;
+							$scope.PaymentTotal+=res.amount;
+						});
+						$scope.AdvancePayment = {amount:-total};
+						
+					}
+					for(var i in $scope.ActiveScheme.schedule){
+						var sched = $scope.ActiveScheme.schedule[i];
+						if(sched.amount<=total){
+							total-=sched.amount;
+							sched.amount = 0;
+						}else{
+							sched.amount-= total;
+							total = 0;
+						}
+						$scope.TotalAmount+= sched.amount;
+					}
+					for(var i in $scope.ActiveScheme.schedule){
+						var sched = $scope.ActiveScheme.schedule[i];
+						if(sched.billing_period_id=='UPONNROL'&&sched.amount==0){
+							sched.amount = 1;
+							var zero = true;
+						}else if(sched.billing_period_id!='UPONNROL'&&sched.amount>0&&zero){
+							sched.amount-=1;
+							break;
+						}
+						if(sched.amount==0)
+							sched.status = 'PAID';
+					};
+					console.log($scope.ActiveScheme.schedule);
 				}
 				if($scope.ActiveStep===6){
 					$scope.ActiveDiscounts= [];
@@ -97,23 +130,16 @@ define(['app','api'], function (app) {
 					}
 					
 					
-					
-					
-					/* $scope.TotalDiscount = $scope.TotalDiscount*-1;
-					$scope.TotalAdjustment = $scope.TotalDiscount + $scope.ActiveScheme.variance_amount;
-					$scope.TotalAmount=$scope.TotalDue + $scope.TotalAdjustment; */
-					/* console.log($scope.ActiveScheme.schedule);
-					$scope.$watchCollection('ActiveScheme.schedule', function(newVal,oldval){
-						console.log(newVal);
-					}); */
 				}
 				
 				if($scope.ActiveStep===7){
-					
-					
+					if($scope.PaymentTotal)
+						$scope.ActiveStudent.payment_total = $scope.PaymentTotal;
+					if($scope.ActiveScheme.variance_amount)
+						$scope.ActiveStudent.discount_amount = $scope.ActiveScheme.variance_amount;
 					
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
-					$scope.ActiveStudent.assessment_total = $scope.TotalAmount + $scope.TotalDiscount;
+					$scope.ActiveStudent.assessment_total = $scope.ActiveTuition.assessment_total;
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -130,6 +156,7 @@ define(['app','api'], function (app) {
 						$scope.Assessment.discounts = $scope.ActiveDiscounts;
 						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
 					}
+					//console.log($scope.Assessment.assessment); return;
 					api.POST('assessments',$scope.Assessment, function success(response){
 						$scope.AssessmentId = response.data.id;
 						$scope.openModal();
@@ -267,21 +294,7 @@ define(['app','api'], function (app) {
 			$scope.toggleSelectDiscount=function(id){
 				$scope.SelectedDiscounts[id] = !$scope.SelectedDiscounts[id]; 
 			}
-			/* $scope.openModal=function(){
-				var modalInstance = $uibModal.open({
-					animation: true,
-					size:'sm',
-					templateUrl: 'successModal.html',
-					controller: 'SuccessModalController',
-					
-				});
-				modalInstance.result.then(function () {
-				  
-				}, function (source) {
-					$scope.init();
-				});
-			}
-			 */
+			
 			$scope.SearchStudent = function(){
 				$scope.Students = '';
 				var data = {
@@ -330,6 +343,20 @@ define(['app','api'], function (app) {
 			
 			$scope.setActiveTab = function(tab){
 				$scope.ActiveTab = tab;
+			}
+			
+			function getReservations(){
+				api.GET('reservations',{account_id:$scope.ActiveStudent.id},function success(response){
+					angular.forEach(response.data, function(res){
+						switch(res.field_type){
+							case 'RSRVE': res.description = 'Reservation'; break;
+							case 'ADVTP': res.description = 'Advance Payment'; break;
+						}
+					});
+					$scope.Reservations = response.data;
+				},function error(response){
+					$scope.Reservations = '';
+				});
 			}
 			
 			function bootstrap(){
@@ -579,7 +606,7 @@ define(['app','api'], function (app) {
 			}
 			
 			function getFees(){
-				var data = {year_level_id:$scope.ActiveSection.year_level_id}
+				var data = {year_level_id:$scope.ActiveSection.year_level_id,sy:$scope.ActiveSy}
 				api.GET('tuitions',data, function success(response){
 					$scope.ActiveTuition = response.data[0];
 					
@@ -615,7 +642,8 @@ define(['app','api'], function (app) {
 			}
 			
 			function getBillingPeriods(){
-				api.GET('billing_periods', function success(response){
+				var data = 
+				api.GET('billing_periods',{sy:$scope.ActiveSy}, function success(response){
 					$scope.BillingPeriods = response.data;
 				});
 			}
