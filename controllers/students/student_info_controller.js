@@ -20,10 +20,12 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.setActiveTyp('New');
 				atomic.ready(function(){
 					// Map defaults and options
+					console.log(atomic);
 					$scope.entrySY = atomic.ActiveSY;
 					$scope.entryPeriod =atomic.SelectedPeriod.id;
 					$scope.entryPeriods = atomic.Periods;
 					$scope.entryDepts =  atomic.Departments;
+					$scope.entryProgs =  atomic.Programs;
 					$scope.isReady =  true;
 					// Filter section dropdown by student department id
 					$selfScope.$watch('SI.ActiveStudent.department_id',function(deptId){
