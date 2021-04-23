@@ -135,8 +135,11 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.saving = true;
 				var data = $scope.ActiveStudent;
 				var yl = $filter('filter')(atomic.Sections,{id:data.section_id});
+				if(data.section_id)
 				data.year_level_id = yl[0].year_level_id;
-				
+
+				if(data.department_id!='SH') data.program_id = null;
+
 				if(data.sno){
 					api.POST('students',data,function(response){
 						aModal.close("StudentInfoModal");
