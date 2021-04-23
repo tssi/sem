@@ -7,7 +7,6 @@ class ReportsController extends AppController{
 	
 		$this->Assessment->recursive=2;
 		$data = $this->Assessment->findById($_POST['AssessmentId']);
-		
 		// Map Assessment Fees to display totals by fee type
 		$fees =  $data['AssessmentFee'];
 		$feeTotals = array();
@@ -30,11 +29,35 @@ class ReportsController extends AppController{
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
+		//pr($feeTotals); exit();
 		$feeSummary = array();
-		foreach($feeTotals	as $f){
+		foreach($data['Assessment'] as $key=>$val){
+			//pr($val);
+			switch($key){
+				case 'discount_amount':
+					if($val<0){
+						$feeTotals['SUBS']= array('label'=>'Less Subsidy','total'=>$val);
+					}
+					break;
+				case 'payment_total':
+					if($val>0){
+						if($val===1000)
+							$feeTotals['ADVP']= array('label'=>'Less Advance Payment','total'=>-$val);
+						else{
+							$feeTotals['RSRV']= array('label'=>'Less Reservation','total'=>-1000);
+							$feeTotals['ADVP']= array('label'=>'Less Advance Payment','total'=>-($val-1000));
+						}
+					}
+					break;
+			}
+			
+		}
+		//pr($feeTotals); exit();
+		foreach($feeTotals as $i=>$f){
 			$feeSum = array('Fee'=>array('name'=>$f['label']),'due_amount'=>$f['total']);
 			array_push($feeSummary,$feeSum);
 		}
+		//pr($feeSummary); exit();
 		$data['AssessmentFee'] =  $feeSummary;
 		//pr($data['AssessmentFee']); exit();
 		$this->set(compact('data'));

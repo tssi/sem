@@ -73,6 +73,7 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===4){
+					$scope.ActiveTab.id = 2;
 					$scope.HasSched = true;
 					if($scope.ActiveSection.program_id=='MIXED'){
 						$scope.ActiveSchedule = {};
@@ -83,6 +84,7 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===5){
+					$scope.ActiveTab.id = 3;
 					$scope.ActiveScheme = angular.copy($scope.SelectedScheme);
 					$scope.PaymentTotal = 0;
 					$scope.TotalAmount = 0;
@@ -121,6 +123,7 @@ define(['app','api'], function (app) {
 					console.log($scope.ActiveScheme.schedule);
 				}
 				if($scope.ActiveStep===6){
+					$scope.ActiveTab.id = 4;
 					$scope.ActiveDiscounts= [];
 					for(var i in $scope.Discounts){
 						var dsc =$scope.Discounts[i];
@@ -347,13 +350,23 @@ define(['app','api'], function (app) {
 			
 			function getReservations(){
 				api.GET('reservations',{account_id:$scope.ActiveStudent.id},function success(response){
-					angular.forEach(response.data, function(res){
+					
+					var advances = 0;
+					var reserves = [];
+					angular.forEach(response.data, function(res,i,array){
 						switch(res.field_type){
-							case 'RSRVE': res.description = 'Reservation'; break;
-							case 'ADVTP': res.description = 'Advance Payment'; break;
+							case 'RSRVE': res.description = 'Reservation'; reserves.push(res); break;
+							case 'ADVTP': advances+=res.amount; break;
+						}
+						if(i===array.length-1){
+							res.amount = advances;
+							res.description = 'Advance Payment';
+							reserves.push(res);
 						}
 					});
-					$scope.Reservations = response.data;
+					console.log(reserves);
+					
+					$scope.Reservations = reserves;
 				},function error(response){
 					$scope.Reservations = '';
 				});

@@ -129,7 +129,13 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(0.2,$y++,'FEE BREAKDOWN','','b');
 		foreach($data['AssessmentFee'] as $d){
 			$this->leftText(0.2,$y,$d['Fee']['name'],'','');
-			$this->rightText(15,$y,number_format($d['due_amount'],2),'','');
+			if($d['due_amount']>=0)
+				$this->rightText(15,$y,number_format($d['due_amount'],2),'','');
+			else{
+				$amt = abs($d['due_amount']);
+				$this->rightText(15,$y,'('.number_format($amt,2).')','','');
+			
+			}
 			$total+=$d['due_amount'];
 			$y++;
 		}
