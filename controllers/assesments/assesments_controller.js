@@ -146,6 +146,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
+					$scope.ActiveStudent.esp = $scope.ActiveSy;
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,
 						paysched:$scope.ActiveScheme.schedule,
