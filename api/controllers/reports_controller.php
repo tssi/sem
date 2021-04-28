@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry');
+	var $uses = array('Assessment','Student','Inquiry','Reservation');
 
 	function student_registration_form(){
 	
@@ -70,5 +70,8 @@ class ReportsController extends AppController{
 		$this->set(compact('data'));
 	}
 	
+	function print_reserve(){
+		pr(json_decode($_POST['reserves'])); exit();
+	}
 	
 }

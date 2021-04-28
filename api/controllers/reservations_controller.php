@@ -5,7 +5,29 @@ class ReservationsController extends AppController {
 
 	function index() {
 		$this->Reservation->recursive = 0;
-		$this->set('reservations', $this->paginate());
+		$reservations = $this->paginate();
+		//pr($reservations); exit();
+		if($this->isAPIRequest()){
+			foreach($reservations as $i=>$res){
+				$data = $res['Reservation'];
+				if(!isset($res['Student']['full_name'])){
+					$stud = $res['Inquiry'];
+					$data['name'] = $stud['first_name'].' '.$stud['middle_name'].' '.$stud['last_name'];			
+					$data['status'] = 'New';
+					$yl = $res['Inquiry']['YearLevel']['description'];
+				}else{
+					$stud = $res['Student'];
+					$data['name'] = $stud['full_name'];
+					$data['status'] = 'Old';
+					$yl = $res['Student']['YearLevel']['description'];
+				}
+				$data['year_level'] = $yl;
+				//pr($res);
+				$reservations[$i]['Reservation'] = $data;
+			}
+		};
+		//exit();
+		$this->set('reservations', $reservations);
 	}
 
 	function view($id = null) {

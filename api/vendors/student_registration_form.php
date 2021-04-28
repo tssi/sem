@@ -16,7 +16,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function hdr($data){
+	function hdr($data,$ass){
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -35,7 +35,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 		$this->centerText(0,$y++,'BONIFACIO ST., CANLALAY, BINAN, LAGUNA',38,'');
 		$this->centerText(0,$y++,'STUDENT REGISTRATION FORM',38,'b');
-		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR 2020-2021',38,'');
+		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
 		$y=6;
 		$this->rightText(5,$y,'STUDENT ID:','','b');
 		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
@@ -50,8 +50,8 @@ class StudentRegistrationForm extends Formsheet{
 		$this->drawBox(0,5,38,2.5);
 	}
 	
-	function newstudent($data){
-		//pr($data);exit;
+	function newstudent($data,$ass){
+		//pr($ass);
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -70,7 +70,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 		$this->centerText(0,$y++,'BONIFACIO ST., CANLALAY, BINAN, LAGUNA',38,'');
 		$this->centerText(0,$y++,'STUDENT REGISTRATION FORM',38,'b');
-		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR 2020-2021',38,'');
+		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR ' . intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
 		$y=6;
 		$this->rightText(5,$y,'STUDENT ID:','','b');
 		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
@@ -85,6 +85,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function data($data){
+		//pr($data); exit();
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.5,

@@ -33,8 +33,14 @@ class Inquiry extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		/* 'Reservation' => array(
+			'className' => 'Reservation',
+			'foreignKey' => 'account_id',
+			'fields' => '',
+			'order' => ''
+		), */
 	);
-
+	
 	function generateIID(){
 		$ID = 0;
 		$cond =  array('Inquiry.id LIKE'=>'LSN%');
