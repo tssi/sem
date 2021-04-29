@@ -38,6 +38,11 @@ define(['app','api','atomic/bomb'],function(app){
 			
 			function getForPrinting(){
 				api.GET('reservations',{limit:9999,field_type:'RSRVE'},function success(response){
+					var cnt = 1;
+					angular.forEach(response.data, function(data){
+						data['cnt'] = cnt;
+						cnt++;
+					});
 					$scope.CompleteReservations = response.data;
 					console.log(response.data);
 				});

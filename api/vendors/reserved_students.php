@@ -32,15 +32,18 @@ class ReservedStudent extends Formsheet{
 		$this->leftText(29,1,'Status',null,'');
 		$this->GRID['font_size']=8;
 		$line = 2;
+		$cnt = 1;
 		foreach($data as $dt){
 			//pr($dt); exit();
+			$this->leftText(1.8,$line,$dt['cnt'].'. ',null,'');
 			$this->leftText(3,$line,$dt['transac_date'],null,'');
 			$this->leftText(8,$line,$dt['ref_no'],null,'');
 			$this->leftText(14,$line,$dt['name'],null,'');
 			$this->leftText(26,$line,$dt['year_level'],null,'');
 			$this->leftText(29,$line,$dt['status'],null,'');
 			$line+=.6;
-			continue;
+			$cnt++;
+			
 		}
 	}	
 }
