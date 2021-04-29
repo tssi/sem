@@ -33,7 +33,7 @@ define(['app','api','atomic/bomb'],function(app){
 				var error = function(response){
 					$scope.NoStudents = true;
 				}
-				api.GET('reservations',filter, success,error);
+				api.GET('reservations', filter, success,error);
 			}
 			
 			function getForPrinting(){

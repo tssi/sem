@@ -37,6 +37,40 @@ class Reservation extends AppModel {
 			'order' => ''
 		),
 	);
+	
+	function beforeFind($queryData){
+		//pr($queryData['conditions']); exit();
+		if($conds=$queryData['conditions']){
+			foreach($conds as $i=>$cond){
+				if(!is_array($cond))
+					break;
+				$keys =  array_keys($cond);
+				$search = 'Reservation.name LIKE';
+				if(in_array($search,$keys)){
+					$name = array_values($cond);
+					//pr($name[0]);
+					$students = $this->Student->findByName($name[0]);
+					$inquiries = $this->Inquiry->findByName($name[0]);
+					$res = [];
+					foreach($inquiries as $i){
+						array_push($res,$i['Inquiry']['id']);
+					}
+					foreach($students as $i){
+						array_push($res,$i['Student']['id']);
+					}
+					unset($conds['OR']);
+					$cond = array('Reservation.account_id'=>$res);
+					array_push($conds,$cond);
+					//pr($cond); exit();
+					continue;
+				}
+				$conds[$i]=$cond;
+			}
+			//pr($conds); exit();
+			$queryData['conditions']=$conds;
+		}
 
+		return $queryData;
+	}
 	
 }

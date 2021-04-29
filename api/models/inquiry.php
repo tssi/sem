@@ -41,6 +41,23 @@ class Inquiry extends AppModel {
 		), */
 	);
 	
+	function findByName($name){
+		//pr($name); exit(); 
+		$students = $this->find('all',
+							array('conditions'=>
+								array('OR'=>array('Inquiry.first_name LIKE'=>$name,
+													'Inquiry.middle_name LIKE'=>$name,
+													'Inquiry.last_name LIKE'=>$name
+												)
+										)
+								)
+							);
+		//pr($students); exit();
+		return $students;
+		
+		
+	} 
+	
 	function generateIID(){
 		$ID = 0;
 		$cond =  array('Inquiry.id LIKE'=>'LSN%');
