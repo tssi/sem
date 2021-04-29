@@ -18,6 +18,7 @@ class Reservation extends AppModel {
 			'foreignKey' => 'account_id',
 			'conditions' => '',
 			'fields' => array(
+				'Student.id',
 				'Student.sno',
 				'Student.gender',
 				'Student.short_name',
@@ -55,13 +56,13 @@ class Reservation extends AppModel {
 					foreach($inquiries as $i){
 						array_push($res,$i['Inquiry']['id']);
 					}
-					foreach($students as $i){
-						array_push($res,$i['Student']['id']);
+					foreach($students as $i=>$s){
+						array_push($res,$i);
 					}
 					unset($conds['OR']);
 					$cond = array('Reservation.account_id'=>$res);
 					array_push($conds,$cond);
-					//pr($cond); exit();
+					//pr($students); exit();
 					continue;
 				}
 				$conds[$i]=$cond;
