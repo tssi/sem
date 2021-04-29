@@ -41,6 +41,31 @@ class Inquiry extends AppModel {
 		), */
 	);
 	
+	function beforeFind($queryData){
+		//pr($queryData['conditions']); exit();
+		if($conds=$queryData['conditions']){
+			foreach($conds as $i=>$cond){
+				if(!is_array($cond))
+					break;
+				$keys =  array_keys($cond);
+				$search = 'Inquiry.full_name LIKE';
+				//pr($cond[$search]); exit();
+				if(in_array($search,$keys)){
+					$val = $cond[$search];
+					unset($cond[$search]);
+					unset($cond['Inquiry.lrn LIKE']);
+					$cond = array('OR'=>array('Inquiry.first_name LIKE'=>$val,'Inquiry.middle_name LIKE'=>$val,'Inquiry.last_name LIKE'=>$val));
+				}
+				
+				$conds[$i]=$cond;
+			}
+			//pr($conds); exit();
+			$queryData['conditions']=$conds;
+		}
+		
+		return $queryData;
+	}
+	
 	function findByName($name){
 		//pr($name); exit(); 
 		$students = $this->find('all',
