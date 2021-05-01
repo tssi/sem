@@ -14,14 +14,15 @@ class ReservationsController extends AppController {
 					$stud = $res['Inquiry'];
 					$data['name'] = $stud['first_name'].' '.$stud['middle_name'].' '.$stud['last_name'];			
 					$data['status'] = 'New';
-					$yl = $res['Inquiry']['YearLevel']['description'];
+					$yl = $res['Inquiry']['YearLevel'];
 				}else{
 					$stud = $res['Student'];
 					$data['name'] = $stud['full_name'];
 					$data['status'] = 'Old';
-					$yl = $res['Student']['YearLevel']['description'];
+					$yl = $res['Student']['YearLevel'];
 				}
-				$data['year_level'] = $yl;
+				$data['year_level'] = $yl['description'];
+				//$data['year_level_id'] = $yl['id'];
 				//pr($res);
 				$reservations[$i]['Reservation'] = $data;
 			}

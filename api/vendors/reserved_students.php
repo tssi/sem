@@ -33,7 +33,7 @@ class ReservedStudent extends Formsheet{
 		$this->GRID['font_size']=8;
 		$line = 2;
 		$cnt = 1;
-		foreach($data as $dt){
+		foreach($data['breakdown'] as $dt){
 			//pr($dt); exit();
 			$this->leftText(1.8,$line,$dt['cnt'].'. ',null,'');
 			$this->leftText(3,$line,$dt['transac_date'],null,'');

@@ -19,15 +19,58 @@
 						<a-searchbox ng-model="RC.Searchbox" on-search="RC.search" on-clear="RC.clearSearch" is-large="true"></a-searchbox>
 					</div>
 					<div class="col-md-1">
-						<button class="btn btn-primary btn-lg" ng-disabled="!RC.CompleteReservations.length" ng-click="RC.PrintRes()" >Print</button>
+						<button class="btn btn-primary btn-lg" ng-disabled="!RC.CompleteReservations.breakdown" ng-click="RC.PrintRes()" >Print</button>
 					</div>
 				</div>
 			</a-header>
 			<a-canvas>
 				<a-content >
-					<a-row ng-show="RC.Students.length">
+					<a-row style="margin-bottom: 20px;">
+						<a-col>
+							<div class="col-md-3" style="margin-left: -70px;">
+								<ul class="nav nav-pills pull-right">
+									<li ng-repeat="tab in RC.Tabs" 
+										ng-click="RC.SetActiveTab(tab)"
+										ng-class="{active:tab==RC.ActiveTab}">
+										<a>{{tab}}</a>
+									</li>
+								</ul>
+							</div>
+						</a-col>
+					</a-row>
+					<a-row ng-show="RC.Students.length&&RC.ActiveTab=='Breakdown'">
 						<a-col>
 							<a-table headers="RC.Headers" props="RC.Props" data="RC.Students"  ng-model="RC.Active" on-row-click="RC.openModal" search-by="RC.SearchBy" search-word="RC.Searchbox"></a-table>
+						</a-col>
+					</a-row>
+					<a-row ng-show="RC.CompleteReservations&&RC.ActiveTab=='Summary'">
+						<a-col>
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th></th>
+										<th>New</th>
+										<th>Old</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="sum in RC.CompleteReservations.summary |  orderBy:'order'">
+										<td>{{sum.description}}</td>
+										<td>{{sum.total_new}}</td>
+										<td>{{sum.total_old}}</td>
+										<td>{{sum.total}}</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td>Total</td>
+										<td>{{RC.CompleteReservations.totals.new}}</td>
+										<td>{{RC.CompleteReservations.totals.old}}</td>
+										<td>{{RC.CompleteReservations.totals.total}}</td>
+									</tr>
+								</tfoot>
+							</table>
 						</a-col>
 					</a-row>
 					<a-row ng-show="RC.NoStudents">

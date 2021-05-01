@@ -8,7 +8,8 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.Headers = ['Date','OR Number','Student','Year Level','Status',];
 				$scope.Props = ['transac_date','ref_no','name','year_level','status'];
 				$scope.SearchBy = ['name'];// Fields you can search from the items 			
-				
+				$scope.Tabs = ['Breakdown','Summary'];
+				$scope.ActiveTab = 'Breakdown';
 				atomic.ready(function(){
 					$selfScope.$watch('SI.ActiveStudent.department_id',function(deptId){
 						
@@ -39,13 +40,59 @@ define(['app','api','atomic/bomb'],function(app){
 			function getForPrinting(){
 				api.GET('reservations',{limit:9999,field_type:'RSRVE'},function success(response){
 					var cnt = 1;
+					var levels = [];
+					var totals = [];
 					angular.forEach(response.data, function(data){
 						data['cnt'] = cnt;
 						cnt++;
 					});
-					$scope.CompleteReservations = response.data;
-					console.log(response.data);
+					totals['total'] = cnt;
+					totals['new'] = 0;
+					totals['old'] = 0;
+					for(var i in response.data){
+						var data = response.data[i];
+						levels[data.year_level_id]={};
+						
+					};
+					for(var i in levels){
+						var desc = '';
+						levels[i]['total']=0;
+						levels[i]['total_new']=0;
+						levels[i]['total_old']=0;
+						switch(i){
+							case 'G7': desc = 'Grade 7'; var order = 1; break;
+							case 'G8': desc = 'Grade 8'; var order = 2; break;
+							case 'G9': desc = 'Grade 9'; var order = 3; break;
+							case 'GX': desc = 'Grade 10'; var order = 4; break;
+							case 'GY': desc = 'Grade 11'; var order = 5; break;
+							case 'GZ': desc = 'Grade 12'; var order = 6; break;
+						}
+						levels[i]['description']=desc;
+						levels[i]['order']=order;
+						angular.forEach(response.data, function(data){
+							if(i==data.year_level_id){
+								levels[i].total++;
+								switch(data.status){
+									case 'Old': levels[i].total_old++; totals['old']++; break;
+									case 'New': levels[i].total_new++; totals['new']++; break;
+								}
+							}
+						}); 
+					}
+					var a=0;
+					for(var i in levels){
+						levels[a]=levels[i];
+						a++;
+					}
+					$scope.CompleteReservations = [];
+					$scope.CompleteReservations['breakdown'] = response.data;
+					$scope.CompleteReservations['summary'] = levels;
+					$scope.CompleteReservations['totals'] = totals;
 				});
+			}
+			
+			$scope.SetActiveTab = function(tab){
+				$scope.ActiveTab = tab;
 			}
 			
 			$scope.PrintRes = function(){
