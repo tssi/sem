@@ -46,7 +46,7 @@ define(['app','api','atomic/bomb'],function(app){
 						data['cnt'] = cnt;
 						cnt++;
 					});
-					totals['total'] = cnt;
+					totals['total'] = cnt-1;
 					totals['new'] = 0;
 					totals['old'] = 0;
 					for(var i in response.data){
@@ -84,7 +84,7 @@ define(['app','api','atomic/bomb'],function(app){
 						levels[a]=levels[i];
 						a++;
 					}
-					$scope.CompleteReservations = [];
+					$scope.CompleteReservations = {};
 					$scope.CompleteReservations['breakdown'] = response.data;
 					$scope.CompleteReservations['summary'] = levels;
 					$scope.CompleteReservations['totals'] = totals;
