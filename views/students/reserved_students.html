@@ -51,26 +51,31 @@
 										<th></th>
 										<th>New</th>
 										<th>Old</th>
+										<th>Unset Program</th>
 										<th>Total</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="sum in RC.CompleteReservations.summary |  orderBy:'order'">
+									<tr ng-repeat="sum in RC.CompleteReservations.summary track by sum.description |  orderBy:'order'">
 										<td>{{sum.description}}</td>
 										<td>{{sum.total_new}}</td>
 										<td>{{sum.total_old}}</td>
+										<td>{{sum.unset}}</td>
 										<td>{{sum.total}}</td>
 									</tr>
+									
 								</tbody>
 								<tfoot>
 									<tr>
 										<td>Total</td>
 										<td>{{RC.CompleteReservations.totals.new}}</td>
 										<td>{{RC.CompleteReservations.totals.old}}</td>
+										<td>{{RC.CompleteReservations.totals.unset}}</td>
 										<td>{{RC.CompleteReservations.totals.total}}</td>
 									</tr>
 								</tfoot>
 							</table>
+							{{RC.CompleteReservations.sh[0]}}
 						</a-col>
 					</a-row>
 					<a-row ng-show="RC.NoStudents">

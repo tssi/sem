@@ -16,7 +16,7 @@ define(['app','api','atomic/bomb'],function(app){
 					});
 				});
 				loadStudents(1);
-				getForPrinting();
+				getPrograms();
 			};
 			
 			function loadStudents(page,search){
@@ -36,6 +36,17 @@ define(['app','api','atomic/bomb'],function(app){
 				}
 				api.GET('reservations', filter, success,error);
 			}
+			function getPrograms(){
+				api.GET('programs',{department_id:'SH'}, function success(response){
+					var progs = [];
+					angular.forEach(response.data, function(data){
+						if(data.id!='MIXED')
+							progs[data.id] = {description:data.alias,total_old:0,total_new:0,total:0};
+					});
+					$scope.Programs = progs;
+					getForPrinting();
+				});
+			}
 			
 			function getForPrinting(){
 				api.GET('reservations',{limit:9999,field_type:'RSRVE'},function success(response){
@@ -49,45 +60,119 @@ define(['app','api','atomic/bomb'],function(app){
 					totals['total'] = cnt-1;
 					totals['new'] = 0;
 					totals['old'] = 0;
+					totals['unset'] = 0;
 					for(var i in response.data){
 						var data = response.data[i];
 						levels[data.year_level_id]={};
 						
 					};
 					for(var i in levels){
-						var desc = '';
+						var lvl = levels[i];
+						switch(i){
+							case 'GY': levels[i]['programs'] = $scope.Programs; break;
+							case 'GZ': levels[i]['programs'] = $scope.Programs; break;
+						}
+					}
+					//console.log(levels); return;
+					for(var i in levels){
+						var item = levels[i];
 						levels[i]['total']=0;
 						levels[i]['total_new']=0;
 						levels[i]['total_old']=0;
+						levels[i]['unset']=0;
+						
 						switch(i){
-							case 'G7': desc = 'Grade 7'; var order = 1; break;
-							case 'G8': desc = 'Grade 8'; var order = 2; break;
-							case 'G9': desc = 'Grade 9'; var order = 3; break;
-							case 'GX': desc = 'Grade 10'; var order = 4; break;
-							case 'GY': desc = 'Grade 11'; var order = 5; break;
-							case 'GZ': desc = 'Grade 12'; var order = 6; break;
+							case 'G7': item['description'] = 'Grade 7'; item['order'] = 1; break;
+							case 'G8': item['description'] = 'Grade 8'; item['order'] = 2; break;
+							case 'G9': item['description']  = 'Grade 9'; item['order'] = 3; break;
+							case 'GX': item['description']  = 'Grade 10'; item['order'] = 4; break;
+							case 'GY': item['description']  = 'Grade 11'; item['order'] = 5; break;
+							case 'GZ': item['description']  = 'Grade 12'; item['order'] = 6; break;
 						}
-						levels[i]['description']=desc;
-						levels[i]['order']=order;
-						angular.forEach(response.data, function(data){
-							if(i==data.year_level_id){
-								levels[i].total++;
-								switch(data.status){
-									case 'Old': levels[i].total_old++; totals['old']++; break;
-									case 'New': levels[i].total_new++; totals['new']++; break;
+						
+						
+						if(i!=='GY'&&i!='GZ'){
+							angular.forEach(response.data, function(data){
+								if(i==data.year_level_id){
+									levels[i].total++;
+									switch(data.status){
+										case 'Old': levels[i].total_old++; totals['old']++; break;
+										case 'New': levels[i].total_new++; totals['new']++; break;
+									}
 								}
-							}
-						}); 
+							}); 
+						}else{
+							angular.forEach(response.data, function(data){
+								if(data.year_level_id==i){
+									levels[i].total++;
+									for(var x in item['programs']){
+										if(x==data.program_id){
+											switch(data.status){
+												case 'Old': item['programs'][x].total_old++; levels[i].total_old++; totals['old']++; break;
+												case 'New': item['programs'][x].total_new++; levels[i].total_new++; totals['new']++; break;
+											}
+										}
+										
+									}
+									if(data.program_id===null){
+										levels[i].unset++;
+										totals.unset++;
+										switch(data.status){
+											case 'Old': levels[i].total_old++; totals['old']++; break;
+											case 'New': levels[i].total_new++; totals['new']++; break;
+										}
+										
+									}
+								}
+								
+							})
+						}
+						//console.log(levels[i]);
 					}
-					var a=0;
+					console.log(levels);
+					var levelss=[];
 					for(var i in levels){
-						levels[a]=levels[i];
-						a++;
+						//console.log(levels[i]);
+						/* if(levels[i]['programs']){
+							
+							for(var x in levels[i]['programs']){
+								levelss[a]=levels[i]['programs'][x];
+								a++; 
+							}
+						}
+						else{ */
+							levelss[levels[i].order-1]=levels[i];
+					//	}
+						
 					}
+					/* var a=0;
+					var levelsss = [];
+					for(var i in levelss){
+						
+						if(levelss[i]['programs']){
+							levelsss[a]=levelss[i];
+							a++;
+							for(var x in levelss[i]['programs']){
+								levelss[i]['programs'][x]['order'] = a+1;
+								levelsss[a]=levelss[i]['programs'][x];
+								a++; 
+							}
+						}
+						else{
+							levelss[i]['order'] = a+1;
+							levelsss[a]=levelss[i];
+							a++;
+						}
+						//console.log(levelsss[a]);
+						
+					} */
+					
+					console.log(levelss); return;
 					$scope.CompleteReservations = {};
 					$scope.CompleteReservations['breakdown'] = response.data;
-					$scope.CompleteReservations['summary'] = levels;
+					$scope.CompleteReservations['summary'] = levelsss;
 					$scope.CompleteReservations['totals'] = totals;
+					//console.log($scope.CompleteReservations);
 				});
 			}
 			
