@@ -30,6 +30,7 @@ define(['app','api'], function (app) {
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
 					$scope.ActiveStudent = $scope.SelectedStudent;
+					console.log($scope.ActiveStudent);
 					$scope.ActiveDept = $scope.ActiveStudent.department_id;
 					$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
 					getCurriculum($scope.ActiveStudent.department_id);
@@ -233,11 +234,15 @@ define(['app','api'], function (app) {
 										 name:student.first_name+" "+student.middle_name+" "+student.last_name+" ",
 										 yearlevel:student.year_level_id,
 										 department_id:student.department_id,
-										 student_id:student.student_id
+										 student_id:student.student_id,
+										 program_id:student.program_id
 				                         };
 				if(student.suffix)
 					$scope.SelectedStudent.name += student.suffix;
 			};
+			
+			
+			
 			$scope.filterYearLevel = function(yearlevel){
 				if($scope.ActiveOpt=='Old')
 					return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+1 || yearlevel.id=='IR';

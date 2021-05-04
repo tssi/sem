@@ -281,7 +281,7 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections" ng-click="setSelectedSection(section)" ng-hide="ActiveLevel.id!=='IR'&&section.program_id=='MIXED'">
+					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections " ng-click="setSelectedSection(section)" ng-hide="(ActiveLevel.id!=='IR'&&section.program_id=='MIXED')||(ActiveStudent.department_id=='SH'&&section.program_id!=ActiveStudent.program_id)">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.program_id}}</span></p>
