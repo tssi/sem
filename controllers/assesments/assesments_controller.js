@@ -478,6 +478,9 @@ define(['app','api'], function (app) {
 				
 			}
 			
+			
+			//computes for special subjects
+			
 			function getSpecialFees(subjects){
 				api.GET('fee_special_subjects',{subject_id:subjects,limit:'less'}, function success(response){
 					var fees = [];
@@ -501,6 +504,8 @@ define(['app','api'], function (app) {
 				});
 				
 			}
+			
+			//computes for irregular student
 			
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
@@ -606,6 +611,8 @@ define(['app','api'], function (app) {
 				}
 			}
 			
+			
+			
 			function getSections(filter){
 				if(filter.id!='IR')
 					var data = {limit:'less',year_level_id:$scope.ActiveLevel.id};
@@ -623,6 +630,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			//getting applicable fee depending on year level
 			function getFees(){
 				var data = {year_level_id:$scope.ActiveSection.year_level_id,sy:$scope.ActiveSy}
 				api.GET('tuitions',data, function success(response){
@@ -659,6 +667,8 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			
+			
 			function getBillingPeriods(){
 				var data = 
 				api.GET('billing_periods',{sy:$scope.ActiveSy}, function success(response){
@@ -666,6 +676,8 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			
+			//getting schedules
 			function getSchedules(){
 				
 				if($scope.ActiveSection.program_id!='MIXED')
@@ -723,6 +735,8 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			
+			//triggers when no avail sched
 			function getCurriculum(dept){
 				var data ={
 					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
