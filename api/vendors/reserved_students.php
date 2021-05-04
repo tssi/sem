@@ -12,6 +12,11 @@ class ReservedStudent extends Formsheet{
 		$this->createSheet();
 	}
 	
+	function hdr($sum,$totals){
+		pr($sum);
+		pr($totals); exit();
+	}
+	
 	function data($data,$page){
 		//pr($data); exit();
 		$this->showLines = false;
@@ -33,7 +38,7 @@ class ReservedStudent extends Formsheet{
 		$this->GRID['font_size']=8;
 		$line = 2;
 		$cnt = 1;
-		foreach($data['breakdown'] as $dt){
+		foreach($data as $dt){
 			//pr($dt); exit();
 			$this->leftText(1.8,$line,$dt['cnt'].'. ',null,'');
 			$this->leftText(3,$line,$dt['transac_date'],null,'');

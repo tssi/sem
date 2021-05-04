@@ -167,10 +167,10 @@ define(['app','api','atomic/bomb'],function(app){
 						
 					} */
 					
-					console.log(levelss); return;
+					//console.log(levelss); return;
 					$scope.CompleteReservations = {};
 					$scope.CompleteReservations['breakdown'] = response.data;
-					$scope.CompleteReservations['summary'] = levelsss;
+					$scope.CompleteReservations['summary'] = levelss;
 					$scope.CompleteReservations['totals'] = totals;
 					//console.log($scope.CompleteReservations);
 				});

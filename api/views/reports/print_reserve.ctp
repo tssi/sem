@@ -5,8 +5,8 @@ App::import('Vendor','reserved_students');
 	$chunk_data = array_chunk($data['breakdown'],48,true);
 	$total_page = count($chunk_data);
 	$i = 1;
-	pr($chunk_data); exit();
-
+	//pr($chunk_data); exit();
+	$pr->hdr($data['summary'],$data['totals']);
 	foreach($chunk_data as $dt){
 		$pr->data($dt,$i);
 		if(count($chunk_data)!=($i++)){
