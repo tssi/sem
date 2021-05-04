@@ -86,6 +86,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===5){
 					$scope.ActiveTab.id = 3;
 					$scope.ActiveScheme = angular.copy($scope.SelectedScheme);
+					console.log($scope.ActiveScheme);
 					$scope.PaymentTotal = 0;
 					$scope.TotalAmount = 0;
 					var total = 0;
@@ -312,7 +313,10 @@ define(['app','api'], function (app) {
 				var error = function(response){
 					
 				}
-				api.GET('students',data,success,error);
+				if($scope.ActiveOpt=='New')
+					api.GET('inquiries',data,success,error);
+				else
+					api.GET('students',data,success,error);
 			}
 			
 			$scope.ClearSearch = function(){
