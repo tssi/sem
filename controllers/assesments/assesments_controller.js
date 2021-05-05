@@ -244,10 +244,12 @@ define(['app','api'], function (app) {
 			
 			
 			$scope.filterYearLevel = function(yearlevel){
+				
 				if($scope.ActiveOpt=='Old')
 					return yearlevel.order >= $scope.ActiveOrder && yearlevel.order <= $scope.ActiveOrder+1 || yearlevel.id=='IR';
 				else
-					return yearlevel.order == $scope.ActiveOrder || yearlevel.id=='IR';
+					return yearlevel.order === $scope.ActiveOrder || yearlevel.id=='IR';
+					
 			}
 			$scope.setSelectedLevel=function(yearLevel){
 				$scope.Disabled = 0;

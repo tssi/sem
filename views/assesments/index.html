@@ -258,12 +258,15 @@
 					<div class="list-group-item text-center" ng-if="!YearLevels.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels | filter: filterYearLevel  | filter:{'department_id':ActiveDept} | orderBy: '-order'" ng-click="setSelectedLevel(yearLevel)">
+					<div class="list-group-item ng-class:{active:yearLevel.id===SelectedLevel.id}" ng-repeat="yearLevel in YearLevels |filter: filterYearLevel | orderBy: '-order'" 
+									ng-click="setSelectedLevel(yearLevel)" >
 						<h4 class="list-group-item-heading">{{yearLevel.description}}</h4>
 						<p class="list-group-item-text">
 							<span class="label label-danger" ng-if="yearLevel.order==ActiveOrder" ng-show="ActiveOpt=='Old'">Repeater</span>
+							<span class="label label-info" ng-if="yearLevel.order==ActiveOrder" ng-show="ActiveOpt=='New'">Promoted</span>
 							<span class="label label-info" ng-if="yearLevel.order==ActiveOrder+1" ng-show="ActiveOpt=='Old'">Promoted</span>
 							<span class="label label-warning" ng-if="yearLevel.id=='IR'">Irregular</span>
+							
 						</p>
 					</div>
 				</div>
