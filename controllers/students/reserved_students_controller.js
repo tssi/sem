@@ -77,7 +77,7 @@ define(['app','api','atomic/bomb'],function(app){
 					var lvlNum = 7;
 
 					for( var pg in  $scope.Programs){
-						var pObj = $scope.Programs[pg];
+						var pObj = angular.copy($scope.Programs[pg]);
 						pObj.total = 0;
 						pObj.total_new = 0;
 						pObj.total_old = 0;
@@ -97,7 +97,7 @@ define(['app','api','atomic/bomb'],function(app){
 						// Attach programs for Grade 11 & G12
 						if(ky== 'GY'|| ky=='GZ'){
 							lvlObj.unset = 0;
-							lvlObj.programs = programs;
+							lvlObj.programs = angular.copy(programs);
 						}
 
 						levels[ky] =  lvlObj;
@@ -136,13 +136,13 @@ define(['app','api','atomic/bomb'],function(app){
 										switch(resObj.status){
 											case 'Old':
 												targetProgram.total_old++;
-												targetLevel.total_old++;
+												//targetLevel.total_old++;
 												totals.old++;
 											break;
 											case 'New':
 												console.log(prgID);
 												targetProgram.total_new++;
-												targetLevel.total_new++;
+												//targetLevel.total_new++;
 												totals.new++;
 											break;
 										}
