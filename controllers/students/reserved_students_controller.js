@@ -50,7 +50,7 @@ define(['app','api','atomic/bomb'],function(app){
 			
 			function getForPrinting(){
 				api.GET('reservations',{limit:9999,field_type:'RSRVE'},function success(response){
-					var cnt = 1;
+					var cnt = response.data.length;
 					var levels = [];
 					var totals = [];
 					/*	
@@ -59,9 +59,9 @@ define(['app','api','atomic/bomb'],function(app){
 						cnt++;
 					});
 					*/
-					data['cnt'] =  response.data.length;
+					//data['cnt'] =  response.data.length;
 					var totals = {};
-						totals['total'] = cnt-1;
+						totals['total'] = cnt;
 						totals['new'] = 0;
 						totals['old'] = 0;
 						totals['unset'] = 0;
@@ -75,6 +75,7 @@ define(['app','api','atomic/bomb'],function(app){
 					var levels = {};
 					var lvlKys = ['G7','G8','G9','GX','GY','GZ'];
 					var lvlNum = 7;
+
 					for( var pg in  $scope.Programs){
 						var pObj = $scope.Programs[pg];
 						pObj.total = 0;
@@ -82,7 +83,9 @@ define(['app','api','atomic/bomb'],function(app){
 						pObj.total_old = 0;
 						programs[pg] =  pObj;
 					}
-					for(var ky in lvlKys){
+					//console.log(programs);
+					for(var k in lvlKys){
+						var ky = lvlKys[k];
 						var lvlObj = {};
 							lvlObj.total = 0;
 							lvlObj.total_new = 0;
@@ -100,16 +103,16 @@ define(['app','api','atomic/bomb'],function(app){
 						levels[ky] =  lvlObj;
 						lvlNum++;
 					}
-
+					console.log(levels);
 					var RSV  = response.data;
 
 					for(var i in RSV){
 						var resObj  =  RSV[i];
 						var yrLID = resObj.year_level_id;
 						var prgID = resObj.program_id;
+						console.log(yrLID,lvlKys.indexOf(yrLID));
 						if(levels[yrLID]!=undefined){
 							var targetLevel = levels[yrLID];
-
 							switch(yrLID){
 								case 'G7': case 'G8': case 'G9': case 'GX':
 									// Counting for Grade 7 -10
@@ -126,8 +129,9 @@ define(['app','api','atomic/bomb'],function(app){
 								break;
 								case 'GY': case 'GZ':
 									// Counting for Grade 11 & 12
-									if(prgID){
+									if(prgID&&prgID!='MIXED'){
 										var targetProgram =  targetLevel.programs[prgID];
+										
 										switch(resObj.status){
 											case 'Old':
 												targetProgram.total_old++;
@@ -135,6 +139,7 @@ define(['app','api','atomic/bomb'],function(app){
 												totals.old++;
 											break;
 											case 'New':
+												console.log(prgID);
 												targetProgram.total_new++;
 												targetLevel.total_new++;
 												totals.new++;
@@ -169,6 +174,7 @@ define(['app','api','atomic/bomb'],function(app){
 					var index = 0;
 					var levelArr = [];
 					var order = 1;
+					console.log(levels);
 					for(var ky in levels){
 						var lvlObj = angular.copy(levels[ky]);
 							lvlObj.order = order;
@@ -185,18 +191,22 @@ define(['app','api','atomic/bomb'],function(app){
 								//   HUMSS
 								//   TVL
 								//   No program
-								levelArr.push(lvlObj);
+								var lvl = angular.copy(lvlObj);
+								delete lvl.programs;
+								levelArr.push(lvl);
 								order++;
 								for(var pg in lvlObj.programs){
 									// ABM, STEM, HUMSS, TVL
 									var prgObj =  lvlObj.programs[pg];
-									levelArr.push(lvlObj);
+									levelArr.push(prgObj);
 									order++;
 								}
 								if(lvlObj.unset>0){
-									lvlObj.order = order;
-									lvlObj.description = 'No Program';
-									levelArr.push(lvlObj);
+									var noPrg = angular.copy(lvlObj);
+									noPrg.order = order;
+									noPrg.description = 'No Program';
+									delete noPrg.programs;
+									levelArr.push(noPrg);
 									order++;
 								}
 							break;
@@ -204,7 +214,7 @@ define(['app','api','atomic/bomb'],function(app){
 						
 					}
 					console.log(levelArr);
-					return;
+					//return;
 					/*
 					for(var i in levels){
 						var lvl = levels[i];
@@ -213,7 +223,7 @@ define(['app','api','atomic/bomb'],function(app){
 							case 'GZ': levels[i]['programs'] = $scope.Programs; break;
 						}
 					}
-					*/
+					
 					//console.log(levels); return;
 					for(var i in levels){
 						var item = levels[i];
@@ -281,12 +291,12 @@ define(['app','api','atomic/bomb'],function(app){
 								a++; 
 							}
 						}
-						else{ */
+						else{ 
 							levelss[levels[i].order-1]=levels[i];
 					//	}
 						
 					}
-					/* var a=0;
+					 var a=0;
 					var levelsss = [];
 					for(var i in levelss){
 						
@@ -308,10 +318,10 @@ define(['app','api','atomic/bomb'],function(app){
 						
 					} */
 					
-					//console.log(levelss); return;
+					//console.log(levelss); return;*/
 					$scope.CompleteReservations = {};
 					$scope.CompleteReservations['breakdown'] = response.data;
-					$scope.CompleteReservations['summary'] = levelss;
+					$scope.CompleteReservations['summary'] = levelArr;
 					$scope.CompleteReservations['totals'] = totals;
 					//console.log($scope.CompleteReservations);
 				});

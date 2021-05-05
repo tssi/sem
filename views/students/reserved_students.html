@@ -56,7 +56,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="sum in RC.CompleteReservations.summary track by sum.description |  orderBy:'order'">
+									<tr ng-repeat="sum in RC.CompleteReservations.summary track by $index |  orderBy:'order'">
 										<td>{{sum.description}}</td>
 										<td>{{sum.total_new}}</td>
 										<td>{{sum.total_old}}</td>
