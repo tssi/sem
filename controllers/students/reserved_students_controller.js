@@ -126,6 +126,7 @@ define(['app','api','atomic/bomb'],function(app){
 											totals.new++;
 										break;
 									}
+									targetLevel.total++;
 								break;
 								case 'GY': case 'GZ':
 									// Counting for Grade 11 & 12
@@ -135,19 +136,19 @@ define(['app','api','atomic/bomb'],function(app){
 										switch(resObj.status){
 											case 'Old':
 												targetProgram.total_old++;
-												//targetLevel.total_old++;
+												targetLevel.total_old++;
 												totals.old++;
 											break;
 											case 'New':
 												console.log(prgID);
 												targetProgram.total_new++;
-												//targetLevel.total_new++;
+												targetLevel.total_new++;
 												totals.new++;
 											break;
 										}
 										targetProgram.total++;
 										targetLevel.programs[prgID] =  targetProgram;
-
+										
 									}else{
 										// No Assigned Program
 										switch(resObj.status){
@@ -162,11 +163,12 @@ define(['app','api','atomic/bomb'],function(app){
 										}
 										targetLevel.unset++;
 										totals.unset++;
+										targetLevel.total++;
 									}
 								break;
 							}
 							
-							targetLevel.total++;
+							
 							totals.total++;
 							// Apply changes to levels;
 							levels[yrLID] =  targetLevel;
