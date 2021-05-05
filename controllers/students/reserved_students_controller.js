@@ -53,19 +53,159 @@ define(['app','api','atomic/bomb'],function(app){
 					var cnt = 1;
 					var levels = [];
 					var totals = [];
+					/*	
 					angular.forEach(response.data, function(data){
 						data['cnt'] = cnt;
 						cnt++;
 					});
-					totals['total'] = cnt-1;
-					totals['new'] = 0;
-					totals['old'] = 0;
-					totals['unset'] = 0;
-					for(var i in response.data){
+					*/
+					data['cnt'] =  response.data.length;
+					var totals = {};
+						totals['total'] = cnt-1;
+						totals['new'] = 0;
+						totals['old'] = 0;
+						totals['unset'] = 0;
+					/*for(var i in response.data){
 						var data = response.data[i];
 						levels[data.year_level_id]={};
 						
-					};
+					};*/
+					//Initialize programs & level objects for counter 
+					var programs={};
+					var levels = {};
+					var lvlKys = ['G7','G8','G9','GX','GY','GZ'];
+					var lvlNum = 7;
+					for( var pg in  $scope.Programs){
+						var pObj = $scope.Programs[pg];
+						pObj.total = 0;
+						pObj.total_new = 0;
+						pObj.total_old = 0;
+						programs[pg] =  pObj;
+					}
+					for(var ky in lvlKys){
+						var lvlObj = {};
+							lvlObj.total = 0;
+							lvlObj.total_new = 0;
+							lvlObj.total_old = 0;
+							
+						// Build Description
+						var desc =  'Grade '+ lvlNum;
+							lvlObj.description = desc;
+						// Attach programs for Grade 11 & G12
+						if(ky== 'GY'|| ky=='GZ'){
+							lvlObj.unset = 0;
+							lvlObj.programs = programs;
+						}
+
+						levels[ky] =  lvlObj;
+						lvlNum++;
+					}
+
+					var RSV  = response.data;
+
+					for(var i in RSV){
+						var resObj  =  RSV[i];
+						var yrLID = resObj.year_level_id;
+						var prgID = resObj.program_id;
+						if(levels[yrLID]!=undefined){
+							var targetLevel = levels[yrLID];
+
+							switch(yrLID){
+								case 'G7': case 'G8': case 'G9': case 'GX':
+									// Counting for Grade 7 -10
+									switch(resObj.status){
+										case 'Old':
+											targetLevel.total_old++;
+											totals.old++;
+										break;
+										case 'New':
+											targetLevel.total_new++;
+											totals.new++;
+										break;
+									}
+								break;
+								case 'GY': case 'GZ':
+									// Counting for Grade 11 & 12
+									if(prgID){
+										var targetProgram =  targetLevel.programs[prgID];
+										switch(resObj.status){
+											case 'Old':
+												targetProgram.total_old++;
+												targetLevel.total_old++;
+												totals.old++;
+											break;
+											case 'New':
+												targetProgram.total_new++;
+												targetLevel.total_new++;
+												totals.new++;
+											break;
+										}
+										targetLevel.programs[prgID] =  targetProgram;
+
+									}else{
+										// No Assigned Program
+										switch(resObj.status){
+											case 'Old':
+												targetLevel.total_old++;
+												totals.old++;
+											break;
+											case 'New':
+												targetLevel.total_new++;
+												totals.new++;
+											break;
+										}
+										targetLevel.unset++;
+										totals.unset++;
+									}
+								break;
+							}
+							
+							targetLevel.total++;
+							totals.total++;
+							// Apply changes to levels;
+							levels[yrLID] =  targetLevel;
+						}
+					}
+					var index = 0;
+					var levelArr = [];
+					var order = 1;
+					for(var ky in levels){
+						var lvlObj = angular.copy(levels[ky]);
+							lvlObj.order = order;
+						switch(ky){
+							case 'G7': case 'G8': case 'G9': case 'GX': 
+								levelArr.push(lvlObj);
+								order++;
+							break;
+							case 'GY': case 'GZ':
+								//              OLD     NEW       TOTAL
+								//  Grade 11             1         23
+								//   ABM          0      1         0     1
+								//   STEM
+								//   HUMSS
+								//   TVL
+								//   No program
+								levelArr.push(lvlObj);
+								order++;
+								for(var pg in lvlObj.programs){
+									// ABM, STEM, HUMSS, TVL
+									var prgObj =  lvlObj.programs[pg];
+									levelArr.push(lvlObj);
+									order++;
+								}
+								if(lvlObj.unset>0){
+									lvlObj.order = order;
+									lvlObj.description = 'No Program';
+									levelArr.push(lvlObj);
+									order++;
+								}
+							break;
+						}
+						
+					}
+					console.log(levelArr);
+					return;
+					/*
 					for(var i in levels){
 						var lvl = levels[i];
 						switch(i){
@@ -73,6 +213,7 @@ define(['app','api','atomic/bomb'],function(app){
 							case 'GZ': levels[i]['programs'] = $scope.Programs; break;
 						}
 					}
+					*/
 					//console.log(levels); return;
 					for(var i in levels){
 						var item = levels[i];
