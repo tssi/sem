@@ -7,6 +7,7 @@ App::import('Vendor','reserved_students');
 	$i = 1;
 	//pr($chunk_data); exit();
 	$pr->hdr($data['summary'],$data['totals']);
+	$pr->createSheet();
 	foreach($chunk_data as $dt){
 		$pr->data($dt,$i);
 		if(count($chunk_data)!=($i++)){
