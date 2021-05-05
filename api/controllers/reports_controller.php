@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig');
 
 	function student_registration_form(){
 	
@@ -57,9 +57,13 @@ class ReportsController extends AppController{
 			$feeSum = array('Fee'=>array('name'=>$f['label']),'due_amount'=>$f['total']);
 			array_push($feeSummary,$feeSum);
 		}
-		//pr($feeSummary); exit();
+		
+		$config = $this->MasterConfig->findById(11);
+		$config = $config['MasterConfig']['sys_value'];
+		
 		$data['AssessmentFee'] =  $feeSummary;
-		//pr($data['AssessmentFee']); exit();
+		$data['Important'] = $config;
+		
 		$this->set(compact('data'));
 	}
 	

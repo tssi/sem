@@ -162,7 +162,7 @@ class StudentRegistrationForm extends Formsheet{
 		
 		//NOTE
 		$y=34;
-		$this->leftText(0,$y,'IMPORTANT:',10,'b');
+		$this->leftText(0,$y,'IMPORTANT: '.$data['Important'],10,'b');
 	}	
 }
 ?>
