@@ -135,16 +135,17 @@ define(['app','api','atomic/bomb'],function(app){
 										switch(resObj.status){
 											case 'Old':
 												targetProgram.total_old++;
-												targetLevel.total_old++;
+												//targetLevel.total_old++;
 												totals.old++;
 											break;
 											case 'New':
 												console.log(prgID);
 												targetProgram.total_new++;
-												targetLevel.total_new++;
+												//targetLevel.total_new++;
 												totals.new++;
 											break;
 										}
+										targetProgram.total++;
 										targetLevel.programs[prgID] =  targetProgram;
 
 									}else{
@@ -193,6 +194,9 @@ define(['app','api','atomic/bomb'],function(app){
 								//   No program
 								var lvl = angular.copy(lvlObj);
 								delete lvl.programs;
+								delete lvl.total_old;
+								delete lvl.total_new;
+								delete lvl.total;
 								levelArr.push(lvl);
 								order++;
 								for(var pg in lvlObj.programs){
