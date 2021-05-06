@@ -364,10 +364,20 @@ define(['app','api'], function (app) {
 			
 			function getReservations(){
 				api.GET('reservations',{account_id:$scope.ActiveStudent.id},function success(response){
-					
 					var advances = 0;
 					var reserves = [];
-					angular.forEach(response.data, function(res,i,array){
+					for(var i in response.data){
+						var res = response.data[i];
+						console.log(res);
+						switch(res.field_type){
+							case 'RSRVE': res.description = 'Reservation'; reserves.push(res); break;
+							case 'ADVTP': advances+=res.amount; break;
+						}
+					}
+					if(advances>0)
+						reserves.push({amount:advances,description:'AdvancePayment'});
+					/* angular.forEach(response.data, function(res,i,array){
+						console.log(i);
 						switch(res.field_type){
 							case 'RSRVE': res.description = 'Reservation'; reserves.push(res); break;
 							case 'ADVTP': advances+=res.amount; break;
@@ -377,7 +387,7 @@ define(['app','api'], function (app) {
 							res.description = 'Advance Payment';
 							reserves.push(res);
 						}
-					});
+					}); */
 					console.log(reserves);
 					
 					$scope.Reservations = reserves;

@@ -106,7 +106,7 @@
 									<td>Discount: {{disc.name}}</td>
 									<td class="amount total peso">{{disc.amount}}</td>
 								</tr>
-								<tr ng-if="AdvancePayment" ng-repeat="res in Reservations">
+								<tr ng-if="AdvancePayment||Reservations" ng-repeat="res in Reservations">
 									<td>{{res.description}}</td>
 									<td class="amount total peso">{{-res.amount | currency}}</td>
 								</tr>
