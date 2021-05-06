@@ -64,14 +64,15 @@ class Curriculum extends AppModel {
 			} 
 			if($flags['Curriculum.department_id']&&
 				$flags['Curriculum.esp']){
-				//$CurriSections = $this->CurriculumSection->getByDeptId($vals['Curriculum.department_id'],$vals['Curriculum.esp']);
-				pr($CurriSections); 
-				//pr($this->CurriculumSection); 
-				exit();
 				
-				$condition = array('Curriculum.department_id'=>$vals['Curriculum.department_id'],
-										'Curriculum.esp'=>$vals['Curriculum.esp']
-										);	
+				App::import('Model','CurriculumSection');
+				$CurriculumSection = new CurriculumSection();
+				$currDeptId = $vals['Curriculum.department_id'];
+				$currESP = $vals['Curriculum.esp'];
+				$currIds = $CurriculumSection->getByDeptId($currDeptId,$currESP);
+				
+				
+				$condition = array('Curriculum.id'=>$currIds);	
 			}
 			if($flags['Curriculum.year_level_id']&&
 				$flags['Curriculum.esp']&&

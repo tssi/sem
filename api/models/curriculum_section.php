@@ -54,11 +54,12 @@ class CurriculumSection extends AppModel {
 		return $data;
 	}
 	
-	function getByDeptId($dept,$esp){
-		pr($dept); exit();
-		$sections = $this->Section->find('first',
-										array('conditions'=>
-											array('Section.department_id'=>$dept)
+	public function getByDeptId($dept,$esp){
+		
+		$sections = $this->Section->find('list',
+										array(
+											'conditions'=>array('Section.department_id'=>$dept),
+											'fields'=>array('id','id')
 											)
 										);
 		$sy =  floor($esp);
@@ -71,16 +72,22 @@ class CurriculumSection extends AppModel {
 		}
 		if($period==0)
 			$esp = $sy;
-		$sect =  $this->Section->findById($sectId);
-		if($sect['Section']['department_id']!='SH'){
+		$sections = array_values($sections);
+		if($dept!='SH'){
 			$esp =  $sy;
 		}
-		$data = $this->find('first',
+		$data = $this->find('list',
 									array(
-										'conditions'=>array('CurriculumSection.section_id'=>$sectId,
-															'CurriculumSection.esp'=>$esp)
+										'conditions'=>
+											array(
+												array('CurriculumSection.section_id'=>$sections),
+												array('CurriculumSection.esp'=>$esp)
+											),
+										'fields'=>array('curriculum_id','curriculum_id'),
 										)
 									);
+
+		$data = array_values($data);
 							 
 		return $data;
 	}
