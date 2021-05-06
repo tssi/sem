@@ -33,7 +33,7 @@ define(['app','api'], function (app) {
 					console.log($scope.ActiveStudent);
 					$scope.ActiveDept = $scope.ActiveStudent.department_id;
 					$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
-					getCurriculum($scope.ActiveStudent.department_id);
+					
 					$scope.ActiveOrder = null;
 					for(var i in $scope.YearLevels){
 						var y = $scope.YearLevels[i];
@@ -47,6 +47,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					getReservations();
 					$scope.ActiveLevel = $scope.SelectedLevel;
+					getCurriculum($scope.ActiveLevel.department_id);
 					getSections($scope.ActiveLevel);
 					$scope.Disabled = 1;
 				}
@@ -256,7 +257,8 @@ define(['app','api'], function (app) {
 				$scope.SelectedLevel = {
 										id: yearLevel.id,
 										educ_level_id: yearLevel.educ_level_id,
-										name: yearLevel.name
+										name: yearLevel.name,
+										department_id:yearLevel.department_id
 									   };
 			};
 			$scope.setSelectedSection=function(section){
@@ -747,8 +749,10 @@ define(['app','api'], function (app) {
 			function getCurriculum(dept){
 				var data ={
 					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
-					department_id:dept
+					department_id:dept,
+					
 				}
+				//data.esp=2020.25;
 				if(dept!='SH')
 					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){

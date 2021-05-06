@@ -24,10 +24,41 @@ class CurriculumSection extends AppModel {
 	);
 	
 	function findBySectId($sectId,$esp){
-		
+		//pr($sectId); exit();
 		$sections = $this->Section->find('first',
 										array('conditions'=>
 											array('Section.id'=>$sectId)
+											)
+										);
+		$sy =  floor($esp);
+		$period =  ($esp -  $sy)*10;
+		//pr($period); exit();
+		if($period<=2.5){
+			$esp =  $sy+0.25;
+		}else{
+			$esp =  $sy+0.45;
+		}
+		if($period==0)
+			$esp = $sy;
+		$sect =  $this->Section->findById($sectId);
+		if($sect['Section']['department_id']!='SH'){
+			$esp =  $sy;
+		}
+		$data = $this->find('first',
+									array(
+										'conditions'=>array('CurriculumSection.section_id'=>$sectId,
+															'CurriculumSection.esp'=>$esp)
+										)
+									);
+							 
+		return $data;
+	}
+	
+	function getByDeptId($dept,$esp){
+		pr($dept); exit();
+		$sections = $this->Section->find('first',
+										array('conditions'=>
+											array('Section.department_id'=>$dept)
 											)
 										);
 		$sy =  floor($esp);

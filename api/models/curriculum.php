@@ -64,7 +64,10 @@ class Curriculum extends AppModel {
 			} 
 			if($flags['Curriculum.department_id']&&
 				$flags['Curriculum.esp']){
-				
+				//$CurriSections = $this->CurriculumSection->getByDeptId($vals['Curriculum.department_id'],$vals['Curriculum.esp']);
+				pr($CurriSections); 
+				//pr($this->CurriculumSection); 
+				exit();
 				
 				$condition = array('Curriculum.department_id'=>$vals['Curriculum.department_id'],
 										'Curriculum.esp'=>$vals['Curriculum.esp']
