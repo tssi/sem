@@ -99,10 +99,10 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 		$y=0;
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
-		$this->centerText(15,$y,'UNITS',2,'b');
-		$this->leftText(17.2,$y,'SECTION','','b');
-		$this->centerText(22,$y,'DAY',2,'b');
-		$this->centerText(24,$y,'TIME',4,'b');
+		$this->centerText(18,$y,'UNITS',2,'b');
+		$this->leftText(20.2,$y,'SECTION','','b');
+		$this->centerText(23.5,$y,'DAY',2,'b');
+		$this->centerText(25,$y,'TIME',4,'b');
 		$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
@@ -111,17 +111,17 @@ class StudentRegistrationForm extends Formsheet{
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
-			$this->centerText(15,$y,$d['Subject']['units'],2,'');
-			$this->leftText(17.2,$y,isset($d['Section']['name']),'','');
-			$this->centerText(22,$y,'--',2,'');
-			$this->centerText(24,$y,'--',4,'');
-			$this->leftText(28.2,$y,'--','','');
+			$this->centerText(18,$y,$d['Subject']['units'],2,'');
+			$this->leftText(20.2,$y,isset($d['Section']['name']),'','');
+			$this->centerText(23.5,$y,'--',2,'');
+			$this->centerText(25,$y,'--',4,'');
+			$this->leftText(29.2,$y,'--','','');
 			$totalunits+=$d['Subject']['units'];
 			$y++;
 		}
 		$this->drawLine($y-0.6,'h');
 		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
-		$this->centerText(15,$y,number_format($totalunits,2),2,'b');
+		$this->centerText(18,$y,number_format($totalunits,2),2,'b');
 		$end = $y+3;
 		
 		//FEE BREAKDOWN

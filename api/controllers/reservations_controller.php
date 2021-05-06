@@ -12,6 +12,9 @@ class ReservationsController extends AppController {
 				$data = $res['Reservation'];
 				if(!isset($res['Student']['full_name'])){
 					$stud = $res['Inquiry'];
+					/* if(!isset($stud['first_name'])){
+						pr($res); exit();
+					} */
 					$data['name'] = $stud['first_name'].' '.$stud['middle_name'].' '.$stud['last_name'];			
 					$data['status'] = 'New';
 					$yl = $res['Inquiry']['YearLevel'];
@@ -21,6 +24,7 @@ class ReservationsController extends AppController {
 					$data['status'] = 'Old';
 					$yl = $res['Student']['YearLevel'];
 				}
+				
 				$data['year_level'] = $yl['description'];
 				//$data['year_level_id'] = $yl['id'];
 				//pr($res);
