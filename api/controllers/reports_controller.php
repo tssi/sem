@@ -36,16 +36,17 @@ class ReportsController extends AppController{
 			switch($key){
 				case 'discount_amount':
 					if($val<0){
-						$feeTotals['SUBS']= array('label'=>'Less Subsidy','total'=>$val);
+						$feeTotals['SUBS']= array('label'=>'Subsidy','total'=>$val);
 					}
 					break;
 				case 'payment_total':
 					if($val>0){
 						if($val===1000)
-							$feeTotals['ADVP']= array('label'=>'Less Advance Payment','total'=>-$val);
+							$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-$val);
 						else{
-							$feeTotals['RSRV']= array('label'=>'Less Reservation','total'=>-1000);
-							$feeTotals['ADVP']= array('label'=>'Less Advance Payment','total'=>-($val-1000));
+							$feeTotals['RSRV']= array('label'=>'Reservation','total'=>-1000);
+							if(($val-1000)>0)
+								$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-($val-1000));
 						}
 					}
 					break;
