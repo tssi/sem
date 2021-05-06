@@ -734,13 +734,22 @@ define(['app','api'], function (app) {
 					$scope.ActiveSchedule = {};
 					var details = [];
 					angular.forEach($scope.Subjects, function(sub){
-						if($scope.ActiveDept=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveSection.year_level_id==sub.year_level_id)
+						if($scope.ActiveSection.department_id=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveLevel.id==sub.year_level_id){
+							console.log(sub);
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-						if($scope.ActiveDept!='SH')
+							
+							/* angular.forEach(sub.sec_id,function(sec){
+								console.log(sec);
+								console.log($scope.ActiveSection.id);
+								if(sec===$scope.ActiveSection.id)
+									
+							}); */
+						}
+						if($scope.ActiveSection.department_id!=='SH')
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
 					});
+					//console.log(details);
 					$scope.ActiveSchedule.schedule_details = details;
-					console.log($scope.ActiveSchedule);
 				});
 			}
 			
