@@ -64,7 +64,7 @@ class ReportsController extends AppController{
 		
 		$data['AssessmentFee'] =  $feeSummary;
 		$data['Important'] = $config;
-		
+		//pr($data); exit();
 		$this->set(compact('data'));
 	}
 	

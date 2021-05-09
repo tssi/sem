@@ -16,7 +16,8 @@ class StudentRegistrationForm extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function hdr($data,$ass){
+	function hdr($data,$ass,$complete){
+		//pr($data); exit();
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -44,7 +45,7 @@ class StudentRegistrationForm extends Formsheet{
 		$y=6;
 		//pr($data);exit;
 		$this->leftText(5.5,$y,$data['sno'],'','');
-		$this->leftText(20.5,$y++,$data['YearLevel']['description'],'','');
+		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'],'','');
 		$this->leftText(5.5,$y,$data['print_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);
@@ -85,7 +86,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function data($data){
-		//pr($data); exit();
+		//pr($data['Section']); exit();
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.5,
@@ -99,29 +100,34 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 		$y=0;
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
-		$this->centerText(18,$y,'UNITS',2,'b');
-		$this->leftText(20.2,$y,'SECTION','','b');
-		$this->centerText(23.5,$y,'DAY',2,'b');
-		$this->centerText(25,$y,'TIME',4,'b');
-		$this->leftText(28.2,$y++,'TEACHER','','b');
+		$this->centerText(15,$y,'UNITS',2,'b');
+		$this->leftText(19.5,$y,'SECTION','','b');
+		$this->centerText(24.5,$y,'DAY',2,'b');
+		$this->centerText(28,$y,'TIME',4,'b');
+		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
 		//ASSESSMENT
 		$totalunits=0;
+		$y++;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
+			if(strlen($d['Subject']['name'])>=45){
+				$d['Subject']['name'] = substr($d['Subject']['name'],0,45) . '...';
+			}
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
-			$this->centerText(18,$y,$d['Subject']['units'],2,'');
-			$this->leftText(20.2,$y,isset($d['Section']['name']),'','');
-			$this->centerText(23.5,$y,'--',2,'');
-			$this->centerText(25,$y,'--',4,'');
-			$this->leftText(29.2,$y,'--','','');
+			$this->centerText(15,$y,$d['Subject']['units'],2,'');
+			if(isset($data['Section']['name']))
+				$this->leftText(19.5,$y,$data['Section']['name'],'','');
+			$this->centerText(24.5,$y,'--',2,'');
+			$this->centerText(28,$y,'--',4,'');
+			//$this->leftText(29.2,$y,'--','','');
 			$totalunits+=$d['Subject']['units'];
 			$y++;
 		}
 		$this->drawLine($y-0.6,'h');
 		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
-		$this->centerText(18,$y,number_format($totalunits,2),2,'b');
+		$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+3;
 		
 		//FEE BREAKDOWN
