@@ -34,7 +34,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=10;
 		$this->centerText(0,$y++,'LAKE SHORE EDUCATIONAL INSTITUTION',38,'b');
 		$this->GRID['font_size']=7;
-		$this->centerText(0,$y++,'BONIFACIO ST., CANLALAY, BINAN, LAGUNA',38,'');
+		$this->centerText(0,$y++,'BONIFACIO ST., CANLALAY, BI'.utf8_decode('Ñ').'AN, LAGUNA',38,'');
 		$this->centerText(0,$y++,'STUDENT REGISTRATION FORM',38,'b');
 		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
 		$y=6;
