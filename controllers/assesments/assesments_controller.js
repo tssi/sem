@@ -125,7 +125,7 @@ define(['app','api'], function (app) {
 					};
 					console.log($scope.ActiveScheme.schedule);
 				}
-				if($scope.ActiveStep===6){
+				/* if($scope.ActiveStep===6){
 					$scope.ActiveTab.id = 4;
 					$scope.ActiveDiscounts= [];
 					for(var i in $scope.Discounts){
@@ -136,9 +136,17 @@ define(['app','api'], function (app) {
 					}
 					
 					
-				}
+				} */
 				
-				if($scope.ActiveStep===7){
+				if($scope.ActiveStep===6){
+					$scope.ActiveTab.id = 4;
+					$scope.ActiveDiscounts= [];
+					for(var i in $scope.Discounts){
+						var dsc =$scope.Discounts[i];
+						if($scope.SelectedDiscounts[dsc.id]){
+							$scope.ActiveDiscounts.push(dsc);
+						}
+					}
 					if($scope.PaymentTotal)
 						$scope.ActiveStudent.payment_total = $scope.PaymentTotal;
 					if($scope.ActiveScheme.variance_amount)
@@ -149,6 +157,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
+					$scope.ActiveStudent.subsidy_status = $scope.ActiveScheme.subsidy_status;
 					$scope.ActiveStudent.esp = $scope.ActiveSy;
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,
@@ -404,8 +413,8 @@ define(['app','api'], function (app) {
 					{id:3, title:"Section", description:"Select Section"},
 					{id:4, title:"Schedule", description:"Select Schedule"},
 					{id:5, title:"Payment Scheme", description:"Select Payment Scheme"},
-					{id:6, title:"Discount", description:"Select Discount"},
-					{id:7, title:"Confirmation", description:"Confirmation"}
+					//{id:6, title:"Discount", description:"Select Discount"},
+					{id:6, title:"Confirmation", description:"Confirmation"}
 				];
 				
 				$scope.$watch('hasStudentInfo',updateHasInfo);
