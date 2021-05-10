@@ -29,6 +29,19 @@ class Student extends AppModel {
 			'fields' => array('id','name'),
 			'order' => ''
 		),
+		'Account' => array(
+			'className' => 'Account',
+			'foreignKey' => 'id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 	);
 	function beforeFind($queryData){
 		//pr($queryData); exit();

@@ -245,7 +245,8 @@ define(['app','api'], function (app) {
 										 yearlevel:student.year_level_id,
 										 department_id:student.department_id,
 										 student_id:student.student_id,
-										 program_id:student.program_id
+										 program_id:student.program_id,
+										 subsidy_status:student.subsidy_status
 				                         };
 				if(student.suffix)
 					$scope.SelectedStudent.name += student.suffix;
