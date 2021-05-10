@@ -24,7 +24,8 @@ class AssessmentsController extends AppController {
 			$assessment['account_type']='student';
 			if(!isset($assessment['student_id']))
 				$assessment['student_id']=$assessment['id'];
-			$assessment['id']=null;
+			$ID = $this->Assessment->generateAID();
+			$assessment['id']=$ID;
 			$paysched = $this->data['Paysched'];
 			$fee = $this->data['Fee'];
 			$schedule = $this->data['Schedule'];
