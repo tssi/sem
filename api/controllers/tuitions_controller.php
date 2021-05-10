@@ -25,10 +25,11 @@ class TuitionsController extends AppController {
 					array_push($fee_breakdowns,$fe);
 				}
 				foreach($pschemes as $p=>$scheme){
-					//pr($scheme);
+					//pr($scheme); exit();
 					$sch['id'] = $scheme['id'];
 					$sch['name'] = $scheme['Scheme']['name'];
 					$sch['scheme_id'] = $scheme['scheme_id'];
+					$sch['subsidy_status'] = $scheme['Scheme']['subsidy_status'];
 					$sch['total_amount'] = $scheme['total_amount'];
 					$sch['payment_frequency'] = $scheme['Scheme']['payment_frequency'];
 					$sch['variance_amount'] = $scheme['variance_amount'];
