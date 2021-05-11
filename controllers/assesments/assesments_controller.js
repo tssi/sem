@@ -29,20 +29,25 @@ define(['app','api'], function (app) {
 			$scope.init();
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
-					$scope.ActiveStudent = $scope.SelectedStudent;
-					console.log($scope.ActiveStudent);
-					$scope.ActiveDept = $scope.ActiveStudent.department_id;
-					$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
+					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:'ACTIV'},function success(response){
+						$scope.AssessmentId = response.data[0].id;
+						$scope.ReAssess(response.data[0]);
+					}, function error(response){
+						$scope.ActiveStudent = $scope.SelectedStudent;
+						$scope.ActiveDept = $scope.ActiveStudent.department_id;
+						$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
+						
+						$scope.ActiveOrder = null;
+						for(var i in $scope.YearLevels){
+							var y = $scope.YearLevels[i];
+							if(y.id === $scope.ActiveStudent.yearlevel){
+								$scope.ActiveOrder=y.order;
+								break;
+							}
+						};
+						$scope.Disabled = 1;
+					});
 					
-					$scope.ActiveOrder = null;
-					for(var i in $scope.YearLevels){
-						var y = $scope.YearLevels[i];
-						if(y.id === $scope.ActiveStudent.yearlevel){
-							$scope.ActiveOrder=y.order;
-							break;
-						}
-					};
-					$scope.Disabled = 1;
 				}
 				if($scope.ActiveStep===2){
 					getReservations();
@@ -159,6 +164,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
 					$scope.ActiveStudent.subsidy_status = $scope.ActiveScheme.subsidy_status;
 					$scope.ActiveStudent.esp = $scope.ActiveSy;
+					$scope.ActiveStudent.status = 'ACTIV';
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,
 						paysched:$scope.ActiveScheme.schedule,
@@ -196,9 +202,7 @@ define(['app','api'], function (app) {
 					}
 				});
 				modalInstance.result.then(function (source) {
-					initAssessment();
-					initDataSource();
-					$scope.Disabled = 1;
+					
 				}, function (source) {
 					initAssessment();
 					initDataSource();
@@ -236,6 +240,48 @@ define(['app','api'], function (app) {
 					}, function (source) {
 						$scope.init();
 					});
+			}
+			$scope.ReAssess = function(student){
+				var modalInstance = $uibModal.open({
+					templateUrl: 'ReAssessModal.html',
+					controller: 'ReAssessModalController',
+					resolve:{
+						student:function(){
+							return $scope.ActiveStudent;
+						},
+						assId:function(){
+							return $scope.AssessmentId;
+						}
+					}
+					
+				});
+				modalInstance.result.then(function (action) {
+					//console.log(student); return;
+					var data = student;
+					data.status = 'ARCHV';
+					if(action=='reassess'){
+						api.POST('assessments',data, function success(response){
+							$scope.ActiveStudent = $scope.SelectedStudent;
+							$scope.ActiveDept = $scope.ActiveStudent.department_id;
+							$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
+							$scope.ActiveOrder = null;
+							for(var i in $scope.YearLevels){
+								var y = $scope.YearLevels[i];
+								if(y.id === $scope.ActiveStudent.yearlevel){
+									$scope.ActiveOrder=y.order;
+									break;
+								}
+							};
+							$scope.Disabled = 1;
+						});
+					}else{
+						initAssessment();
+						initDataSource();
+						$scope.Disabled = 1;
+					}
+				}, function (source) {
+					
+				});
 			}
 			$scope.setSelectedStudent=function(student){
 				$scope.Disabled = 0;
@@ -814,6 +860,27 @@ define(['app','api'], function (app) {
 			$rootScope.__MODAL_OPEN = false;
 			$uibModalInstance.dismiss('ok');
 		};
+	}]);
+	app.register.controller('ReAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', 'student','assId',
+	function ($scope,$rootScope,$timeout, $uibModalInstance, api,student,assId){
+		$rootScope.__MODAL_OPEN = true;
+		$scope.ActiveStudent = student;
+		$scope.AssessmentId = assId;
+		$scope.Cancel = function(){
+			$uibModalInstance.close();
+			$rootScope.__MODAL_OPEN = false;
+		}
+		
+		$scope.Action = function(action){
+			if(action=='reassess')
+				$uibModalInstance.close(action);
+			else{
+				document.getElementById('PrintAssess').submit();
+				$uibModalInstance.close(action);
+			}
+			$rootScope.__MODAL_OPEN = false;
+		}
+		
 	}]);
 	
 });

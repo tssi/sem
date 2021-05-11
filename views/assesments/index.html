@@ -532,4 +532,33 @@
 			<button class="btn btn-danger btn-block" type="button" ng-click="dismissModal()">OK</button>
 		</div>
 	</script>
+	<script type="text/ng-template" id="ReAssessModal.html">
+		<div class="modal-header">
+			<h4>
+				Reassess
+			</h4>
+		</div>
+		<div class="modal-body text-center">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Existing Assessment Found.</h3>
+					{{ActiveStudent.name}} has been assessed already. What would you like to do?
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					Reassess will archive the previous assessment.
+					Reprint will generate the same assessment form.
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default pull-left" ng-click="Cancel()">Cancel</button>
+			<button class="btn btn-success pull-right" ng-click="Action('reassess')">Reassess</button>
+			<button class="btn btn-primary pull-right" ng-click="Action('reprint')">Reprint</button>
+		</div>
+		<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">
+			<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
+		</form>
+	</script>
 </div>
