@@ -30,8 +30,8 @@ define(['app','api'], function (app) {
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
 					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:'ACTIV'},function success(response){
-						$scope.AssessmentId = response.data[0].id;
-						$scope.ReAssess(response.data[0]);
+						$scope.Assessment = response.data[0];
+						$scope.ReAssess($scope.SelectedStudent);
 					}, function error(response){
 						$scope.ActiveStudent = $scope.SelectedStudent;
 						$scope.ActiveDept = $scope.ActiveStudent.department_id;
@@ -241,23 +241,23 @@ define(['app','api'], function (app) {
 						$scope.init();
 					});
 			}
-			$scope.ReAssess = function(student){
+			$scope.ReAssess = function(stud){
 				var modalInstance = $uibModal.open({
 					templateUrl: 'ReAssessModal.html',
 					controller: 'ReAssessModalController',
 					resolve:{
 						student:function(){
-							return $scope.ActiveStudent;
+							return stud;
 						},
 						assId:function(){
-							return $scope.AssessmentId;
+							return $scope.Assessment.id;
 						}
 					}
 					
 				});
 				modalInstance.result.then(function (action) {
 					//console.log(student); return;
-					var data = student;
+					var data = $scope.Assessment;
 					data.status = 'ARCHV';
 					if(action=='reassess'){
 						api.POST('assessments',data, function success(response){
@@ -863,8 +863,9 @@ define(['app','api'], function (app) {
 	}]);
 	app.register.controller('ReAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', 'student','assId',
 	function ($scope,$rootScope,$timeout, $uibModalInstance, api,student,assId){
-		$rootScope.__MODAL_OPEN = true;
 		$scope.ActiveStudent = student;
+		console.log(student);
+		$rootScope.__MODAL_OPEN = true;
 		$scope.AssessmentId = assId;
 		$scope.Cancel = function(){
 			$uibModalInstance.close();

@@ -533,24 +533,20 @@
 		</div>
 	</script>
 	<script type="text/ng-template" id="ReAssessModal.html">
-		<div class="modal-header">
-			<h4>
-				Reassess
-			</h4>
-		</div>
+		
 		<div class="modal-body text-center">
+			<button class="btn btn-danger btn-fab btn-fab-drop show" ><span class="glyphicon glyphicon-alert"></span></button>
 			<div class="row">
 				<div class="col-md-12">
-					<h3>Existing Assessment Found.</h3>
+					<h1>Existing Assessment Found.</h1>
 					{{ActiveStudent.name}} has been assessed already. What would you like to do?
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
+				
 					Reassess will archive the previous assessment.
 					Reprint will generate the same assessment form.
+						
 				</div>
 			</div>
+			
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-default pull-left" ng-click="Cancel()">Cancel</button>
