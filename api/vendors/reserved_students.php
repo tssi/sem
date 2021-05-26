@@ -12,7 +12,7 @@ class ReservedStudent extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function hdr($sum,$totals){
+	function hdr($sum,$totals,$data){
 		//pr($sum); exit();
 		$metrics = array(
 			'base_x'=> 0,
@@ -24,46 +24,49 @@ class ReservedStudent extends Formsheet{
 		);
 		$this->section($metrics);
 		$this->GRID['font_size']=12;
-		$this->leftText(15,1,'SUMMARY',null,'');
+		$this->leftText(15,1.5,'Reservation Report',null,'');
 		$this->GRID['font_size']=10;
-		$this->leftText(3,2,'Year Level',null,'');
-		$this->drawBox(2.8,1.2,9,1);
-		$this->leftText(12,2,'New Students',null,'');
-		$this->drawBox(11.8,1.2,8,1);
-		$this->leftText(20,2,'Old Students',null,'');
-		$this->drawBox(19.8,1.2,8,1);
-		$this->leftText(28,2,'Total',null,'');
-		$this->drawBox(27.8,1.2,6,1);
-		$line = 3;
+		$this->leftText(16.5,2,'Summary',null,'');
+		$this->leftText(13,2.5,$data['date'],null,'');
+		$this->leftText(3,4,'Year Level',null,'');
+		$this->drawBox(2.8,3.2,9,1);
+		$this->leftText(12,4,'New Students',null,'');
+		$this->drawBox(11.8,3.2,8,1);
+		$this->leftText(20,4,'Old Students',null,'');
+		$this->drawBox(19.8,3.2,8,1);
+		$this->leftText(28,4,'Total',null,'');
+		$this->drawBox(27.8,3.2,6,1);
+		$line = 4.8;
+		$this->GRID['font_size']=9;
 		foreach($sum as $d){
 			if(isset($d['total_new'])){
 				if(!isset($d['program']))
 					$this->leftText(3,$line,$d['description'],null,'');
 				else
 					$this->rightText(11,$line,$d['description'],null,'');
-				$this->drawBox(2.8,$line-.8,9,1);
+				$this->drawBox(2.8,$line-.6,9,.8);
 				$this->leftText(12,$line,$d['total_new'],null,'');
-				$this->drawBox(11.8,$line-.8,8,1);
+				$this->drawBox(11.8,$line-.6,8,.8);
 				$this->leftText(20,$line,$d['total_old'],null,'');
-				$this->drawBox(19.8,$line-.8,8,1);
+				$this->drawBox(19.8,$line-.6,8,.8);
 				$this->leftText(28,$line,$d['total'],null,'');
-				$this->drawBox(27.8,$line-.8,6,1);
+				$this->drawBox(27.8,$line-.6,6,.8);
 			}else{
 				$this->leftText(3,$line,$d['description'],null,'');
-				$this->drawBox(2.8,$line-.8,31,1);
+				$this->drawBox(2.8,$line-.6,31,.8);
 			}
-			$line++;
+			$line+=.8;
 			
 		}
 		
 		$this->leftText(3,$line,'Totals',null,'');
-		$this->drawBox(2.8,$line-.8,9,1);
+		$this->drawBox(2.8,$line-.6,9,.8);
 		$this->leftText(12,$line,$totals['new'],null,'');
-		$this->drawBox(11.8,$line-.8,8,1);
+		$this->drawBox(11.8,$line-.6,8,.8);
 		$this->leftText(20,$line,$totals['old'],null,'');
-		$this->drawBox(19.8,$line-.8,8,1);
+		$this->drawBox(19.8,$line-.6,8,.8);
 		$this->leftText(28,$line,$totals['total'],null,'');
-		$this->drawBox(27.8,$line-.8,6,1);
+		$this->drawBox(27.8,$line-.6,6,.8);
 		
 	}
 	

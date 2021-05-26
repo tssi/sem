@@ -79,6 +79,7 @@ class ReportsController extends AppController{
 		//pr(json_decode($_POST['reserves'])); exit();
 		//$data = $this->Reservation->find('all',array('conditions'=>array('Reservation.esp'=>2021,'Reservation.field_type'=>'RSRVE')));
 		$data = json_decode($_POST['reserves'],true);
+		$data['date'] = date("l jS \of F Y H:i:s");
 		//pr($data); exit();
 		$this->set(compact('data'));
 	}
