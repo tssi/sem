@@ -83,21 +83,21 @@ class ReservedStudent extends Formsheet{
 		);
 		$this->section($metrics);
 		$this->GRID['font_size']=10;
-		$this->leftText(3,1,'Date',null,'');
-		$this->leftText(8,1,'OR Number',null,'');
-		$this->leftText(14,1,'Name',null,'');
-		$this->leftText(26,1,'Grade',null,'');
-		$this->leftText(29,1,'Status',null,'');
+		$this->leftText(4,2,'Date',null,'');
+		$this->leftText(9,2,'OR Number',null,'');
+		$this->leftText(15,2,'Name',null,'');
+		$this->leftText(27,2,'Grade',null,'');
+		$this->leftText(30,2,'Status',null,'');
 		$this->GRID['font_size']=8;
-		$line = 2;
+		$line = 3;
 		foreach($data as $i=>$dt){
 			//pr($dt); exit();
-			$this->leftText(1.8,$line,$i+1 . '. ',null,'');
-			$this->leftText(3,$line,$dt['transac_date'],null,'');
-			$this->leftText(8,$line,$dt['ref_no'],null,'');
-			$this->leftText(14,$line,$dt['name'],null,'');
-			$this->leftText(26,$line,$dt['year_level'],null,'');
-			$this->leftText(29,$line,$dt['status'],null,'');
+			$this->leftText(2.5,$line,$i+1 . '. ',null,'');
+			$this->leftText(4,$line,$dt['transac_date'],null,'');
+			$this->leftText(9,$line,$dt['ref_no'],null,'');
+			$this->leftText(15,$line,$dt['name'],null,'');
+			$this->leftText(27,$line,$dt['year_level'],null,'');
+			$this->leftText(30,$line,$dt['status'],null,'');
 			$line+=.6;
 		}
 	}	
