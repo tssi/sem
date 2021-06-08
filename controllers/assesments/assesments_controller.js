@@ -52,6 +52,8 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					getReservations();
 					$scope.ActiveLevel = $scope.SelectedLevel;
+					if($scope.ActiveLevel.id=='IR')
+						$scope.ActiveStudent.program_id = 'MIXED';
 					getCurriculum($scope.ActiveLevel.department_id);
 					getSections($scope.ActiveLevel);
 					$scope.Disabled = 1;
@@ -144,8 +146,10 @@ define(['app','api'], function (app) {
 				} */
 				
 				if($scope.ActiveStep===6){
+					/* $scope.ActiveTab = {};
 					$scope.ActiveTab.id = 4;
-					$scope.ActiveDiscounts= [];
+					$scope.ActiveDiscounts= []; */
+					//return;
 					for(var i in $scope.Discounts){
 						var dsc =$scope.Discounts[i];
 						if($scope.SelectedDiscounts[dsc.id]){
@@ -308,6 +312,7 @@ define(['app','api'], function (app) {
 					return yearlevel.order === $scope.ActiveOrder || yearlevel.id=='IR';
 					
 			}
+			
 			$scope.setSelectedLevel=function(yearLevel){
 				$scope.Disabled = 0;
 				$scope.SelectedLevel = {
@@ -689,10 +694,15 @@ define(['app','api'], function (app) {
 			
 			
 			function getSections(filter){
-				if(filter.id!='IR')
-					var data = {limit:'less',year_level_id:$scope.ActiveLevel.id};
-				else
-					var data = {program_id:'MIXED',department_id:$scope.ActiveDept};
+				var data = {};
+				if(filter.id!='IR'){
+					data = {limit:'less',year_level_id:$scope.ActiveLevel.id};
+					if(filter.department_id=='SH'&&$scope.ActiveStudent.program_id!=null)
+						data.program_id = $scope.ActiveStudent.program_id;
+				}else
+					data = {program_id:'MIXED',department_id:$scope.ActiveStudent.department_id};
+				console.log($scope.ActiveStudent);
+				console.log(filter);
 				api.GET('sections',data, function success(response){
 					$scope.Sections = response.data;
 					
