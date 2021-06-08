@@ -59,7 +59,7 @@ class ReportsController extends AppController{
 			array_push($feeSummary,$feeSum);
 		}
 		
-		$config = $this->MasterConfig->findById(11);
+		$config = $this->MasterConfig->findBySysKey('ASSMT_MEMO');
 		$config = $config['MasterConfig']['sys_value'];
 		
 		$data['AssessmentFee'] =  $feeSummary;
