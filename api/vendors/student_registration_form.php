@@ -83,6 +83,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);
+
 	}
 	
 	function data($data){
@@ -166,9 +167,28 @@ class StudentRegistrationForm extends Formsheet{
 		$this->rightText(30,$y,number_format($totaldue,2),3,'b');
 		
 		
+		
+
+		$AID = $data['Assessment']['id'];
+		$student = $data['Assessment']['student_id'];
+
+		App::import('Vendor','phpqrcode/qrlib');
+		App::import('Model','Record');
+		
+		$fileName = 'aid-'.$AID.'.png';
+		
+		$Record =  new Record();
+		$fullPath = $Record->registerFile($fileName,$student,'img');
+		QRcode::png($AID,$fullPath);
+
+		$this->DrawImage(0,27,1.1,1.1,$fullPath);
+		$this->leftText(0.75,27.5,"CODE: " .$AID,12,'b');
+		$this->RotateText(0.5,33.5,'SCAN @ CASHIER',90);
+
 		//NOTE
 		$y=34;
-		$this->leftText(0,$y,'IMPORTANT: '.$data['Important'],10,'b');
+		$this->wrapText(0,$y,'IMPORTANT: '.$data['Important'],25);
+
 	}	
 }
 ?>
