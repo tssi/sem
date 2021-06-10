@@ -371,6 +371,7 @@ define(['app','api'], function (app) {
 			}
 			
 			$scope.SearchStudent = function(){
+				$scope.NoStudent = false;
 				$scope.Students = '';
 				var data = {
 					keyword:$scope.SearchWord,
@@ -378,6 +379,8 @@ define(['app','api'], function (app) {
 					limit:'less',
 				}
 				var success = function(response){
+					if(response.meta.code)
+						$scope.NoStudent = true;
 					$scope.Students = response.data;
 				}
 				var error = function(response){
@@ -533,6 +536,7 @@ define(['app','api'], function (app) {
 				/* $scope.Students=[];
 				$scope.YearLevels=[];
 				$scope.Sections=[]; */
+				$scope.Sections = [];
 				$scope.Tuitions=[];
 				$scope.PaymentSchemes=[];
 				$scope.Discounts=[];
@@ -764,7 +768,7 @@ define(['app','api'], function (app) {
 			
 			//getting schedules
 			function getSchedules(){
-				
+				$scope.LoadingSec = true;
 				if($scope.ActiveSection.program_id!='MIXED')
 					var data = {section_id:$scope.ActiveSection.id};
 				else
@@ -776,7 +780,7 @@ define(['app','api'], function (app) {
 							
 						});
 					}else{
-						$scope.LoadingSec = true;
+						
 						$scope.ClassSchedules = response.data;
 						var filter = {department_id:$scope.ActiveDept,limit:'less'}
 						api.GET('sections',filter, function success(response){
@@ -823,6 +827,7 @@ define(['app','api'], function (app) {
 						}
 						if($scope.ActiveSection.department_id!=='SH')
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+						$scope.LoadingSec = false;
 					});
 					//console.log(details);
 					$scope.ActiveSchedule.schedule_details = details;

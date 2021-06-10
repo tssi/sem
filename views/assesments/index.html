@@ -203,7 +203,7 @@
 							<li ng-repeat="opt in Options" ng-class="{active:ActiveOpt==opt}" ng-click="setActiveOpt(opt)"><a>{{opt}}</a></li>
 						</ul>
 					</div>
-					<div class="list-group-item text-center" ng-if="!Students.length&&!NoInquiries">
+					<div class="list-group-item text-center" ng-if="!Students.length&&!NoInquiries&&!NoStudent">
 						<div class="preloader-message">Loading...</div>
 						<div class="loader"></div>
 					</div>
@@ -216,26 +216,17 @@
 								<span ng-if="student.status=='for-clearance'">| <span class="label label-danger">For Clearance</span> </span>
 							</p>
 					</div>
-					<div class="list-group-item" ng-show="NoInquiries">
+					<div class="list-group-item" ng-if="NoStudent&&!Students.length">
 						<div class="empty-state">
 							<div class="well">
 								<div class="empty-state-icon">
 									<i class="glyphicon glyphicon-exclamation-sign"></i>
 								</div>
-								<h4>No Inquiries yet!</h4>
+								<h4>No Student found!</h4>
 							</div>
 						</div>
 					</div>
-					<!-- <div class="list-group-item" ng-show="SearchWord&&!Students">
-						<div class="empty-state">
-							<div class="well">
-								<div class="empty-state-icon">
-									<i class="glyphicon glyphicon-info-sign"></i>
-								</div>
-								<h4>Click search button</h4>
-							</div>
-						</div>
-					</div> -->
+					
 				</div>
 				<div class="list-group-item list-group-search-box">
 					<div class="input-group"> 
@@ -298,7 +289,10 @@
 					<button class="btn btn-xs btn-warning" ng-click="prevStep()"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
 					<label for="">{{Steps[3].title}}</label>
 				</div>
-				<div class="list-group-canvas">
+				<div class="list-group-canvas text-center" ng-if="LoadingSec">
+					Loading...
+				</div>
+				<div class="list-group-canvas" ng-if="!LoadingSec">
 					<div class="list-group-item list-group-header">
 						<h5 ng-show="ActiveSection.program_id=='MIXED'">{{Steps[3].description}}</h5>
 						<h5 ng-show="ActiveSection.program_id!='MIXED'">{{ActiveSection.name}} Class Schedule</h5>
