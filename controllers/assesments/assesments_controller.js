@@ -29,7 +29,7 @@ define(['app','api'], function (app) {
 			$scope.init();
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
-					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:'ACTIV'},function success(response){
+					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:['ACTIV','NROLD']},function success(response){
 						$scope.Assessment = response.data[0];
 						$scope.ReAssess($scope.SelectedStudent);
 					}, function error(response){

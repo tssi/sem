@@ -129,4 +129,5 @@ class Student extends AppModel {
 
 	    return 10 * $number + $sum; 
 	}
+	
 }
