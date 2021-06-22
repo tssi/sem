@@ -806,9 +806,10 @@ define(['app','api'], function (app) {
 							});
 							console.log($scope.Sections);
 							console.log($scope.Subjects);
-							$scope.LoadingSec = false;
+							
 						});
 					}
+					$scope.LoadingSec = false;
 					
 				}, function error(response){
 					$scope.ActiveSchedule = {};
