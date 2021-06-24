@@ -2,7 +2,6 @@
 class Account extends AppModel {
 	var $name = 'Account';
 	var $useDbConfig = 'srp';
-	var $useTable = 'accounts_2020';
 	
 	var $belongsTo = array(
 		
