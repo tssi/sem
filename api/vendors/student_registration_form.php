@@ -44,7 +44,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
 		//pr($data);exit;
-		$this->leftText(5.5,$y,$data['sno'].' | '.$ass['id'] ,'','');
+		$this->leftText(5.5,$y,$data['sno'];
 		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'],'','');
 		$this->leftText(5.5,$y,$data['print_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
@@ -117,7 +117,7 @@ class StudentRegistrationForm extends Formsheet{
 				$d['Subject']['name'] = substr($d['Subject']['name'],0,45) . '...';
 			}
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
-			$this->centerText(15,$y,$d['Subject']['units'],2,'');
+			$this->centerText(15,$y,'--',2,'');
 			if(isset($data['Section']['name']))
 				$this->leftText(19.5,$y,$data['Section']['name'],'','');
 			$this->centerText(24.5,$y,'--',2,'');
