@@ -496,6 +496,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			function initAssessment(){
+				console.log('dumaan');
 				$scope.ActiveTuition = '';
 				$scope.SearchWord = '';
 				$scope.Options = ['Old','New'];
