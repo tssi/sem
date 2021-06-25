@@ -181,12 +181,12 @@ class StudentRegistrationForm extends Formsheet{
 		$fullPath = $Record->registerFile($fileName,$student,'img');
 		QRcode::png($AID,$fullPath);
 
-		$this->DrawImage(0,27,1.1,1.1,$fullPath);
-		$this->leftText(0.75,27.5,"CODE: " .$AID,12,'b');
-		$this->RotateText(0.5,33.5,'SCAN @ CASHIER',90);
+		$this->DrawImage(0,26,1.1,1.1,$fullPath);
+		$this->leftText(0.75,26.5,"CODE: " .$AID,12,'b');
+		$this->RotateText(0.5,32.5,'SCAN @ CASHIER',90);
 
 		//NOTE
-		$y=34;
+		$y=33;
 		$this->wrapText(0,$y,'IMPORTANT: '.$data['Important'],25);
 
 	}	
