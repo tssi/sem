@@ -702,7 +702,7 @@ define(['app','api'], function (app) {
 				var data = {};
 				if(filter.id!='IR'){
 					data = {limit:'less',year_level_id:$scope.ActiveLevel.id};
-					if(filter.department_id=='SH'&&$scope.ActiveStudent.program_id!=null)
+					if(filter.department_id=='SH'&&$scope.ActiveStudent.program_id!=null&&$scope.ActiveStudent.program_id!='HSBED')
 						data.program_id = $scope.ActiveStudent.program_id;
 				}else
 					data = {program_id:'MIXED',department_id:$scope.ActiveStudent.department_id};
