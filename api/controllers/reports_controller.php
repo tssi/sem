@@ -83,5 +83,11 @@ class ReportsController extends AppController{
 		//pr($data); exit();
 		$this->set(compact('data'));
 	}
+
+	function enrollment(){
+		$contents = file_get_contents(APP."json/enrollment.json");
+		$json  =  json_decode($contents,true);
+		pr($json);exit;
+	}
 	
 }

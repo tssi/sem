@@ -1,0 +1,73 @@
+{
+  "coverage":"05-JUL-21",	
+  "today": {
+    "date": "21-JUN-21",
+    "day": "Mon",
+    "total": 10,
+    "levels": {
+      "G7": 1,
+      "G8": 1,
+      "G9": 1,
+      "GX": 1,
+      "GYSTEM": 1,
+      "GYHUMS": 1,
+      "GYTVL": 1,
+      "GZSTEM": 1,
+      "GZHUMS": 1,
+      "GZTVL": 1
+    }
+  },
+  "overall": [
+    {
+      "ed": 1,
+      "date": "21-JUN-21",
+      "day": "Mon",
+      "total": 10,
+      "levels": {
+        "G7": 1,
+        "G8": 1,
+        "G9": 1,
+        "GX": 1,
+        "GYSTEM": 1,
+        "GYHUMS": 1,
+        "GYTVL": 1,
+        "GZSTEM": 1,
+        "GZHUMS": 1,
+        "GZTVL": 1
+      }
+    },
+    {
+      "ed": 2,
+      "date": "22-JUN-21",
+      "day": "Tue",
+      "total": 10,
+      "levels": {
+        "G7": 1,
+        "G8": 1,
+        "G9": 1,
+        "GX": 1,
+        "GYSTEM": 1,
+        "GYHUMS": 1,
+        "GYTVL": 1,
+        "GZSTEM": 1,
+        "GZHUMS": 1,
+        "GZTVL": 1
+      }
+    }
+  ],
+  "totals": {
+    "total": 20,
+    "levels": {
+      "G7": 2,
+      "G8": 2,
+      "G9": 2,
+      "GX": 2,
+      "GYSTEM": 2,
+      "GYHUMS": 2,
+      "GYTVL": 2,
+      "GZSTEM": 2,
+      "GZHUMS": 2,
+      "GZTVL": 2
+    }
+  }
+}

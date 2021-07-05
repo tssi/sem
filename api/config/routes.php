@@ -42,18 +42,22 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			"/info_sheet",
 			array("controller"=>"reports","action"=>"student_inquiry_information_sheet")
 	);
-	
+	Router::connect(
+			"/enrollment_stats",
+			array("controller"=>"reports","action"=>"enrollment")
+	);
 	App::import('Lib', 'Api.SlugRoute');
 	//Custom API Routing
 	Configure::write('Api.MASTER_ROUTES','educ_levels|system_defaults|modules');
 	App::import('Vendor', 'Api.routes');
+	
 	
 	Router::connect(
 			"/reports/:action",
 			array("controller"=>"reports", "[method]" => "POST")
 	);
 	
-
+	
 	App::import('Lib', 'Api.SlugRoute');
 	//Custom API Routing
 	Configure::write('Api.MASTER_ROUTES','educ_levels|system_defaults|modules');
