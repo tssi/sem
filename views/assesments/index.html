@@ -545,7 +545,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-default pull-left" ng-click="Cancel()">Cancel</button>
-			<button class="btn btn-success pull-right" ng-click="Action('reassess')">Reassess</button>
+			<button class="btn btn-success pull-right" ng-click="Action('reassess')" ng-show="ActiveAssessment.status!='NROLD'">Reassess</button>
 			<button class="btn btn-primary pull-right" ng-click="Action('reprint')">Reprint</button>
 		</div>
 		<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">

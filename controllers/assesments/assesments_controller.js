@@ -255,6 +255,9 @@ define(['app','api'], function (app) {
 						},
 						assId:function(){
 							return $scope.Assessment.id;
+						},
+						ass:function(){
+							return $scope.Assessment;
 						}
 					}
 					
@@ -878,12 +881,13 @@ define(['app','api'], function (app) {
 			$uibModalInstance.dismiss('ok');
 		};
 	}]);
-	app.register.controller('ReAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', 'student','assId',
-	function ($scope,$rootScope,$timeout, $uibModalInstance, api,student,assId){
+	app.register.controller('ReAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', 'student','assId','ass',	
+	function ($scope,$rootScope,$timeout, $uibModalInstance, api,student,assId,ass){
 		$scope.ActiveStudent = student;
 		console.log(student);
 		$rootScope.__MODAL_OPEN = true;
 		$scope.AssessmentId = assId;
+		$scope.ActiveAssessment=ass;
 		$scope.Cancel = function(){
 			$uibModalInstance.close();
 			$rootScope.__MODAL_OPEN = false;
