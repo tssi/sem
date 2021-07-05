@@ -1,5 +1,8 @@
 <div ng-controller="StudentInfoController as SI" ng-init="SI.init()">
+	<!--
+	NOTE: Disable ADD in student info, only encode in Student Inquiry Module
 	<a-fab ng-click="SI.openModal()" ng-disabled="SI.ActiveTyp=='New'" ></a-fab>
+	-->
 	<a-module>
 		<a-container>
 			<a-header>
@@ -56,28 +59,28 @@
 						<uib-tab index="0" heading="Basic Info">
 							<a-row >
 								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.lrn" label="LRN"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.lrn" label="LRN" ng-disabled="SI.ActiveTyp=='Old'"></m-formgroup>
 								</a-col>
 								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.sno" label="SNO"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.sno" label="SNO" ng-disabled="SI.ActiveTyp=='Old'"></m-formgroup>
 								</a-col>
 							</a-row>	
 							<a-row >
 								<a-col size="12">
-									<m-formgroup ng-model="SI.ActiveStudent.last_name" label="Last Name"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.last_name" label="Last Name" ng-disabled="SI.ActiveTyp=='Old'"></m-formgroup>
 								</a-col>
 							</a-row>	
 							<a-row >
 								<a-col size="12">
-									<m-formgroup ng-model="SI.ActiveStudent.first_name" label="First Name"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.first_name" ng-disabled="SI.ActiveTyp=='Old'" label="First Name"></m-formgroup>
 								</a-col>
 							</a-row>	
 							<a-row >
 								<a-col size="9">
-									<m-formgroup ng-model="SI.ActiveStudent.middle_name" label="Middle Name"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.middle_name"  ng-disabled="SI.ActiveTyp=='Old'" label="Middle Name"></m-formgroup>
 								</a-col>
 								<a-col size="3">
-									<m-formgroup ng-model="SI.ActiveStudent.suffix" label="Suffix"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.suffix" label="Suffix" ng-disabled="SI.ActiveTyp=='Old'"></m-formgroup>
 								</a-col>
 							</a-row>
 							
@@ -85,37 +88,44 @@
 						<uib-tab index="1" heading="Academic">
 							<a-row>
 								<a-col size="4">
-									<m-formgroup ng-model="SI.ActiveStudent.entry_status" label="Entry Status" options="SI.entryStats" option-label="name" ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.entry_status" label="Entry Status" options="SI.entryStats" option-label="name" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>
 								<a-col size="4">
-									<m-formgroup ng-model="SI.ActiveStudent.entry_sy" label="Entry SY"  ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.entry_sy" label="Entry SY"  ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>
 								<a-col size="4">
-									<m-formgroup ng-model="SI.ActiveStudent.entry_period" label="Entry Period" options="SI.entryPeriods" option-label="name" ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.entry_period" label="Entry Period" options="SI.entryPeriods" option-label="name" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>
 							</a-row>
 							<a-row>
 								<a-col size="SI.ActiveStudent.department_id=='SH'?4:6">
-									<m-formgroup ng-model="SI.ActiveStudent.department_id" label="Department" options="SI.entryDepts" option-label="description" ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.department_id" label="Department" options="SI.entryDepts" option-label="description" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>
 								<a-col size="4" ng-show="SI.ActiveStudent.department_id=='SH'">
-									<m-formgroup ng-model="SI.ActiveStudent.program_id" label="Program" options="SI.entryProgs" option-label="description" ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.program_id" label="Program" options="SI.entryProgs" option-label="description" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>								
 								<a-col size="SI.ActiveStudent.department_id=='SH'?4:6">
-									<m-formgroup ng-model="SI.ActiveStudent.section_id" label="Section" options="SI.entrySections" option-label="name" option-group="year_level"  ></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.section_id" label="Section" options="SI.entrySections" option-label="name" option-group="year_level"  ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
 								</a-col>
 							</a-row>
 							
 						</uib-tab>
 						
 					</uib-tabset>
+
+					<p class="alert alert-warning">
+						<b>NOTE:</b> 
+						<b>Old Student</b> information can only be edited by the Registrar.<br/> <b>Inquiry</b> (New students)  can be modified by the Admissions Office.	
+						<br/><br/>
+						Changes will reflect as long as the student is not yet offficially enrolled. <br/>If there are modifications after enrollment, coordinate with the Registrar.
+					</p>
 				</a-col>
 			</a-row>
 		</a-modal-body>
 		<a-modal-footer>
 			<a-button opt-class="pull-left" ng-click="SI.closeModal()" > Close</a-button>
 			<a-button ng-show="SI.ActiveTyp=='New'" ng-click="SI.printInfoSheet()" > Print</a-button>
-			<a-button ng-disabled="SI.saving || SI.isGatheringData" type="primary" ng-click="SI.confirmModal()">
+			<a-button ng-disabled="SI.saving || SI.isGatheringData || SI.ActiveTyp=='Old'" type="primary" ng-click="SI.confirmModal()">
 				<span ng-if="!SI.saving">Confirm</span>
 				<span ng-if="SI.saving">Saving...</span>
 			</a-button>
