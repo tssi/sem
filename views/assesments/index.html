@@ -534,11 +534,13 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h1>Existing Assessment Found.</h1>
-					{{ActiveStudent.name}} has been assessed already. What would you like to do?
+					<p ng-show="ActiveAssessment.status!='NROLD'">{{ActiveStudent.name}} has been assessed already. What would you like to do?
 				
 					Reassess will archive the previous assessment.
-					Reprint will generate the same assessment form.
-						
+					Reprint will generate the same assessment form.</p>
+					<p ng-show="ActiveAssessment.status=='NROLD'">{{ActiveStudent.name}} already enrolled.
+						Click REPRINT button to reprint registration form.
+					</p>
 				</div>
 			</div>
 			
