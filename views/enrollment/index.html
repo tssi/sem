@@ -1,0 +1,137 @@
+<div ng-controller="EnrollmentController as EC" ng-init="EC.init()">
+	<a-module>
+		<a-container>
+			<a-header>
+				<a-row>
+					<a-col size="6">
+						<h4>Enrollment Report</h4>
+					</a-col>
+					<a-col size="6">
+						<o-dropdown-filter ng-model="EC.Active" show-section="false" show-sem="false" show-period="false" class="pull-right" >
+						</o-dropdown-filter>
+					</a-col>
+				</a-row>
+			</a-header>
+			<a-header>
+				<a-row>
+					<a-col size="6"></a-col>
+					<a-col size="4">
+						<div class="input-group pull-right">
+							<span class="input-group-addon">date:</span>
+							<input type="date" class="form-control" ng-model="EC.date"/>
+						</div>
+					</a-col>
+					<a-col size="2">
+						<button class="btn btn-default" ng-click="EC.LoadReport()" ng-show="!EC.Enrollment.overall.length">Load</button>
+						<button class="btn btn-default" ng-click="EC.Clear()" ng-show="EC.Enrollment.overall.length">Clear</button>
+						<button class="btn btn-primary">Print</button>
+					</a-col>
+				</a-row>
+			</a-header>
+			<a-canvas>
+				<a-content ng-show="EC.Enrollment.overall.length">
+					<a-row>
+						<a-col size="12">
+							<h4>Enrollment report for {{EC.date | date:'dd MMM yyyy'}}</h4>
+							<table class="table table-bordered table-condensed">
+								<thead class="text-center">
+									<tr>
+										<th colspan="6"></th>
+										<th colspan="4">Grade 11</th>
+										<th colspan="4">Grade 12</th>
+									</tr>
+									<tr>
+										<th>Date</th>
+										<th>Day</th>
+										<th>G7</th>
+										<th>G8</th>
+										<th>G9</th>
+										<th>G10</th>
+										<th>ABM</th>
+										<th>STEM</th>
+										<th>TVL</th>
+										<th>HUMSS</th>
+										<th>ABM</th>
+										<th>STEM</th>
+										<th>TVL</th>
+										<th>HUMSS</th>
+										<th>total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>{{EC.Enrollment.today.date}}</td>
+										<td>{{EC.Enrollment.today.day}}</td>
+										<td>{{EC.Enrollment.today.levels.G7}}</td>
+										<td>{{EC.Enrollment.today.levels.G8}}</td>
+										<td>{{EC.Enrollment.today.levels.G9}}</td>
+										<td>{{EC.Enrollment.today.levels.GX}}</td>
+										<td>{{EC.Enrollment.today.levels.GYABM}}</td>
+										<td>{{EC.Enrollment.today.levels.GYSTEM}}</td>
+										<td>{{EC.Enrollment.today.levels.GYTVL}}</td>
+										<td>{{EC.Enrollment.today.levels.GYHUMS}}</td>
+										<td>{{EC.Enrollment.today.levels.GZABM}}</td>
+										<td>{{EC.Enrollment.today.levels.GZSTEM}}</td>
+										<td>{{EC.Enrollment.today.levels.GZTVL}}</td>
+										<td>{{EC.Enrollment.today.levels.GZHUMS}}</td>
+										<td>{{EC.Enrollment.today.total}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</a-col>
+					</a-row>
+					<a-row>
+						<a-col size="12">
+							<h4>Overall Enrollment as of Today</h4>
+							<table class="table table-bordered table-condensed">
+								<thead class="text-center">
+									<tr>
+										<th colspan="6"></th>
+										<th colspan="4">Grade 11</th>
+										<th colspan="4">Grade 12</th>
+									</tr>
+									<tr>
+										<th>Date</th>
+										<th>Day</th>
+										<th>G7</th>
+										<th>G8</th>
+										<th>G9</th>
+										<th>G10</th>
+										<th>ABM</th>
+										<th>STEM</th>
+										<th>TVL</th>
+										<th>HUMSS</th>
+										<th>ABM</th>
+										<th>STEM</th>
+										<th>TVL</th>
+										<th>HUMSS</th>
+										<th>total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in EC.Enrollment.overall">
+										<td>{{item.date}}</td>
+										<td>{{item.day}}</td>
+										<td>{{item.levels.G7}}</td>
+										<td>{{item.levels.G8}}</td>
+										<td>{{item.levels.G9}}</td>
+										<td>{{item.levels.GX}}</td>
+										<td>{{item.levels.GYABM}}</td>
+										<td>{{item.levels.GYSTEM}}</td>
+										<td>{{item.levels.GYTVL}}</td>
+										<td>{{item.levels.GYHUMS}}</td>
+										<td>{{item.levels.GZABM}}</td>
+										<td>{{item.levels.GZSTEM}}</td>
+										<td>{{item.levels.GZTVL}}</td>
+										<td>{{item.levels.GZHUMS}}</td>
+										<td>{{item.total}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</a-col>
+					</a-row>
+				</a-content>
+			</a-canvas>
+		</a-container>
+	</a-module>
+</div>

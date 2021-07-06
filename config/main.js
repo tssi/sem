@@ -24,6 +24,7 @@ require.config({
         'angular-chart':'vendors/node_modules/angular-chart.js/dist/angular-chart',
 		'students':'../controllers/students',
 		'assesments':'../controllers/assesments',
+		'enrollment':'../controllers/enrollment',
         'custom-window':'vendors/custom_window',
 		'atomic':'vendors/atomic_design',
 		'util':'../config/util',
