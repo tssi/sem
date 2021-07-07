@@ -35,30 +35,7 @@ class EnrollmentsController extends AppController {
 															)
 												);
 			}
-			//pr($days); exit();
-			/* $data = array(
-				'coverage'=>$today,
-				'today'=>array(
-					'date'=>'',
-					'day'=>'',
-					'total'=>'',
-					'levels'=>array(
-						'G7'=>0,
-						'G8'=>0,
-						'G9'=>0,
-						'GX'=>0,
-						'GYSTEM'=>0,
-						'GYHUMS'=>0,
-						'GYABM'=>0,
-						'GYTVL'=>0,
-						'GZSTEM'=>0,
-						'GZHUMS'=>0,
-						'GZABM'=>0,
-						'GZTVL'=>0,
-					),
-				),
-				'overall'=>array()
-			); */
+			
 			$HS = array('G7','G8','G9','GX');
 			$programs = array(
 				'SHSTM'=>"STEM",
@@ -66,18 +43,38 @@ class EnrollmentsController extends AppController {
 				'SHTVL'=>"TVL",
 				'SHABM'=>"ABM"
 			);
+			$totals = array(
+							'total'=>0,
+							'levels'=>array(
+										'G7'=>0,
+										'G8'=>0,
+										'G9'=>0,
+										'GX'=>0,
+										'GYSTEM'=>0,
+										'GYHUMS'=>0,
+										'GYABM'=>0,
+										'GYTVL'=>0,
+										'GZSTEM'=>0,
+										'GZHUMS'=>0,
+										'GZABM'=>0,
+										'GZTVL'=>0,
+									)
+			);
 			foreach($Enrollments as $i=>$l){
+				$totals['total']++;
 				$stud = $l['Student'];
 				$led = $l['Enrollment'];
 				$days[$led['transac_date']]['total']++;
 				if(in_array($stud['year_level_id'],$HS)){
 					$days[$led['transac_date']]['levels'][$stud['year_level_id']]++;
+					$totals['levels'][$stud['year_level_id']]++;
 				}
 				else{
 					if(isset($stud['program_id'])){
 						$program = $programs[$stud['program_id']];
 						$prog_display = $stud['year_level_id'].$program;
 						$days[$led['transac_date']]['levels'][$prog_display]++;
+						$totals['levels'][$prog_display]++;
 					}
 					
 				}
@@ -94,7 +91,8 @@ class EnrollmentsController extends AppController {
 			$data = array(
 				'coverage'=>$today,
 				'today'=>$days[$date],
-				'overall'=>$overall
+				'overall'=>$overall,
+				'totals'=>$totals
 			);
 			$enrollment_data[0]['Enrollment'] = $data;
 			//pr($data); exit();

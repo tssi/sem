@@ -85,9 +85,11 @@ class ReportsController extends AppController{
 	}
 
 	function enrollment(){
-		$contents = file_get_contents(APP."json/enrollment.json");
+		//$contents = file_get_contents(APP."json/enrollment.json");
+		//pr($_POST); exit();
+		$contents = $_POST['enrollments'];
 		$json  =  json_decode($contents,true);
-		
+		//pr($json); exit();
 		// TODO: Get data from database instead of test json data
 		$data =  $json;
 		$this->set(compact('data'));

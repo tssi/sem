@@ -148,11 +148,13 @@ class EnrollmentStatSheet extends Formsheet{
 
 
 		// Display today enrollment stats
+		$cnt = 0;
 		if($overall && $totals){
 			$this->GRID['font_size'] = 9.5;
 			$y =  2;
 			foreach($overall  as $O):
-				$this->centerText(0,$y,$O['ed'],2);
+				$cnt++;
+				$this->centerText(0,$y,$cnt,2);
 				$this->centerText(2,$y,$O['date'],4);
 				$day = $O['day'][0];
 				$this->centerText(6,$y,$day,2);

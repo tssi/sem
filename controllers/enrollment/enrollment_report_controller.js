@@ -1,7 +1,7 @@
 "use strict";
 define(['app','api','atomic/bomb'],function(app){
-	app.register.controller('EnrollmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter',
-	function($rootScope,$scope,api,atomic, aModal,$http,$filter){
+	app.register.controller('EnrollmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter','$timeout',
+	function($rootScope,$scope,api,atomic, aModal,$http,$filter,$timeout){
 		const $selfScope = $scope;
 		$scope = this;
 		$scope.init = function(){
@@ -22,6 +22,13 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.date = '';
 			$scope.Enrollment = '';
 		}
+		
+		$scope.Print = function(){
+			$timeout(function(){
+				document.getElementById('PrintEnrollment').submit();
+			},1000);
+		}
+		
 		$scope.LoadReport = function(){
 			var data = {
 				esp:2021,

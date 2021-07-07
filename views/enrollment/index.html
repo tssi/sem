@@ -24,7 +24,7 @@
 					<a-col size="2">
 						<button class="btn btn-default" ng-click="EC.LoadReport()" ng-show="!EC.Enrollment.overall.length">Load</button>
 						<button class="btn btn-default" ng-click="EC.Clear()" ng-show="EC.Enrollment.overall.length">Clear</button>
-						<button class="btn btn-primary">Print</button>
+						<button class="btn btn-primary" ng-click="EC.Print()">Print</button>
 					</a-col>
 				</a-row>
 			</a-header>
@@ -134,4 +134,7 @@
 			</a-canvas>
 		</a-container>
 	</a-module>
+	<form action="api/reports/enrollment" id="PrintEnrollment" method="POST" target="_blank">
+		<input type="hidden" value="{{EC.Enrollment}}" name="enrollments">
+	</form>
 </div>
