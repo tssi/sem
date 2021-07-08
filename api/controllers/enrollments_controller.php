@@ -14,27 +14,35 @@ class EnrollmentsController extends AppController {
 			//pr($start); exit();
 			$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
 			$days = array();
+			$levels_empty = array(
+								'G7'=>0,
+								'G8'=>0,
+								'G9'=>0,
+								'GX'=>0,
+								'GYSTEM'=>0,
+								'GYHUMS'=>0,
+								'GYABM'=>0,
+								'GYTVL'=>0,
+								'GZSTEM'=>0,
+								'GZHUMS'=>0,
+								'GZABM'=>0,
+								'GZTVL'=>0,
+								);
 			foreach($period as $day){
 				$days[$day->format('Y-m-d')]= array(
 												'date'=>$day->format('Y-m-d'),
 												'day'=>date('D', strtotime($day->format('Y-m-d'))),
 												'total'=>0,
-												'levels'=>array(
-															'G7'=>0,
-															'G8'=>0,
-															'G9'=>0,
-															'GX'=>0,
-															'GYSTEM'=>0,
-															'GYHUMS'=>0,
-															'GYABM'=>0,
-															'GYTVL'=>0,
-															'GZSTEM'=>0,
-															'GZHUMS'=>0,
-															'GZABM'=>0,
-															'GZTVL'=>0,
-															)
+												'levels'=>$levels_empty
 												);
 			}
+			$days[$today] = array(
+								'date'=>$today,
+								'day'=>date('D', strtotime($today)),
+								'total'=>0,
+								'levels'=>$levels_empty
+								);
+			//pr($days); exit();
 			$HS = array('G7','G8','G9','GX');
 			$programs = array(
 				'SHSTM'=>"STEM",
