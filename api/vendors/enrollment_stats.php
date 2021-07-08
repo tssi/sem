@@ -25,6 +25,7 @@ class EnrollmentStatSheet extends Formsheet{
 			'rows'=> 4,	
 		);
 		$bxH = 3;
+		$colW = 2.5;
 		$this->section($metrics);
 		$this->GRID['font_size']=12;
 		$this->leftText(0,-5,'LakeShore Enrollment Report',1,'b');
@@ -45,27 +46,29 @@ class EnrollmentStatSheet extends Formsheet{
 		
 		// Display Headers for each levels
 		$x = 8;
-		$tracks = array("STEM","HUMSS","TVL");
-		for($l=1;$l<=10;$l++){
+		$tracks = array("ABM","STEM","HUMSS","TVL");
+		$ctrT = count($tracks);
+		for($l=1;$l<=12;$l++){
 			$label = $l;
 			if($l<5){
 				$label =  sprintf("Gr. %d",$l+6);
 			}else{
-				$label = $tracks[($l+1)%3];
+				$label = $tracks[($l-1)%$ctrT];
 			}
-			$this->centerText($x,0.75,$label,3);
-			$this->DrawNEWSLine($x,0,3,$bxH,'E');
-			$x+=3;
+			$this->centerText($x,0.75,$label,$colW);
+			$this->DrawNEWSLine($x,0,$colW,$bxH,'E');
+			$x+=$colW;
 		}
 
+		$GW =  $colW * $ctrT;
 		// Grade 11
-		$this->DrawBox(20,-1,9, 1);
-		$this->centerText(20,-0.25,'Grade 11',9);
+		$this->DrawBox(18,-1,$GW, 1);
+		$this->centerText(18,-0.25,'Grade 11',$GW);
 		// Grade 12
-		$this->DrawBox(29,-1,9, 1);
-		$this->centerText(29,-0.25,'Grade 12',9);
+		$this->DrawBox(28,-1,$GW, 1);
+		$this->centerText(28,-0.25,'Grade 12',$GW);
 		// Total
-		$this->centerText($x,0.75,'Total',3);
+		$this->centerText($x,0.75,'Total',$colW+0.5);
 
 		// Display today enrollment stats
 		if($today){
@@ -75,11 +78,11 @@ class EnrollmentStatSheet extends Formsheet{
 
 			$x = 8;
 			foreach($today['levels'] as $l){
-				$this->centerText($x,2.25,$l,3);
-				$x+=3;
+				$this->centerText($x,2.25,$l,$colW);
+				$x+=$colW;
 			}
 
-			$this->centerText($x,2.25,$today['total'],3);
+			$this->centerText($x,2.25,$today['total'],$colW+0.5);
 		}
 	}
 
@@ -96,6 +99,7 @@ class EnrollmentStatSheet extends Formsheet{
 		// Number of rows allowed
 		
 		$lnH = 1.25;
+		$colW = 2.5;
 		$bxH = 4 * $lnH;
 
 		if(count($overall)>3)
@@ -121,26 +125,29 @@ class EnrollmentStatSheet extends Formsheet{
 		$this->DrawNEWSLine(6,0,2,$bxH,'E');
 
 		$x = 8;
-		$tracks = array("STEM","HUMSS","TVL");
-		for($l=1;$l<=10;$l++){
+		$tracks = array("ABM","STEM","HUMSS","TVL");
+		$ctrT = count($tracks);
+		for($l=1;$l<=12;$l++){
 			$label = $l;
 			if($l<5){
 				$label =  sprintf("Gr. %d",$l+6);
 			}else{
-				$label = $tracks[($l+1)%3];
+				$label = $tracks[($l-1)%$ctrT];
 			}
-			$this->centerText($x,0.75,$label,3);
-			$this->DrawNEWSLine($x,0,3,$bxH,'E');
-			$x+=3;
+			$this->centerText($x,0.75,$label,$colW);
+			$this->DrawNEWSLine($x,0,$colW,$bxH,'E');
+			$x+=$colW;
 		}
+
+		$GW = $colW*$ctrT;
 		// Grade 11
-		$this->DrawBox(20,-1,9, 1);
-		$this->centerText(20,-0.25,'Grade 11',9);
+		$this->DrawBox(18,-1,$GW, 1);
+		$this->centerText(18,-0.25,'Grade 11',$GW);
 		// Grade 12
-		$this->DrawBox(29,-1,9, 1);
-		$this->centerText(29,-0.25,'Grade 12',9);
+		$this->DrawBox(28,-1,$GW, 1);
+		$this->centerText(28,-0.25,'Grade 12',$GW);
 		// Total
-		$this->centerText($x,0.75,'Total',3);
+		$this->centerText($x,0.75,'Total',$colW+0.5);
 		// Grand Total
 		$this->SetFillColor(255,255,255);
 		$this->DrawBox(0,$bxH-1.5,8, 1.5,'FD');
@@ -161,21 +168,21 @@ class EnrollmentStatSheet extends Formsheet{
 
 				$x = 8;
 				foreach($O['levels'] as $l){
-					$this->centerText($x,$y,$l,3);
-					$x+=3;
+					$this->centerText($x,$y,$l,$colW);
+					$x+=$colW;
 				}
 
-				$this->centerText($x,$y,$O['total'],3);
+				$this->centerText($x,$y,$O['total'],$colW+0.5);
 				$y+=$lnH;
 			endforeach;
 			$x = 8;
 			$y = $bxH-0.5; 
 			foreach($totals['levels'] as $l){
-				$this->centerText($x,$y,$l,3,'b');
-				$x+=3;
+				$this->centerText($x,$y,$l,$colW,'b');
+				$x+=$colW;
 			}
 
-			$this->centerText($x,$y,$totals['total'],3,'b');
+			$this->centerText($x,$y,$totals['total'],$colW+0.5,'b');
 		}
 
 	}

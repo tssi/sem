@@ -35,7 +35,6 @@ class EnrollmentsController extends AppController {
 															)
 												);
 			}
-			
 			$HS = array('G7','G8','G9','GX');
 			$programs = array(
 				'SHSTM'=>"STEM",
@@ -64,7 +63,13 @@ class EnrollmentsController extends AppController {
 				$totals['total']++;
 				$stud = $l['Student'];
 				$led = $l['Enrollment'];
+				// Skip loop if empty student or invalid date
+				if(!isset($stud['year_level_id']) || !isset($days[$led['transac_date']])):
+					continue;
+				endif;
+				
 				$days[$led['transac_date']]['total']++;
+
 				if(in_array($stud['year_level_id'],$HS)){
 					$days[$led['transac_date']]['levels'][$stud['year_level_id']]++;
 					$totals['levels'][$stud['year_level_id']]++;
