@@ -17,8 +17,8 @@
 					<a-col size="6"></a-col>
 					<a-col size="4">
 						<div class="input-group pull-right">
-							<span class="input-group-addon">date:</span>
-							<input type="date" class="form-control" ng-model="EC.date"/>
+							<span class="input-group-addon">Date:</span>
+							<input type="date" class="form-control" ng-model="EC.date" ng-disabled="EC.Enrollment.overall.length" />
 						</div>
 					</a-col>
 					<a-col size="2">
@@ -41,26 +41,26 @@
 										<th colspan="4">Grade 12</th>
 									</tr>
 									<tr>
-										<th>Date</th>
-										<th>Day</th>
-										<th>G7</th>
-										<th>G8</th>
-										<th>G9</th>
-										<th>G10</th>
-										<th>ABM</th>
-										<th>STEM</th>
-										<th>TVL</th>
-										<th>HUMSS</th>
-										<th>ABM</th>
-										<th>STEM</th>
-										<th>TVL</th>
-										<th>HUMSS</th>
-										<th>total</th>
+										<th class="text-center">Date</th>
+										<th class="text-center">Day</th>
+										<th class="text-center">G7</th>
+										<th class="text-center">G8</th>
+										<th class="text-center">G9</th>
+										<th class="text-center">G10</th>
+										<th class="text-center">ABM</th>
+										<th class="text-center">STEM</th>
+										<th class="text-center">TVL</th>
+										<th class="text-center">HUMSS</th>
+										<th class="text-center">ABM</th>
+										<th class="text-center">STEM</th>
+										<th class="text-center">TVL</th>
+										<th class="text-center">HUMSS</th>
+										<th class="text-center">Total</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>{{EC.Enrollment.today.date}}</td>
+										<td>{{EC.Enrollment.today.date | date:'dd-MMM-yy'}}</td>
 										<td>{{EC.Enrollment.today.day}}</td>
 										<td>{{EC.Enrollment.today.levels.G7}}</td>
 										<td>{{EC.Enrollment.today.levels.G8}}</td>
@@ -84,33 +84,35 @@
 						<a-col size="12">
 							<h4>Overall Enrollment as of Today</h4>
 							<table class="table table-bordered table-condensed">
-								<thead class="text-center">
+								<thead>
 									<tr>
-										<th colspan="6"></th>
+										<th colspan="7"></th>
 										<th colspan="4">Grade 11</th>
 										<th colspan="4">Grade 12</th>
 									</tr>
-									<tr>
-										<th>Date</th>
-										<th>Day</th>
-										<th>G7</th>
-										<th>G8</th>
-										<th>G9</th>
-										<th>G10</th>
-										<th>ABM</th>
-										<th>STEM</th>
-										<th>TVL</th>
-										<th>HUMSS</th>
-										<th>ABM</th>
-										<th>STEM</th>
-										<th>TVL</th>
-										<th>HUMSS</th>
-										<th>total</th>
+									<tr class="text-center">
+										<th class="text-center">ED</th>
+										<th class="text-center">Date</th>
+										<th class="text-center">Day</th>
+										<th class="text-center">G7</th>
+										<th class="text-center">G8</th>
+										<th class="text-center">G9</th>
+										<th class="text-center">G10</th>
+										<th class="text-center">ABM</th>
+										<th class="text-center">STEM</th>
+										<th class="text-center">TVL</th>
+										<th class="text-center">HUMSS</th>
+										<th class="text-center">ABM</th>
+										<th class="text-center">STEM</th>
+										<th class="text-center">TVL</th>
+										<th class="text-center">HUMSS</th>
+										<th class="text-center">total</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr ng-repeat="item in EC.Enrollment.overall">
-										<td>{{item.date}}</td>
+										<td>{{$index + 1}}</td>
+										<td>{{item.date | date:'dd-MMM-yy'}}</td>
 										<td>{{item.day}}</td>
 										<td>{{item.levels.G7}}</td>
 										<td>{{item.levels.G8}}</td>
@@ -127,9 +129,37 @@
 										<td>{{item.total}}</td>
 									</tr>
 								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="3">Grand Total</td>
+										<td>{{EC.Enrollment.totals.levels.G7}}</td>
+										<td>{{EC.Enrollment.totals.levels.G8}}</td>
+										<td>{{EC.Enrollment.totals.levels.G9}}</td>
+										<td>{{EC.Enrollment.totals.levels.GX}}</td>
+										<td>{{EC.Enrollment.totals.levels.GYABM}}</td>
+										<td>{{EC.Enrollment.totals.levels.GYSTEM}}</td>
+										<td>{{EC.Enrollment.totals.levels.GYTVL}}</td>
+										<td>{{EC.Enrollment.totals.levels.GYHUMS}}</td>
+										<td>{{EC.Enrollment.totals.levels.GZABM}}</td>
+										<td>{{EC.Enrollment.totals.levels.GZSTEM}}</td>
+										<td>{{EC.Enrollment.totals.levels.GZTVL}}</td>
+										<td>{{EC.Enrollment.totals.levels.GZHUMS}}</td>
+										<td>{{EC.Enrollment.totals.total}}</td>
+									</tr>
+								</tfoot>
 							</table>
 						</a-col>
 					</a-row>
+				</a-content>
+				<a-content ng-show="EC.Loading" style="height: 100%">
+					<div class="empty-state">
+						<div class="well text-center">
+							<div class="empty-state-icon text-center">
+								<i class="glyphicon glyphicon-refresh spin"></i>
+							</div>
+							<h4>Loading Enrollment report...</h4>
+						</div>
+					</div>
 				</a-content>
 			</a-canvas>
 		</a-container>

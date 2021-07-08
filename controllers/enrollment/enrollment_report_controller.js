@@ -30,6 +30,7 @@ define(['app','api','atomic/bomb'],function(app){
 		}
 		
 		$scope.LoadReport = function(){
+			$scope.Loading = 1;
 			var data = {
 				esp:2021,
 				transaction_type_id:['INIPY','FULLP'],
@@ -39,6 +40,7 @@ define(['app','api','atomic/bomb'],function(app){
 			data.transac_date = $filter('date')(new Date(data.transac_date),'yyyy-MM-dd');
 			api.GET('enrollments',data, function success(response){
 				$scope.Enrollment = response.data[0];
+				$scope.Loading = 0;
 			}, function error(response){
 				
 			});

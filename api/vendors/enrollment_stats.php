@@ -162,6 +162,7 @@ class EnrollmentStatSheet extends Formsheet{
 			foreach($overall  as $O):
 				$cnt++;
 				$this->centerText(0,$y,$cnt,2);
+				$O['date'] = date("d-M-y", strtotime($O['date']));
 				$this->centerText(2,$y,$O['date'],4);
 				$day = $O['day'][0];
 				$this->centerText(6,$y,$day,2);
