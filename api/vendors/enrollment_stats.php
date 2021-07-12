@@ -73,7 +73,7 @@ class EnrollmentStatSheet extends Formsheet{
 		// Display today enrollment stats
 		if($today){
 			$this->GRID['font_size'] = 9.5;
-			$this->centerText(0,2.25,$today['date'],4);
+			$this->centerText(0,2.25,date("d-M-y", strtotime($today['date'])),4);
 			$this->centerText(4,2.25,$today['day'],4);
 
 			$x = 8;
