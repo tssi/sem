@@ -30,7 +30,7 @@ class EnrollmentStatSheet extends Formsheet{
 		$this->GRID['font_size']=12;
 		$this->leftText(0,-5,'LakeShore Enrollment Report',1,'b');
 		$this->GRID['font_size']=11;
-		$this->leftText(0,-1,'Enrollment Report as of '.$today['date'],1,'b');
+		$this->leftText(0,-1,'Enrollment Report as of '.date("d-M-Y", strtotime($today['date'])),1,'b');
 		
 
 		$this->DrawBox(0,0,41, $bxH);

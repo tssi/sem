@@ -34,6 +34,7 @@ define(['app','api'], function (app) {
 						$scope.ReAssess($scope.SelectedStudent);
 					}, function error(response){
 						$scope.ActiveStudent = $scope.SelectedStudent;
+						console.log($scope.ActiveStudent);
 						$scope.ActiveDept = $scope.ActiveStudent.department_id;
 						$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
 						
