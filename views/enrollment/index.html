@@ -14,22 +14,30 @@
 			</a-header>
 			<a-header>
 				<a-row>
-					<a-col size="6"></a-col>
-					<a-col size="4">
+					<a-col size="6">
+						<ul class="nav nav-pills">
+							<li ng-repeat="opt in EC.Options" 
+							ng-click="EC.setActOption(opt)" 
+							ng-class="{active:EC.ActiveOpt===(opt)}">
+								<a>{{opt}}</a>
+							</li>
+						</ul>
+					</a-col>
+					<a-col size="4" ng-show="EC.ActiveOpt=='Summary'">
 						<div class="input-group pull-right">
 							<span class="input-group-addon">Date:</span>
 							<input type="date" class="form-control" ng-model="EC.date" ng-disabled="EC.Enrollment.overall.length" />
 						</div>
 					</a-col>
-					<a-col size="2">
+					<a-col size="2" ng-show="EC.ActiveOpt=='Summary'">
 						<button class="btn btn-default" ng-click="EC.LoadReport()" ng-show="!EC.Enrollment.overall.length">Load</button>
 						<button class="btn btn-default" ng-click="EC.Clear()" ng-show="EC.Enrollment.overall.length">Clear</button>
-						<button class="btn btn-primary" ng-click="EC.Print()">Print</button>
+						<button class="btn btn-primary" ng-click="EC.Print()" ng-disabled="!EC.Enrollment.overall.length" >Print</button>
 					</a-col>
 				</a-row>
 			</a-header>
 			<a-canvas>
-				<a-content ng-show="EC.Enrollment.overall.length">
+				<a-content ng-show="EC.Enrollment.overall.length&&EC.ActiveOpt=='Summary'">
 					<a-row>
 						<a-col size="12">
 							<h4>Enrollment report for {{EC.date | date:'dd MMM yyyy'}}</h4>
@@ -147,6 +155,30 @@
 										<td>{{EC.Enrollment.totals.total}}</td>
 									</tr>
 								</tfoot>
+							</table>
+						</a-col>
+					</a-row>
+				</a-content>
+				<a-content ng-show="EC.ActiveOpt=='List'&&EC.Lists.length">
+					<a-row>
+						<a-col>
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th class="text-center">Level</th>
+										<th class="col-md-5 text-center">Name</th>
+										<th class="col-md-3 text-center">Date Enrolled</th>
+										<th class="text-center">OR</th>
+									</tr>
+								</thead>
+								<tbody ng-repeat="item in EC.Lists">
+									<tr ng-repeat="list in item.lists">
+										<td rowspan="{{item.lists.length}}" class="text-center" ng-show="$index==0">{{item.level}}</td>
+										<td>{{list.name}}</td>
+										<td>{{list.transac_date}}</td>
+										<td>{{list.ref_no}}</td>
+									</tr>
+								</tbody>
 							</table>
 						</a-col>
 					</a-row>
