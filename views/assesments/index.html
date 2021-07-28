@@ -110,6 +110,10 @@
 									<td>{{res.description}}</td>
 									<td class="amount total peso">{{-res.amount | currency}}</td>
 								</tr>
+								<tr ng-if="Sponsorship" >
+									<td>{{Sponsorship.details}}</td>
+									<td class="amount total peso">{{-Sponsorship.amount | currency}}</td>
+								</tr>
 							</tbody>
 							<tfoot> 
 								<tr ng-if="TotalDiscount">

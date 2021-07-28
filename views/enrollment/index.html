@@ -162,7 +162,14 @@
 				<a-content ng-show="EC.ActiveOpt=='List'&&EC.Lists.length">
 					<a-row>
 						<a-col>
-							<table class="table table-bordered table-condensed">
+							<ul class="nav nav-pills" style="margin-bottom: 20px;">
+								<li ng-repeat="opt in EC.Order" 
+								ng-click="EC.setActiveOrder(opt)" 
+								ng-class="{active:EC.ActiveOrder===(opt)}">
+									<a>{{opt}}</a>
+								</li>
+							</ul>
+							<table class="table table-bordered table-condensed" ng-show="EC.ActiveOrder=='Year Level'">
 								<thead>
 									<tr>
 										<th class="text-center">Level</th>

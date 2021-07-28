@@ -10,6 +10,8 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Props = ['date','day','levels.G7','levels.G8','l']; */
 			$scope.SearchBy = ['name'];// Fields you can search from the items 	
 			$scope.Options = ['Summary','List'];
+			$scope.Order = ['Year Level','Date'];
+			$scope.ActiveOrder = 'Year Level';
 			$scope.ActiveOpt = 'Summary';
 			getList();
 			atomic.ready(function(){
@@ -22,6 +24,9 @@ define(['app','api','atomic/bomb'],function(app){
 		
 		$scope.setActOption = function(opt){
 			$scope.ActiveOpt = opt;
+		}
+		$scope.setActiveOrder = function(opt){
+			$scope.ActiveOrder = opt;
 		}
 		
 		$scope.Clear = function(){

@@ -52,6 +52,7 @@ define(['app','api'], function (app) {
 				}
 				if($scope.ActiveStep===2){
 					getReservations();
+					getSponsorships();
 					$scope.ActiveLevel = $scope.SelectedLevel;
 					if($scope.ActiveLevel.id=='IR')
 						$scope.ActiveStudent.program_id = 'MIXED';
@@ -96,7 +97,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===5){
 					$scope.ActiveTab.id = 3;
 					$scope.ActiveScheme = angular.copy($scope.SelectedScheme);
-					console.log($scope.ActiveScheme);
+					//console.log($scope.ActiveScheme);
 					$scope.PaymentTotal = 0;
 					$scope.TotalAmount = 0;
 					var total = 0;
@@ -106,8 +107,12 @@ define(['app','api'], function (app) {
 							$scope.PaymentTotal+=res.amount;
 						});
 						$scope.AdvancePayment = {amount:-total};
-						
 					}
+					if($scope.Sponsorship!==''){
+						total+=$scope.Sponsorship.amount;
+						$scope.PaymentTotal+=$scope.Sponsorship.amount;
+					}
+					
 					for(var i in $scope.ActiveScheme.schedule){
 						var sched = $scope.ActiveScheme.schedule[i];
 						if(sched.amount<=total){
@@ -133,18 +138,7 @@ define(['app','api'], function (app) {
 					};
 					console.log($scope.ActiveScheme.schedule);
 				}
-				/* if($scope.ActiveStep===6){
-					$scope.ActiveTab.id = 4;
-					$scope.ActiveDiscounts= [];
-					for(var i in $scope.Discounts){
-						var dsc =$scope.Discounts[i];
-						if($scope.SelectedDiscounts[dsc.id]){
-							$scope.ActiveDiscounts.push(dsc);
-						}
-					}
-					
-					
-				} */
+
 				
 				if($scope.ActiveStep===6){
 					/* $scope.ActiveTab = {};
@@ -444,23 +438,19 @@ define(['app','api'], function (app) {
 					}
 					if(advances>0)
 						reserves.push({amount:advances,description:'AdvancePayment'});
-					/* angular.forEach(response.data, function(res,i,array){
-						console.log(i);
-						switch(res.field_type){
-							case 'RSRVE': res.description = 'Reservation'; reserves.push(res); break;
-							case 'ADVTP': advances+=res.amount; break;
-						}
-						if(i===array.length-1){
-							res.amount = advances;
-							res.description = 'Advance Payment';
-							reserves.push(res);
-						}
-					}); */
-					console.log(reserves);
 					
 					$scope.Reservations = reserves;
 				},function error(response){
 					$scope.Reservations = '';
+				});
+			}
+			
+			function getSponsorships(){
+				var data = {account_id:$scope.ActiveStudent.id,transaction_type_id:'SPONS'};
+				api.GET('ledgers', data, function success(response){
+					$scope.Sponsorship = response.data[0];
+				},function error(response){
+					$scope.Sponsorship = '';
 				});
 			}
 			

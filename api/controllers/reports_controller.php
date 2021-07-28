@@ -1,12 +1,17 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger');
 
 	function student_registration_form(){
 	
 		$this->Assessment->recursive=2;
 		$data = $this->Assessment->findById($_POST['AssessmentId']);
+		$id = $data['Assessment']['student_id'];
+		//pr($id);
+		$res = $this->Reservation->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id)));
+		$spons = $this->Ledger->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id,'transaction_type_id'=>'SPONS')));
+		//pr($res); exit();
 		// Map Assessment Fees to display totals by fee type
 		$fees =  $data['AssessmentFee'];
 		$feeTotals = array();
@@ -29,7 +34,7 @@ class ReportsController extends AppController{
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
-		//pr($feeTotals); exit();
+		//pr($spons); exit();
 		$feeSummary = array();
 		foreach($data['Assessment'] as $key=>$val){
 			//pr($val);
@@ -39,7 +44,7 @@ class ReportsController extends AppController{
 						$feeTotals['SUBS']= array('label'=>'Subsidy','total'=>$val);
 					}
 					break;
-				case 'payment_total':
+				/* case 'payment_total':
 					if($val>0){
 						if($val===1000)
 							$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-$val);
@@ -49,9 +54,23 @@ class ReportsController extends AppController{
 								$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-($val-1000));
 						}
 					}
-					break;
+					break; */
 			}
-			
+		}
+		if(isset($res[0])){
+			foreach($res as $r){
+				switch($r['Reservation']['field_type']){
+					case 'RSRVE':
+						$feeTotals['RSRV']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
+					break;
+					case 'ADVP':
+						$feeTotals['ADVP']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
+					break;
+				}
+			}
+		}
+		if(isset($spons[0])){
+			$feeTotals['SPONS']= array('label'=>'Sponsorship','total'=>-$spons[0]['Ledger']['amount']);
 		}
 		//pr($feeTotals); exit();
 		foreach($feeTotals as $i=>$f){
