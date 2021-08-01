@@ -39,6 +39,11 @@ define(['app','api','atomic/bomb'],function(app){
 				document.getElementById('PrintEnrollment').submit();
 			},1000);
 		}
+		$scope.PrintList = function(){
+			$timeout(function(){
+				document.getElementById('PrintEnrollmentList').submit();
+			},1000);
+		}
 		
 		$scope.LoadReport = function(){
 			$scope.Loading = 1;

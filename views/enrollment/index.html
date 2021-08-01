@@ -34,6 +34,9 @@
 						<button class="btn btn-default" ng-click="EC.Clear()" ng-show="EC.Enrollment.overall.length">Clear</button>
 						<button class="btn btn-primary" ng-click="EC.Print()" ng-disabled="!EC.Enrollment.overall.length" >Print</button>
 					</a-col>
+					<a-col size="6" ng-show="EC.ActiveOpt!=='Summary'">
+						<button class="btn btn-primary pull-right" ng-click="EC.PrintList()">Print</button>
+					</a-col>
 				</a-row>
 			</a-header>
 			<a-canvas>
@@ -205,5 +208,8 @@
 	</a-module>
 	<form action="api/reports/enrollment" id="PrintEnrollment" method="POST" target="_blank">
 		<input type="hidden" value="{{EC.Enrollment}}" name="enrollments">
+	</form>
+	<form action="api/reports/print_list" id="PrintEnrollmentList" method="POST" target="_blank">
+		<input type="hidden" value="{{EC.Lists}}" name="list">
 	</form>
 </div>
