@@ -31,12 +31,9 @@ class EnrollmentListsController extends AppController {
 			foreach($list as $i=>$l){
 				$stud = $l['Student'];
 				$data = $l['EnrollmentList'];
-				if(isset($stud['full_name']))
-					$data['name'] = $stud['full_name'];
-				else{
-					$data['name'] = $stud['first_name'].' '.$stud['last_name'];
-					//pr($l); exit();
-				}
+				
+				$data['name'] = $stud['last_name'].', '.$stud['first_name'].' '.$stud['middle_name'];
+					
 				if(!isset($l['Student']['id'])){
 					pr($l); exit();
 				}
@@ -52,9 +49,50 @@ class EnrollmentListsController extends AppController {
 			}
 			$ctr = 0;
 			$list = array();
+			function array_sort($array, $on, $order=SORT_ASC)
+			{
+				$new_array = array();
+				$sortable_array = array();
+
+				if (count($array) > 0) {
+					foreach ($array as $k => $v) {
+						if (is_array($v)) {
+							foreach ($v as $k2 => $v2) {
+								if ($k2 == $on) {
+									$sortable_array[$k] = $v2;
+								}
+							}
+						} else {
+							$sortable_array[$k] = $v;
+						}
+					}
+
+					switch ($order) {
+						case SORT_ASC:
+							asort($sortable_array);
+						break;
+						case SORT_DESC:
+							arsort($sortable_array);
+						break;
+					}
+
+					foreach ($sortable_array as $k => $v) {
+						$new_array[$k] = $array[$k];
+					}
+				}
+
+				return $new_array;
+			}
 			foreach($levels as $i=>$level){
+				$level = array_sort($level,'name',SORT_ASC);
+				$newL = array();
+				$cnt = 1;
+				foreach($level as $l){
+					$l['cnt'] = $cnt++;
+					array_push($newL,$l);
+				}
 				//pr($level);
-				$list[$ctr]['EnrollmentList'] = array('level'=>$i,'lists'=>$level);
+				$list[$ctr]['EnrollmentList'] = array('level'=>$i,'lists'=>$newL);
 				$ctr++;
 				/* foreach($level as $l){
 					$ctr++;

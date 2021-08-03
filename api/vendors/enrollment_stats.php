@@ -233,7 +233,7 @@ class EnrollmentStatSheet extends Formsheet{
 		foreach($data as $d){
 			$d['transac_date'] = date("d-M-y", strtotime($d['transac_date']));
 			$this->DrawBox(8,$y-1,20, 1);
-			$this->leftText(8.5,$y-.2,$d['name'],'');
+			$this->leftText(8.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
 		
 			$this->DrawBox(28,$y-1,7, 1);
 			$this->leftText(28.5,$y-.2,$d['transac_date'],'');
