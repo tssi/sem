@@ -8,10 +8,12 @@ class ReportsController extends AppController{
 		$this->Assessment->recursive=2;
 		$data = $this->Assessment->findById($_POST['AssessmentId']);
 		$id = $data['Assessment']['student_id'];
-		//pr($id);
+		$esp = round($data['Assessment']['esp'],0);
+		$esp = substr($esp.'', -2);
+		//pr($data); exit();
 		$res = $this->Reservation->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id)));
-		$spons = $this->Ledger->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id,'transaction_type_id'=>'SPONS')));
-		//pr($res); exit();
+		$spons = $this->Ledger->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id,'ref_no LIKE'=>'SPO'.$esp)));
+		//pr($spons); exit();
 		// Map Assessment Fees to display totals by fee type
 		$fees =  $data['AssessmentFee'];
 		$feeTotals = array();
