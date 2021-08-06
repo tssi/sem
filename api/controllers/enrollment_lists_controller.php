@@ -14,11 +14,13 @@ class EnrollmentListsController extends AppController {
 							'GYSTEM'=>array(),
 							'GYHUMS'=>array(),
 							'GYABM'=>array(),
+							'GYGAS'=>array(),
 							'GYTVL'=>array(),
 							'GZSTEM'=>array(),
 							'GZHUMS'=>array(),
 							'GZABM'=>array(),
 							'GZTVL'=>array(),
+							'GZGAS'=>array(),
 							);
 		$HS = array('G7','G8','G9','GX');
 		$programs = array(
