@@ -28,6 +28,7 @@ class EnrollmentListsController extends AppController {
 			'SHHUM'=>"HUMS",
 			'SHTVL'=>"TVL",
 			'SHABM'=>"ABM"
+			'SHGAS'=>"GAS"
 		);
 		if($this->isAPIRequest()){
 			foreach($list as $i=>$l){

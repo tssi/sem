@@ -23,10 +23,12 @@ class EnrollmentsController extends AppController {
 								'GYHUMS'=>0,
 								'GYABM'=>0,
 								'GYTVL'=>0,
+								'GYGAS'=>0,
 								'GZSTEM'=>0,
 								'GZHUMS'=>0,
 								'GZABM'=>0,
 								'GZTVL'=>0,
+								'GZGAS'=>0,
 								);
 			foreach($period as $day){
 				$days[$day->format('Y-m-d')]= array(
@@ -49,6 +51,7 @@ class EnrollmentsController extends AppController {
 				'SHHUM'=>"HUMS",
 				'SHTVL'=>"TVL",
 				'SHABM'=>"ABM"
+				'SHGAS'=>"GAS"
 			);
 			$totals = array(
 							'total'=>0,
@@ -61,10 +64,12 @@ class EnrollmentsController extends AppController {
 										'GYHUMS'=>0,
 										'GYABM'=>0,
 										'GYTVL'=>0,
+										'GYGAS'=>0,
 										'GZSTEM'=>0,
 										'GZHUMS'=>0,
 										'GZABM'=>0,
 										'GZTVL'=>0,
+										'GZGAS'=>0,
 									)
 			);
 			foreach($Enrollments as $i=>$l){
