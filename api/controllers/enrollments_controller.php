@@ -50,7 +50,7 @@ class EnrollmentsController extends AppController {
 				'SHSTM'=>"STEM",
 				'SHHUM'=>"HUMS",
 				'SHTVL'=>"TVL",
-				'SHABM'=>"ABM"
+				'SHABM'=>"ABM",
 				'SHGAS'=>"GAS"
 			);
 			$totals = array(
