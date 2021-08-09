@@ -30,7 +30,18 @@ class EnrollmentListsController extends AppController {
 			'SHABM'=>"ABM",
 			'SHGAS'=>"GAS"
 		);
+		$today = date("Y-m-d");
+		$interval = new DateInterval('P1D');
+		$start = $list[0]['EnrollmentList']['transac_date'];
+		//pr($start); exit();
+		$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
+		$days = array();
+		foreach($period as $day){
+			$days[$day->format('Y-m-d')]= array();
+		}
+		$days[$today] = array();
 		if($this->isAPIRequest()){
+			//pr($days); exit();
 			foreach($list as $i=>$l){
 				$stud = $l['Student'];
 				$data = $l['EnrollmentList'];
@@ -49,9 +60,20 @@ class EnrollmentListsController extends AppController {
 					$prog_display = $stud['year_level_id'].$program;
 					array_push($levels[$prog_display],$data);
 				}
+				$item = array(
+								'year_level_id'=>$data['year_level_id'],
+								'name'=>$data['name'],
+								'ref_no'=>$data['ref_no']
+								
+							);
+				array_push($days[$data['transac_date']],$item );
 			}
-			$ctr = 0;
 			$list = array();
+			$list['days'] = array();
+			
+			
+			//pr($list['days']); exit();
+			
 			function array_sort($array, $on, $order=SORT_ASC)
 			{
 				$new_array = array();
@@ -86,6 +108,18 @@ class EnrollmentListsController extends AppController {
 
 				return $new_array;
 			}
+			foreach($days as $i=>$d){
+				$d = array_sort($d,'name',SORT_ASC);
+				$cnt = 1;
+				$dItem = array();
+				foreach($d as $date){
+					$date['cnt']=$cnt++;
+					array_push($dItem,$date);
+				}
+				$item = array('date'=>$i,'lists'=>$dItem);
+				array_push($list['days'],$item);
+			}
+			$list['level'] = array();
 			foreach($levels as $i=>$level){
 				$level = array_sort($level,'name',SORT_ASC);
 				$newL = array();
@@ -95,15 +129,15 @@ class EnrollmentListsController extends AppController {
 					array_push($newL,$l);
 				}
 				//pr($level);
-				$list[$ctr]['EnrollmentList'] = array('level'=>$i,'lists'=>$newL);
-				$ctr++;
-				/* foreach($level as $l){
-					$ctr++;
-				} */
+				$item = array('level'=>$i,'lists'=>$newL);
+				array_push($list['level'],$item);
+				
 			}
+			//pr($list); exit();
+			$coll = array(array('EnrollmentList'=>$list));
 		}
 		//pr($list); exit();
-		$this->set('enrollmentLists', $list);
+		$this->set('enrollmentLists', $coll);
 	}
 
 	function view($id = null) {

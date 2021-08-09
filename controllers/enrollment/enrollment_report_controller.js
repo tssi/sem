@@ -69,7 +69,7 @@ define(['app','api','atomic/bomb'],function(app){
 				limit:'less'
 			}
 			api.GET('enrollment_lists',data, function success(response){
-				angular.forEach(response.data, function(item){
+				angular.forEach(response.data[0].level, function(item){
 					switch(item.level){
 						case 'G7': item.level = 'Grade 7'; break;
 						case 'G8': item.level = 'Grade 8'; break;
@@ -85,7 +85,8 @@ define(['app','api','atomic/bomb'],function(app){
 						case 'GZTVL': item.level = 'Grade 12 TVL'; break;
 					};
 				})
-				$scope.Lists = response.data;
+				$scope.Lists = response.data[0].level;
+				$scope.Days = response.data[0].days;
 				console.log($scope.Lists);
 			});
 		}

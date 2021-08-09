@@ -34,7 +34,11 @@
 						<button class="btn btn-default" ng-click="EC.Clear()" ng-show="EC.Enrollment.overall.length">Clear</button>
 						<button class="btn btn-primary" ng-click="EC.Print()" ng-disabled="!EC.Enrollment.overall.length" >Print</button>
 					</a-col>
-					<a-col size="6" ng-show="EC.ActiveOpt!=='Summary'">
+					<a-col size="5" ng-show="EC.ActiveOpt!=='Summary'">
+						<div class="btn-group pull-right" role="group" aria-label="...">
+						  <button type="button" class="btn btn-default" ng-repeat="ord in EC.Order" ng-class="{'btn-primary':EC.ActiveOrder==ord}" ng-click="EC.setActiveOrder(ord)">{{ord}}</button>
+						</div></a-col>
+					<a-col size="1" ng-show="EC.ActiveOpt!=='Summary'">
 						<button class="btn btn-primary pull-right" ng-click="EC.PrintList()">Print</button>
 					</a-col>
 				</a-row>
@@ -169,15 +173,8 @@
 					</a-row>
 				</a-content>
 				<a-content ng-show="EC.ActiveOpt=='List'&&EC.Lists.length">
-					<a-row>
+					<a-row ng-show="EC.ActiveOrder=='Year Level'">
 						<a-col>
-							<ul class="nav nav-pills" style="margin-bottom: 20px;">
-								<li ng-repeat="opt in EC.Order" 
-								ng-click="EC.setActiveOrder(opt)" 
-								ng-class="{active:EC.ActiveOrder===(opt)}">
-									<a>{{opt}}</a>
-								</li>
-							</ul>
 							<table class="table table-bordered table-condensed" ng-show="EC.ActiveOrder=='Year Level'">
 								<thead>
 									<tr>
@@ -193,6 +190,28 @@
 										<td>{{list.name}}</td>
 										<td>{{list.transac_date}}</td>
 										<td>{{list.ref_no}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</a-col>
+					</a-row>
+					<a-row ng-show="EC.ActiveOrder=='Date'">
+						<a-col>
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th class="text-center">Date</th>
+										<th class="text-center">Name</th>
+										<th class="text-center">Year Level</th>
+										<th class="text-center">OR</th>
+									</tr>
+								</thead>
+								<tbody ng-repeat="item in EC.Days">
+									<tr ng-repeat="data in item.lists">
+										<td rowspan="{{item.lists.length}}" ng-show="$index==0" class="text-center">{{item.date | date: 'dd-MMM-yyyy'}}</td>
+										<td>{{data.name}}</td>
+										<td>{{data.year_level_id}}</td>
+										<td>{{data.ref_no}}</td>
 									</tr>
 								</tbody>
 							</table>
