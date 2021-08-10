@@ -218,16 +218,6 @@ class EnrollmentStatSheet extends Formsheet{
 		$this->DrawBox(35,-1,5, 1);
 		$this->centerText(37,-.25,'OR','');
 		
-		/* foreach($level as $l){
-			switch($l){
-				case 'G7': $l = 'Grade 7'; break;
-				case 'G8': $l = 'Grade 8'; break;
-				case 'G9': $l = 'Grade 9'; break;
-				case 'GX': $l = 'Grade 10'; break;
-				case 'GY': $l = 'Grade 11'; break;
-				case 'GZ': $l = 'Grade 12'; break;
-			}
-		} */
 		$y = 1;
 		
 		foreach($data as $d){
@@ -244,6 +234,56 @@ class EnrollmentStatSheet extends Formsheet{
 		}
 		$this->DrawBox(1,0,7, count($data));
 		$this->leftText(1.5,1,$level,'');
+		
+	}
+	
+	function enrollment_days($day,$data){
+		//pr($data); exit();
+		$metrics = array(
+			'base_x'=> 0.5,
+			'base_y'=> 1.5,
+			'width'=> 7.5,
+			'height'=> 0.7,
+			'cols'=> 41,
+			'rows'=> 4,	
+		);
+		$bxH = 3;
+		$colW = 2.5;
+		$this->section($metrics);
+		$this->GRID['font_size']=12;
+		//$this->leftText(0,-5,'LakeShore Enrollment List Report',1,'b');
+		$this->GRID['font_size']=11;
+		$this->leftText(10,-5,'Enrollment List Report as of '.date("d-M-Y"),strtotime($day));
+		$this->GRID['font_size']=9;
+		$this->DrawBox(1,-1,7, 1);
+		$this->centerText(4,-0.25,'Date','');
+	
+		$this->DrawBox(8,-1,20, 1);
+		$this->centerText(18,-.25,'Name','');
+	
+		$this->DrawBox(28,-1,7, 1);
+		$this->centerText(31.5,-.25,'Year Level','');
+		
+		$this->DrawBox(35,-1,5, 1);
+		$this->centerText(37,-.25,'OR','');
+		
+		$y = 1;
+		
+		foreach($data as $d){
+			
+			$this->DrawBox(8,$y-1,20, 1);
+			$this->leftText(8.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
+		
+			$this->DrawBox(28,$y-1,7, 1);
+			$this->leftText(28.5,$y-.2,$d['level'],'');
+			
+			$this->DrawBox(35,$y-1,5, 1);
+			$this->leftText(35.5,$y-.2,$d['ref_no'],'');
+			$y++;
+		}
+		$day = date("d-F-Y", strtotime($day));
+		$this->DrawBox(1,0,7, count($data));
+		$this->leftText(1.5,1,$day,'');
 		
 	}
 }

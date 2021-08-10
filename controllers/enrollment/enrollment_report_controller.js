@@ -40,9 +40,15 @@ define(['app','api','atomic/bomb'],function(app){
 			},1000);
 		}
 		$scope.PrintList = function(){
-			$timeout(function(){
-				document.getElementById('PrintEnrollmentList').submit();
-			},1000);
+			if($scope.ActiveOrder=='Year Level'){
+				$timeout(function(){
+					document.getElementById('PrintEnrollmentList').submit();
+				},1000);
+			}else{
+				$timeout(function(){
+					document.getElementById('PrintEnrollmentDate').submit();
+				},1000);
+			}
 		}
 		
 		$scope.LoadReport = function(){
@@ -85,6 +91,19 @@ define(['app','api','atomic/bomb'],function(app){
 						case 'GZTVL': item.level = 'Grade 12 TVL'; break;
 					};
 				})
+				angular.forEach(response.data[0].days, function(item){
+					angular.forEach(item.lists, function(i){
+						switch(i.year_level_id){
+							case 'G7': i.level = 'Grade 7'; break;
+							case 'G8': i.level = 'Grade 8'; break;
+							case 'G9': i.level = 'Grade 9'; break;
+							case 'GX': i.level = 'Grade 10'; break;
+							case 'GY': i.level = 'Grade 11'; break;
+							case 'GZ': i.level = 'Grade 12'; break;
+						}
+					});
+					
+				});
 				$scope.Lists = response.data[0].level;
 				$scope.Days = response.data[0].days;
 				console.log($scope.Lists);
