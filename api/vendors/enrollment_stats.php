@@ -209,10 +209,13 @@ class EnrollmentStatSheet extends Formsheet{
 		$this->DrawBox(1,-1,7, 1);
 		$this->centerText(4,-0.25,'Level','');
 	
-		$this->DrawBox(8,-1,20, 1);
+		$this->DrawBox(8,-1,5, 1);
+		$this->centerText(10,-.25,'Sno','');
+		
+		$this->DrawBox(13,-1,16, 1);
 		$this->centerText(18,-.25,'Name','');
 	
-		$this->DrawBox(28,-1,7, 1);
+		$this->DrawBox(29,-1,6, 1);
 		$this->centerText(31.5,-.25,'Date Enrolled','');
 		
 		$this->DrawBox(35,-1,5, 1);
@@ -222,11 +225,14 @@ class EnrollmentStatSheet extends Formsheet{
 		
 		foreach($data as $d){
 			$d['transac_date'] = date("d-M-y", strtotime($d['transac_date']));
-			$this->DrawBox(8,$y-1,20, 1);
-			$this->leftText(8.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
+			$this->DrawBox(8,$y-1,5, 1);
+			$this->leftText(8.5,$y-.2,$d['sno'],'');
+			
+			$this->DrawBox(13,$y-1,16, 1);
+			$this->leftText(13.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
 		
-			$this->DrawBox(28,$y-1,7, 1);
-			$this->leftText(28.5,$y-.2,$d['transac_date'],'');
+			$this->DrawBox(29,$y-1,6, 1);
+			$this->leftText(29.5,$y-.2,$d['transac_date'],'');
 			
 			$this->DrawBox(35,$y-1,5, 1);
 			$this->leftText(35.5,$y-.2,$d['ref_no'],'');
@@ -238,7 +244,8 @@ class EnrollmentStatSheet extends Formsheet{
 	}
 	
 	function enrollment_days($day,$data){
-		//pr($data); exit();
+		//pr($day); 
+		$day = date("d-F-Y", strtotime($day));
 		$metrics = array(
 			'base_x'=> 0.5,
 			'base_y'=> 1.5,
@@ -253,15 +260,18 @@ class EnrollmentStatSheet extends Formsheet{
 		$this->GRID['font_size']=12;
 		//$this->leftText(0,-5,'LakeShore Enrollment List Report',1,'b');
 		$this->GRID['font_size']=11;
-		$this->leftText(10,-5,'Enrollment List Report as of '.date("d-M-Y"),strtotime($day));
+		$this->leftText(10,-5,'Enrollment List Report as of '.$day,'');
 		$this->GRID['font_size']=9;
 		$this->DrawBox(1,-1,7, 1);
 		$this->centerText(4,-0.25,'Date','');
 	
-		$this->DrawBox(8,-1,20, 1);
+		$this->DrawBox(8,-1,5, 1);
+		$this->centerText(10,-.25,'Sno','');
+		
+		$this->DrawBox(13,-1,16, 1);
 		$this->centerText(18,-.25,'Name','');
 	
-		$this->DrawBox(28,-1,7, 1);
+		$this->DrawBox(29,-1,6, 1);
 		$this->centerText(31.5,-.25,'Year Level','');
 		
 		$this->DrawBox(35,-1,5, 1);
@@ -271,17 +281,20 @@ class EnrollmentStatSheet extends Formsheet{
 		
 		foreach($data as $d){
 			
-			$this->DrawBox(8,$y-1,20, 1);
-			$this->leftText(8.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
+			$this->DrawBox(8,$y-1,5, 1);
+			$this->leftText(8.5,$y-.2,$d['sno'],'');
+			
+			$this->DrawBox(13,$y-1,16, 1);
+			$this->leftText(13.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
 		
-			$this->DrawBox(28,$y-1,7, 1);
-			$this->leftText(28.5,$y-.2,$d['level'],'');
+			$this->DrawBox(29,$y-1,6, 1);
+			$this->leftText(29.5,$y-.2,$d['level'],'');
 			
 			$this->DrawBox(35,$y-1,5, 1);
 			$this->leftText(35.5,$y-.2,$d['ref_no'],'');
 			$y++;
 		}
-		$day = date("d-F-Y", strtotime($day));
+		
 		$this->DrawBox(1,0,7, count($data));
 		$this->leftText(1.5,1,$day,'');
 		

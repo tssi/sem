@@ -47,7 +47,7 @@ class EnrollmentListsController extends AppController {
 				$data = $l['EnrollmentList'];
 				
 				$data['name'] = $stud['last_name'].', '.$stud['first_name'].' '.$stud['middle_name'];
-					
+				$data['sno'] = $stud['sno'];
 				if(!isset($l['Student']['id'])){
 					pr($l); exit();
 				}
@@ -62,6 +62,7 @@ class EnrollmentListsController extends AppController {
 				}
 				$item = array(
 								'year_level_id'=>$data['year_level_id'],
+								'sno'=>$data['sno'],
 								'name'=>$data['name'],
 								'ref_no'=>$data['ref_no']
 								
