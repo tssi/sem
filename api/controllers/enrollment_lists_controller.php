@@ -6,6 +6,18 @@ class EnrollmentListsController extends AppController {
 	function index() {
 		$this->EnrollmentList->recursive = 0;
 		$list = $this->paginate();
+		//pr($_GET); exit();
+		$conds = array('EnrollmentList.esp'=>$_GET['esp'],'EnrollmentList.ref_no LIKE'=>'X%');
+		//pr($conds); exit();
+		$cancelled = $this->EnrollmentList->find('all',array('recursive'=>0,'conditions'=>$conds));
+		$cancelled_ors = array();
+		//pr($cancelled); exit();
+		foreach($cancelled as $c){
+			$ref_no = explode(" ",$c['EnrollmentList']['ref_no']);
+			//pr($ref_no);
+			array_push($cancelled_ors,$ref_no[1]);
+		}
+		//pr($cancelled_ids); exit();
 		$levels = array(
 							'G7'=>array(),
 							'G8'=>array(),
@@ -43,6 +55,10 @@ class EnrollmentListsController extends AppController {
 		if($this->isAPIRequest()){
 			//pr($days); exit();
 			foreach($list as $i=>$l){
+				$ref_no = explode(" ",$l['EnrollmentList']['ref_no']);
+				if(in_array($ref_no[1],$cancelled_ors)){
+					continue;
+				}
 				$stud = $l['Student'];
 				$data = $l['EnrollmentList'];
 				

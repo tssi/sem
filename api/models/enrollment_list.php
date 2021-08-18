@@ -26,22 +26,12 @@ class EnrollmentList extends AppModel {
 	
 	/* function beforeFind($queryData){
 		if($conds=$queryData['conditions']){
-			foreach($conds as $i=>$cond){
-				if(is_array($cond)):
-					$keys = array_keys($cond);
-					$search = 'Enrollment.transac_date';
-					if(in_array($search,$keys)){
-						$value = $cond[$search];//
-						unset($cond[$search]);
-					}
-				endif;
-				$conds[$i]=$cond;
-				
-			}
+			$cond = array('EnrollmentList.ref_no NOT LIKE'=>'XOR%');
+			array_push($conds,$cond);
 			//pr($conds); exit();
 			$queryData['conditions'] = $conds;
 		}
 		//pr($queryData); exit();
 		return $queryData;
-	} */
+	}  */
 }
