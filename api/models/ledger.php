@@ -13,24 +13,31 @@ class Ledger extends AppModel {
 				if(!is_array($cond))
 					break;
 				$keys =  array_keys($cond);
-				$search = 'Ledger.ref_no';
 				$sy = 'Ledger.sy';
+				$search = 'Ledger.ref_no';
+				
 				//pr($cond[$search]); exit();
-				if(in_array($search,$keys)){
-					$preffix = $cond[$search];
-					$ref = $preffix.$esp;
-					//pr($cond); exit();
-					unset($cond[$search]);
-					$cond = array('Ledger.ref_no LIKE'=>$ref.'%');
-					$conds[$i]=$cond;
-				}
+				
+				
 				if(in_array($sy,$keys)){
 					$esp = $cond[$sy];
 					$esp =  substr($esp.'', -2);
+					//pr($esp);
+					unset($conds[$i]);
+				}
+				if(in_array($search,$keys)){
+					$preffix = $cond[$search];
+					$ref = $preffix;
+					//pr($ref); exit();
+					unset($cond[$search]);
 					unset($conds[$i]);
 				}
 				//pr($cond);
 				
+			}
+			if(isset($esp)){
+				$cond = array('Ledger.ref_no LIKE'=>$ref.$esp.'%');
+				array_push($conds,$cond);
 			}
 			//pr($conds); exit();
 			$queryData['conditions']=$conds;

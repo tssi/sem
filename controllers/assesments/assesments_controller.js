@@ -446,7 +446,7 @@ define(['app','api'], function (app) {
 			}
 			
 			function getSponsorships(){
-				var data = {account_id:$scope.ActiveStudent.id,sy:$scope.ActiveSy,ref_no:'SPO'};
+				var data = {account_id:$scope.ActiveStudent.id,ref_no:'SPO',sy:$scope.ActiveSy,};
 				api.GET('ledgers', data, function success(response){
 					$scope.Sponsorship = response.data[0];
 				},function error(response){
