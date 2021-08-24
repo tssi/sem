@@ -280,7 +280,7 @@
 						Loading...
 					</div>
 					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections " ng-click="setSelectedSection(section)" 
-								ng-hide="(ActiveLevel.id!=='IR'&&section.program_id=='MIXED')">
+								ng-hide="(ActiveLevel.id=='IR'&&section.program_id!=='MIXED')">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.program_id}}</span></p>
@@ -346,7 +346,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="list-group-item" ng-show="ActiveSection.program_id=='MIXED'">
+					<div class="list-group-item" ng-show="ActiveLevel.id=='IR'">
 						<label for="">Section</label>
 						<select name="" id="" class="form-control" ng-options="sc as sc.name group by sc.year_level for sc in Sections | filter:{program_id:'!'+'MIXED'} | orderBy:'year_level_id' " ng-model="sec">
 							<option value="" ng-show="!LoadingSec">Select section</option>
@@ -367,7 +367,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="sched in sec.schedule_details">
+								<tr ng-repeat="sched in ActiveSchedule.schedule_details | filter:{sec_ids:sec.id}" >
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
 									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>

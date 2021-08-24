@@ -401,14 +401,14 @@ define(['app','api'], function (app) {
 			$scope.AddSched = function(subject,index,sec){
 				subject.section_id = sec.id;
 				$scope.CustomizedScheds.push(subject);
-				$scope.sec.schedule_details.splice(index,1);
+				$scope.ActiveSchedule.schedule_details.splice(index,1);
 				if($scope.Disabled==1)
 					$scope.Disabled = 0;
 			}
 			
 			$scope.removeSched = function(subject,index){
 				$scope.CustomizedScheds.splice(index,1);
-				$scope.sec.schedule_details.push(subject);
+				$scope.ActiveSchedule.schedule_details.push(subject);
 				if($scope.Disabled==1)
 					$scope.Disabled = 0;
 			}
@@ -593,7 +593,7 @@ define(['app','api'], function (app) {
 					if(fee.type=='MSC')
 						uponnrol+=fee.amount;
 				});
-				var assess_date = new Date('2021-01-15');
+				var assess_date = new Date();
 				var year = assess_date.getFullYear();
 				var nextMonth = assess_date.getMonth()+2;
 				var day = assess_date.getDate();
@@ -602,7 +602,10 @@ define(['app','api'], function (app) {
 					if(sc.scheme_id=='MONT')
 						lastDate = new Date(sc.schedule[sc.schedule.length-1].due_dates);
 				});
-				var lastMonth = lastDate.getMonth()+1;
+				//for irregular only 5 months
+				var lastMonth = lastDate.getMonth()-4;
+				if(lastMonth==0)
+					lastMonth = 12;
 				var count = 1;
 				var schedules = [];
 				for(var i=nextMonth-1;i!=lastMonth;i++){
@@ -699,7 +702,7 @@ define(['app','api'], function (app) {
 					if(filter.department_id=='SH'&&$scope.ActiveStudent.program_id!=null&&$scope.ActiveStudent.program_id!='HSBED')
 						data.program_id = $scope.ActiveStudent.program_id;
 				}else
-					data = {program_id:'MIXED',department_id:$scope.ActiveStudent.department_id};
+					data = {department_id:$scope.ActiveStudent.department_id};
 				console.log($scope.ActiveStudent);
 				console.log(filter);
 				api.GET('sections',data, function success(response){
@@ -809,24 +812,26 @@ define(['app','api'], function (app) {
 				}, function error(response){
 					$scope.ActiveSchedule = {};
 					var details = [];
+					//console.log($scope.ActiveSection);
+					//console.log($scope.Subjects);
 					angular.forEach($scope.Subjects, function(sub){
-						if($scope.ActiveSection.department_id=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveLevel.id==sub.year_level_id){
-							console.log(sub);
-							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-							
-							/* angular.forEach(sub.sec_id,function(sec){
-								console.log(sec);
-								console.log($scope.ActiveSection.id);
-								if(sec===$scope.ActiveSection.id)
-									
-							}); */
+						if($scope.ActiveLevel.id=='IR'){
+							if($scope.ActiveSection.department_id=='SH'&&$scope.ActiveSection.year_level_id==sub.year_level_id){
+								console.log(sub);
+								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'sec_ids':sub.sec_id});
+							}		
+						}else{
+							if($scope.ActiveSection.department_id=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveLevel.id==sub.year_level_id){
+								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+							}
 						}
 						if($scope.ActiveSection.department_id!=='SH')
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
 						$scope.LoadingSec = false;
 					});
-					//console.log(details);
+					//if($scope.ActiveLevel.id=='IR')
 					$scope.ActiveSchedule.schedule_details = details;
+					
 				});
 			}
 			
