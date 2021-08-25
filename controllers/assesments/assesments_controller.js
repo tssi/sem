@@ -703,9 +703,9 @@ define(['app','api'], function (app) {
 						data.program_id = $scope.ActiveStudent.program_id;
 				}else
 					data = {department_id:$scope.ActiveStudent.department_id};
-				console.log($scope.ActiveStudent);
-				console.log(filter);
+				//console.log($scope.ActiveStudent);
 				api.GET('sections',data, function success(response){
+					console.log(response.data);
 					$scope.Sections = response.data;
 					
 				});

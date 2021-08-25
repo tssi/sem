@@ -280,7 +280,7 @@
 						Loading...
 					</div>
 					<div class="list-group-item ng-class:{active:section.name===SelectedSection.name}" ng-repeat="section in Sections " ng-click="setSelectedSection(section)" 
-								ng-hide="(ActiveLevel.id=='IR'&&section.program_id!=='MIXED')">
+								ng-hide="ActiveLevel.id=='IR'&&section.program_id!=='MIXED'">
 						<h4 class="list-group-item-heading">{{section.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{section.program_id}}</span></p>
