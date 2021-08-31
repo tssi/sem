@@ -15,8 +15,8 @@ define(['app','api'], function (app) {
 								case 'DEFAULT_': $scope.Defaults = JSON.parse(item.sys_value); break;
 							}
 						});*/
-						console.log($scope.Defaults.SEMESTER);
-						console.log($scope.ActiveSy);
+						//console.log($scope.Defaults.SEMESTER);
+						//console.log($scope.ActiveSy);
 						$scope.ActiveSem = $scope.Defaults.SEMESTER
 						initAssessment();
 						initDataSource();
@@ -34,7 +34,7 @@ define(['app','api'], function (app) {
 						$scope.ReAssess($scope.SelectedStudent);
 					}, function error(response){
 						$scope.ActiveStudent = $scope.SelectedStudent;
-						console.log($scope.ActiveStudent);
+						//console.log($scope.ActiveStudent);
 						$scope.ActiveDept = $scope.ActiveStudent.department_id;
 						$scope.YearLevels.push({'id':'IR','description':'Irregular','name':'Irregular','order':-1,'department_id':$scope.ActiveDept});
 						
@@ -136,7 +136,7 @@ define(['app','api'], function (app) {
 						if(sched.amount==0)
 							sched.status = 'PAID';
 					};
-					console.log($scope.ActiveScheme.schedule);
+					//console.log($scope.ActiveScheme.schedule);
 				}
 
 				
@@ -398,17 +398,22 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			$scope.selectSec = function(sec){
+				$scope.sec = sec;
+			}
+			
 			$scope.AddSched = function(subject,index,sec){
 				subject.section_id = sec.id;
+				console.log($scope.sec);
 				$scope.CustomizedScheds.push(subject);
-				$scope.ActiveSchedule.schedule_details.splice(index,1);
+				$scope.sec.details.splice(index,1);
 				if($scope.Disabled==1)
 					$scope.Disabled = 0;
 			}
 			
 			$scope.removeSched = function(subject,index){
 				$scope.CustomizedScheds.splice(index,1);
-				$scope.ActiveSchedule.schedule_details.push(subject);
+				$scope.sec.details.push(subject);
 				if($scope.Disabled==1)
 					$scope.Disabled = 0;
 			}
@@ -430,7 +435,7 @@ define(['app','api'], function (app) {
 					var reserves = [];
 					for(var i in response.data){
 						var res = response.data[i];
-						console.log(res);
+						//console.log(res);
 						switch(res.field_type){
 							case 'RSRVE': res.description = 'Reservation'; reserves.push(res); break;
 							case 'ADVTP': advances+=res.amount; break;
@@ -490,7 +495,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			function initAssessment(){
-				console.log('dumaan');
+				//console.log('dumaan');
 				$scope.ActiveTuition = '';
 				$scope.SearchWord = '';
 				$scope.Options = ['Old','New'];
@@ -596,7 +601,8 @@ define(['app','api'], function (app) {
 				var assess_date = new Date();
 				var year = assess_date.getFullYear();
 				var nextMonth = assess_date.getMonth()+2;
-				var day = assess_date.getDate();
+				var day = 1;
+				//console.log(day);
 				var lastDate = '';
 				angular.forEach($scope.ActiveTuition.schemes, function(sc){
 					if(sc.scheme_id=='MONT')
@@ -604,8 +610,10 @@ define(['app','api'], function (app) {
 				});
 				//for irregular only 5 months
 				var lastMonth = lastDate.getMonth()-4;
+				
 				if(lastMonth==0)
 					lastMonth = 12;
+				
 				var count = 1;
 				var schedules = [];
 				for(var i=nextMonth-1;i!=lastMonth;i++){
@@ -613,6 +621,7 @@ define(['app','api'], function (app) {
 						i=1;
 					count++;
 				}
+				console.log(nextMonth,lastMonth);
 				var distribute = ($scope.TotalAmount-uponnrol)/(count-1);
 				count = 1;
 				for(var i=nextMonth-1;i!=lastMonth+1;i++){
@@ -621,6 +630,7 @@ define(['app','api'], function (app) {
 						year++;
 					}
 					var due_date = new Date(year+'-'+i+'-'+day);
+					//console.log(due_date);
 					var mo = due_date.toLocaleString('en-us', { month: 'short' });
 					var sched = {
 						amount:distribute,
@@ -632,6 +642,8 @@ define(['app','api'], function (app) {
 						sched.billing_period_id = 'UPONNROL';
 					}
 					sched.billing_period_id = sched.billing_period_id.toUpperCase();
+					///console.log(sched.billing_period_id);
+					//console.log(mo);
 					angular.forEach($scope.BillingPeriods, function(bill){
 						if(sched.billing_period_id==bill.id)
 							sched.description = bill.name;
@@ -705,7 +717,7 @@ define(['app','api'], function (app) {
 					data = {department_id:$scope.ActiveStudent.department_id};
 				//console.log($scope.ActiveStudent);
 				api.GET('sections',data, function success(response){
-					console.log(response.data);
+					//console.log(response.data);
 					$scope.Sections = response.data;
 					
 				});
@@ -766,6 +778,7 @@ define(['app','api'], function (app) {
 			
 			//getting schedules
 			function getSchedules(){
+				console.log($scope.ActiveSection);
 				$scope.LoadingSec = true;
 				if($scope.ActiveSection.program_id!='MIXED')
 					var data = {section_id:$scope.ActiveSection.id};
@@ -802,22 +815,19 @@ define(['app','api'], function (app) {
 									sec.schedule_details = details;
 								}
 							});
-							console.log($scope.Sections);
-							console.log($scope.Subjects);
-							
 						});
 					}
 					$scope.LoadingSec = false;
 					
 				}, function error(response){
 					$scope.ActiveSchedule = {};
-					var details = [];
+					
 					//console.log($scope.ActiveSection);
 					//console.log($scope.Subjects);
-					angular.forEach($scope.Subjects, function(sub){
+					/* angular.forEach($scope.Subjects, function(sub){
 						if($scope.ActiveLevel.id=='IR'){
 							if($scope.ActiveSection.department_id=='SH'&&$scope.ActiveSection.year_level_id==sub.year_level_id){
-								console.log(sub);
+								//console.log(sub);
 								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'sec_ids':sub.sec_id});
 							}		
 						}else{
@@ -827,10 +837,32 @@ define(['app','api'], function (app) {
 						}
 						if($scope.ActiveSection.department_id!=='SH')
 							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-						$scope.LoadingSec = false;
-					});
-					//if($scope.ActiveLevel.id=='IR')
-					$scope.ActiveSchedule.schedule_details = details;
+						
+					}); */
+					if($scope.ActiveLevel.id=='IR'){
+						angular.forEach($scope.Sections, function(sec){
+							var details = [];
+							angular.forEach($scope.Subjects, function(sub){
+								if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
+									details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+								}
+							});
+							sec.details = details;
+						});
+					}else{
+						
+						var details = [];
+						angular.forEach($scope.Subjects, function(sub){
+							if(sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&sub.year_level_id==$scope.ActiveSection.year_level_id){
+								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+							}
+						});
+						$scope.ActiveSchedule.schedule_details = details;
+						
+					}
+					console.log($scope.Sections);
+					$scope.LoadingSec = false;
+					
 					
 				});
 			}
@@ -880,7 +912,7 @@ define(['app','api'], function (app) {
 	app.register.controller('ReAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api', 'student','assId','ass',	
 	function ($scope,$rootScope,$timeout, $uibModalInstance, api,student,assId,ass){
 		$scope.ActiveStudent = student;
-		console.log(student);
+		//console.log(student);
 		$rootScope.__MODAL_OPEN = true;
 		$scope.AssessmentId = assId;
 		$scope.ActiveAssessment=ass;
