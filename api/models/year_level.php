@@ -3,6 +3,8 @@ class YearLevel extends AppModel {
 	var $name = 'YearLevel';
 	var $displayField = 'name';
 	var $useDbConfig = 'ser';
+	var $cacheExpires = '+1 day';
+	var $usePaginationCache = true;
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(

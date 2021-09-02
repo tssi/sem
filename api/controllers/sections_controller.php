@@ -4,7 +4,8 @@ class SectionsController extends AppController {
 	var $name = 'Sections';
 
 	function index() {
-		$this->Section->recursive = 2;
+		$this->Section->recursive = 1;
+		$this->paginate['Section']['contain'] = array('Department','Program','YearLevel');
 		$sections = $this->paginate();
 		if($this->isAPIRequest()){
 			foreach($sections as $i=>$sec){

@@ -8,6 +8,7 @@ class MasterConfigsController extends AppController {
 	}
 	function index() {
 		$this->MasterConfig->recursive = 0;
+		$this->paginate['MasterConfig']['recursive']=0;
 		$this->paginate['MasterConfig']['limit'] = 999;
 		$masterConfig =  $this->paginate();
 		$config = array();
@@ -67,7 +68,7 @@ class MasterConfigsController extends AppController {
 
 			);
 		$programs = $this->Program->find('list');
-		$departments = $this->Department->find('list');
+		$departments = $this->Department->find('list',array('order'=>'order'));
 		$config['SCHOOL_YEARS'] = $sy_obj;
 		$config['PERIODS'] = $period_obj;
 		$config['SEMESTERS'] = $semester_obj;

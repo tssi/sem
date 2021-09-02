@@ -1,0 +1,28 @@
+<div ng-controller="RegFormController as RFC" ng-init="RFC.init()">
+	<a-module>
+		<a-container>
+			<a-header is-main="true">
+				<a-row>
+					<a-col size="6">
+						<h4>Registration Form</h4>
+					</a-col>
+					<a-col size="6">
+						<o-dropdown-filter ng-model="RFC.Active" show-section="false" show-sem="false" show-period="false" class="pull-right" >
+						</o-dropdown-filter>
+					</a-col>
+				</a-row>
+			</a-header>
+			<a-header>
+				<a-row>
+					<a-col size="6">
+						<m-navpill-dept ng-model="RFC.ActiveDeptId"></m-navpill-dept>
+					</a-col>
+					<a-col size="6" align="right">
+						<a-dropdown ng-model="RFC.ActiveSection" label='Select Section' options="RFC.ActiveSections"></a-dropdown>
+						<a-button type="primary" ng-disabled="!RFC.ActiveSection">LOAD</a-button>
+					</a-col>
+				</a-row>
+			</a-header>
+		</a-container>
+	</a-module>
+</div>

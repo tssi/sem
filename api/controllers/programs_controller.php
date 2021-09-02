@@ -5,6 +5,7 @@ class ProgramsController extends AppController {
 
 	function index() {
 		$this->Program->recursive = 0;
+		$this->paginate['Program']['recursive']=0;
 		$this->set('programs', $this->paginate());
 	}
 
