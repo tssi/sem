@@ -5,7 +5,9 @@ class YearLevelsController extends AppController {
 
 	function index() {
 		$this->YearLevel->recursive = 0;
+		$this->paginate['YearLevel']['recursive']=0;
 		$this->set('yearLevels', $this->paginate());
+
 	}
 
 	function view($id = null) {

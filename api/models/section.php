@@ -3,7 +3,10 @@ class Section extends AppModel {
 	var $name = 'Section';
 	var $displayField = 'name';
 	var $useDbConfig = 'ser';
+	var $cacheExpires = '+1 day';
+	var $usePaginationCache = true;
 	var $recursive = 0;
+	var $actsAs = array('Containable');
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -11,21 +14,21 @@ class Section extends AppModel {
 			'className' => 'Department',
 			'foreignKey' => 'department_id',
 			'conditions' => '',
-			'fields' => '',
+			'fields' =>  array('id','name','description'),
 			'order' => ''
 		),
 		'YearLevel' => array(
 			'className' => 'YearLevel',
 			'foreignKey' => 'year_level_id',
 			'conditions' => '',
-			'fields' => '',
+			'fields' => array('id','name','description','alias'),
 			'order' => ''
 		),
 		'Program' => array(
 			'className' => 'Program',
 			'foreignKey' => 'program_id',
 			'conditions' => '',
-			'fields' => '',
+			'fields' => array('id','name'),
 			'order' => ''
 		)
 	);

@@ -61,7 +61,6 @@ class ApiAppModel extends Model {
 			Cache::write( $prefix , $pagination, $conf);
 	 
 		}
-	 
 		return $pagination;
 	 
 	}
