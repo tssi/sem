@@ -101,10 +101,10 @@ class ReportsController extends AppController{
 		$this->set(compact('data'));
 	}
 	function reg_form($aid){
-		//$this->student_registration_form($aid);
-		$contents = file_get_contents(APP."json/regform.json");
-		$data =  json_decode($contents,true);
-		$this->set(compact('data'));
+		$this->student_registration_form($aid);
+		//$contents = file_get_contents(APP."json/regform.json");
+		//$data =  json_decode($contents,true);
+		//$this->set(compact('data'));
 
 
 	}
