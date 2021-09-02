@@ -68,7 +68,7 @@ class MasterConfigsController extends AppController {
 
 			);
 		$programs = $this->Program->find('list');
-		$departments = $this->Department->find('list');
+		$departments = $this->Department->find('list',array('order'=>'order'));
 		$config['SCHOOL_YEARS'] = $sy_obj;
 		$config['PERIODS'] = $period_obj;
 		$config['SEMESTERS'] = $semester_obj;
