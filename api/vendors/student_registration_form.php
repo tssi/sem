@@ -88,7 +88,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function data($data){
-		//pr($data['Section']); exit();
+		//pr($data); exit();
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.5,
@@ -119,8 +119,8 @@ class StudentRegistrationForm extends Formsheet{
 			}
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
 			$this->centerText(15,$y,'--',2,'');
-			if(isset($data['Section']['name']))
-				$this->leftText(19.5,$y,$data['Section']['name'],'','');
+			if(isset($d['Section']['name']))
+				$this->leftText(19.5,$y,$d['Section']['name'],'','');
 			$this->centerText(24.5,$y,'--',2,'');
 			$this->centerText(28,$y,'--',4,'');
 			//$this->leftText(29.2,$y,'--','','');

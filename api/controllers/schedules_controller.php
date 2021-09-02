@@ -21,10 +21,9 @@ class SchedulesController extends AppController {
 				$sched_details = array();
 				$subjects = array();
 				foreach($details as $s=>$d){
-					
 					$sub = $d['subject_id'];
 					$ss = $this->Subject->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>$d['subject_id'])));
-					$room = $this->Room->find('all',array('recursive'=>0,'conditions'=>array('Room.id'=>$d['room_id'])));
+					///$room = $this->Room->find('all',array('recursive'=>0,'conditions'=>array('Room.id'=>$d['room_id'])));
 					$subject['subject'] = $ss[0]['Subject']['alias'];
 					$subject['units'] = $ss[0]['Subject']['units'];
 					$details[$s]['subject'] = $ss[0]['Subject']['alias'];
@@ -36,8 +35,8 @@ class SchedulesController extends AppController {
 						$subjects[$sub]['rooms'] = '';
 					}
 					$subjects[$sub]['days'] .= $d['day'].' ';
-					if($subjects[$sub]['rooms']!= $room[0]['Room']['name'].' ')
-					$subjects[$sub]['rooms'] .= $room[0]['Room']['name'].' ';
+					//if($subjects[$sub]['rooms']!= $room[0]['Room']['name'].' ')
+					//$subjects[$sub]['rooms'] .= $room[0]['Room']['name'].' ';
 					if($subjects[$sub]['times']!==$d['start_time'].' - '.$d['end_time'])
 						$subjects[$sub]['times'] .= $d['start_time'].' - '.$d['end_time'];
 					else
