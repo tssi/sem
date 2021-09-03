@@ -789,57 +789,59 @@ define(['app','api'], function (app) {
 						$scope.ActiveSchedule = response.data[0];
 						angular.forEach($scope.ActiveSchedule.schedule_details,function(sched){
 							sched.section_id = $scope.ActiveSection.id;
-						});
+							sched.sched = '';
+							for(var i=0;i<sched.days.length;i++){
+								var day = sched.days[i];
+								var time = sched.times[i];
+								sched.sched += day+' '+time;
+								if(i<sched.days.length-1)
+									sched.sched += ' | ';
+							}
+						}); 
+						console.log($scope.ActiveSchedule);
 					}else{
-						/* $scope.ClassSchedules = response.data;
-						var filter = {department_id:$scope.ActiveDept,limit:'less'}
-						api.GET('sections',filter, function success(response){
-							$scope.Sections = response.data;
-							angular.forEach($scope.ClassSchedules, function(sched){
-								angular.forEach($scope.Sections, function(sec){
-									if(sec.id==sched.section_id){
-										sec.schedule_details = sched.schedule_details;
-									}
-								})
-							});
-							angular.forEach($scope.Sections, function(sec){
-								if(!sec.schedule_details){
-									var details = [];
-									angular.forEach($scope.Subjects, function(sub){
-										if($scope.ActiveDept!='SH'&&sec.year_level_id==sub.year_level_id)
-											details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'year_level_id':sub.year_level_id});
-										if($scope.ActiveDept=='SH'&&sub.sec_id.indexOf(sec.id)!==-1&&sec.year_level_id==sub.year_level_id)
-											details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'year_level_id':sub.year_level_id});
-									});
-									sec.schedule_details = details;
-								}
-							});
-						}); */
 						var scheds = response.data;
+						angular.forEach(scheds, function(item){
+							angular.forEach(item.schedule_details,function(sched){
+								sched.section_id = $scope.ActiveSection.id;
+								sched.sched = '';
+								for(var i=0;i<sched.days.length;i++){
+									var day = sched.days[i];
+									var time = sched.times[i];
+									sched.sched += day+' '+time;
+									if(i<sched.days.length-1)
+										sched.sched += ' | ';
+								}
+							}); 
+						});
+						console.log(scheds);
 						if($scope.ActiveLevel.id=='IR'){
 							angular.forEach($scope.Sections, function(sec){
 								var details = [];
 								angular.forEach(scheds, function(sched){
-									sec.schedule = sched;
+									sec.schedule = {};
+									if(sec.id==sched.section_id)
+										sec.schedule = sched;
 								});
 								angular.forEach($scope.Subjects, function(sub){
 									if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
-										
-										details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
+										var subject_data = {'subject':sub.name,'subject_id':sub.code};
+										if(sec.schedule.id)
+											subject_data.schedule_id = sec.schedule.id;
+										details.push(subject_data);
 									}
 								});
 								sec.details = details;
-								
 							});
-						}else{
-							var details = [];
-							angular.forEach($scope.Subjects, function(sub){
-								if(sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&sub.year_level_id==$scope.ActiveSection.year_level_id){
-									details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-								}
+							angular.forEach($scope.Sections, function(sec){
+								angular.forEach(sec.schedule.schedule_details, function(sched){
+									angular.forEach(sec.details, function(det){
+										if(det.subject_id==sched.subject_id)
+											det.sched = sched.sched;
+									});
+								});
 							});
-							$scope.ActiveSchedule.schedule_details = details;
-							
+							console.log($scope.Sections);
 						}
 					}
 					$scope.LoadingSec = false;
@@ -847,23 +849,6 @@ define(['app','api'], function (app) {
 				}, function error(response){
 					$scope.ActiveSchedule = {};
 					
-					//console.log($scope.ActiveSection);
-					//console.log($scope.Subjects);
-					/* angular.forEach($scope.Subjects, function(sub){
-						if($scope.ActiveLevel.id=='IR'){
-							if($scope.ActiveSection.department_id=='SH'&&$scope.ActiveSection.year_level_id==sub.year_level_id){
-								//console.log(sub);
-								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true,'sec_ids':sub.sec_id});
-							}		
-						}else{
-							if($scope.ActiveSection.department_id=='SH'&&sub.sec_id.indexOf($scope.ActiveSection.id)!==-1&&$scope.ActiveLevel.id==sub.year_level_id){
-								details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-							}
-						}
-						if($scope.ActiveSection.department_id!=='SH')
-							details.push({'subject':sub.name,'subject_id':sub.code,'no_sched':true});
-						
-					}); */
 					if($scope.ActiveLevel.id=='IR'){
 						angular.forEach($scope.Sections, function(sec){
 							var details = [];

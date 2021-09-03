@@ -314,7 +314,7 @@
 								<tr ng-repeat="sched in ActiveSchedule.schedule_details">
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
-									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="!sched.no_sched">{{sched.sched}}</td>
 									<td ng-show="sched.no_sched">Schedule not set</td>
 								</tr>
 							</tbody>
@@ -337,7 +337,7 @@
 								<tr ng-repeat="sched in CustomizedScheds">
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
-									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="!sched.no_sched">{{sched.sched}}</td>
 									<td ng-show="sched.no_sched">Schedule not set</td>
 									<td>
 										<button class="btn btn-danger" ng-click="removeSched(sched,$index)" ><span class="glyphicon glyphicon-minus"></span></button>
@@ -370,7 +370,7 @@
 								<tr ng-repeat="sched in sec.details " >
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
-									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="!sched.no_sched">{{sched.sched}}</td>
 									<td ng-show="sched.no_sched">Schedule not set</td>
 									<td>
 										<button class="btn btn-success" ng-click="AddSched(sched,$index,sec)"><span class="glyphicon glyphicon-plus"></span></button>

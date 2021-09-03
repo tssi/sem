@@ -30,17 +30,16 @@ class SchedulesController extends AppController {
 					
 					if(!isset($subjects[$sub])){
 						$subjects[$sub] = array();
-						$subjects[$sub]['days'] = '';
-						$subjects[$sub]['times'] = '';
+						$subjects[$sub]['days'] = array();
+						$subjects[$sub]['times'] = array();
 						$subjects[$sub]['rooms'] = '';
 					}
-					$subjects[$sub]['days'] .= $d['day'].' ';
 					//if($subjects[$sub]['rooms']!= $room[0]['Room']['name'].' ')
 					//$subjects[$sub]['rooms'] .= $room[0]['Room']['name'].' ';
-					if($subjects[$sub]['times']!==$d['start_time'].' - '.$d['end_time'])
-						$subjects[$sub]['times'] .= $d['start_time'].' - '.$d['end_time'];
-					else
-						$subjects[$sub]['times'] =  $d['start_time'].' - '.$d['end_time'];
+					$d['start_time'] = date("h:m A",strtotime($d['start_time']));
+					$d['end_time'] = date("h:m A",strtotime($d['end_time']));
+					array_push($subjects[$sub]['times'],$d['start_time'].'-'.$d['end_time']);
+					array_push($subjects[$sub]['days'], $d['day']);
 					
 					//$subjects[$sub]['times'] =  $d['start_time'].' - '.$d['end_time'];
 					$subjects[$sub]['subject'] = $ss[0]['Subject']['name'];
