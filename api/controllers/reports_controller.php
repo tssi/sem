@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household');
 
 	function student_registration_form($aid){
 		$AID = $aid;
@@ -102,6 +102,26 @@ class ReportsController extends AppController{
 	}
 	function reg_form($aid){
 		$this->student_registration_form($aid);
+		$data  = $this->viewVars['data'];
+		$ASM   = $data['Assessment'];
+		$SID   = $ASM['student_id'];
+		$HHO   = $this->Household->getInfo($SID);
+		$HHO['father_name'] = "N/A";
+		$HHO['mother_name'] = "N/A";
+		foreach($HHO['members'] as $member){
+			switch($member['rel']){
+				case 'Father': 
+					$HHO['father_name']  =  $member['name'];
+				break;
+				case 'Mother': 
+					$HHO['mother_name']  =  $member['name'];
+				break;
+			}
+		}
+		$data['Student']['Household'] =  $HHO;
+		$this->set(compact('data'));
+		
+		//pr($data);exit;
 		//$contents = file_get_contents(APP."json/regform.json");
 		//$data =  json_decode($contents,true);
 		//$this->set(compact('data'));
