@@ -90,14 +90,8 @@ class StudentRegistrationForm extends Formsheet{
 	function data($data){
 		//pr($data); exit();
 		$this->showLines = !true;
-		$metrics = array(
-			'base_x'=> 0.5,
-			'base_y'=> 1.4,
-			'width'=> 5.5,
-			'height'=> 0.6,
-			'cols'=> 33,
-			'rows'=> 4,	
-		);
+		$metrics = $this->setUpMetrics($data);
+
 		$this->section($metrics);
 		$this->GRID['font_size']=7;
 		$y=0;
@@ -131,7 +125,37 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
 		$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+3;
+		$this->fee_breakdown($data,$end);
 		
+		if(!isset($data['isRegForm'])):
+			$this->payment_sched($data,$end);
+			$this->foot_notes($data,$end);
+		endif;
+	
+	}	
+	function setUpMetrics($data){
+		$metrics = array(
+			'base_x'=> 0.5,
+			'base_y'=> 1.4,
+			'width'=> 5.5,
+			'height'=> 0.6,
+			'cols'=> 33,
+			'rows'=> 4,	
+		);
+		if(isset($data['offsetY']))
+			$metrics['base_y'] +=  $data['offsetY'];
+
+		if(isset($data['offsetX']))
+			$metrics['base_x'] +=  $data['offsetX'];
+		return $metrics;
+
+	}
+	function fee_breakdown($data,$end){
+		$metrics =$this->setUpMetrics($data);
+
+		$this->section($metrics);
+		$this->GRID['font_size']=7;
+
 		//FEE BREAKDOWN
 		$y=$end;
 		$total=0;
@@ -151,7 +175,14 @@ class StudentRegistrationForm extends Formsheet{
 		$this->drawLine($y-0.6,'h',array(0,16));
 		$this->leftText(0.2,$y,'Total','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
-		
+
+	}
+
+	function payment_sched($data,$end){
+		$metrics =$this->setUpMetrics($data);
+		$this->section($metrics);
+		$this->GRID['font_size']=7;
+
 		//PAYMENT SCHED
 		$y=$end;
 		$totaldue=0;
@@ -166,9 +197,13 @@ class StudentRegistrationForm extends Formsheet{
 	
 		$this->drawLine($y-0.6,'h',array(22,11));
 		$this->rightText(30,$y,number_format($totaldue,2),3,'b');
-		
-		
-		
+	}
+
+	function foot_notes($data,$end){
+		$metrics =$this->setUpMetrics($data);
+
+		$this->GRID['font_size']=7;
+
 
 		$AID = $data['Assessment']['id'];
 		$student = $data['Assessment']['student_id'];
@@ -189,8 +224,7 @@ class StudentRegistrationForm extends Formsheet{
 		//NOTE
 		$y=33;
 		$this->wrapText(0,$y,'IMPORTANT: '.$data['Important'],25);
-
-	}	
+	}
 }
 ?>
 	

@@ -3,10 +3,15 @@ class ReportsController extends AppController{
 	var $name = 'Reports';
 	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger');
 
-	function student_registration_form(){
-	
+	function student_registration_form($aid){
+		$AID = $aid;
+		if(isset($_POST['AssessmentId']))
+			$AID = $_POST['AssessmentId'];
 		$this->Assessment->recursive=2;
-		$data = $this->Assessment->findById($_POST['AssessmentId']);
+		$this->Assessment->Section->unbindModel(
+        	array('hasMany' => array('Student'))
+    	);
+		$data = $this->Assessment->findById($AID);
 		$id = $data['Assessment']['student_id'];
 		$esp = round($data['Assessment']['esp'],0);
 		$esp = substr($esp.'', -2);
@@ -95,7 +100,14 @@ class ReportsController extends AppController{
 		$data = $this->Inquiry->findById($IID);
 		$this->set(compact('data'));
 	}
-	
+	function reg_form($aid){
+		$this->student_registration_form($aid);
+		//$contents = file_get_contents(APP."json/regform.json");
+		//$data =  json_decode($contents,true);
+		//$this->set(compact('data'));
+
+
+	}
 	function print_reserve(){
 		//pr(json_decode($_POST['reserves'])); exit();
 		//$data = $this->Reservation->find('all',array('conditions'=>array('Reservation.esp'=>2021,'Reservation.field_type'=>'RSRVE')));
