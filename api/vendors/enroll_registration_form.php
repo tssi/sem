@@ -101,25 +101,46 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$COL_1 +=0.5;
 		$COL_2 +=0.5;
 		$COL_3 +=0.5;
+
+		// Student Info
+		$SID 	= $data['sno'];
+		$LRN 	= $data['lrn']?$data['lrn']:'N/A';
+		$NAME 	= $data['print_name'];
+		$LVL 	= strtoupper($complete['Section']['YearLevel']['description']);
+		$DOB 	= strtoupper(date("M d, Y", strtotime($data['birthday'])));
+		$SEX 	= $data['gender']=='M'?'MALE':'FEMALE';
+		$FTHR 	= $data['Household']['father_name'];
+		$MTHR 	= $data['Household']['mother_name'];
+		$ADDR 	= $data['Household']['address'];
+		$CNO 	= $data['Household']['mobile_number'];
+		$DTM 	= strtoupper(date("M d, Y h:i A"));
+		$TYPE 	= 'N/A';
+		switch($data['Account']['subsidy_status']){
+			case 'DSESC': $TYPE ='ESC'; break;
+		}
+		$utf8Vars = array('NAME','FTHR','MTHR','ADDR');
+		foreach($utf8Vars as $var){
+			$$var =  utf8_decode(mb_strtoupper($$var));
+		}
+		$this->leftText($COL_1,$y,$SID,'','');
+		$this->leftText($COL_2,$y++,$LVL,'','');
+
+
+		$this->leftText($COL_1,$y,$NAME,'','');
+		$this->leftText($COL_2,$y,$DOB,'','');
+		$this->leftText($COL_3,$y++,$SEX,'','');
+
+		$this->leftText($COL_1,$y,$LRN,'','');
+		$this->leftText($COL_3,$y++,$TYPE,'','');
+
+		$this->leftText($COL_1,$y++,$ADDR,'','');
 		
-		$this->leftText($COL_1,$y,'STUDENT ID:','','');
-		$this->leftText($COL_2,$y++,'LEVEL/COURSE:','','');
 
+		$this->leftText($COL_1,$y,$FTHR,'','');
+		$this->leftText($COL_2,$y++,$MTHR,'','');
 
-		$this->leftText($COL_1,$y,'NAME:','','');
-		$this->leftText($COL_2,$y,'DATE OF BIRTH:','','');
-		$this->leftText($COL_3,$y++,'FEMALE','','');
-
-		$this->leftText($COL_1,$y,'LRN:','','');
-		$this->leftText($COL_3,$y++,'ESC:','','');
-
-		$this->leftText($COL_1,$y++,'ADDRESS:','','');
-		
-
-		$this->leftText($COL_1,$y,"FATHER'S NAME:",'','');
-		$this->leftText($COL_2,$y++,"MOTHER'S NAME:",'','');
-
-		$this->leftText($COL_1,$y,"CONTACT NO:",'','');
+		$this->leftText($COL_1,$y,$CNO,'','');
+		$this->leftText($COL_2,$y,$DTM,'','');
 		/*
 		
 		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'],'','');
