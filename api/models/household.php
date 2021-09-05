@@ -48,4 +48,60 @@ class Household extends AppModel {
 		return $hhObj;
 	}
 
+	function hasHousehold($student){
+		$HOM = $this->HouseholdMember->findByEntityId($student);
+		$hasHOM = isset($HOM['HouseholdMember']);
+		return $hasHOM;
+	}
+
+	function initHome($home){
+		$HID = $this->generateHONO();
+		$home['id'] =  $HID;
+		$this->save($home);
+		$SID = $home['student'];
+		$GRD = $home['guardian'];
+		$this->HouseholdMember->Guardian->save($GRD);
+		$GID = $this->HouseholdMember->Guardian->id;
+		$members = array();
+		$members[] = array('household_id'=>$HID,'type'=>'STU','entity_id'=>$SID);
+		$members[] = array('household_id'=>$HID,'type'=>'GRD','entity_id'=>$GID);
+		$this->HouseholdMember->saveAll($members);
+		$HOM = $this->findById($HID);
+		return $HOM;
+	}
+
+	function generateHONO(){
+		$prefix = 44;
+		$length = 5;
+		$isTaken = false;
+		do{
+			$min = pow(10, $length - 1) ;
+			$max = pow(10, $length) - 1;
+			$HONO =  $this->luhnify($prefix.mt_rand($min, $max));  
+			$isTaken = $this->findById($HONO);
+		}while($isTaken);
+		return $HONO;
+	}
+
+	protected function luhnify($number) {
+	    $sum = 0;               // Luhn checksum w/o last digit
+	    $even = true;           // Start with an even digit
+	    $n = $number;
+
+	    // Lookup table for the digitsums of 2*$i
+	    $evendig = array(0, 2, 4, 6, 8, 1, 3, 5, 7, 9);
+
+	    while ($n > 0) {
+	        $d = $n % 10;
+	        $sum += ($even) ? $evendig[$d] : $d;
+
+	        $even = !$even;
+	        $n = ($n - $d) / 10;
+	    }
+
+	    $sum = 9*$sum % 10;
+
+	    return 10 * $number + $sum; 
+	}
+
 }

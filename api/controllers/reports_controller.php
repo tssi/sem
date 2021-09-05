@@ -105,15 +105,45 @@ class ReportsController extends AppController{
 		$data  = $this->viewVars['data'];
 		$ASM   = $data['Assessment'];
 		$SID   = $ASM['student_id'];
+		// Check $SID starts with LSN
+		if(preg_match("/^LSN/i", $SID)){
+			//Look up for related account_id in ledger by Assessment.id & TUIXN
+			$ACC = $this->Ledger->getAccountId($ASM['id'], 'TUIXN');
+			$INQ =  $data['Inquiry'];
+			//Init household if not exist
+			if(!$this->Household->hasHousehold($ACC)){
+				// Init home address & contact
+				$home = array();
+				
+				$home['street'] 	= $INQ['c_address'];
+				$home['barangay'] 	= $INQ['barangay'];
+				$home['city'] 		= $INQ['city'];
+				$home['province'] 	= $INQ['province'];
+				$home['mobile'] 	= $INQ['mobile'];
+				
+				$grd ['first_name']	= $INQ['g_first_name'];
+				$grd ['middle_name']= $INQ['g_middle_name'];
+				$grd ['last_name']	= $INQ['g_last_name'];
+				$grd ['rel']		= $INQ['g_rel'];
+				$home['guardian']	= $grd;
+				$home['student'] 	= $ACC;
+
+				$HOM = $this->Household->initHome($home);
+				
+			}
+			$SID = $ACC;
+			
+		}
+
 		$HHO   = $this->Household->getInfo($SID);
 		$HHO['father_name'] = "N/A";
 		$HHO['mother_name'] = "N/A";
 		foreach($HHO['members'] as $member){
-			switch($member['rel']){
-				case 'Father': 
+			switch(strtoupper($member['rel'])){
+				case 'FATHER': 
 					$HHO['father_name']  =  $member['name'];
 				break;
-				case 'Mother': 
+				case 'MOTHER': 
 					$HHO['mother_name']  =  $member['name'];
 				break;
 			}

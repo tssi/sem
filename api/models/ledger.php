@@ -45,5 +45,13 @@ class Ledger extends AppModel {
 		
 		return $queryData;
 	}
-	
+	function getAccountId($ref_no, $trnx_id){
+		$AID = null;
+		$cond =  array('ref_no'=>$ref_no , 'transaction_type_id'=>$trnx_id);
+		$LDG = $this->find('first',array('conditions'=>$cond));
+		if($LDG)
+			$AID = $LDG['Ledger']['account_id'];
+		return $AID;
+
+	}
 }
