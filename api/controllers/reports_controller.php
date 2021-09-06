@@ -132,6 +132,10 @@ class ReportsController extends AppController{
 				
 			}
 			$SID = $ACC;
+			$this->Student->recursive =0;
+			$STU = $this->Student->findById($SID);
+			$data['Student']= $STU['Student'];
+			$data['Student']['Account'] =  $STU['Account'];
 			
 		}
 
