@@ -120,10 +120,16 @@ class ReportsController extends AppController{
 		$data = $this->Inquiry->findById($IID);
 		$this->set(compact('data'));
 	}
-	function reg_form($aid){
+	function reg_form($aid=null){
 		ini_set('max_execution_time', '0');
+
 		$sy = 2021;
 		$sectId = 9005;
+
+		if(isset($_POST)){
+			$sy = $_POST['Sy'];
+			$sectId = $_POST['Section'];
+		}
 		$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
 		$DATA_BANK = array();
 
