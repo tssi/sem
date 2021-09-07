@@ -101,6 +101,11 @@ class Assessment extends AppModel {
 
 		
 		$ass = $this->find('all',array('conditions'=>$cond,'contain'=>$cont));
+		/*
+		$extra['contain'] = $cont;
+		$cond = array($cond);
+		$ass = $this->paginate($cond, array(), null, 999, 1, 2, $extra);
+		*/
 		$sortAss = array('M'=>array(),'F'=>array());
 		foreach($ass as $A){
 			if($A['Inquiry']['id']){

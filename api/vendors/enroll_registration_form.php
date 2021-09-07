@@ -182,16 +182,22 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$AID = $data['Assessment']['id'];
 		$URL = 'https://lsei.tssi.one/sap';
 		$student = $data['Assessment']['student_id'];
-		$DATA =sprintf("%s?SID=%s",$URL,$student);
+		$DATA =sprintf("%s?USER=%s",$URL,$student);
 
 		App::import('Vendor','phpqrcode/qrlib');
 		App::import('Model','Record');
 		
-		$fileName = 'sap-'.$AID.'.png';
+		$fileName = 'QR-'.$AID.'.png';
 		
 		$Record =  new Record();
-		$fullPath = $Record->registerFile($fileName,$student,'img');
-		QRcode::png($DATA,$fullPath);
+
+		$fullPath = $Record->registerFile($fileName,$student,'qr',$DATA);
+		// Check if file is the same skip generation
+		if(!isset($fullPath['duplicate']))
+			QRcode::png($DATA,$fullPath);
+		else
+			$fullPath =  $fullPath['path'];
+
 		$offsetX = -11.25;
 		$offsetY = -4;
 		$SY = (int)$data['Assessment']['esp'].'';

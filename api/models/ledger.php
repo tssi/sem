@@ -4,7 +4,9 @@ class Ledger extends AppModel {
 	var $displayField = 'name';
 	var $useDbConfig = 'srp';
 	var $recursive = 2;
-	
+	var $cacheExpires = '+1 day';
+	var $usePaginationCache = true;
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	function beforeFind($queryData){
 		//pr($queryData['conditions']); exit();
@@ -54,4 +56,24 @@ class Ledger extends AppModel {
 		return $AID;
 
 	}
+	function getRecords($id,$esp,$prefix=""){
+		$resConfig = array(
+					'conditions'=>array(
+							array('Ledger.account_id'=>$id),
+						),
+					'recursive'=>0,
+					'fields'=>array(),
+					'order'=>'Ledger.ref_no',
+					'limit'=>999,
+			);
+		if($prefix)
+			$resConfig['conditions'][] = array('Ledger.ref_no LIKE'=>'SPO'.$esp.'%');
+		else
+			$resConfig['conditions'][] = array('Ledger.esp'=>$esp);
+		$this->recursive=0;
+		
+		$res = $this->paginate($resConfig['conditions'],$resConfig['fields'],$resConfig['order'],$resConfig['limit']);
+		return $res;
+	}
+	
 }

@@ -75,5 +75,23 @@ class Reservation extends AppModel {
 
 		return $queryData;
 	}
+
+	
+	function getRecords($id,$esp){
+		$resConfig = array(
+					'conditions'=>array(
+							array('Reservation.account_id'=>$id),
+							array('Reservation.esp'=>$esp)
+						),
+					'recursive'=>0,
+					'fields'=>array(),
+					'order'=>'Reservation.ref_no',
+					'limit'=>999,
+			);
+
+		$this->recursive=0;
+		$res = $this->paginate($resConfig['conditions'],$resConfig['fields'],$resConfig['order'],$resConfig['limit']);
+		return $res;
+	}
 	
 }

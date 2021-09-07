@@ -47,7 +47,7 @@ class Record extends AppModel {
 			default:
 				$filename = $fileObj['name'];
 				$this->updateManifest($type,$filename,$SID);
-				if($type=='img'){
+				if($type=='img'||$type=='qr'){
 					$path= $this->imgPath($SID);
 				}else{
 					$path = $this->docsPath($SID);
@@ -115,15 +115,19 @@ class Record extends AppModel {
 		}
 		return $vObj;
 	}
-	function registerFile($filename,$student,$type="docs"){
+	function registerFile($filename,$student,$type="docs",$data=""){
 
 		$path = $this->docsPath($student);
-		if($type=='img'){
-			$path =  $this->imgPath($student);
-		}
-		else
-			$type = 'docs';
+		switch($type){
+			case 'img':	case 'qr':
+				$path =  $this->imgPath($student);
+			break;
+			default:
+				$type = 'docs';
+			break;
 
+		}
+		
 
 		$fullPath = $filePath =  $path.$filename;
 		
@@ -131,6 +135,24 @@ class Record extends AppModel {
         $nfE = $exists = $nFile->exists();
         $ctr=1;
 
+        if($type=='qr'):
+        	$mObj = $this->readManifest($student);
+        	$mData = $mObj['data'];
+        	$hash = md5($filename.$data);
+        	if($exists):
+	        	$duplicate = in_array($hash,$mData['hash']);
+	        	if($duplicate):
+		        	$fullPath = array('duplicate'=>true,'path'=>$fullPath);
+		        	return $fullPath;
+		        else:
+		        	$this->updateManifest('hash',$hash,$student);
+	        	endif;
+	        	
+	        else:
+	        	$this->updateManifest('hash',$hash,$student);
+        	endif;
+        	
+        endif;
 
         while($exists){
         	$nInfo = $nFile->info();
@@ -159,26 +181,41 @@ class Record extends AppModel {
         
 		return $fullPath;
 	}
-	protected function updateManifest($field,$file,$student){
-		// Update manifest file
+	protected function readManifest($student){
 		$manifest = new File($this->manifestPath($student),true,0777);
 		$mData =  json_decode($manifest->read(),true);
-		
 		if(!$mData){
 			$mInfo =  $manifest->info();
 			$mData = array(
 				'student_id'=>$student,
 				'path'=>$mInfo['dirname'],
 				'img'=>array(),
+				'hash'=>array(),
 				'docs'=>array(),
 				'created'=>date('Y-M-d H:m:i',time()),
 				'modified'=>date('Y-M-d H:m:i',time())
 			);
 		}
-		
+
+		if(!isset($mData['hash'])){
+			$mData['hash'] = array();
+			$fData = json_encode($this->utf8ize($mData),JSON_PRETTY_PRINT);
+			$manifest->write($fData);
+		}
+		$mObj = array('file'=>$manifest,'data'=>$mData);
+		return $mObj;
+	}
+	protected function updateManifest($field,$file,$student){
+		// Update manifest file
+		$mObj =  $this->readManifest($student);
+		$mData = $mObj['data'];
+		$manifest = $mObj['file'];
 		switch($field){
 			case 'img':
 				array_push($mData['img'],$file);
+			break;
+			case 'hash':
+				array_push($mData['hash'],$file);
 			break;
 			default:
 				array_push($mData['docs'],$file);

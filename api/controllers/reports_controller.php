@@ -29,17 +29,16 @@ class ReportsController extends AppController{
 	        'limit' => 1,
     	);
     	$data = $this->paginate()[0];
-    	//pr($data);exit;
-		//	$data = $this->Assessment->findById($aid);
-		//exit;
-		//$data = $this->Assessment->paginate();
-		$id = $data['Assessment']['student_id'];
-		$esp = round($data['Assessment']['esp'],0);
+    	
+    	$id = $data['Assessment']['student_id'];
+		$resESP = $esp = round($data['Assessment']['esp'],0);
 		$esp = substr($esp.'', -2);
-		//pr($data); exit();
-		$res = $this->Reservation->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id)));
-		$spons = $this->Ledger->find('all',array('recursive'=>0,'conditions'=>array('account_id'=>$id,'ref_no LIKE'=>'SPO'.$esp)));
-		//pr($spons); exit();
+
+		// Request records from Reservation
+		$res = $this->Reservation->getRecords($id,$resESP);
+		// Request records from Ledger with SPO prefix
+		$spons = $this->Ledger->getRecords($id,$esp,'SPO');
+		
 		// Map Assessment Fees to display totals by fee type
 		$fees =  $data['AssessmentFee'];
 		$feeTotals = array();
