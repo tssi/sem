@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section');
 
 	function student_registration_form($aid){
 		$AID = $aid;
@@ -11,7 +11,28 @@ class ReportsController extends AppController{
 		$this->Assessment->Section->unbindModel(
         	array('hasMany' => array('Student'))
     	);
-		$data = $this->Assessment->findById($AID);
+
+    	
+    	// NOTE:PERFROMANCE IMRPOVEMENT
+    	// Use paginate to take advantage of caching 
+    	// Use contain to get relevant data only
+    	$this->paginate = array(
+	        'conditions' => array(array('Assessment.id' => $aid)),
+	        'contain'=>array(
+	        	'Inquiry',
+	        	'Student'=>array('Account'),
+	        	'Section'=>array('id','name','YearLevel'),
+	        	'AssessmentFee'=>array('id','due_amount','Fee'),
+	        	'AssessmentPaysched',
+	        	'AssessmentSubject'=>array('id','Subject')
+	        ),
+	        'limit' => 1,
+    	);
+    	$data = $this->paginate()[0];
+    	//pr($data);exit;
+		//	$data = $this->Assessment->findById($aid);
+		//exit;
+		//$data = $this->Assessment->paginate();
 		$id = $data['Assessment']['student_id'];
 		$esp = round($data['Assessment']['esp'],0);
 		$esp = substr($esp.'', -2);
@@ -101,59 +122,74 @@ class ReportsController extends AppController{
 		$this->set(compact('data'));
 	}
 	function reg_form($aid){
-		$this->student_registration_form($aid);
-		$data  = $this->viewVars['data'];
-		$ASM   = $data['Assessment'];
-		$SID   = $ASM['student_id'];
-		// Check $SID starts with LSN
-		if(preg_match("/^LSN/i", $SID)){
-			//Look up for related account_id in ledger by Assessment.id & TUIXN
-			$ACC = $this->Ledger->getAccountId($ASM['id'], 'TUIXN');
-			$INQ =  $data['Inquiry'];
-			//Init household if not exist
-			if(!$this->Household->hasHousehold($ACC)){
-				// Init home address & contact
-				$home = array();
-				
-				$home['street'] 	= $INQ['c_address'];
-				$home['barangay'] 	= $INQ['barangay'];
-				$home['city'] 		= $INQ['city'];
-				$home['province'] 	= $INQ['province'];
-				$home['mobile'] 	= $INQ['mobile'];
-				
-				$grd ['first_name']	= $INQ['g_first_name'];
-				$grd ['middle_name']= $INQ['g_middle_name'];
-				$grd ['last_name']	= $INQ['g_last_name'];
-				$grd ['rel']		= $INQ['g_rel'];
-				$home['guardian']	= $grd;
-				$home['student'] 	= $ACC;
+		ini_set('max_execution_time', '0');
+		$sy = 2021;
+		$sectId = 9005;
+		$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
+		$DATA_BANK = array();
 
-				$HOM = $this->Household->initHome($home);
+		// Use this code to test one student only
+		// $AIDs = array($AIDs[0]); 
+
+		// Run contents of AIDs for batch loading
+		foreach($AIDs as $aid):
+			$this->student_registration_form($aid);
+			$data  = $this->viewVars['data'];
+			$ASM   = $data['Assessment'];
+			$SID   = $ASM['student_id'];
+			// Check $SID starts with LSN
+			if(preg_match("/^LSN/i", $SID)){
+				//Look up for related account_id in ledger by Assessment.id & TUIXN
+				$ACC = $this->Ledger->getAccountId($ASM['id'], 'TUIXN');
+				$INQ =  $data['Inquiry'];
+				//Init household if not exist
+				if(!$this->Household->hasHousehold($ACC)){
+					// Init home address & contact
+					$home = array();
+					
+					$home['street'] 	= $INQ['c_address'];
+					$home['barangay'] 	= $INQ['barangay'];
+					$home['city'] 		= $INQ['city'];
+					$home['province'] 	= $INQ['province'];
+					$home['mobile'] 	= $INQ['mobile'];
+					
+					$grd ['first_name']	= $INQ['g_first_name'];
+					$grd ['middle_name']= $INQ['g_middle_name'];
+					$grd ['last_name']	= $INQ['g_last_name'];
+					$grd ['rel']		= $INQ['g_rel'];
+					$home['guardian']	= $grd;
+					$home['student'] 	= $ACC;
+
+					$HOM = $this->Household->initHome($home);
+					
+				}
+				$SID = $ACC;
+				$this->Student->recursive =0;
+				$STU = $this->Student->findById($SID);
+				$data['Student']= $STU['Student'];
+				$data['Student']['Account'] =  $STU['Account'];
 				
 			}
-			$SID = $ACC;
-			$this->Student->recursive =0;
-			$STU = $this->Student->findById($SID);
-			$data['Student']= $STU['Student'];
-			$data['Student']['Account'] =  $STU['Account'];
-			
-		}
 
-		$HHO   = $this->Household->getInfo($SID);
-		$HHO['father_name'] = "N/A";
-		$HHO['mother_name'] = "N/A";
-		foreach($HHO['members'] as $member){
-			switch(strtoupper($member['rel'])){
-				case 'FATHER': 
-					$HHO['father_name']  =  $member['name'];
-				break;
-				case 'MOTHER': 
-					$HHO['mother_name']  =  $member['name'];
-				break;
+			$HHO   = $this->Household->getInfo($SID);
+			$HHO['father_name'] = "N/A";
+			$HHO['mother_name'] = "N/A";
+			foreach($HHO['members'] as $member){
+				switch(strtoupper($member['rel'])){
+					case 'FATHER': 
+						$HHO['father_name']  =  $member['name'];
+					break;
+					case 'MOTHER': 
+						$HHO['mother_name']  =  $member['name'];
+					break;
+				}
 			}
-		}
-		$data['Student']['Household'] =  $HHO;
-		$this->set(compact('data'));
+			$data['Student']['Household'] =  $HHO;
+			array_push($DATA_BANK,$data);
+		endforeach;
+		
+
+		$this->set(compact('DATA_BANK'));
 		
 		//pr($data);exit;
 		//$contents = file_get_contents(APP."json/regform.json");

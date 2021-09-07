@@ -4,7 +4,7 @@ class Guardian extends AppModel {
 	var $useDbConfig = 'ser';
 	var $consumableFields =  array('id','first_name','middle_name','last_name','full_name');
 	var $virtualFields = array(
-				'full_name'=>"CONCAT( Guardian.first_name,' ',LEFT(Guardian.middle_name,1),' ',Guardian.last_name)"
+				'full_name'=>"CONCAT( Guardian.first_name,' ',COALESCE(Guardian.middle_name,''),' ',Guardian.last_name)"
 				);
 	var $hasMany = array(
 		'HouseholdMember' => array(

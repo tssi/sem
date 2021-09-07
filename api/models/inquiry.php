@@ -2,6 +2,10 @@
 class Inquiry extends AppModel {
 	var $name = 'Inquiry';
 	var $displayField = 'name';
+	
+	var $virtualFields = array(
+				'full_name'=>"CONCAT( Inquiry.last_name,', ',Inquiry.first_name,', ',COALESCE(Inquiry.middle_name,''))"
+				);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
