@@ -1,5 +1,6 @@
 "use strict";
-define(['app','api','atomic/bomb'],function(app){
+define(['app','md5','api','atomic/bomb'],function(app,md5){
+	
 	app.register.controller('RegFormController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter','$timeout',
 	function($rootScope,$scope,api,atomic, aModal,$http,$filter,$timeout){
 		const $selfScope = $scope;
@@ -21,6 +22,24 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.ActiveSection = null;
 				$scope.ActiveSections  = $filter('filter')($scope.Sections,{department_id:deptId},true);
 			});
+		}
+		$scope.Load = function(){
+			
+			// Hash Request to prevent cache
+			var request =  JSON.stringify({timestamp:new Date()});
+				$scope.RequestHash = md5(request);
+			// Prepare form submission via iframe
+			$scope.Loading = true;
+			var form=  document.getElementById('PrintRegForm');
+			var iframe=  document.getElementById('RegFormFrame');
+				// Handle iframe loaded event
+				iframe.addEventListener('load', function () {
+				  $timeout(function(){
+				  	$scope.Loading = false;
+				  },100);
+				});
+				// Submit form
+				form.submit();	
 		}
 
 		}]);

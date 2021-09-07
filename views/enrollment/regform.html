@@ -19,10 +19,33 @@
 					</a-col>
 					<a-col size="6" align="right">
 						<a-dropdown ng-model="RFC.ActiveSection" label='Select Section' options="RFC.ActiveSections"></a-dropdown>
-						<a-button type="primary" ng-disabled="!RFC.ActiveSection">LOAD</a-button>
+						<a-button type="primary" ng-disabled="!RFC.ActiveSection||RFC.Loading" ng-click="RFC.Load()">
+							{{RFC.Loading?'WAIT...':'LOAD'}}
+						</a-button>
 					</a-col>
 				</a-row>
 			</a-header>
+			<a-canvas>
+				<a-content style="height:100%;">
+					<form action="api/reports/reg_form/" method="POST"  target="RegFormFrame" id="PrintRegForm">
+						<input type="hidden" name="Type" value="{{RFC.ActiveOpt}}"/>
+						<input type="hidden" name="Sy" value="{{RFC.ActiveSY}}"/>
+						<input type="hidden" name="Section" value="{{RFC.ActiveSection.id}}"/>
+						<input type="hidden" name="secret" value="{{RFC.RequestHash}}"/>
+					</form>
+					<div class="loader fade out"
+						ng-class="{'out':!RFC.Loading,'in':RFC.Loading&&RFC.ActiveSection}"
+					 ></div>
+					<iframe 
+						name="RegFormFrame" 
+						class="fade" 
+						ng-class="{'out':RFC.Loading,'in':!RFC.Loading}"
+						id="RegFormFrame" 
+						frameborder="0" 
+						style="width:100%;height:100%;display:block;">
+					</iframe>
+				</a-content>
+			</a-canvas>
 		</a-container>
 	</a-module>
 </div>
