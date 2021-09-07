@@ -26,6 +26,7 @@ require.config({
 		'assesments':'../controllers/assesments',
 		'enrollment':'../controllers/enrollment',
         'custom-window':'vendors/custom_window',
+        'md5':'../vendors/node_modules/js-md5/build/md5.min',
 		'atomic':'vendors/atomic_design',
 		'util':'../config/util',
     },
