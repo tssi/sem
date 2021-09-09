@@ -41,7 +41,7 @@ class ReportsController extends AppController{
 
     	//Check if section is block or mixed
     	$isBlock =  $data['Section']['program_id']!='MIXED';
-    	
+
     	// Re-initialize Assesssment Subject for block section
     	if($isBlock && !$isAssSubjUpdated):
 			$sCond =  array(array('Schedule.section_id'=>$sectId, 'Schedule.esp'=>$esp));
@@ -182,7 +182,7 @@ class ReportsController extends AppController{
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
-		 $AIDs = array($AIDs[0]); 
+		// $AIDs = array($AIDs[0]); 
 
 		// Run contents of AIDs for batch loading
 		foreach($AIDs as $aid):
