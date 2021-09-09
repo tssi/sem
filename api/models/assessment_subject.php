@@ -57,10 +57,6 @@ class AssessmentSubject extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		
-	);
-	
-	var $hasMany = array(
 		'ScheduleDetail' => array(
 			'className' => 'ScheduleDetail',
 			'foreignKey' => false,
@@ -75,6 +71,11 @@ class AssessmentSubject extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+	);
+	
+	var $hasMany = array(
+		
+		
 	);
 	
 
