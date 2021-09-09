@@ -103,6 +103,9 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$COL_3 +=0.5;
 
 		// Student Info
+		if(!isset($data['sno'])){
+			pr($data);exit;
+		}
 		$SID 	= $data['sno'];
 		$LRN 	= $data['lrn']?$data['lrn']:'N/A';
 		$NAME 	= $data['print_name'];
