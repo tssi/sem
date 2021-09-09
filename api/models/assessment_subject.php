@@ -56,27 +56,25 @@ class AssessmentSubject extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
-		'ScheduleDetail' => array(
-			'className' => 'ScheduleDetail',
-			'foreignKey' => false,
-			'dependent' => false,
-			'conditions' => array('ScheduleDetail.schedule_id=AssessmentSubject.schedule_id,
-									ScheduleDetail.subject_id=AssessmentSubject.subject_id'),
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
+		)
+		
 	);
 	
-	var $hasMany = array(
-		
-		
-	);
+	 var $hasMany = array(
+	 	'ScheduleDetail'=>array(
+	 		'className'=>'ScheduleDetail',
+	 		'foreignKey'=>false,
+	 		'dependent' => false,
+	 		'finderQuery'=>'SELECT ScheduleDetail.* from schedule_details as ScheduleDetail
+	 			INNER JOIN assessment_subjects as AssessmentSubject ON (
+	 			ScheduleDetail.subject_id = AssessmentSubject.subject_id AND
+	 			ScheduleDetail.schedule_id = AssessmentSubject.schedule_id
+	 		)
+	 		 WHERE AssessmentSubject.id = {$__cakeID__$}
+	 		 ORDER BY ScheduleDetail.start_time
+	 		 ',
+	 	)
+	 );
 	
 
 }
