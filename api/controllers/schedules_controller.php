@@ -36,8 +36,8 @@ class SchedulesController extends AppController {
 					}
 					//if($subjects[$sub]['rooms']!= $room[0]['Room']['name'].' ')
 					//$subjects[$sub]['rooms'] .= $room[0]['Room']['name'].' ';
-					$d['start_time'] = date("h:m A",strtotime($d['start_time']));
-					$d['end_time'] = date("h:m A",strtotime($d['end_time']));
+					$d['start_time'] = date("h:i A",strtotime($d['start_time']));
+					$d['end_time'] = date("h:i A",strtotime($d['end_time']));
 					array_push($subjects[$sub]['times'],$d['start_time'].'-'.$d['end_time']);
 					array_push($subjects[$sub]['days'], $d['day']);
 					
