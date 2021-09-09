@@ -2,7 +2,7 @@
 require('student_registration_form.php');
 class EnrollRegistrationForm extends StudentRegistrationForm{
 	protected static $_width = 8.5;
-	protected static $_height = 13;
+	protected static $_height = 14;
 	protected static $_unit = 'in';
 	protected static $_orient = 'P';	
 	protected static $curr_page = 1;
@@ -167,15 +167,15 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->GRID['font_size']=7;
 
 		//NOTE
-		$y=15;
+		$y=19;
 		$this->wrapText(7,$y,'IMPORTANT: '.$data['Important'],27);
 		$this->SetFillColor(255,255,255);
 		$this->DrawBox(7,$y,4,1.2,'F');
 		$this->leftText(7.25,$y+0.75,'IMPORTANT:', '','b');
 
-		$this->leftText(7.25,25,'CONFORME:', '','b');
-		$this->DrawLine(27,'h',array(7.25,13.5));
-		$this->centerText(7.25,28,'Signature Over Printed Name', 13.5,'');
+		$this->leftText(7.25,29,'CONFORME:', '','b');
+		$this->DrawLine(31,'h',array(7.25,13.5));
+		$this->centerText(7.25,32,'Signature Over Printed Name', 13.5,'');
 		
 		
 		
@@ -199,7 +199,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 			$fullPath =  $fullPath['path'];
 
 		$offsetX = -11.25;
-		$offsetY = -4;
+		$offsetY = -1;
 		$SY = (int)$data['Assessment']['esp'].'';
 		$MILL = sprintf('%s  %s',$SY[0],$SY[1]);
 		$DECA = sprintf('%s  %s',$SY[2],$SY[3]);

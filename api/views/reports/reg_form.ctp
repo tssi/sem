@@ -12,8 +12,8 @@ foreach($DATA_BANK as $i=>$data):
 	$data['copyOf'] = 'Registrar';
 	$pr->data($data);
 
-	$data['Student']['offsetY'] = 6.5;
-	$data['offsetY'] = 7.1;
+	$data['Student']['offsetY'] = 7;
+	$data['offsetY'] = 7.6;
 	if(!empty($data['Student']))
 		$pr->hdr($data['Student'],$data['Assessment'],$data);
 	else
