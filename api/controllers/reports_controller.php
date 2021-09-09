@@ -21,15 +21,63 @@ class ReportsController extends AppController{
 	        'contain'=>array(
 	        	'Inquiry',
 	        	'Student'=>array('Account'),
-	        	'Section'=>array('id','name','YearLevel'),
+	        	'Section'=>array('id','name','program_id','YearLevel'),
 	        	'AssessmentFee'=>array('id','due_amount','Fee'),
 	        	'AssessmentPaysched',
-	        	'AssessmentSubject'=>array('id','schedule_id','Subject','Section','ScheduleDetail')
+	        	'AssessmentSubject'=>array('id','schedule_id','created','Subject','Section','ScheduleDetail')
 	        ),
 	        'limit' => 1,
     	);
+    	//$this->Assessment->AssessmentSubject->deleteAll(array('assessment_id'=>$aid));
+
     	$data = $this->paginate()[0];
-		
+    	$assId = $data['Assessment']['id'];
+    	$sectId = $data['Assessment']['section_id'];
+    	$sectId = $data['Assessment']['section_id'];
+    	$esp = $data['Assessment']['esp'];
+    	$asmCreate =  (int)date('Ymd',strtotime($data['Assessment']['created']));
+    	$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
+    	$isAssSubjUpdated = $asbCreate > $asmCreate;
+
+    	//Check if section is block or mixed
+    	$isBlock =  $data['Section']['program_id']!='MIXED';
+    	
+    	// Re-initialize Assesssment Subject for block section
+    	if($isBlock && !$isAssSubjUpdated):
+			$sCond =  array(array('Schedule.section_id'=>$sectId, 'Schedule.esp'=>$esp));
+	    	$sched = $this->Schedule->find('first',array('conditions'=>$sCond));
+	    	$schedId =  $sched['Schedule']['id'];
+	    	$assSubjs = array();
+	    	$subjNrol = array();
+
+	    	// Loop into schedule details and map to subjects
+	    	foreach($sched['ScheduleDetail'] as $dtl):
+	    		$subjId = $dtl['subject_id'];
+	    		// Skip if subject already added
+	    		if(in_array($subjId, $subjNrol)) continue;
+	    		// Record enrolled subjects
+	    		array_push($subjNrol,$subjId);
+
+	    		// Build Assessed Subjects data
+	    		$assSubj = array('assessment_id'=>$assId,
+		    			'subject_id'=>$subjId,
+		    			'section_id'=>$sectId,
+		    			'schedule_id'=>$schedId);
+	    		array_push($assSubjs,$assSubj);
+
+	    	endforeach;
+
+	    	// Clear existing assessed subjects
+	    	$asjCond = array('AssessmentSubject.assessment_id'=>$assId);
+	    	$this->Assessment->AssessmentSubject->recursive=0;
+    		$this->Assessment->AssessmentSubject->deleteAll($asjCond,false);
+    		$this->Assessment->AssessmentSubject->saveAll($assSubjs);
+    		// Request fresh data
+    		$this->Assessment->usePaginationCache = false;
+    		$data = $this->paginate()[0];
+    	endif;
+
+    	
     	$id = $data['Assessment']['student_id'];
 		$resESP = $esp = round($data['Assessment']['esp'],0);
 		$esp = substr($esp.'', -2);
@@ -124,7 +172,7 @@ class ReportsController extends AppController{
 		ini_set('max_execution_time', '0');
 
 		$sy = 2021;
-		$sectId = 9005;
+		$sectId = 1203;
 
 		if(isset($_POST['Sy'])){
 			$sy = $_POST['Sy'];
@@ -192,7 +240,6 @@ class ReportsController extends AppController{
 			$data['Student']['Household'] =  $HHO;
 			array_push($DATA_BANK,$data);
 
-			pr($DATA_BANK);exit;
 		endforeach;
 		
 
