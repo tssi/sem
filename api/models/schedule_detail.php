@@ -25,7 +25,16 @@ class ScheduleDetail extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
+		/* 'AssessmentSubject'=>array(
+			'className' => 'AssessmentSubject',
+			'foreignKey' => false,
+			'conditions' => array('ScheduleDetail.schedule_id=AssessmentSubject.schedule_id,
+									ScheduleDetail.subject_id=AssessmentSubject.subject_id,
+									ScheduleDetail.section_id=AssessmentSubject.section_id'),
+			'fields' => '',
+			'order' => ''
+		) */
 		
 	);
 	

@@ -803,7 +803,6 @@ define(['app','api'], function (app) {
 						var scheds = response.data;
 						angular.forEach(scheds, function(item){
 							angular.forEach(item.schedule_details,function(sched){
-								sched.section_id = $scope.ActiveSection.id;
 								sched.sched = '';
 								for(var i=0;i<sched.days.length;i++){
 									var day = sched.days[i];
@@ -819,9 +818,9 @@ define(['app','api'], function (app) {
 							angular.forEach($scope.Sections, function(sec){
 								var details = [];
 								angular.forEach(scheds, function(sched){
-									sec.schedule = {};
 									if(sec.id==sched.section_id)
 										sec.schedule = sched;
+									
 								});
 								angular.forEach($scope.Subjects, function(sub){
 									if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
@@ -834,12 +833,15 @@ define(['app','api'], function (app) {
 								sec.details = details;
 							});
 							angular.forEach($scope.Sections, function(sec){
-								angular.forEach(sec.schedule.schedule_details, function(sched){
-									angular.forEach(sec.details, function(det){
-										if(det.subject_id==sched.subject_id)
-											det.sched = sched.sched;
+								if(sec.program_id!=='MIXED'){
+									angular.forEach(sec.schedule.schedule_details, function(sched){
+										angular.forEach(sec.details, function(det){
+											if(det.subject_id==sched.subject_id){
+												det.sched = sched.sched;
+											}
+										});
 									});
-								});
+								}
 							});
 							console.log($scope.Sections);
 						}

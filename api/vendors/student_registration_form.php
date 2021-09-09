@@ -88,7 +88,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function data($data){
-		//pr($data); exit();
+		pr($data); exit();
 		$this->showLines = !true;
 		$metrics = $this->setUpMetrics($data);
 

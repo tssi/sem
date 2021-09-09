@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section','Schedule');
 
 	function student_registration_form($aid){
 		$AID = $aid;
@@ -24,12 +24,12 @@ class ReportsController extends AppController{
 	        	'Section'=>array('id','name','YearLevel'),
 	        	'AssessmentFee'=>array('id','due_amount','Fee'),
 	        	'AssessmentPaysched',
-	        	'AssessmentSubject'=>array('id','Subject')
+	        	'AssessmentSubject'=>array('id','schedule_id','Subject','Section','ScheduleDetail')
 	        ),
 	        'limit' => 1,
     	);
     	$data = $this->paginate()[0];
-    	
+		
     	$id = $data['Assessment']['student_id'];
 		$resESP = $esp = round($data['Assessment']['esp'],0);
 		$esp = substr($esp.'', -2);

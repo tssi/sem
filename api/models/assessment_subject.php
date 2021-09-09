@@ -60,6 +60,22 @@ class AssessmentSubject extends AppModel {
 		
 	);
 	
+	var $hasMany = array(
+		'ScheduleDetail' => array(
+			'className' => 'ScheduleDetail',
+			'foreignKey' => false,
+			'dependent' => false,
+			'conditions' => array('ScheduleDetail.schedule_id=AssessmentSubject.schedule_id,
+									ScheduleDetail.subject_id=AssessmentSubject.subject_id'),
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+	);
 	
 
 }

@@ -144,7 +144,7 @@
 							<tbody>
 								<tr ng-repeat="sched in ActiveSchedule.schedule_details">
 									<td>{{sched.subject}}</td>
-									<td ng-show="!sched.no_sched">{{sched.days}} | {{sched.times}} | {{sched.rooms}}</td>
+									<td ng-show="!sched.no_sched">{{sched.sched}}</td>
 									<td ng-show="sched.no_sched">Schedule not set</td>
 									
 								</tr>

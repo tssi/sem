@@ -42,7 +42,7 @@ class Schedule extends AppModel {
 				}
 				$conds[$i]=$cond;
 			}
-			//pr($conds); exit();
+			
 			$queryData['conditions']=$conds;
 		}
 		return $queryData;
