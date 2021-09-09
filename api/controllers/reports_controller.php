@@ -126,7 +126,7 @@ class ReportsController extends AppController{
 		$sy = 2021;
 		$sectId = 9005;
 
-		if(isset($_POST)){
+		if(isset($_POST['Sy'])){
 			$sy = $_POST['Sy'];
 			$sectId = $_POST['Section'];
 		}
@@ -134,7 +134,7 @@ class ReportsController extends AppController{
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
-		// $AIDs = array($AIDs[0]); 
+		 $AIDs = array($AIDs[0]); 
 
 		// Run contents of AIDs for batch loading
 		foreach($AIDs as $aid):
@@ -191,6 +191,8 @@ class ReportsController extends AppController{
 			}
 			$data['Student']['Household'] =  $HHO;
 			array_push($DATA_BANK,$data);
+
+			pr($DATA_BANK);exit;
 		endforeach;
 		
 
