@@ -106,6 +106,7 @@ class StudentRegistrationForm extends Formsheet{
 		//ASSESSMENT
 		$totalunits=0;
 		$y++;
+		//pr($data['AssessmentSubject']);exit;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 			if(strlen($d['Subject']['name'])>=45){
@@ -115,19 +116,26 @@ class StudentRegistrationForm extends Formsheet{
 			$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
 				$this->leftText(19.5,$y,$d['Section']['name'],'','');
-			if(isset($d['ScheduleDetail']['id'])){
-				$this->centerText(24.5,$y,$d['ScheduleDetail']['day'],2,'');
-				$this->centerText(28,$y,$d['ScheduleDetail']['start_time'].' - '.$d['ScheduleDetail']['end_time'],4,'');
-			}
+
+			foreach($d['ScheduleDetail'] as $sched):
+				$day =  $sched['day'];
+				$startT =  date('h:i A',strtotime($sched['start_time']));
+				$endT =  date('h:i A',strtotime($sched['end_time']));
+				$time = sprintf("%s -  %s",$startT,$endT);
+
+				$this->centerText(24.5,$y,$day,2,'');
+				$this->centerText(28,$y++,$time,4,'');
+				
+			endforeach;
 
 			//$this->leftText(29.2,$y,'--','','');
 			$totalunits+=$d['Subject']['units'];
-			$y++;
+		
 		}
 		$this->drawLine($y-0.6,'h');
 		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
 		$this->centerText(15,$y,number_format($totalunits,2),2,'b');
-		$end = $y+3;
+		$end = $y+2;
 		$this->fee_breakdown($data,$end);
 		
 		if(!isset($data['isRegForm'])):
