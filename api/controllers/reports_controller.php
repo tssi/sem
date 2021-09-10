@@ -3,7 +3,7 @@ class ReportsController extends AppController{
 	var $name = 'Reports';
 	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section','Schedule');
 
-	function student_registration_form($aid){
+	function student_registration_form($aid=null){
 		$AID = $aid;
 		if(isset($_POST['AssessmentId']))
 			$AID = $_POST['AssessmentId'];
@@ -17,7 +17,7 @@ class ReportsController extends AppController{
     	// Use paginate to take advantage of caching 
     	// Use contain to get relevant data only
     	$this->paginate = array(
-	        'conditions' => array(array('Assessment.id' => $aid)),
+	        'conditions' => array(array('Assessment.id' => $AID)),
 	        'contain'=>array(
 	        	'Inquiry',
 	        	'Student'=>array('Account'),
@@ -36,6 +36,7 @@ class ReportsController extends AppController{
     	$sectId = $data['Assessment']['section_id'];
     	$esp = $data['Assessment']['esp'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
+    	
     	$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
     	$isAssSubjUpdated = $asbCreate > $asmModified;
 
@@ -172,13 +173,14 @@ class ReportsController extends AppController{
 		ini_set('max_execution_time', '0');
 
 		$sy = 2021;
-		$sectId = 1203;
+		$sectId = 7003;
 
 		if(isset($_POST['Sy'])){
 			$sy = $_POST['Sy'];
 			$sectId = $_POST['Section'];
 		}
 		$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
+		pr($AIDs);
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
@@ -194,6 +196,11 @@ class ReportsController extends AppController{
 			if(preg_match("/^LSN/i", $SID)){
 				//Look up for related account_id in ledger by Assessment.id & TUIXN
 				$ACC = $this->Ledger->getAccountId($ASM['id'], 'TUIXN');
+				if(!$ACC):
+					pr($ASM);
+					pr($data);
+					exit;
+				endif;
 				$INQ =  $data['Inquiry'];
 				//Init household if not exist
 				if(!$this->Household->hasHousehold($ACC)){
