@@ -816,18 +816,19 @@ define(['app','api'], function (app) {
 								}
 							}); 
 						});
-						console.log(scheds);
 						if($scope.ActiveLevel.id=='IR'){
 							angular.forEach($scope.Sections, function(sec){
 								var details = [];
 								angular.forEach(scheds, function(sched){
-									if(sec.id==sched.section_id&&sec.program_id)
+									if(sec.id==sched.section_id){
 										sec.schedule = sched;
-									
+									}
 								});
+								console.log(sec);
 								angular.forEach($scope.Subjects, function(sub){
 									if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
 										var subject_data = {'subject':sub.name,'subject_id':sub.code};
+										console.log(sec);
 										if(sec.schedule.id)
 											subject_data.schedule_id = sec.schedule.id;
 										details.push(subject_data);
@@ -890,6 +891,8 @@ define(['app','api'], function (app) {
 					
 				}
 				//data.esp=2020.25;
+				if($scope.ActiveStudent.yearlevel=='GX')
+					data.department_id = 'SH';
 				if(dept!='SH')
 					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){
