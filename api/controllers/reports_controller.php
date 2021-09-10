@@ -35,9 +35,9 @@ class ReportsController extends AppController{
     	$sectId = $data['Assessment']['section_id'];
     	$sectId = $data['Assessment']['section_id'];
     	$esp = $data['Assessment']['esp'];
-    	$asmCreate =  (int)date('Ymd',strtotime($data['Assessment']['created']));
+    	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
     	$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
-    	$isAssSubjUpdated = $asbCreate > $asmCreate;
+    	$isAssSubjUpdated = $asbCreate > $asmModified;
 
     	//Check if section is block or mixed
     	$isBlock =  $data['Section']['program_id']!='MIXED';
