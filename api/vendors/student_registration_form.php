@@ -127,6 +127,8 @@ class StudentRegistrationForm extends Formsheet{
 				$this->centerText(28,$y++,$time,4,'');
 				
 			endforeach;
+			if(!count($d['ScheduleDetail'])) $y++;
+
 
 			//$this->leftText(29.2,$y,'--','','');
 			$totalunits+=$d['Subject']['units'];
