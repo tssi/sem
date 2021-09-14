@@ -36,8 +36,14 @@ class ReportsController extends AppController{
     	$sectId = $data['Assessment']['section_id'];
     	$esp = $data['Assessment']['esp'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
-    	
-    	$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
+
+    	// Check if AssessmentSubject has been created
+    	if(isset($data['AssessmentSubject'][0]))
+    		$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
+    	else
+    		$asbCreate = 0;
+
+    	// Check if ASB is updated compared to ASM modified	
     	$isAssSubjUpdated = $asbCreate > $asmModified;
 
     	//Check if section is block or mixed
@@ -180,7 +186,7 @@ class ReportsController extends AppController{
 			$sectId = $_POST['Section'];
 		}
 		$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
-		pr($AIDs);
+		//pr($AIDs);
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
@@ -197,10 +203,51 @@ class ReportsController extends AppController{
 				//Look up for related account_id in ledger by Assessment.id & TUIXN
 				$ACC = $this->Ledger->getAccountId($ASM['id'], 'TUIXN');
 				if(!$ACC):
-					pr($ASM);
-					pr($data);
-					exit;
+
+					$sCond =  array(
+								array('Student.last_name'=>$data['Inquiry']['last_name']),
+								array('Student.first_name'=>$data['Inquiry']['first_name']),
+								array('Student.middle_name'=>$data['Inquiry']['middle_name']),
+					);
+					$Stud = $this->Student->find('first',array('conditions'=>$sCond));
+					// Legender Entries
+					$SACC = $Stud['Account'];
+					$ACID =  $SACC['id'];
+					$ESP = $ASM['esp'];
+					$TDATE =  date('Y-m-d',strtotime($SACC['created']));
+					$TTIME =  date('H:i:s',strtotime($SACC['created']));
+					$REFNO =  $ASM['id'];
+
+					$ENTRIES = array();
+
+					// Tuition and Other Fees
+					$ENTRY =	array(
+								'details'=>'Tuition and Other Fees',
+								'account_id'=>$ACID,'type'=>'+',
+								'transaction_type_id'=>'TUIXN','esp'=>$ESP,
+								'transact_date'=>$TDATE,'transac_time'=>$TTIME,
+								'amount'=>$TDATE,'ref_no'=>$REFNO,
+								'notes'=>'ERRCO',
+							);
+					
+					array_push($ENTRIES,$ENTRY);
+
+					if($SACC['discount_amount']<0):
+						// Discount 
+						$ENTRY['details']= 'Discount';
+						$ENTRY['type']= '-';
+						$ENTRY['transaction_type_id']= $SACC['subsidy_status'];
+						$ENTRY['amount']= abs($SACC['discount_amount']);					
+
+						array_push($ENTRIES,$ENTRY);
+					endif;				
+					//TODO: Missing IP Transaction, Reservation and Sponor
+					$this->Ledger->saveAll($ENTRIES);
+
+					// Set ACC to ACID (Account ID)
+					$ACC  =  $ACID;
 				endif;
+
 				$INQ =  $data['Inquiry'];
 				//Init household if not exist
 				if(!$this->Household->hasHousehold($ACC)){
@@ -234,6 +281,7 @@ class ReportsController extends AppController{
 			$HHO   = $this->Household->getInfo($SID);
 			$HHO['father_name'] = "N/A";
 			$HHO['mother_name'] = "N/A";
+			
 			foreach($HHO['members'] as $member){
 				switch(strtoupper($member['rel'])){
 					case 'FATHER': 
