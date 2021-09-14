@@ -107,15 +107,19 @@ class Assessment extends AppModel {
 		$ass = $this->paginate($cond, array(), null, 999, 1, 2, $extra);
 		*/
 		$sortAss = array('M'=>array(),'F'=>array());
+
 		foreach($ass as $A){
 			if($A['Inquiry']['id']){
 				$sex = $A['Inquiry']['gender'];
 				$aid = $A['Assessment']['id'];
 				$sortAss[$sex][$aid] =  $A['Inquiry']['full_name'];
- 			}else if($A['Student']['id']){
+ 			}else if(isset($A['Student']['id'])){
 				$sex = $A['Student']['gender'];
 				$aid = $A['Assessment']['id'];
 				$sortAss[$sex][$aid] =  $A['Student']['class_name'];
+ 			}else{
+ 				// Skip non-existing student
+ 				continue;
  			}
 		}
 		asort($sortAss['M']);
