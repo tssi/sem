@@ -573,14 +573,15 @@ define(['app','api'], function (app) {
 						fees.push(sub.fee_id);
 					});
 					angular.forEach($scope.OrigFees, function(fee){
+						/* if(fee.fee_id=='REG'){
+							$scope.ActiveTuition.fee_breakdowns.push(fee);
+							$scope.TotalDue+=fee.amount;
+						}  */
 						if(fees.indexOf(fee.fee_id)!==-1){
 							$scope.TotalDue+=fee.amount;
 							$scope.ActiveTuition.fee_breakdowns.push(fee);
 						}
-						if(fee.fee_id=='REG'){
-							$scope.ActiveTuition.fee_breakdowns.push(fee);
-							$scope.TotalDue+=fee.amount;
-						}
+						
 					});
 					
 					IrregPaymentScheme();
@@ -595,9 +596,12 @@ define(['app','api'], function (app) {
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
 				var uponnrol = 0;
+				console.log($scope.ActiveTuition.fee_breakdowns);
 				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
-					if(fee.type=='MSC')
+					if(fee.type=='MSC'){
 						uponnrol+=fee.amount;
+						console.log(fee);
+					}
 				});
 				var assess_date = new Date();
 				var year = assess_date.getFullYear();
@@ -652,6 +656,7 @@ define(['app','api'], function (app) {
 					schedules.push(sched);
 					count++;
 				}
+				console.log(schedules);
 				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
 			}
 			
