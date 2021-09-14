@@ -25,7 +25,7 @@ class Household extends AppModel {
 		)
 	);
 	function getInfo($student){
-		$hhObj = array();
+		$hhObj = array('members'=>array(),'address'=>null, 'mobile_number'=>null, 'email'=>'');
 		$HOM = $this->HouseholdMember->findByEntityId($student);
 		if($HOM['HouseholdMember']){
 			$HID = $HOM['HouseholdMember']['household_id'];
