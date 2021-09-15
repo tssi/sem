@@ -157,7 +157,7 @@ define(['app','api'], function (app) {
 						$scope.ActiveStudent.discount_amount = $scope.ActiveScheme.variance_amount;
 					
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
-					$scope.ActiveStudent.assessment_total = $scope.ActiveTuition.assessment_total;
+					$scope.ActiveStudent.assessment_total = $scope.TotalAmount;
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -554,6 +554,7 @@ define(['app','api'], function (app) {
 					var tuition = 0;
 					angular.forEach(response.data, function(sub){
 						tuition += sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr;
+						console.log(sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr);
 					});
 					$scope.TotalDue+=tuition;
 					$scope.ActiveTuition.fee_breakdowns.push({fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1});
@@ -572,14 +573,15 @@ define(['app','api'], function (app) {
 						fees.push(sub.fee_id);
 					});
 					angular.forEach($scope.OrigFees, function(fee){
+						/* if(fee.fee_id=='REG'){
+							$scope.ActiveTuition.fee_breakdowns.push(fee);
+							$scope.TotalDue+=fee.amount;
+						}  */
 						if(fees.indexOf(fee.fee_id)!==-1){
 							$scope.TotalDue+=fee.amount;
 							$scope.ActiveTuition.fee_breakdowns.push(fee);
 						}
-						if(fee.fee_id=='REG'){
-							$scope.ActiveTuition.fee_breakdowns.push(fee);
-							$scope.TotalDue+=fee.amount;
-						}
+						
 					});
 					
 					IrregPaymentScheme();
@@ -594,9 +596,12 @@ define(['app','api'], function (app) {
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
 				var uponnrol = 0;
+				console.log($scope.ActiveTuition.fee_breakdowns);
 				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
-					if(fee.type=='MSC')
+					if(fee.type=='MSC'){
 						uponnrol+=fee.amount;
+						console.log(fee);
+					}
 				});
 				var assess_date = new Date();
 				var year = assess_date.getFullYear();
@@ -651,6 +656,7 @@ define(['app','api'], function (app) {
 					schedules.push(sched);
 					count++;
 				}
+				console.log(schedules);
 				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
 			}
 			
