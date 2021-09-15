@@ -18,8 +18,8 @@ class MaintenanceListsController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			$this->MaintenanceList->create();
-			if ($this->MaintenanceList->save($this->data)) {
+			
+			if ($this->MaintenanceList->saveAll($this->data)) {
 				$this->Session->setFlash(__('The maintenance list has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
