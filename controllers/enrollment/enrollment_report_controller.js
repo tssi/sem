@@ -86,11 +86,13 @@ define(['app','api','atomic/bomb'],function(app){
 						case 'GYABM': item.level = 'Grade 11 ABM'; break;
 						case 'GYTVL': item.level = 'Grade 11 TVL'; break;
 						case 'GYGAS': item.level = 'Grade 11 GAS'; break;
+						case 'GYMIXED': item.level = 'Grade 11 IRREG'; break;
 						case 'GZSTEM': item.level = 'Grade 12 STEM'; break;
 						case 'GZHUMS': item.level = 'Grade 12 HUMMS'; break;
 						case 'GZABM': item.level = 'Grade 12 ABM'; break;
 						case 'GZTVL': item.level = 'Grade 12 TVL'; break;
 						case 'GZGAS': item.level = 'Grade 12 GAS'; break;
+						case 'GZMIXED': item.level = 'Grade 12 IRREG'; break;
 					};
 				})
 				angular.forEach(response.data[0].days, function(item){
