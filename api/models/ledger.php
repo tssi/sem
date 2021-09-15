@@ -56,6 +56,14 @@ class Ledger extends AppModel {
 		return $AID;
 
 	}
+	function getRefNo($account, $trnx_id,$esp){
+		$AID = null;
+		$cond =  array('account_id'=>$account , 'transaction_type_id'=>$trnx_id,'esp'=>$esp);
+		$LDG = $this->find('first',array('conditions'=>$cond));
+		if($LDG)
+			$AID = $LDG['Ledger']['ref_no'];
+		return $AID;		
+	}
 	function getRecords($id,$esp,$prefix=""){
 		$resConfig = array(
 					'conditions'=>array(

@@ -29,14 +29,14 @@
 								</a-button>
 							</div>
 
-								<m-search-entity ng-show="!RFC.isBatch" ng-model="RFC.Student"></m-search-entity>
+								<m-search-entity ng-show="!RFC.isBatch" ng-model="RFC.ActiveStudent"></m-search-entity>
 								<m-navpill-dept  ng-show="RFC.isBatch"  ng-model="RFC.ActiveDeptId"></m-navpill-dept>
 								<a-dropdown ng-show="RFC.isBatch" ng-model="RFC.ActiveSection" label='Select Section' options="RFC.ActiveSections"></a-dropdown>
 
 
 					</a-col>
 					<a-col size="RFC.isBatch?3:1" align="right">
-						<a-button type="primary" ng-disabled="!RFC.ActiveSection||RFC.Loading" ng-click="RFC.Load()">
+						<a-button type="primary" ng-disabled="(RFC.isBatch &&!RFC.ActiveSection )|| (!RFC.isBatch && !RFC.ActiveStudent.id)||RFC.Loading" ng-click="RFC.Load()">
 							{{RFC.Loading?'WAIT...':'LOAD'}}
 						</a-button>
 					</a-col>
@@ -44,15 +44,32 @@
 			</a-header>
 			<a-canvas>
 				<a-content style="height:100%;">
-					<form action="api/reports/reg_form/" method="POST"  target="RegFormFrame" id="PrintRegForm">
-						<input type="hidden" name="Type" value="{{RFC.ActiveOpt}}"/>
-						<input type="hidden" name="Sy" value="{{RFC.ActiveSY}}"/>
-						<input type="hidden" name="Section" value="{{RFC.ActiveSection.id}}"/>
-						<input type="hidden" name="secret" value="{{RFC.RequestHash}}"/>
-					</form>
-					<div class="loader fade out"
-						ng-class="{'out':!RFC.Loading,'in':RFC.Loading&&RFC.ActiveSection}"
+					
+
+					<div class="empty-state" ng-show="!RFC.Loaded">
+							<div class="well" ng-show="!RFC.Loading">
+								<div class="empty-state-icon">
+									<a-glyph ng-show="RFC.isBatch" icon="th-list"></a-glyph>
+									<a-glyph ng-show="!RFC.isBatch" icon="user"></a-glyph>
+								</div>
+								<h4>Nothing to display</h4>
+								<p class="empty-state-message">Select a section or search student</p>
+							</div>
+							<div class="well" ng-show="RFC.Loading">
+								<div class="loader fade out"
+						ng-class="{'out':!RFC.Loading,'in':RFC.Loading&&!RFC.Loaded}"
 					 ></div>
+								<div class="empty-state-icon">
+									<a-glyph ng-show="RFC.isBatch" icon="th-list"></a-glyph>
+									<a-glyph ng-show="!RFC.isBatch" icon="user"></a-glyph>
+								</div>
+								<h4>Loading  
+								{{RFC.isBatch?RFC.ActiveSection.year_level+' '+RFC.ActiveSection.name:RFC.ActiveStudent.name}}
+							</h4>
+								<p class="empty-state-message">Please wait.</p>
+							</div>
+							
+						</div>
 					<iframe 
 						name="RegFormFrame" 
 						class="fade" 
@@ -61,6 +78,15 @@
 						frameborder="0" 
 						style="width:100%;height:100%;display:block;">
 					</iframe>
+					<form action="api/reports/reg_form/" method="POST"  target="RegFormFrame" id="PrintRegForm">
+						<input type="hidden" name="Type" value="{{RFC.isBatch?'batch':'single'}}"/>
+						<input type="hidden" name="Student" value="{{RFC.ActiveStudent.id}}"/>
+						<input type="hidden" name="Sy" value="{{RFC.ActiveSY}}"/>
+						<input type="hidden" name="Section" value="{{RFC.ActiveSection.id}}"/>
+						<input type="hidden" name="secret" value="{{RFC.RequestHash}}"/>
+					</form>
+					
+					
 				</a-content>
 			</a-canvas>
 		</a-container>

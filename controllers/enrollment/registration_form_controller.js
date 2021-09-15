@@ -25,18 +25,25 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 			});
 		}
 		$scope.Load = function(){
-			
+			if(!$scope.isBatch){
+				$scope.ActiveSection = null;
+			}else{
+				$scope.ActiveStudent = null;
+			}
+			console.log($scope.isBatch);
 			// Hash Request to prevent cache
 			var request =  JSON.stringify({timestamp:new Date()});
 				$scope.RequestHash = md5(request);
 			// Prepare form submission via iframe
 			$scope.Loading = true;
+			$scope.Loaded =false;
 			var form=  document.getElementById('PrintRegForm');
 			var iframe=  document.getElementById('RegFormFrame');
 				// Handle iframe loaded event
 				iframe.addEventListener('load', function () {
 				  $timeout(function(){
 				  	$scope.Loading = false;
+				  	$scope.Loaded =true;
 				  },100);
 				});
 				// Submit form
