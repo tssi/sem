@@ -21,6 +21,7 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 			$selfScope.$watch('RFC.ActiveDeptId',function(deptId){
 				$scope.ActiveSection = null;
 				$scope.ActiveSections  = $filter('filter')($scope.Sections,{department_id:deptId},true);
+				$scope.isBatch = true;
 			});
 		}
 		$scope.Load = function(){

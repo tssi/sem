@@ -14,11 +14,28 @@
 			</a-header>
 			<a-header>
 				<a-row>
-					<a-col size="6">
-						<m-navpill-dept ng-model="RFC.ActiveDeptId"></m-navpill-dept>
+					
+					<a-col size="RFC.isBatch?9:11" align="left">
+						
+							<div class="btn-group pull-left" style="margin-right:5px;">
+								<a-button type="default"  style="width:80px;" ng-click="RFC.isBatch=!RFC.isBatch">
+									{{RFC.isBatch?'Section':'Student'}}
+								</a-button>
+								<a-button type="default" is-active="RFC.isBatch" ng-click="RFC.isBatch=true">
+									<a-glyph icon="th-list"></a-glyph>
+								</a-button>
+								<a-button type="default" is-active="!RFC.isBatch" ng-click="RFC.isBatch=false">
+									<a-glyph icon="user"></a-glyph>
+								</a-button>
+							</div>
+
+								<m-search-entity ng-show="!RFC.isBatch" ng-model="RFC.Student"></m-search-entity>
+								<m-navpill-dept  ng-show="RFC.isBatch"  ng-model="RFC.ActiveDeptId"></m-navpill-dept>
+								<a-dropdown ng-show="RFC.isBatch" ng-model="RFC.ActiveSection" label='Select Section' options="RFC.ActiveSections"></a-dropdown>
+
+
 					</a-col>
-					<a-col size="6" align="right">
-						<a-dropdown ng-model="RFC.ActiveSection" label='Select Section' options="RFC.ActiveSections"></a-dropdown>
+					<a-col size="RFC.isBatch?3:1" align="right">
 						<a-button type="primary" ng-disabled="!RFC.ActiveSection||RFC.Loading" ng-click="RFC.Load()">
 							{{RFC.Loading?'WAIT...':'LOAD'}}
 						</a-button>
