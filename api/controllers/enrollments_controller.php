@@ -24,11 +24,13 @@ class EnrollmentsController extends AppController {
 								'GYABM'=>0,
 								'GYTVL'=>0,
 								'GYGAS'=>0,
+								'GYMIXED'=>0,
 								'GZSTEM'=>0,
 								'GZHUMS'=>0,
 								'GZABM'=>0,
 								'GZTVL'=>0,
 								'GZGAS'=>0,
+								'GZMIXED'=>0,
 								);
 			foreach($period as $day){
 				$days[$day->format('Y-m-d')]= array(
@@ -51,7 +53,8 @@ class EnrollmentsController extends AppController {
 				'SHHUM'=>"HUMS",
 				'SHTVL'=>"TVL",
 				'SHABM'=>"ABM",
-				'SHGAS'=>"GAS"
+				'SHGAS'=>"GAS",
+				'MIXED'=>'MIXED'
 			);
 			$totals = array(
 							'total'=>0,
@@ -65,11 +68,13 @@ class EnrollmentsController extends AppController {
 										'GYABM'=>0,
 										'GYTVL'=>0,
 										'GYGAS'=>0,
+										'GYMIXED'=>0,
 										'GZSTEM'=>0,
 										'GZHUMS'=>0,
 										'GZABM'=>0,
 										'GZTVL'=>0,
 										'GZGAS'=>0,
+										'GZMIXED'=>0,
 									)
 			);
 			foreach($Enrollments as $i=>$l){
@@ -89,6 +94,9 @@ class EnrollmentsController extends AppController {
 				}
 				else{
 					if(isset($stud['program_id'])){
+						if(!isset($programs[$stud['program_id']])){
+							pr($stud); exit();
+						}
 						$program = $programs[$stud['program_id']];
 						$prog_display = $stud['year_level_id'].$program;
 						$days[$led['transac_date']]['levels'][$prog_display]++;
