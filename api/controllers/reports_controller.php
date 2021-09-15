@@ -180,13 +180,22 @@ class ReportsController extends AppController{
 
 		$sy = 2021;
 		$sectId = 7003;
+		$type = 'batch';
+		$student = null;
 
 		if(isset($_POST['Sy'])){
 			$sy = $_POST['Sy'];
 			$sectId = $_POST['Section'];
+			$type =  $_POST['Type'];
+			$student =  $_POST['Student'];
 		}
-		$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
-		//pr($AIDs);
+		if($type=='single'){
+			$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
+			$AIDs = array($refNo);
+		}else{
+			$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
+		}
+		
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
