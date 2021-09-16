@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section','Schedule');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section','Schedule','Tuition');
 
 	function student_registration_form($aid=null){
 		$AID = $aid;
@@ -43,14 +43,19 @@ class ReportsController extends AppController{
     	else
     		$asbCreate = 0;
 
+		$sy = floor($esp);
+		pr($data); exit();
+		$yl = $data['Section']['year_level_id'];
+		$tuition = $this->Tuition->getTuiDetail($sy,$yl);
+		$isIrreg = $tuition['assessment_total']!=$data['Assessment']['assessment_total'];
     	// Check if ASB is updated compared to ASM modified	
     	$isAssSubjUpdated = $asbCreate > $asmModified;
 
     	//Check if section is block or mixed
     	$isBlock =  $data['Section']['program_id']!='MIXED';
 
-    	// Re-initialize Assesssment Subject for block section
-    	if($isBlock && !$isAssSubjUpdated):
+    	// Re-initialize Assesssment Subject for regular student
+    	if(!$isIrreg && !$isAssSubjUpdated):
 			$sCond =  array(array('Schedule.section_id'=>$sectId, 'Schedule.esp'=>$esp));
 	    	$sched = $this->Schedule->find('first',array('conditions'=>$sCond));
 	    	$schedId =  $sched['Schedule']['id'];

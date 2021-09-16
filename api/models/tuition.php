@@ -56,5 +56,15 @@ class Tuition extends AppModel {
 			'counterQuery' => ''
 		),
 	);
+	
+	function getTuiDetail($sy,$yl){
+		$tuitionObj = array('assessment_total'=>0);
+		$cond = array('Tuition.sy'=>$sy,'Tuition.year_level_id'=>$yl);
+		$this->recursive = 0;
+		$tui = $this->find('first',array('conditions'=>$cond));
+		if($tui)
+			$tuitionObj = $tui['Tuition'];
+		return $tuitionObj;
+	}
 
 }
