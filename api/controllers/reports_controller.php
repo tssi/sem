@@ -44,7 +44,7 @@ class ReportsController extends AppController{
     		$asbCreate = 0;
 
 		$sy = floor($esp);
-		pr($data); exit();
+		//pr($data); exit();
 		$yl = $data['Section']['year_level_id'];
 		$tuition = $this->Tuition->getTuiDetail($sy,$yl);
 		$isIrreg = $tuition['assessment_total']!=$data['Assessment']['assessment_total'];
