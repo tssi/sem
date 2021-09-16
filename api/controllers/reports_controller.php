@@ -184,7 +184,7 @@ class ReportsController extends AppController{
 		ini_set('max_execution_time', '0');
 
 		$sy = 2021;
-		$sectId = 7003;
+		$sectId = 7004;
 		$type = 'batch';
 		$student = null;
 
@@ -204,7 +204,7 @@ class ReportsController extends AppController{
 		$DATA_BANK = array();
 
 		// Use this code to test one student only
-		// $AIDs = array($AIDs[0]); 
+		//$AIDs = array($AIDs[0]); 
 
 		// Run contents of AIDs for batch loading
 		foreach($AIDs as $aid):
@@ -293,6 +293,7 @@ class ReportsController extends AppController{
 			}
 
 			$HHO   = $this->Household->getInfo($SID);
+			
 			$HHO['father_name'] = "N/A";
 			$HHO['mother_name'] = "N/A";
 			
@@ -305,8 +306,11 @@ class ReportsController extends AppController{
 						$HHO['mother_name']  =  $member['name'];
 					break;
 				}
+				$HHO['username']	 =  $member['guid'];
+				$HHO['password']	 =  $member['pass'];
 			}
 			$data['Student']['Household'] =  $HHO;
+
 			array_push($DATA_BANK,$data);
 
 		endforeach;

@@ -40,7 +40,18 @@ class Household extends AppModel {
 			$members =  array();
 			foreach ($GRD as $grd) {
 				$g = $grd['Guardian'];
-				$member =  array('name'=>$g['full_name'],'rel'=>$g['rel']);
+				$guid = $g['user_id'];
+
+				if(!$guid):
+					$USG = $this->HouseholdMember->Guardian->createUser($g['id']);
+					$guid =  $USG['user_id'];
+				endif;
+
+				$G = $this->HouseholdMember->Guardian->findByUserId($guid);
+				$U = $G['UserGuardian'];
+				$pass  =  $U['plain_password'];
+
+				$member =  array('name'=>$g['full_name'],'rel'=>$g['rel'],'guid'=>$guid,'pass'=>$pass);
 				array_push($members,$member);
 			}
 			$hhObj['members']=$members;

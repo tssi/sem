@@ -185,8 +185,14 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$AID = $data['Assessment']['id'];
 		$URL = 'https://lsei.tssi.one/sap';
 		$student = $data['Assessment']['student_id'];
-		$DATA =sprintf("%s?USER=%s",$URL,$student);
-
+		$username = $password = '??';
+		if(isset($data['Student']['Household']['username'])):
+		$username = $data['Student']['Household']['username'];
+		$password = $data['Student']['Household']['password'];
+		endif;
+		$DATA =sprintf("%s?USER=%s&PASS=%s",$URL,$username,$password);
+		$USER = sprintf("U: %s",$username);
+		$PASS = sprintf("P: %s",$password);
 		App::import('Vendor','phpqrcode/qrlib');
 		App::import('Model','Record');
 		
@@ -209,11 +215,11 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		
 		$this->DrawImage(0+$offsetX ,26+$offsetY,1.1,1.1,$fullPath);
 		$this->GRID['font_size']=8;
-		$this->leftText(-0.5+$offsetX ,27.25+$offsetY,$MILL,12,'b');
-		$this->leftText(-0.5+$offsetX ,28+$offsetY,$DECA,12,'b');
+		$this->leftText(-0.5+$offsetX ,31.75+$offsetY,$MILL,12,'b');
+		$this->leftText(-0.5+$offsetX ,32.5+$offsetY,$DECA,12,'b');
 		$this->GRID['font_size']=7.5;
-		$this->RotateText(0.5+$offsetX ,32.5+$offsetY,'PWRD 12346',90);
-		$this->RotateText(-0.25+$offsetX ,32.5+$offsetY,'USER 12346',90);
+		$this->RotateText(0.5+$offsetX ,31+$offsetY,$PASS,90,'b');
+		$this->RotateText(-0.25+$offsetX ,31+$offsetY,$USER,90);
 
 		$this->leftText(6.5+$offsetX ,30.5+$offsetY,"PARENT/STUDENT PORTAL",12,'');
 		$this->leftText(6.5+$offsetX ,31.5+$offsetY,'SCAN CODE OR GO TO',12,'');

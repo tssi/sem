@@ -1,23 +1,43 @@
 <!--div for controller-->
+<style type="text/css">
+input.form-control{transition:all ease-in-out 0.5s; width:100%;}
+.wauto{width:auto !important; min-width:100%;}
+</style>
 <div ng-controller="MaintenanceController" ng-init="list()">
-	<a href="#/" class="btn btn-default btn-fab fixed top right">
-		<span class="glyphicon glyphicon-home"></span>
-	</a>
-	<button class="btn btn-primary btn-fab bottom right fixed" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
+
+	<button class="btn btn-primary btn-fab fixed top right" ng-click="openModal()"><span class="glyphicon glyphicon-plus"></span></button>
 	<div class="row">
 		<div class="col-md-4">
 			<div class="list-group">
 				<div class="list-group-item list-group-header">
 					<label for="">List Maintenance</label>
 				</div>
-				<div class="list-group-canvas">
-					<div class="list-group-item ng-class:{active: list.name === List.name}" ng-repeat="list in MaintenanceList" ng-click="openMaintenance(list)">
+				<div class="list-group-canvas list-group-search-results">
+					<div class="list-group-item" ng-if="!MaintenanceList">
+						<div class="empty-state">
+							<div class="well">
+								<div class="empty-state-icon">
+									<i class="glyphicon glyphicon-refresh spin"></i>
+								</div>
+								<h4>Loading...</h4>
+								<p class="empty-state-message">Please wait.{{ErrorCode}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="list-group-item ng-class:{active: list.name === List.name}" ng-repeat="list in MaintenanceList | filter:list_name" ng-click="openMaintenance(list)">
 						<h4 class="list-group-item-heading" >{{list.name}}</h4>
 						<p class="list-group-item-text">
 						<span>{{list.description}}</span></p>
 					</div>
 				</div>
+				
+				<div class="list-group-item list-group-search-box">
+					<div class="input-group col-md-12">
+						<input type="text" class="form-control" ng-model="list_name" placeholder="Search"/>
+					</div>
+				</div>
 			</div>
+			
 		</div>
 		<div class="col-md-8">
 			<div class="list-group">
@@ -38,7 +58,6 @@
 						<h5>{{List.name}} List</h5>
 					</div>
 					<div class="list-group-item" ng-show="List.state==='edit'" ng-if="Columns.length">
-						
 						<table class="table table-bordered table-condensed" ng-class="{hide:!Columns.length}">
 							<thead>
 								<tr>
@@ -47,12 +66,45 @@
 								</tr>
 								<tr>
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
-									<input type="text" class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
+									<input type="text" ng-focus="FocusCol=column" ng-blur="FocusCol=''" ng-class="{'wauto':FocusCol==column}"  class="form-control" ng-model="newItem[column]" placeholder="{{column}}" ng-hide="hideColIf(column)"/>
+									<input type="password" ng-focus="FocusCol=column" ng-blur="FocusCol=''" ng-class="{'wauto':FocusCol==column}" ng-if="column==='password'"  class="form-control" ng-model="newItem[column]" placeholder="{{column}}" />
 									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
 									</select>
-									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='educ_level_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
-										<option value="">Select EducLevels</option>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='educ_level_id'||column==='department_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
+										<option value="">Select Departments</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]"  ng-if="column==='program_id'" ng-options="program.id as program.name for program in Programs">
+										<option value="">Select Programs</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='section_id'" ng-options="section.id as section.year_level_id + ' ' + section.name for section in Sections">
+										<option value="">Select Sections</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='user_type_id'" ng-options="userType.id as userType.name for userType in UserTypes">
+										<option value="">Select User Type</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='master_module_id'" ng-options="module.id as module.name for module in Modules">
+										<option value="">Select Module</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='period'" ng-options="period.id as period.name for period in Periods">
+										<option value="">Select Period</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='month'" ng-options="month.id as month.alias for month in Months">
+										<option value="">Select Month</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='calendar_id'" ng-options="cal.id as cal.department_id + ' ' + cal.sy for cal in Calendars">
+										<option value="">Select Calendar ID</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='input_by'" ng-options="item.alias as item.alias for item in inputBy">
+										<option value="">Select Input By</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='type'" ng-options="prog.id as prog.description for prog in Programs">
+										<option value="">Select Program Type</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='curriculum_id'" ng-options="cur.id as cur.alias + ' ' + cur.esp for cur in curris">
+										<option value="">Select Curriculum ID</option>
+									</select><select name="" id="" class="form-control" ng-model="newItem[column]" ng-if="column==='subject_id'" ng-options="sub.id as sub.description for sub in subjs">
+										<option value="">Select Subject</option>
 									</select>
 									</td>
 									<td class="text-center col-md-1"><button class="btn btn-success" ng-click="addNewItem()"><span class="glyphicon glyphicon-plus"></span></button></td>
@@ -61,21 +113,66 @@
 							<tbody>
 								<tr ng-repeat="listitem in ListItems">
 									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns" >
-									<input type="text" class="form-control" ng-blur="updateItem(listitem)" ng-model="listitem[column]" ng-hide="column==='year_level_id' || column==='educ_level_id'"/>
-									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
+									<input type="text" ng-blur="FocusCol=''" ng-focus="FocusCol=column" ng-class="{'wauto':FocusCol==column}" class="form-control" ng-change="updateItem(listitem)" ng-model-options="{ updateOn: 'blur' }" ng-model="listitem[column]" ng-hide="hideColIf(column)" ng-readonly="column=='id'"/>
+									<button ng-focus="FocusCol=column" ng-blur="FocusCol=''" ng-class="{'wauto':FocusCol==column}" class="btn btn-default btn-block" ng-if="column==='password'" ng-click="resetPassword(listitem)" ng-model="listitem[column]">
+										Reset
+									</button>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='year_level_id'" ng-options="yearLevel.id as yearLevel.name for yearLevel in YearLevels">
 										<option value="">Select YearLevel</option>
 									</select>
-									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-blur="updateItem(listitem)" ng-if="column==='educ_level_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
-										<option value="">Select EducLevels</option>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='educ_level_id'||column==='department_id'" ng-options="educLevel.id as educLevel.name for educLevel in EducLevels">
+										<option value="">Select Departments</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='program_id'" ng-options="program.id as program.name for program in Programs">
+										<option value="">Select Programs</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='section_id'" ng-options="section.id as section.year_level_id + ' ' + section.name for section in Sections">
+										<option value="">Select Sections</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='user_type_id'" ng-options="userType.id as userType.name for userType in UserTypes">
+										<option value="">Select User Type</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='master_module_id'" ng-options="module.id as module.name for module in Modules">
+										<option value="">Select Module</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='period'" ng-options="period.id as period.name for period in Periods">
+										<option value="">Select Period</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='month'" ng-options="month.id as month.alias for month in Months">
+										<option value="">Select Period</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='calendar_id'" ng-options="cal.id as cal.department_id + ' ' + cal.sy for cal in Calendars">
+										<option value="">Select Calendar ID</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='input_by'" ng-options="item.alias as item.alias for item in inputBy">
+										<option value="">Select Calendar ID</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='type'" ng-options="prog.id as prog.description for prog in Programs">
+										<option value="">Select Program Type</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='curriculum_id'" ng-options="cur.id as cur.alias + ' ' + cur.esp for cur in curris">
+										<option value="">Select Curriculum ID</option>
+									</select>
+									<select name="" id="" class="form-control" ng-model="listitem[column]" ng-change="updateItem(listitem)" ng-if="column==='subject_id'" ng-options="sub.id as sub.description for sub in subjs">
+										<option value="">Select Curriculum ID</option>
 									</select>
 									</td>
-									<td class="text-center col-md-1"><button class="btn btn-danger" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+									<td class="text-center col-md-1">
+									<button class="btn btn-default" disabled ng-show="SavingItemId==listitem.id" ><span class="glyphicon glyphicon-refresh spin"></span></button>
+									<button class="btn btn-danger" ng-hide="SavingItemId==listitem.id" ng-click="removeItem($index,listitem.id)"><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
 								</tr>
-								<tr ng-if="ListItems.length==0"> 
+								<tr ng-if="ListItems.length==0 && !LoadingListItems"> 
 									<td colspan="{{Columns.length}}">
 										<div class="help-text"><a href="" class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-plus"></span></a> Click to add {{List.name}}.</div>
 									</td>
 									<td></td>
+								</tr>
+								<tr ng-if="LoadingListItems">
+									<td colspan="{{Columns.length +1}}">
+										<div class="help-text"><i class="glyphicon glyphicon-refresh spin"></i> Loading {{List.name}}...</div>
+										
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -96,7 +193,19 @@
 							</thead>
 							<tbody ui-tree-nodes ng-model="SortItem">
 								<tr ng-repeat="listitem in SortItem " ui-tree-node >
-									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">{{listitem[column]}}</td>
+									<td class="col-md-{{ColumnLen}}" ng-repeat="column in Columns">
+									<input type="text" class="form-control" ng-model="listitem[column]" ng-hide="hideColIf(column)" ng-disabled="true" />
+									<input type="text" class="form-control" ng-if="column==='year_level_id'" ng-disabled="true" ng-repeat="yearLevel in YearLevels | filter:{id:listitem[column]}" ng-model="yearLevel.name"/>
+									<input type="text" class="form-control" ng-if="column==='educ_level_id'" ng-disabled="true" ng-repeat="educLevel in EducLevels | filter:{id:listitem[column]}" ng-model="educLevel.name"/>
+									<input type="text" class="form-control" ng-if="column==='program_id'" ng-disabled="true" ng-repeat="program in Programs | filter:{id:listitem[column]}" ng-model="program.name"/>
+									<input type="text" class="form-control" ng-if="column==='period'" ng-disabled="true" ng-repeat="period in Periods | filter:{id:listitem[column]}" ng-model="period.id"/>
+									<input type="text" class="form-control" ng-if="column==='month'" ng-disabled="true" ng-repeat="month in Months | filter:{id:listitem[column]}" ng-model="month.id"/>
+									<input type="text" class="form-control" ng-if="column==='calendar_id'" ng-disabled="true" ng-repeat="cal in Calendars | filter:{id:listitem[column]}" ng-model="cal.id"/>
+									<input type="text" class="form-control" ng-if="column==='input_by'" ng-disabled="true" ng-repeat="item in inputBy | filter:{id:listitem[column]}" ng-model="item.alias"/>
+									<input type="text" class="form-control" ng-if="column==='type'" ng-disabled="true" ng-repeat="prog in Programs | filter:{id:listitem[column]}" ng-model="prog.id"/>
+									<input type="text" class="form-control" ng-if="column==='curriculum_id'" ng-disabled="true" ng-repeat="cur in curris | filter:{id:listitem[column]}" ng-model="cur.id"/>
+									<input type="text" class="form-control" ng-if="column==='subject_id'" ng-disabled="true" ng-repeat="sub in subjs | filter:{id:listitem[column]}" ng-model="sub.id"/>
+									</td>
 									<td class="text-center col-md-1"><a class="btn btn-default" ui-tree-handle ><span class="glyphicon glyphicon-sort"></span></a></td>
 								</tr>
 							</tbody>
