@@ -9,15 +9,15 @@ class EnrollmentListsController extends AppController {
 		//pr($_GET); exit();
 		$conds = array('EnrollmentList.esp'=>$_GET['esp'],'EnrollmentList.ref_no LIKE'=>'X%');
 		//pr($conds); exit();
-		$cancelled = $this->EnrollmentList->find('all',array('recursive'=>0,'conditions'=>$conds));
-		$cancelled_ors = array();
+		//$cancelled = $this->EnrollmentList->find('all',array('recursive'=>0,'conditions'=>$conds));
+		//$cancelled_ors = array();
 		//pr($cancelled); exit();
-		foreach($cancelled as $c){
+		/* foreach($cancelled as $c){
 			$ref_no = explode(" ",$c['EnrollmentList']['ref_no']);
 			//pr($ref_no);
 			array_push($cancelled_ors,$ref_no[1]);
-		}
-		//pr($cancelled_ids); exit();
+		} */
+		//pr($cancelled_ors); exit();
 		$levels = array(
 							'G7'=>array(),
 							'G8'=>array(),
@@ -28,11 +28,12 @@ class EnrollmentListsController extends AppController {
 							'GYABM'=>array(),
 							'GYGAS'=>array(),
 							'GYTVL'=>array(),
+							'GYMIXED'=>array(),
 							'GZSTEM'=>array(),
 							'GZHUMS'=>array(),
 							'GZABM'=>array(),
 							'GZTVL'=>array(),
-							'GZGAS'=>array(),
+							'GZMIXED'=>array(),
 							);
 		$HS = array('G7','G8','G9','GX');
 		$programs = array(
@@ -40,7 +41,8 @@ class EnrollmentListsController extends AppController {
 			'SHHUM'=>"HUMS",
 			'SHTVL'=>"TVL",
 			'SHABM'=>"ABM",
-			'SHGAS'=>"GAS"
+			'SHGAS'=>"GAS",
+			'SHMIXED'=>"MIXED",
 		);
 		$today = date("Y-m-d");
 		$interval = new DateInterval('P1D');
@@ -56,9 +58,9 @@ class EnrollmentListsController extends AppController {
 			//pr($days); exit();
 			foreach($list as $i=>$l){
 				$ref_no = explode(" ",$l['EnrollmentList']['ref_no']);
-				if(in_array($ref_no[1],$cancelled_ors)){
+				/* if(in_array($ref_no[1],$cancelled_ors)){
 					continue;
-				}
+				} */
 				$stud = $l['Student'];
 				$data = $l['EnrollmentList'];
 				
@@ -72,6 +74,7 @@ class EnrollmentListsController extends AppController {
 				if(in_array($stud['year_level_id'],$HS)){
 					array_push($levels[$stud['year_level_id']],$data);
 				}else{
+					if(!isset($programs[$stud['program_id']])){pr($stud); exit();}
 					$program = $programs[$stud['program_id']];
 					$prog_display = $stud['year_level_id'].$program;
 					array_push($levels[$prog_display],$data);
