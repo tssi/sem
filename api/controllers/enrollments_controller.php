@@ -11,7 +11,7 @@ class EnrollmentsController extends AppController {
 			$today = date("Y-m-d");
 			$interval = new DateInterval('P1D');
 			$start = $Enrollments[0]['Enrollment']['transac_date'];
-			//pr($start); exit();
+			//pr($Enrollments); exit();
 			$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
 			$days = array();
 			$levels_empty = array(
@@ -40,6 +40,7 @@ class EnrollmentsController extends AppController {
 												'levels'=>$levels_empty
 												);
 			}
+			//PR($period);
 			$days[$today] = array(
 								'date'=>$today,
 								'day'=>date('D', strtotime($today)),
@@ -109,6 +110,7 @@ class EnrollmentsController extends AppController {
 			}
 			$index = 0;
 			$overall = array();
+			//pr($days); exit();
 			foreach($days as $day){
 				//pr($day);
 				$overall[$index] = $day;

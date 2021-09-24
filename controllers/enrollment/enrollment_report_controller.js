@@ -55,7 +55,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Loading = 1;
 			var data = {
 				esp:2021,
-				transaction_type_id:['INIPY','FULLP'],
+				transaction_type_id:'TUIXN',
 				transac_date:$scope.date,
 				limit:'less'
 			}
@@ -71,7 +71,7 @@ define(['app','api','atomic/bomb'],function(app){
 		function getList(){
 			var data = {
 				esp:2021,
-				transaction_type_id:['INIPY','FULLP'],
+				transaction_type_id:'TUIXN',
 				limit:'less'
 			}
 			api.GET('enrollment_lists',data, function success(response){
