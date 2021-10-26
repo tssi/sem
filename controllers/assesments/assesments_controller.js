@@ -658,6 +658,7 @@ define(['app','api'], function (app) {
 				}
 				console.log(schedules);
 				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
+				console.log($scope.PaymentSchemes);
 			}
 			
 			function computePaymentSchedule(){

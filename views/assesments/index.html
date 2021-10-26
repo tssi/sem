@@ -396,7 +396,7 @@
 					<div class="list-group-item text-center" ng-if="!Sections.length">
 						Loading...
 					</div>
-					<div class="list-group-item ng-class:{active:paymentScheme.name===SelectedScheme.name}" ng-repeat="paymentScheme in PaymentSchemes | filter:{subsidy_status:ActiveStudent.subsidy_status}" ng-click="setSelectedScheme(paymentScheme)">
+					<div class="list-group-item ng-class:{active:paymentScheme.name===SelectedScheme.name}" ng-repeat="paymentScheme in PaymentSchemes" ng-click="setSelectedScheme(paymentScheme)">
 						<div class="row">
 							<div class="col-md-6">
 								<h4 class="list-group-item-heading">{{paymentScheme.name}}</h4>
