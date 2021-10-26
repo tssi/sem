@@ -23,7 +23,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 			'rows'=> 12,	
 		);
 		$this->section($metrics);
-		$this->DrawBox(0,0,$metrics['cols'],$metrics['rows']/2,'D');
+		//$this->DrawBox(0,0,$metrics['cols'],$metrics['rows']/2,'D');
 	}
 
 	function hdr($data,$ass,$complete){
@@ -43,14 +43,24 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->section($metrics);
 		$SCHOOL_ADDR =  'A. Bonifacio St. Canlalay, City of Biñan, Laguna';
 		$SCHOOL_TELNO =  '(049) 511-4328';
-		$SCHOOL_ID =  '424528';
+		$SCHOOL_ID =  '424538';
+		$SCHOOL_SM = intval(explode('.',$ass['esp'].'')[1]);
+		
 		$SCHOOL_YR = intval($ass['esp']);
 
+		$isSH =  $data['year_level_id']=='GY' ||  $data['year_level_id']=='GZ';
+		
 		$ADDR =  sprintf("%s",utf8_decode($SCHOOL_ADDR));
 		$TELNO =  sprintf("Tel.No. %s",$SCHOOL_TELNO);
 		$SCHID =  sprintf("School ID: %s",$SCHOOL_ID);
 		$SCHID =  sprintf("School ID: %s",$SCHOOL_ID);
-		$SCH_DURA =  sprintf("ONE YEAR DURATION SCHOOL YEAR %d - %d",$SCHOOL_YR, $SCHOOL_YR-1);
+		$SCH_DURA =  sprintf("SCHOOL YEAR %d - %d /  ",$SCHOOL_YR, $SCHOOL_YR+1);
+
+		if($isSH):
+			$SCH_DURA .=$SCHOOL_SM==0?'1st Semester':'2nd Semester';
+		else:
+			$SCH_DURA .='FULL';
+		endif;
 		$BAR_WIDTH =  27;
 		
 		$y=1;
