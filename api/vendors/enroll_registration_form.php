@@ -130,6 +130,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$TYPE 	= 'N/A';
 		switch($data['Account']['subsidy_status']){
 			case 'DSESC': $TYPE ='ESC'; break;
+			case 'REGXX': $TYPE = 'REGULAR'; break;
 		}
 		$utf8Vars = array('NAME','FTHR','MTHR','ADDR');
 		foreach($utf8Vars as $var){
