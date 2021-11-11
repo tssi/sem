@@ -150,8 +150,8 @@ class ReportsController extends AppController{
 					case 'RSRVE':
 						$feeTotals['RSRV']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
 					break;
-					case 'ADVP':
-						$feeTotals['ADVP']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
+					case 'ADVTP':
+						$feeTotals['ADVTP']= array('label'=>'Advance Payment','total'=>-$r['Reservation']['amount']);
 					break;
 				}
 			}
