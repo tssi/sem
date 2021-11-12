@@ -86,6 +86,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$COL_1 =  5.5;
 		$COL_2 =  22;
 		$COL_3 =  34;
+		
 		$this->rightText($COL_1,$y,'STUDENT ID:','','b');
 		$this->rightText($COL_2,$y++,'LEVEL/COURSE:','','b');
 		
@@ -94,8 +95,10 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->rightText($COL_3,$y++,'GENDER:','','b');
 		
 		$this->rightText($COL_1,$y,'LRN:','','b');
-		$this->rightText($COL_3,$y++,'STUDENT TYPE:','','b');
-
+		if($data['Account']['subsidy_status']=='DSPUB')
+			$this->rightText(32,$y++,'STUDENT TYPE:','','b');
+		else
+			$this->rightText($COL_3,$y++,'STUDENT TYPE:','','b');
 		$this->rightText($COL_1,$y++,'ADDRESS:','','b');
 
 		$this->rightText($COL_1,$y,"FATHER'S NAME:",'','b');
@@ -147,7 +150,11 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->leftText($COL_3,$y++,$SEX,'','');
 
 		$this->leftText($COL_1,$y,$LRN,'','');
-		$this->leftText($COL_3,$y++,$TYPE,'','');
+		if($data['Account']['subsidy_status']=='DSPUB')
+			$this->leftText(32.2,$y++,$TYPE,'','');
+		else
+			$this->leftText($COL_3,$y++,$TYPE,'','');
+		
 
 		$this->leftText($COL_1,$y++,$ADDR,'','');
 		
