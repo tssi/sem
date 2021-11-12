@@ -136,7 +136,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 			case 'REGXX': $TYPE = 'REGULAR'; break;
 			case 'DSPUB': $TYPE = 'PUBLIC COMPLETER'; break;
 			case 'DSQVR': $TYPE = 'QVR'; break;
-			case null: $TYPE = 'IRREGULAR'; break;
+			case null: $TYPE = 'REGULAR'; break;
 		}
 		$utf8Vars = array('NAME','FTHR','MTHR','ADDR');
 		foreach($utf8Vars as $var){
