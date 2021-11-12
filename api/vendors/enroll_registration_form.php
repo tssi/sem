@@ -131,7 +131,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		switch($data['Account']['subsidy_status']){
 			case 'DSESC': $TYPE ='ESC'; break;
 			case 'REGXX': $TYPE = 'REGULAR'; break;
-			case 'DSPUB': $TYPE = 'From Public'; break;
+			case 'DSPUB': $TYPE = 'PUBLIC COMPLETER'; break;
 			case 'DSQVR': $TYPE = 'QVR'; break;
 		}
 		$utf8Vars = array('NAME','FTHR','MTHR','ADDR');
