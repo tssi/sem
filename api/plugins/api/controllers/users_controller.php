@@ -9,6 +9,7 @@ class UsersController extends ApiAppController  {
 		parent::beforeFilter();
         $this->Auth->autoRedirect = false;
 		$this->Auth->allow(array('login','add'));
+		$this->Auth->userScope = array('User.status' => 'ACTIV');
 		
     }
 	function login(){
@@ -28,13 +29,16 @@ class UsersController extends ApiAppController  {
 			}else{
 				$username = $this->data['User']['username'];
 				$user = $this->User->findByUsername($username);
+				$this->Session->setFlash(__('Invalid username/password', true));
 				if($user){
 					$user['User']['login_failed']=$user['User']['login_failed']+1;
 					$user['User']['ip_failed']=$this->getIPAddr();
-					$this->User->save($user);	
+					$this->User->save($user);
+					if($user['User']['status']!='ACTIV'){
+						$this->Session->setFlash(__('Account not active', true));
+					}
 				}
 				$user = array('User'=>null);
-				$this->Session->setFlash(__('Invalid username/password', true));
 			}
 		}
 		if(isset($user['User']['id'])){

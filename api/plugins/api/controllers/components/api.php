@@ -56,13 +56,22 @@ class ApiComponent extends Object {
 		if($sort){
 			switch($sort){
 				case 'latest':
+					$sort = 'modified';
 					$direction = 'desc';
 				break;
 				case 'oldest':
+					$sort = 'modified';
 					$direction = 'asc';
 				break;
+				default:
+					$sortParam = explode('-',$sort);
+					if(count($sortParam)==2):
+						$sort =  $sortParam[0];
+						$direction =  $sortParam[1];
+					endif;
+				break;
 			}
-			$sort = 'modified';
+			
 		}
 		//Filter
 		$conditions = array();
@@ -159,6 +168,7 @@ class ApiComponent extends Object {
 	   $input = file_get_contents('php://input');
 	   $data = array($__Class=>json_decode($input,true));
 	   if($this->controller->params['action']!='logout')
+	   		if(is_array($data[$__Class]))
 		   foreach($data[$__Class] as $field=>$value){
 			  
 			   if(is_array($value)){
