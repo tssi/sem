@@ -18,6 +18,8 @@ define(['app','api'], function (app) {
 						//console.log($scope.Defaults.SEMESTER);
 						//console.log($scope.ActiveSy);
 						$scope.ActiveSem = $scope.Defaults.SEMESTER
+						$scope.ActiveEsp = $scope.ActiveSy+($scope.ActiveSem.id/100);
+						console.log($scope.ActiveEsp);
 						initAssessment();
 						initDataSource();
 						$scope.Disabled = 1;
@@ -29,7 +31,7 @@ define(['app','api'], function (app) {
 			$scope.init();
 			$scope.nextStep = function(){
 				if($scope.ActiveStep===1){
-					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:['ACTIV','NROLD']},function success(response){
+					api.GET('assessments',{student_id:$scope.SelectedStudent.id,status:['ACTIV','NROLD'],esp:$scope.ActiveEsp},function success(response){
 						$scope.Assessment = response.data[0];
 						$scope.ReAssess($scope.SelectedStudent);
 					}, function error(response){
@@ -615,10 +617,12 @@ define(['app','api'], function (app) {
 				});
 				//for irregular only 5 months
 				var lastMonth = lastDate.getMonth()-4;
-				
+				//console.log($scope.ActiveTuition.schemes);
+				//console.log(lastDate.getMonth());
 				if(lastMonth==0)
 					lastMonth = 12;
-				
+				if($scope.ActiveSem.id==45)
+					lastMonth = lastDate.getMonth()+1;
 				var count = 1;
 				var schedules = [];
 				for(var i=nextMonth-1;i!=lastMonth;i++){
