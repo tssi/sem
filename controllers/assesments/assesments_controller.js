@@ -792,12 +792,15 @@ define(['app','api'], function (app) {
 			
 			//getting schedules
 			function getSchedules(){
-				console.log($scope.ActiveSection);
+				console.log($scope.ActiveStudent);
 				$scope.LoadingSec = true;
 				if($scope.ActiveSection.program_id!='MIXED')
 					var data = {section_id:$scope.ActiveSection.id};
 				else
-					var data = {limit:'less'}
+					var data = {limit:'less'};
+				if($scope.ActiveStudent.department_id=='SH'&&$scope.ActiveSection.program_id=='MIXED')
+					data.esp = $scope.ActiveEsp;
+				console.log(data);
 				api.GET('schedules',data, function success(response){
 					if(response.data.length==1&&$scope.ActiveSection.program_id!=='MIXED'){
 						$scope.ActiveSchedule = response.data[0];
@@ -827,6 +830,7 @@ define(['app','api'], function (app) {
 								}
 							}); 
 						});
+						console.log(scheds);
 						if($scope.ActiveLevel.id=='IR'){
 							angular.forEach($scope.Sections, function(sec){
 								var details = [];
