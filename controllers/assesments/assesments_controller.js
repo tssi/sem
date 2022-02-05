@@ -164,7 +164,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
 					$scope.ActiveStudent.subsidy_status = $scope.ActiveScheme.subsidy_status;
-					$scope.ActiveStudent.esp = $scope.ActiveSy;
+					$scope.ActiveStudent.esp = $scope.ActiveEsp;
 					$scope.ActiveStudent.status = 'ACTIV';
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,
@@ -966,5 +966,4 @@ define(['app','api'], function (app) {
 	}]);
 	
 });
-
 

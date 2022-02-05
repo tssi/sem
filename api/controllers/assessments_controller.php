@@ -22,7 +22,8 @@ class AssessmentsController extends AppController {
 			//pr($this->data); exit();
 			$assessment = $this->data['Assessment'];
 			$assessment['account_type']='student';
-			
+			if($assessment['program_id']=='MIXED')
+				$assessment['account_details']='Irregular';
 			if(!isset($assessment['student_id'])){
 				$assessment['student_id']=$assessment['id'];
 				$ID = $this->Assessment->generateAID();
