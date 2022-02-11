@@ -769,9 +769,9 @@ define(['app','api'], function (app) {
 						$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
 						$scope.InitialFee = 0;
 						angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
-							if($scope.ActiveSem.id==45){
+							if($scope.ActiveSem.id==45&&$scope.IsIrreg){
 								console.log($scope.IsIrreg);
-								if($scope.IsIrreg&&fee.type=='MSC'){
+								if(fee.type=='MSC'){
 									if(fee.fee_id=='REG'){
 										$scope.TotalDue += fee.amount;
 										breakdown.push(fee);
