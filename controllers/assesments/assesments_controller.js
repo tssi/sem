@@ -630,39 +630,55 @@ define(['app','api'], function (app) {
 						i=1;
 					count++;
 				}
-				console.log(nextMonth,lastMonth);
-				var distribute = ($scope.TotalAmount-uponnrol)/(count-1);
-				count = 1;
-				for(var i=nextMonth-1;i!=lastMonth+1;i++){
-					if(i==13){
-						i=1;
-						year++;
-					}
-					var due_date = new Date(year+'-'+i+'-'+day);
-					//console.log(due_date);
-					var mo = due_date.toLocaleString('en-us', { month: 'short' });
-					var sched = {
-						amount:distribute,
-						due_dates:year+'-'+i+'-'+day,
-						billing_period_id:mo+year
-					};
-					if(count==1){
-						sched.amount = uponnrol;
-						sched.billing_period_id = 'UPONNROL';
-					}
-					sched.billing_period_id = sched.billing_period_id.toUpperCase();
-					///console.log(sched.billing_period_id);
-					//console.log(mo);
-					angular.forEach($scope.BillingPeriods, function(bill){
-						if(sched.billing_period_id==bill.id)
-							sched.description = bill.name;
-					});
-					schedules.push(sched);
-					count++;
+				//console.log(nextMonth,lastMonth);
+				if($scope.ActiveSem.id==45&&$scope.IsIrreg){
+					if($scope.InitialFee<=$scope.TotalDue)
+						uponnrol+=$scope.InitialFee;
+					else
+						uponnrol=$scope.TotalAmount;
 				}
-				console.log(schedules);
+				
+				if($scope.InitialFee>=$scope.TotalAmount){
+					var sched = {
+						billing_period_id : 'UPONNROL',
+						amount : uponnrol,
+						desc : 'Initial Payment'
+					};
+					schedules.push(sched);
+				}else{
+					var distribute = ($scope.TotalAmount-uponnrol)/(count-1);
+					count = 1;
+					for(var i=nextMonth-1;i!=lastMonth+1;i++){
+						if(i==13){
+							i=1;
+							year++;
+						}
+						var due_date = new Date(year+'-'+i+'-'+day);
+						//console.log(due_date);
+						var mo = due_date.toLocaleString('en-us', { month: 'short' });
+						var sched = {
+							amount:distribute,
+							due_dates:year+'-'+i+'-'+day,
+							billing_period_id:mo+year
+						};
+						if(count==1){
+							sched.amount = uponnrol;
+							sched.billing_period_id = 'UPONNROL';
+						}
+						sched.billing_period_id = sched.billing_period_id.toUpperCase();
+						///console.log(sched.billing_period_id);
+						//console.log(mo);
+						angular.forEach($scope.BillingPeriods, function(bill){
+							if(sched.billing_period_id==bill.id)
+								sched.description = bill.name;
+						});
+						schedules.push(sched);
+						count++;
+					}
+				}
 				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
 				console.log($scope.PaymentSchemes);
+				console.log(schedules);
 			}
 			
 			function computePaymentSchedule(){
@@ -748,14 +764,25 @@ define(['app','api'], function (app) {
 				var data = {year_level_id:$scope.ActiveSection.year_level_id,sy:$scope.ActiveSy}
 				api.GET('tuitions',data, function success(response){
 					$scope.ActiveTuition = response.data[0];
-					
 					if($scope.ActiveSection.program_id=='MIXED'){
 						var breakdown = [];
 						$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
+						$scope.InitialFee = 0;
 						angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
-							if(fee.type=='MSC'){
-								breakdown.push(fee);
-								$scope.TotalDue += fee.amount;
+							if($scope.ActiveSem.id==45){
+								console.log($scope.IsIrreg);
+								if($scope.IsIrreg&&fee.type=='MSC'){
+									if(fee.fee_id=='REG'){
+										$scope.TotalDue += fee.amount;
+										breakdown.push(fee);
+									}
+									$scope.InitialFee+=fee.amount;
+								}
+							}else{
+								if(fee.type=='MSC'){
+									breakdown.push(fee);
+									$scope.TotalDue += fee.amount;
+								}
 							}
 						});
 						$scope.TotalAmount=$scope.TotalDue;
@@ -903,7 +930,6 @@ define(['app','api'], function (app) {
 				var data ={
 					esp: $scope.ActiveSy+($scope.ActiveSem.id/100),
 					department_id:dept,
-					
 				}
 				//data.esp=2020.25;
 				if($scope.ActiveStudent.yearlevel=='GX')
@@ -912,8 +938,20 @@ define(['app','api'], function (app) {
 					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){
 					$scope.Curriculum = response.data;
+					checkIrreg();
 				});
 			}
+			
+			function checkIrreg(){
+				$scope.IsIrreg = 0;
+				var data = {esp:$scope.ActiveSy+.1,student_id:$scope.ActiveStudent.id};
+				api.GET('classlist_irregulars',data, function success(response){
+					$scope.IsIrreg = 1;
+				}, function error(response){
+					$scope.IsIrreg = 0;
+				});
+			}
+			
 		};
     }]);
 	app.register.controller('SuccessAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api','assessmentId', function ($scope,$rootScope,$timeout, $uibModalInstance, api,assessmentId){
