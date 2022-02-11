@@ -593,8 +593,14 @@ define(['app','api'], function (app) {
 				
 			}
 			
-			//computes for irregular student
+			function getFirstAssess(first){
+				var data = {esp:$scope.ActiveSy+.25, student_id:$scope.ActiveStudent.id};
+				api.GET('assessments',data, function success(response){
+					return first = response.data[0];
+				});
+			}
 			
+			//computes for irregular student
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
 				var uponnrol = 0;
@@ -631,19 +637,31 @@ define(['app','api'], function (app) {
 					count++;
 				}
 				//console.log(nextMonth,lastMonth);
-				if($scope.ActiveSem.id==45&&$scope.IsIrreg){
-					if($scope.InitialFee<=$scope.TotalDue)
-						uponnrol+=$scope.InitialFee;
-					else
-						uponnrol=$scope.TotalAmount;
+				if($scope.ActiveSem.id==45){
+					if($scope.IsIrreg){
+						if($scope.InitialFee<=$scope.TotalDue)
+							uponnrol+=$scope.InitialFee;
+						else
+							uponnrol=$scope.TotalAmount;
+					}
+					if($scope.ActiveOpt=='Old'&&!$scope.IsIrreg){
+						if($scope.InitialFee<=$scope.TotalDue)
+							uponnrol+=$scope.InitialFee;
+						else
+							uponnrol=$scope.TotalAmount;
+						var first = {};
+						getFirstAssess(first);
+						console.log(first);
+					}
 				}
 				
 				if($scope.InitialFee>=$scope.TotalAmount){
 					var sched = {
 						billing_period_id : 'UPONNROL',
 						amount : uponnrol,
-						desc : 'Initial Payment'
+						description : 'Initial Payment'
 					};
+					sched.billing_period_id = sched.billing_period_id.toUpperCase();
 					schedules.push(sched);
 				}else{
 					var distribute = ($scope.TotalAmount-uponnrol)/(count-1);
@@ -765,48 +783,57 @@ define(['app','api'], function (app) {
 				api.GET('tuitions',data, function success(response){
 					$scope.ActiveTuition = response.data[0];
 					if($scope.ActiveSection.program_id=='MIXED'){
-						var breakdown = [];
-						$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
-						$scope.InitialFee = 0;
-						angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
-							if($scope.ActiveSem.id==45&&$scope.IsIrreg){
-								console.log($scope.IsIrreg);
-								if(fee.type=='MSC'){
-									if(fee.fee_id=='REG'){
-										$scope.TotalDue += fee.amount;
-										breakdown.push(fee);
-									}
-									$scope.InitialFee+=fee.amount;
-								}
-							}else{
-								if(fee.type=='MSC'){
-									breakdown.push(fee);
-									$scope.TotalDue += fee.amount;
-								}
-							}
-						});
-						$scope.TotalAmount=$scope.TotalDue;
-						$scope.ActiveTuition.fee_breakdowns = breakdown;
+						calculateIrreg();
 					}else{
-						for(var i in $scope.ActiveTuition.fee_breakdowns){
-							var a = $scope.ActiveTuition.fee_breakdowns[i]
-							$scope.TotalDue += a.amount;
-						};
-						$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
-						$scope.Discounts=$scope.ActiveTuition.discounts;
-						$scope.TotalAmount=$scope.TotalDue; 
-						angular.forEach($scope.ActiveTuition.schemes, function(scheme){
-							angular.forEach(scheme.schedule, function(sched){
-								angular.forEach($scope.BillingPeriods, function(per){
-									if(per.id==sched.billing_period_id)
-										sched.description = per.name;
-								});
-							});
-						});
+						calculateReg();
 					}
 				});
 			}
 			
+			//fees if irreg
+			function calculateIrreg(){
+				var breakdown = [];
+					$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
+					$scope.InitialFee = 0;
+					angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
+						if($scope.ActiveSem.id==45&&($scope.IsIrreg||$scope.ActiveOpt=='Old')){
+							//console.log($scope.IsIrreg);
+							if(fee.type=='MSC'){
+								if(fee.fee_id=='REG'){
+									$scope.TotalDue += fee.amount;
+									breakdown.push(fee);
+								}
+								$scope.InitialFee+=fee.amount;
+							}
+						}else{
+							if(fee.type=='MSC'){
+								breakdown.push(fee);
+								$scope.TotalDue += fee.amount;
+							}
+						}
+					});
+					$scope.TotalAmount=$scope.TotalDue;
+					$scope.ActiveTuition.fee_breakdowns = breakdown;
+			}
+			
+			//fees if regular student
+			function calculateReg(){
+				for(var i in $scope.ActiveTuition.fee_breakdowns){
+						var a = $scope.ActiveTuition.fee_breakdowns[i]
+						$scope.TotalDue += a.amount;
+					};
+					$scope.PaymentSchemes=$scope.ActiveTuition.schemes;
+					$scope.Discounts=$scope.ActiveTuition.discounts;
+					$scope.TotalAmount=$scope.TotalDue; 
+					angular.forEach($scope.ActiveTuition.schemes, function(scheme){
+						angular.forEach(scheme.schedule, function(sched){
+							angular.forEach($scope.BillingPeriods, function(per){
+								if(per.id==sched.billing_period_id)
+									sched.description = per.name;
+							});
+						});
+					});
+			}
 			
 			
 			function getBillingPeriods(){
@@ -942,6 +969,7 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			//check if irregular in first sem
 			function checkIrreg(){
 				$scope.IsIrreg = 0;
 				var data = {esp:$scope.ActiveSy+.1,student_id:$scope.ActiveStudent.id};
@@ -951,6 +979,7 @@ define(['app','api'], function (app) {
 					$scope.IsIrreg = 0;
 				});
 			}
+			
 			
 		};
     }]);
