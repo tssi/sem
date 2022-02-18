@@ -167,7 +167,16 @@ class ReportsController extends AppController{
 		
 		$config = $this->MasterConfig->findBySysKey('ASSMT_MEMO');
 		$config = $config['MasterConfig']['sys_value'];
-		
+		if($data['Assessment']['account_details']=='Adjust'){
+			$feeSummary=array(
+				array('name'=>'First Sem Tuition','due_amount'=>$data['Assessment']['first']),
+				array('name'=>'Second Sem Tuition','due_amount'=>$data['Assessment']['second']),
+				array('name'=>'Misc','due_amount'=>$data['Assessment']['misc']),
+				array('name'=>'Reg fee','due_amount'=>$data['AssessmentFee'][1]['due_amount']),
+				array('name'=>'Subsidy','due_amount'=>$data['Assessment']['discount_amount']),
+			);
+		}
+			
 		$data['AssessmentFee'] =  $feeSummary;
 		$data['Important'] = $config;
 		//pr($data); exit();

@@ -2,11 +2,28 @@
 class AssessmentsController extends AppController {
 
 	var $name = 'Assessments';
-	var $uses = array('Assessment','AssessmentFee','AssessmentPaysched','AssessmentSubject');
+	var $uses = array('Assessment','AssessmentFee','AssessmentPaysched','AssessmentSubject','AccountSchedule','Account','Ledger');
 
 	function index() {
 		$this->Assessment->recursive = 0;
-		$this->set('assessments', $this->paginate());
+		$assessments = $this->paginate();
+		foreach($assessments as $i=>$ass){
+			//pr($ass); exit();
+			$data = $ass['Assessment'];
+			$paysched = array();
+			foreach($ass['AssessmentPaysched'] as $pay){
+				array_push($paysched,$pay);
+			}
+			$subjects = array();
+			foreach($ass['AssessmentSubject'] as $sub){
+				array_push($subjects,$sub['subject_id']);
+			}
+			$data['payscheds'] = $paysched;
+			$data['subjects'] = $subjects;
+			$assessments[$i]['Assessment']=$data;
+			//pr($ass); exit();
+		}
+		$this->set('assessments', $assessments);
 	}
 
 	function view($id = null) {
@@ -19,11 +36,43 @@ class AssessmentsController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			//pr($this->data); exit();
+			//pr($this->data); 
+			$isAdjust = 0;
 			$assessment = $this->data['Assessment'];
+			if(isset($this->data['Assessment']['difference'])){
+				//pr($assessment['difference']);
+				$isAdjust = 1;
+				$assessment['second']=$assessment['assessment_total']-600;
+				$assessment['total']=$assessment['outstanding_balance'];
+				
+				$account = $this->Account->findById($assessment['id']);
+				$account['Account']['assessment_total']-=$assessment['difference'];
+				$account['Account']['outstanding_balance']-=$assessment['difference'];
+				$assessment['outstanding_balance'] = $account['Account']['outstanding_balance'];
+				$assessment['discount_amount'] = $account['Account']['discount_amount'];
+				$assessment['payment_total'] = $account['Account']['payment_total'];
+				$assessment['assessment_total'] = $assessment['total_adjustment'];
+				
+				$sy = explode('.',$assessment['esp']);
+				$this->Account->save($account['Account']);
+				$ledger = array(
+					'account_id'=>$assessment['id'],
+					'type'=>'-',
+					'transaction_type_id'=>'ADJST',
+					'esp'=>$sy[0],
+					'transac_date'=>date("Y-m-d"),
+					'details'=>'Tuition Adjustment',
+					'amount'=>$assessment['second']+600
+				);
+				$this->Ledger->save($ledger);
+				//pr($this->data);
+			}
+			
 			$assessment['account_type']='student';
 			if($assessment['program_id']=='MIXED')
 				$assessment['account_details']='Irregular';
+			if($isAdjust)
+				$assessment['account_details']='Adjust';
 			if(!isset($assessment['student_id'])){
 				$assessment['student_id']=$assessment['id'];
 				$ID = $this->Assessment->generateAID();
@@ -36,12 +85,17 @@ class AssessmentsController extends AppController {
 			$this->Assessment->create();
 			$success = $this->Assessment->saveAll($assessment);
 			$assess_id = $this->Assessment->id;
+			
+			$this->AccountSchedule->saveAll($paysched);
+			
 			foreach($paysched as $i=>$sched){
 				$sched['id'] = null;
 				$sched['assessment_id'] = $assess_id;
-				$sched['bill_month'] = $sched['billing_period_id'];
-				$sched['due_date'] = $sched['due_dates'];
-				$sched['due_amount'] = $sched['amount'];
+				if(!$isAdjust){
+					$sched['bill_month'] = $sched['billing_period_id'];
+					$sched['due_date'] = $sched['due_dates'];
+					$sched['due_amount'] = $sched['amount'];
+				}
 				$sched['order'] =$i+1;
 				$sched['status'] ='NONE';
 				$sched['transaction_type_id'] =$i==0?'INIPY':'SBQPY';
