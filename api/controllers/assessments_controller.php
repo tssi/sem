@@ -36,7 +36,7 @@ class AssessmentsController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			//pr($this->data); 
+			//pr($this->data); exit();
 			$isAdjust = 0;
 			$assessment = $this->data['Assessment'];
 			if(isset($this->data['Assessment']['difference'])){
@@ -53,8 +53,8 @@ class AssessmentsController extends AppController {
 				$assessment['payment_total'] = $account['Account']['payment_total'];
 				$assessment['assessment_total'] = $assessment['total_adjustment'];
 				
-				$sy = explode('.',$assessment['esp']);
-				$this->Account->save($account['Account']);
+				/* $sy = explode('.',$assessment['esp']);
+				//$this->Account->save($account['Account']);
 				$ledger = array(
 					'account_id'=>$assessment['id'],
 					'type'=>'-',
@@ -63,8 +63,8 @@ class AssessmentsController extends AppController {
 					'transac_date'=>date("Y-m-d"),
 					'details'=>'Tuition Adjustment',
 					'amount'=>$assessment['second']+600
-				);
-				$this->Ledger->save($ledger);
+				); */
+				//$this->Ledger->save($ledger);
 				//pr($this->data);
 			}
 			
@@ -97,8 +97,10 @@ class AssessmentsController extends AppController {
 					$sched['due_amount'] = $sched['amount'];
 				}
 				$sched['order'] =$i+1;
-				$sched['status'] ='NONE';
-				$sched['transaction_type_id'] =$i==0?'INIPY':'SBQPY';
+				if(!$isAdjust){
+					$sched['status'] ='NONE';
+					$sched['transaction_type_id'] =$i==0?'INIPY':'SBQPY';
+				}
 				$paysched[$i] = $sched;
 			}
 			$this->AssessmentPaysched->saveAll($paysched);

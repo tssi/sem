@@ -622,6 +622,9 @@ define(['app','api'], function (app) {
 						});
 						var dist = Math.abs($scope.ActiveStudent['difference']/divisor);
 						angular.forEach(scheds, function(sched){
+							console.log(sched);
+							if(sched.order==order)
+								sched.transaction_type_id='INIPY';
 							if(sched.order>=order){
 								if($scope.ActiveStudent.difference<0)
 									sched.due_amount+=dist;
