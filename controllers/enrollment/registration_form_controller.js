@@ -11,7 +11,7 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 			$scope.ActiveDeptId = $scope.ActiveDept.id;
 			$scope.Departments = atomic.Departments;
 			$scope.ActiveSY = atomic.ActiveSY;	
-			$scope.SelectedSem = atomic.SelectedSem;	
+				
 			$scope.SelectedPeriod = atomic.SelectedPeriod;	
 			$scope.Sections =  atomic.Sections;
 			console.log($scope.SelectedSem);
@@ -24,6 +24,13 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 				$scope.isBatch = true;
 			});
 		}
+		
+		$selfScope.$watch("RFC.Active",function(active){
+			if(!active) return false;
+			$scope.SelectedSem = active.sem;
+			console.log($scope.SelectedSem);
+		});
+		
 		$scope.Load = function(){
 			if(!$scope.isBatch){
 				$scope.ActiveSection = null;

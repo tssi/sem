@@ -141,7 +141,7 @@ class Assessment extends AppModel {
 		return $IID;
 	}
 	
-	function getActiveIrregAssess($student,$esp){
+	function getAssessment($student,$esp){
 		$assesment= $this->find('first', array('conditions'=>array('Assessment.student_id'=>$student,'Assessment.esp'=>$esp),'order' => array('Assessment.id' => 'DESC')));
 		return $assesment['Assessment']['id'];
 	}

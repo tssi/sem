@@ -206,7 +206,9 @@ class ReportsController extends AppController{
 		}
 		
 		if($type=='single'){
-			$refNo = $this->Assessment->getActiveIrregAssess($student,$esp);
+			$refNo = $this->Assessment->getAssessment($student,$esp);
+			if(!isset($refNo))
+				$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
 			//pr($refNo); exit();
 			$AIDs = array($refNo);
 			
