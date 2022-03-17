@@ -14,7 +14,7 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 			$scope.SelectedSem = atomic.SelectedSem;	
 			$scope.SelectedPeriod = atomic.SelectedPeriod;	
 			$scope.Sections =  atomic.Sections;
-
+			console.log($scope.SelectedSem);
 		});
 
 		$scope.init = function(){

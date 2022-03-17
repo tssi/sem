@@ -11,7 +11,7 @@ class ReportsController extends AppController{
 		$this->Assessment->Section->unbindModel(
         	array('hasMany' => array('Student'))
     	);
-
+		//pr($AID); exit();
     	
     	// NOTE:PERFROMANCE IMRPOVEMENT
     	// Use paginate to take advantage of caching 
@@ -29,7 +29,7 @@ class ReportsController extends AppController{
 	        'limit' => 1,
     	);
     	//$this->Assessment->AssessmentSubject->deleteAll(array('assessment_id'=>$aid));
-
+		
     	$data = $this->paginate()[0];
     	$assId = $data['Assessment']['id'];
     	$sectId = $data['Assessment']['section_id'];
@@ -44,7 +44,7 @@ class ReportsController extends AppController{
     		$asbCreate = 0;
 
 		$sy = floor($esp);
-		//pr($data); exit();
+		
 		$yl = $data['Section']['year_level_id'];
 		$tuition = $this->Tuition->getTuiDetail($sy,$yl);
 		$isIrreg = $tuition['assessment_total']!=$data['Assessment']['assessment_total'];
@@ -191,23 +191,27 @@ class ReportsController extends AppController{
 	}
 	function reg_form($aid=null){
 		ini_set('max_execution_time', '0');
-
+		
 		$sy = 2021;
 		$sectId = 7004;
 		$type = 'batch';
 		$student = null;
 
 		if(isset($_POST['Sy'])){
+			$esp = $_POST['Sy'].'.'.$_POST['Sem'];
 			$sy = $_POST['Sy'];
 			$sectId = $_POST['Section'];
 			$type =  $_POST['Type'];
 			$student =  $_POST['Student'];
 		}
+		
 		if($type=='single'){
-			$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
+			$refNo = $this->Assessment->getActiveIrregAssess($student,$esp);
+			//pr($refNo); exit();
 			$AIDs = array($refNo);
+			
 		}else{
-			$AIDs = $this->Assessment->getEnrolled($sy,$sectId);
+			$AIDs = $this->Assessment->getEnrolled($sem,$sectId);
 		}
 		
 		$DATA_BANK = array();
@@ -221,6 +225,7 @@ class ReportsController extends AppController{
 			$data  = $this->viewVars['data'];
 			$ASM   = $data['Assessment'];
 			$SID   = $ASM['student_id'];
+			
 			// Check $SID starts with LSN
 			if(preg_match("/^LSN/i", $SID)){
 				//Look up for related account_id in ledger by Assessment.id & TUIXN

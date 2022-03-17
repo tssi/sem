@@ -170,7 +170,8 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 
 		//FEE BREAKDOWN
-		$y=$end;
+		
+		$y=$end-1.2;
 		$total=0;
 		$this->leftText(0.2,$y++,'FEE BREAKDOWN','','b');
 		foreach($data['AssessmentFee'] as $d){
