@@ -1,9 +1,10 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','Ledger','Household','Section','Schedule','Tuition');
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig',
+						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
 
-	function student_registration_form($aid=null){
+	function student_registration_form($aid=null,$curri_esp,$sem){
 		$AID = $aid;
 		if(isset($_POST['AssessmentId']))
 			$AID = $_POST['AssessmentId'];
@@ -33,10 +34,48 @@ class ReportsController extends AppController{
     	$data = $this->paginate()[0];
     	$assId = $data['Assessment']['id'];
     	$sectId = $data['Assessment']['section_id'];
-    	$sectId = $data['Assessment']['section_id'];
     	$esp = $data['Assessment']['esp'];
+    	$stud_program = $data['Section']['program_id'];
+    	$level = $data['Section']['year_level_id'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
 
+		//pr($data); //exit();
+		//pr($sectId); exit();
+		$isSecondSem=false;
+		if(isset($curri_esp)&&$sem==45){
+			$isSecondSem=true;
+			$subjects = array();
+			$curId = $this->CurriculumSection->findBySectId($sectId,$curri_esp);
+			$curId = $curId['CurriculumSection']['curriculum_id'];
+			//pr($curId); exit();
+			$curriculum = $this->Curriculum->find('all',array('conditions'=>array('Curriculum.id'=>array($curId))));
+			//pr($curriculum); exit();
+			foreach($curriculum[0]['CurriculumDetail'] as $c){
+				if($level==$c['year_level_id']){
+					$subItem = array(
+						'subject_id'=>$c['Subject']['id'],
+						'Subject'=>$c['Subject'],
+						'Section'=>array('name'=>$data['Section']['name']),'created'=>''
+					);
+					array_push($subjects,$subItem);
+				}
+			}
+			$schedule = $this->Schedule->getSched($sectId,$curri_esp);
+			foreach($subjects as $i=>$sub){
+				$scheds = array();
+				//pr($sub);exit();
+				foreach($schedule[0]['ScheduleDetail'] as $sched){
+					if($sub['subject_id']==$sched['subject_id']){
+						array_push($scheds,$sched);
+					}
+				}
+				///pr($scheds);exit();
+				$sub['ScheduleDetail'] = $scheds;
+				$subjects[$i]=$sub;
+			}
+			$data['AssessmentSubject']=$subjects;
+		}
+		//pr($data); exit();
     	// Check if AssessmentSubject has been created
     	if(isset($data['AssessmentSubject'][0]))
     		$asbCreate =  (int)date('Ymd',strtotime($data['AssessmentSubject'][0]['created']));
@@ -85,6 +124,8 @@ class ReportsController extends AppController{
     		$this->Assessment->AssessmentSubject->deleteAll($asjCond,false);
     		$this->Assessment->AssessmentSubject->saveAll($assSubjs);
     		// Request fresh data
+			//pr($data);exit();
+			
     		$this->Assessment->usePaginationCache = false;
     		$data = $this->paginate()[0];
     	endif;
@@ -179,7 +220,12 @@ class ReportsController extends AppController{
 			
 		$data['AssessmentFee'] =  $feeSummary;
 		$data['Important'] = $config;
-		//pr($data); exit();
+		
+		if($isSecondSem){
+			$data['AssessmentSubject'] = $subjects;
+			$data['isSecondSem'] = true;
+			//pr('dumaan'); exit();
+		}
 		$this->set(compact('data'));
 	}
 	
@@ -189,6 +235,7 @@ class ReportsController extends AppController{
 		$data = $this->Inquiry->findById($IID);
 		$this->set(compact('data'));
 	}
+	
 	function reg_form($aid=null){
 		ini_set('max_execution_time', '0');
 		
@@ -199,6 +246,7 @@ class ReportsController extends AppController{
 
 		if(isset($_POST['Sy'])){
 			$esp = $_POST['Sy'].'.'.$_POST['Sem'];
+			$sem = $_POST['Sem'];
 			$sy = $_POST['Sy'];
 			$sectId = $_POST['Section'];
 			$type =  $_POST['Type'];
@@ -207,9 +255,11 @@ class ReportsController extends AppController{
 		
 		if($type=='single'){
 			$refNo = $this->Assessment->getAssessment($student,$esp);
-			if(!isset($refNo))
+			if(!isset($refNo)&&$sem==25)
 				$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
-			//pr($refNo); exit();
+			else{
+				$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
+			}
 			$AIDs = array($refNo);
 			
 		}else{
@@ -223,7 +273,7 @@ class ReportsController extends AppController{
 
 		// Run contents of AIDs for batch loading
 		foreach($AIDs as $aid):
-			$this->student_registration_form($aid);
+			$this->student_registration_form($aid,$esp,$sem);
 			$data  = $this->viewVars['data'];
 			$ASM   = $data['Assessment'];
 			$SID   = $ASM['student_id'];

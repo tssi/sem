@@ -45,7 +45,10 @@ class Curriculum extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+	
+	
 	function beforeFind($queryData){
+		//pr($queryData); exit();
 		if($conds=$queryData['conditions']){
 			$flags = array(
 						'Curriculum.year_level_id'=>0,
@@ -62,18 +65,7 @@ class Curriculum extends AppModel {
 				$vals[$key] = $val;
 				
 			} 
-			if($flags['Curriculum.department_id']&&
-				$flags['Curriculum.esp']){
-				
-				App::import('Model','CurriculumSection');
-				$CurriculumSection = new CurriculumSection();
-				$currDeptId = $vals['Curriculum.department_id'];
-				$currESP = $vals['Curriculum.esp'];
-				$currIds = $CurriculumSection->getByDeptId($currDeptId,$currESP);
-				
-				
-				$condition = array('Curriculum.id'=>$currIds);	
-			}
+			
 			if($flags['Curriculum.year_level_id']&&
 				$flags['Curriculum.esp']&&
 				$flags['Curriculum.department_id']){
@@ -100,7 +92,8 @@ class Curriculum extends AppModel {
 			if($flags['Curriculum.section_id']&&$flags['Curriculum.esp']){
 				$sectId = $vals['Curriculum.section_id'];
 				$esp = $vals['Curriculum.esp'];
-				
+				$CurriSections = $this->CurriculumSection->findBySectId($sectId,$esp);
+				 
 				$this->unbindModel(array('hasMany'=>array('CurriculumDetail')));
 				$this->bindModel(array('hasMany'=>
 								array('CurriculumDetail'=>
@@ -118,13 +111,17 @@ class Curriculum extends AppModel {
 			if($flags['Curriculum.id']){
 				$condition = $queryData['conditions'];
 			}
-			$queryData['conditions'] = $condition;
+			
+			if(isset($condition))
+				$queryData['conditions'] = $condition;
+				
 		}
-		
-		//pr($condition);
 		return $queryData;
-		
 	}
 	
-
+	
+	function getSubjects($esp,$sect){
+		return $curriculums = $this->find('all',array('limit'=>9999,'conditions'=>array('Curriculum.esp'=>array($esp),'Curriculum.section_id'=>array($sect))));	
+	}
+	
 }

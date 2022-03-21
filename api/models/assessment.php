@@ -126,8 +126,8 @@ class Assessment extends AppModel {
 		asort($sortAss['F']);
 		$ids = array_merge(array_keys($sortAss['M']),array_keys($sortAss['F']));
 		return $ids;
-
 	}
+	
 	function generateAID(){
 		$ID = 0;
 		$cond =  array('Assessment.id LIKE'=>'LSA%');

@@ -29,10 +29,13 @@ class Schedule extends AppModel {
 		)
 	);
 	function beforeFind($queryData){
+		//pr($queryData);
 		if($conds=$queryData['conditions']){
 			foreach($conds as $i=>$cond){
 				$keys =  array_keys($cond);
 				$search = 'Schedule.program_id';
+				if(!isset($cond[$search]))
+					return;
 				if(in_array($search,$keys)){
 					$value = $cond[$search];
 					$sections = $this->Section->findByProgramId($value);
@@ -46,5 +49,9 @@ class Schedule extends AppModel {
 			$queryData['conditions']=$conds;
 		}
 		return $queryData;
+	}
+	
+	function getSched($sec,$esp){
+		return $sched = $this->find('all',array('conditions'=>array('Schedule.section_id'=>array($sec),'Schedule.esp'=>array($esp))));
 	}
 }

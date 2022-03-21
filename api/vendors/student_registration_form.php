@@ -164,6 +164,9 @@ class StudentRegistrationForm extends Formsheet{
 
 	}
 	function fee_breakdown($data,$end){
+		if(isset($data['isSecondSem']))
+			return;
+		
 		$metrics =$this->setUpMetrics($data);
 
 		$this->section($metrics);

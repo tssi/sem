@@ -182,8 +182,14 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$data['offsetX'] = 0;
 		parent::data($data);
 		$data['offsetX'] = 2;
-		$this->payment_sched($data,0);
-		$this->foot_notes($data,0);
+		
+		if(isset($data['isSecondSem'])){
+			$this->hardcode();
+		}
+		else{
+			$this->payment_sched($data,0);
+			$this->foot_notes($data,0);
+		}
 	}
 	function foot_notes($data,$end){
 		$metrics =$this->setUpMetrics($data);
@@ -252,5 +258,24 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->leftText(6.5+$offsetX ,29+$offsetY,$COPY_OF, 0,'b');
 		
 		
+	}
+	
+	function hardcode(){
+		$this->GRID['font_size']=9;
+		$this->leftText(1,20.5,"I declare that all the information submitted to LSEI are true and correct. I shall abide by all existing rules and regulations ",12,'b');
+		$this->leftText(1,21.5,"of the school and those that are promulgated from time to time.",12,'b');
+		$this->leftText(2.5,26.5,"Student Signiture Over Printed Name",12,'b');
+		$this->leftText(25.5,26.5,"Date",12,'b');
+		$this->leftText(1,25.5,"_________________________________________",12,'b');
+		$this->leftText(23,25.5,"____________________",12,'b');
+		$this->leftText(34,1,"Fees for the Second semester",12,'b');
+		$this->leftText(34,2,"are inclusive in the first ",12,'b');
+		$this->leftText(34,3,"semester assessment",12,'b');
+		$this->leftText(34,5,"Installment Payment Schedule:",12,'b');
+		$this->leftText(34,7,"January 15, 2022",12,'b');
+		$this->leftText(34,9,"February 15, 2022",12,'b');
+		$this->leftText(34,11,"March 15, 2022",12,'b');
+		$this->leftText(34,13,"April 15, 2022",12,'b');
+		$this->leftText(34,15,"May 1, 2022",12,'b');
 	}
 }
