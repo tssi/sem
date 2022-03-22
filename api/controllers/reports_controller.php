@@ -42,7 +42,8 @@ class ReportsController extends AppController{
 		//pr($data); //exit();
 		//pr($sectId); exit();
 		$isSecondSem=false;
-		if(isset($curri_esp)&&$sem==45){
+		if($data['Assessment']['account_details']==''&&$sem==45){
+			//pr('dumaan'); exit();
 			$isSecondSem=true;
 			$subjects = array();
 			$curId = $this->CurriculumSection->findBySectId($sectId,$curri_esp);
@@ -255,11 +256,8 @@ class ReportsController extends AppController{
 		
 		if($type=='single'){
 			$refNo = $this->Assessment->getAssessment($student,$esp);
-			if(!isset($refNo)&&$sem==25)
+			if(!isset($refNo))
 				$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
-			else{
-				$refNo = $this->Ledger->getRefNo($student,'TUIXN',$sy);
-			}
 			$AIDs = array($refNo);
 			
 		}else{
