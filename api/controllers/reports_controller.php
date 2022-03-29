@@ -39,7 +39,7 @@ class ReportsController extends AppController{
     	$level = $data['Section']['year_level_id'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
 
-		//pr($data); //exit();
+		//pr($sem); exit();
 		//pr($sectId); exit();
 		$isSecondSem=false;
 		if($data['Assessment']['account_details']==''&&$sem==45){
@@ -261,9 +261,9 @@ class ReportsController extends AppController{
 			$AIDs = array($refNo);
 			
 		}else{
-			$AIDs = $this->Assessment->getEnrolled($sem,$sectId);
+			$AIDs = $this->Assessment->getEnrolled($sy.'.25',$sectId);
 		}
-		
+		//pr($AIDs);exit();
 		$DATA_BANK = array();
 
 		// Use this code to test one student only

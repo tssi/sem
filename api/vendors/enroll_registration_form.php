@@ -184,7 +184,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$data['offsetX'] = 2;
 		
 		if(isset($data['isSecondSem'])){
-			$this->hardcode();
+			$this->hardcode($data);
 		}
 		else{
 			$this->payment_sched($data,0);
@@ -260,22 +260,86 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		
 	}
 	
-	function hardcode(){
-		$this->GRID['font_size']=9;
-		$this->leftText(1,20.5,"I declare that all the information submitted to LSEI are true and correct. I shall abide by all existing rules and regulations ",12,'b');
-		$this->leftText(1,21.5,"of the school and those that are promulgated from time to time.",12,'b');
-		$this->leftText(2.5,26.5,"Student Signiture Over Printed Name",12,'b');
+	function hardcode($data){
+		$this->GRID['font_size']=8;
+		//$this->leftText(1,20.5,"I declare that all the information submitted to LSEI are true and correct. I shall abide by all existing rules and regulations ",12,'b');
+		//$this->leftText(1,21.5,"of the school and those that are promulgated from time to time.",12,'b');
+		//$this->leftText(2.5,26.5,"Student Signiture Over Printed Name",12,'b');
+		/* $this->wrapText(7,20.5,'IMPORTANT: '.$data['Important'],35);
 		$this->leftText(25.5,26.5,"Date",12,'b');
 		$this->leftText(1,25.5,"_________________________________________",12,'b');
-		$this->leftText(23,25.5,"____________________",12,'b');
-		$this->leftText(34,1,"Fees for the Second semester",12,'b');
-		$this->leftText(34,2,"are inclusive in the first ",12,'b');
-		$this->leftText(34,3,"semester assessment",12,'b');
+		$this->leftText(23,25.5,"____________________",12,'b'); */
+		$this->wrapText(33.5,.5,"Fees for the Second semester are inclusive in the first semester assessment",12);
 		$this->leftText(34,5,"Installment Payment Schedule:",12,'b');
 		$this->leftText(34,7,"January 15, 2022",12,'b');
 		$this->leftText(34,9,"February 15, 2022",12,'b');
 		$this->leftText(34,11,"March 15, 2022",12,'b');
 		$this->leftText(34,13,"April 15, 2022",12,'b');
 		$this->leftText(34,15,"May 1, 2022",12,'b');
+		
+		
+		$metrics =$this->setUpMetrics($data);
+
+		$this->GRID['font_size']=7;
+
+		//NOTE
+		$y=20;
+		$this->wrapText(17,$y,'IMPORTANT: '.$data['Important'],27);
+		$this->SetFillColor(255,255,255);
+		$this->DrawBox(7,$y,4,1.2,'F');
+
+		$this->leftText(7.25,29,'CONFORME:', '','b');
+		$this->DrawLine(31,'h',array(7.25,13.5));
+		$this->centerText(7.25,32,'Signature Over Printed Name', 13.5,'');
+		$this->DrawLine(31,'h',array(25,13.5));
+		$this->centerText(25,32,'Date', 13.5,'');
+		
+		$AID = $data['Assessment']['id'];
+		$URL = 'https://lsei.tssi.one/sap';
+		$student = $data['Assessment']['student_id'];
+		$username = $password = '??';
+		if(isset($data['Student']['Household']['username'])):
+		$username = $data['Student']['Household']['username'];
+		$password = $data['Student']['Household']['password'];
+		endif;
+		$DATA =sprintf("%s?USER=%s&PASS=%s",$URL,$username,$password);
+		$USER = sprintf("U: %s",$username);
+		$PASS = sprintf("P: %s",$password);
+		App::import('Vendor','phpqrcode/qrlib');
+		App::import('Model','Record');
+		
+		$fileName = 'QR-'.$AID.'.png';
+		
+		$Record =  new Record();
+
+		$fullPath = $Record->registerFile($fileName,$student,'qr',$DATA);
+		// Check if file is the same skip generation
+		if(!isset($fullPath['duplicate']))
+			QRcode::png($DATA,$fullPath);
+		else
+			$fullPath =  $fullPath['path'];
+
+		$offsetX = 0;
+		$offsetY = -8;
+		$SY = (int)$data['Assessment']['esp'].'';
+		$MILL = sprintf('%s  %s',$SY[0],$SY[1]);
+		$DECA = sprintf('%s  %s',$SY[2],$SY[3]);
+		
+		$this->DrawImage(0+$offsetX ,26+$offsetY,1.1,1.1,$fullPath);
+		$this->GRID['font_size']=8;
+		$this->leftText(-0.5+$offsetX ,31.75+$offsetY,$MILL,12,'b');
+		$this->leftText(-0.5+$offsetX ,32.5+$offsetY,$DECA,12,'b');
+		$this->GRID['font_size']=7.5;
+		$this->RotateText(0.5+$offsetX ,31+$offsetY,$PASS,90,'b');
+		$this->RotateText(-0.25+$offsetX ,31+$offsetY,$USER,90);
+
+		$this->leftText(6.5+$offsetX ,30.5+$offsetY,"PARENT/STUDENT PORTAL",12,'');
+		$this->leftText(6.5+$offsetX ,31.5+$offsetY,'SCAN CODE OR GO TO',12,'');
+		$this->GRID['font_size']=8;
+		$this->leftText(6.5+$offsetX ,32.5+$offsetY,$URL,12,'b');
+
+		$this->GRID['font_size']=10;
+		$COPY_OF = strtoupper(sprintf("%s'S COPY",$data['copyOf']));
+		$this->leftText(6.5+$offsetX ,29+$offsetY,$COPY_OF, 0,'b');
 	}
 }
