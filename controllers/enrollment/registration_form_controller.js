@@ -28,7 +28,7 @@ define(['app','md5','api','atomic/bomb'],function(app,md5){
 		$selfScope.$watch("RFC.Active",function(active){
 			if(!active) return false;
 			$scope.SelectedSem = active.sem;
-			console.log($scope.SelectedSem);
+			$scope.ActiveSY = active.sy;
 		});
 		
 		$scope.Load = function(){
