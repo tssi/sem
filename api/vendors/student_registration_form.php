@@ -96,10 +96,10 @@ class StudentRegistrationForm extends Formsheet{
 		$this->GRID['font_size']=7;
 		$y=0;
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
-		$this->centerText(15,$y,'UNITS',2,'b');
-		$this->leftText(19.5,$y,'SECTION','','b');
-		$this->centerText(24.5,$y,'DAY',2,'b');
-		$this->centerText(28,$y,'TIME',4,'b');
+		//$this->centerText(15,$y,'UNITS',2,'b');
+		$this->leftText(15,$y,'SECTION','','b');
+		$this->centerText(20,$y,'DAY',2,'b');
+		$this->centerText(27,$y,'TIME',4,'b');
 		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
@@ -113,18 +113,19 @@ class StudentRegistrationForm extends Formsheet{
 				$d['Subject']['name'] = substr($d['Subject']['name'],0,45) . '...';
 			}
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
-			$this->centerText(15,$y,'--',2,'');
+			//$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
-				$this->leftText(19.5,$y,$d['Section']['name'],'','');
+				$this->leftText(15,$y,$d['Section']['name'],'','');
 
 			foreach($d['ScheduleDetail'] as $sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
 				$time = sprintf("%s -  %s",$startT,$endT);
-
-				$this->centerText(24.5,$y,$day,2,'');
-				$this->centerText(28,$y++,$time,4,'');
+				$grading = $sched['grading'];
+				
+				$this->centerText(20,$y,$day,2,'');
+				$this->centerText(27,$y++,$grading.' | '. $time,4,'');
 				
 			endforeach;
 			if(!count($d['ScheduleDetail'])) $y++;
@@ -237,12 +238,12 @@ class StudentRegistrationForm extends Formsheet{
 		$fullPath = $Record->registerFile($fileName,$student,'img');
 		QRcode::png($AID,$fullPath);
 
-		$this->DrawImage(0,26,1.1,1.1,$fullPath);
-		$this->leftText(0.75,26.5,"CODE: " .$AID,12,'b');
-		$this->RotateText(0.5,32.5,'SCAN @ CASHIER',90);
+		$this->DrawImage(0,32,1.1,1.1,$fullPath);
+		$this->leftText(0.75,32.5,"CODE: " .$AID,12,'b');
+		$this->RotateText(0.5,38.5,'SCAN @ CASHIER',90);
 
 		//NOTE
-		$y=33;
+		$y=39;
 		$this->wrapText(0,$y,'IMPORTANT: '.$data['Important'],25);
 	}
 }

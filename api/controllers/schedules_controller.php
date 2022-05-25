@@ -32,7 +32,7 @@ class SchedulesController extends AppController {
 						$subjects[$sub] = array();
 						$subjects[$sub]['days'] = array();
 						$subjects[$sub]['times'] = array();
-						$subjects[$sub]['rooms'] = '';
+						$subjects[$sub]['gradings'] = array();
 					}
 					//if($subjects[$sub]['rooms']!= $room[0]['Room']['name'].' ')
 					//$subjects[$sub]['rooms'] .= $room[0]['Room']['name'].' ';
@@ -40,12 +40,15 @@ class SchedulesController extends AppController {
 					$d['end_time'] = date("h:i A",strtotime($d['end_time']));
 					array_push($subjects[$sub]['times'],$d['start_time'].'-'.$d['end_time']);
 					array_push($subjects[$sub]['days'], $d['day']);
+					array_push($subjects[$sub]['gradings'], $d['grading']);
 					
 					//$subjects[$sub]['times'] =  $d['start_time'].' - '.$d['end_time'];
 					$subjects[$sub]['subject'] = $ss[0]['Subject']['name'];
 					$subjects[$sub]['subject_id'] = $sub;
 					$subjects[$sub]['units'] = $ss[0]['Subject']['units'];
 					$subjects[$sub]['schedule_id'] = $sched['Schedule']['id'];
+					//pr($d); 
+					$subjects[$sub]['grading'] = $d['grading'];
 				}
 				/* pr($subjects); exit();
 				foreach($details as $s=>$d){

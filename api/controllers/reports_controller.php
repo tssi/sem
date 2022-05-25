@@ -4,7 +4,7 @@ class ReportsController extends AppController{
 	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig',
 						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
 
-	function student_registration_form($aid=null,$curri_esp,$sem){
+	function student_registration_form($aid=null,$curri_esp=null,$sem=null){
 		$AID = $aid;
 		if(isset($_POST['AssessmentId']))
 			$AID = $_POST['AssessmentId'];
@@ -263,7 +263,7 @@ class ReportsController extends AppController{
 		}else{
 			$AIDs = $this->Assessment->getEnrolled($sy.'.25',$sectId);
 		}
-		//pr($AIDs);exit();
+		
 		$DATA_BANK = array();
 
 		// Use this code to test one student only

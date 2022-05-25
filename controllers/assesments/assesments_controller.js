@@ -889,7 +889,7 @@ define(['app','api'], function (app) {
 			
 			function getBillingPeriods(){
 				var data = 
-				api.GET('billing_periods',{sy:$scope.ActiveSy}, function success(response){
+				api.GET('billing_periods',{sy:$scope.ActiveSy,limit:'99'}, function success(response){
 					$scope.BillingPeriods = response.data;
 				});
 			}
@@ -900,12 +900,15 @@ define(['app','api'], function (app) {
 				console.log($scope.ActiveStudent);
 				$scope.LoadingSec = true;
 				if($scope.ActiveSection.program_id!='MIXED')
-					var data = {section_id:$scope.ActiveSection.id};
+					var data = {section_id:$scope.ActiveSection.id,esp:$scope.ActiveSy};
 				else
 					var data = {limit:'less'};
 				if($scope.ActiveStudent.department_id=='SH'&&$scope.ActiveSection.program_id=='MIXED')
 					data.esp = $scope.ActiveEsp;
-				console.log(data);
+				if(($scope.ActiveStudent.yearlevel=='GX'||$scope.ActiveStudent.department_id=='SH')&&$scope.ActiveSection.program_id!=='MIXED'){
+					data.esp = $scope.ActiveEsp;
+				}
+				console.log($scope.ActiveStudent,$scope.ActiveEsp,data);
 				api.GET('schedules',data, function success(response){
 					if(response.data.length==1&&$scope.ActiveSection.program_id!=='MIXED'){
 						$scope.ActiveSchedule = response.data[0];
@@ -915,7 +918,8 @@ define(['app','api'], function (app) {
 							for(var i=0;i<sched.days.length;i++){
 								var day = sched.days[i];
 								var time = sched.times[i];
-								sched.sched += day+' '+time;
+								var grading = sched.gradings[i];
+								sched.sched += grading+'-' +day+' '+time;
 								if(i<sched.days.length-1)
 									sched.sched += ' | ';
 							}
