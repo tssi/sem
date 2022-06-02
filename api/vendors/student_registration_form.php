@@ -165,6 +165,7 @@ class StudentRegistrationForm extends Formsheet{
 
 	}
 	function fee_breakdown($data,$end){
+		//pr($data); exit();
 		if(isset($data['isSecondSem']))
 			return;
 		
@@ -196,6 +197,8 @@ class StudentRegistrationForm extends Formsheet{
 		$this->drawLine($y-0.6,'h',array(0,16));
 		$this->leftText(0.2,$y,'Total','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
+		$this->leftText(0.2,$y+1,'Modules & Ebooks','','b');
+		$this->rightText(15,$y+1,number_format($data['Assessment']['module_balance'],2),'','b');
 
 	}
 

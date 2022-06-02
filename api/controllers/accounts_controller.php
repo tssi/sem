@@ -6,7 +6,6 @@ class AccountsController extends AppController {
 
 	function index() {
 		$this->Account->recursive = 0;
-		pr($this->paginate()); exit();
 		$this->set('accounts',$this->paginate());
 	}
 

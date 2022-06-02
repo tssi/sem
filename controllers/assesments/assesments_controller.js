@@ -24,6 +24,8 @@ define(['app','api'], function (app) {
 						initDataSource();
 						$scope.Disabled = 1;
 						$scope.ShowInfo = 0;
+						//Declared Modules Ebooks
+						$scope.Module = 4950;
 					}
 				});
 			};
@@ -162,6 +164,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
 					$scope.ActiveStudent.subsidy_status = $scope.ActiveScheme.subsidy_status;
 					$scope.ActiveStudent.esp = $scope.ActiveEsp;
+					$scope.ActiveStudent.module_balance = $scope.Module;
 					$scope.ActiveStudent.status = 'ACTIV';
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,

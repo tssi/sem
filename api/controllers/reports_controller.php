@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig',
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','TransactionType',
 						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
 
 	function student_registration_form($aid=null,$curri_esp=null,$sem=null){
@@ -38,9 +38,7 @@ class ReportsController extends AppController{
     	$stud_program = $data['Section']['program_id'];
     	$level = $data['Section']['year_level_id'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
-
-		//pr($sem); exit();
-		//pr($sectId); exit();
+		
 		$isSecondSem=false;
 		if($data['Assessment']['account_details']==''&&$sem==45){
 			//pr('dumaan'); exit();
@@ -97,12 +95,15 @@ class ReportsController extends AppController{
     	// Re-initialize Assesssment Subject for regular student
     	if(!$isIrreg && !$isAssSubjUpdated):
 			$sCond =  array(array('Schedule.section_id'=>$sectId, 'Schedule.esp'=>$esp));
+			if(!in_array($yl,array('GY','GZ')))
+				$sCond =  array(array('Schedule.section_id'=>$sectId,'Schedule.esp'=>floor($esp)));
 	    	$sched = $this->Schedule->find('first',array('conditions'=>$sCond));
 	    	$schedId =  $sched['Schedule']['id'];
 	    	$assSubjs = array();
 	    	$subjNrol = array();
 
 	    	// Loop into schedule details and map to subjects
+			//pr($sCond); exit();
 	    	foreach($sched['ScheduleDetail'] as $dtl):
 	    		$subjId = $dtl['subject_id'];
 	    		// Skip if subject already added
@@ -125,7 +126,6 @@ class ReportsController extends AppController{
     		$this->Assessment->AssessmentSubject->deleteAll($asjCond,false);
     		$this->Assessment->AssessmentSubject->saveAll($assSubjs);
     		// Request fresh data
-			//pr($data);exit();
 			
     		$this->Assessment->usePaginationCache = false;
     		$data = $this->paginate()[0];
@@ -162,6 +162,8 @@ class ReportsController extends AppController{
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
+		
+		
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
 		//pr($spons); exit();
 		$feeSummary = array();
@@ -173,17 +175,6 @@ class ReportsController extends AppController{
 						$feeTotals['SUBS']= array('label'=>'Subsidy','total'=>$val);
 					}
 					break;
-				/* case 'payment_total':
-					if($val>0){
-						if($val===1000)
-							$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-$val);
-						else{
-							$feeTotals['RSRV']= array('label'=>'Reservation','total'=>-1000);
-							if(($val-1000)>0)
-								$feeTotals['ADVP']= array('label'=>'Advance Payment','total'=>-($val-1000));
-						}
-					}
-					break; */
 			}
 		}
 		if(isset($res[0])){
@@ -201,7 +192,7 @@ class ReportsController extends AppController{
 		if(isset($spons[0])){
 			$feeTotals['SPONS']= array('label'=>'Sponsorship','total'=>-$spons[0]['Ledger']['amount']);
 		}
-		//pr($feeTotals); exit();
+		
 		foreach($feeTotals as $i=>$f){
 			$feeSum = array('Fee'=>array('name'=>$f['label']),'due_amount'=>$f['total']);
 			array_push($feeSummary,$feeSum);
