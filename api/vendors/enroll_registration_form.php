@@ -92,6 +92,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		
 		$this->rightText($COL_1,$y,'NAME:','','b');
 		$this->rightText($COL_2,$y,'DATE OF BIRTH:','','b');
+		$this->rightText($COL_3,$y-1,'SECTION:','','b');
 		$this->rightText($COL_3,$y++,'GENDER:','','b');
 		
 		$this->rightText($COL_1,$y,'LRN:','','b');
@@ -145,9 +146,10 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->leftText($COL_1,$y,$SID,'','');
 		$this->leftText($COL_2,$y++,$LVL,'','');
 
-
+		//pr($complete);
 		$this->leftText($COL_1,$y,$NAME,'','');
 		$this->leftText($COL_2,$y,$DOB,'','');
+		$this->leftText($COL_3,$y-1,$complete['Section']['name'],'','');
 		$this->leftText($COL_3,$y++,$SEX,'','');
 
 		$this->leftText($COL_1,$y,$LRN,'','');

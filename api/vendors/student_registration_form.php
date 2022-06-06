@@ -97,47 +97,60 @@ class StudentRegistrationForm extends Formsheet{
 		$y=0;
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
 		//$this->centerText(15,$y,'UNITS',2,'b');
-		$this->leftText(15,$y,'SECTION','','b');
-		$this->centerText(20,$y,'DAY',2,'b');
-		$this->centerText(27,$y,'TIME',4,'b');
+		//$this->leftText(15,$y,'SECTION','','b');
+		$this->centerText(11,$y,'DAY',2,'b');
+		$this->centerText(15,$y,'PERIOD',2,'b');
+		$this->centerText(20,$y,'TIME',4,'b');
+		$this->centerText(27,$y,'TIME2',4,'b');
 		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
 		//ASSESSMENT
-		$totalunits=0;
+		//$totalunits=0;
 		$y++;
-		//pr($data['AssessmentSubject']);exit;
+		pr($data['AssessmentSubject']);exit;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
+
 			if(strlen($d['Subject']['name'])>=45){
-				$d['Subject']['name'] = substr($d['Subject']['name'],0,45) . '...';
+				$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
 			}
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
 			//$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
-				$this->leftText(15,$y,$d['Section']['name'],'','');
-
+				//$this->leftText(15,$y,$d['Section']['name'],'','');
+			$x_time = 20;
+			$x_day = 14;
+			$lastItem = end($d['ScheduleDetail']);
+			$length = count($d['ScheduleDetail']);
+			//pr($d['ScheduleDetail']); exit();
 			foreach($d['ScheduleDetail'] as $sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
-				$time = sprintf("%s -  %s",$startT,$endT);
+				$time = sprintf("%s-%s",$startT,$endT);
 				$grading = $sched['grading'];
+				//pr($sched); exit();
+				if($sched['id']!=$lastItem['id']||$length==1){
+					$this->centerText(11,$y,$day,2,'');
+					$this->centerText($x_day,$y,$grading,4,'');
+				}
+				$this->centerText($x_time,$y,$time,4,'');
 				
-				$this->centerText(20,$y,$day,2,'');
-				$this->centerText(27,$y++,$grading.' | '. $time,4,'');
-				
+				$x_time+=7;
+				$x_day+=7;
 			endforeach;
+			$y++;
 			if(!count($d['ScheduleDetail'])) $y++;
 
 
 			//$this->leftText(29.2,$y,'--','','');
-			$totalunits+=$d['Subject']['units'];
+			//$totalunits+=$d['Subject']['units'];
 		
 		}
 		$this->drawLine($y-0.6,'h');
 		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
-		$this->centerText(15,$y,number_format($totalunits,2),2,'b');
+		//$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+2;
 		$this->fee_breakdown($data,$end);
 		
