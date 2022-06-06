@@ -158,7 +158,7 @@ define(['app','api'], function (app) {
 						$scope.ActiveStudent.discount_amount = $scope.ActiveScheme.variance_amount;
 					
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
-					$scope.ActiveStudent.assessment_total = $scope.TotalAmount;
+					$scope.ActiveStudent.assessment_total = $scope.TotalAmount-$scope.ActiveScheme.variance_amount;
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -1026,6 +1026,7 @@ define(['app','api'], function (app) {
 					checkIrreg();
 				});
 			}
+			
 			
 			//check if irregular in first sem
 			function checkIrreg(){
