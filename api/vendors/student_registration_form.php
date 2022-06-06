@@ -108,7 +108,7 @@ class StudentRegistrationForm extends Formsheet{
 		//ASSESSMENT
 		//$totalunits=0;
 		$y++;
-		pr($data['AssessmentSubject']);exit;
+		//pr($data['AssessmentSubject']);exit;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 
