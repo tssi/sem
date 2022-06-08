@@ -199,6 +199,21 @@
 						<div class="form-group">
 							<div class="form-group">
 								<div class="row">
+									<div class="col-md-6">
+										<label for="">LRN</label>
+										<input type="text" class="form-control" placeholder="Learner's Reference Number" ng-model="lrn"/>
+									</div>
+									<div class="col-md-6">
+										<label for="">Student Type</label>
+										<select name="" id="" class="form-control" ng-options="st as st.name for st in StudentTypes "
+										ng-model="studentType" >
+											<option value="">Select Student Type</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
 									<div class="col-md-{{ActiveDepartment.id=='SH'?4:6}}"" >
 										<label for=""> Department</label>
 										<div class="btn-group btn-group-justified">

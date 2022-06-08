@@ -12,6 +12,12 @@ define(['app','api'], function (app) {
 				$scope.Countries=['Philippines'];
 				$scope.Provinces=['Batangas'];
 				$scope.Cities=['Balayan'];
+				$scope.StudentTypes = [
+					{id:'ESC',name:'ESC'},
+					{id:'REG',name:'Regular'},
+					{id:'PUB',name:'Public'},
+					{id:'QVR',name:'QVR'},
+				];
 			};
 			$scope.init();
 			$scope.Departments=[];
@@ -79,6 +85,8 @@ define(['app','api'], function (app) {
 				$scope.Student.citizenship=$scope.citizenship;
 				$scope.Student.prev_school=$scope.prevSchool;
 				$scope.Student.civil_status=$scope.civilStatus;
+				$scope.Student.lrn = $scope.lrn;
+				$scope.Student.student_type = $scope.studentType;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
@@ -154,6 +162,8 @@ define(['app','api'], function (app) {
 				$scope.citizenship = 'Filipino';
 				$scope.prevSchool=null;
 				$scope.civilStatus=null;
+				$scope.lrn = null;
+				$scope.studentType=null;
 			};
 			$scope.clearField2=function(){
 				$scope.landline = null;
