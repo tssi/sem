@@ -433,7 +433,7 @@ define(['app','api'], function (app) {
 			}
 			
 			function getReservations(){
-				api.GET('reservations',{account_id:$scope.ActiveStudent.id},function success(response){
+				api.GET('reservations',{account_id:$scope.ActiveStudent.id,esp:$scope.ActiveSy},function success(response){
 					var advances = 0;
 					var reserves = [];
 					for(var i in response.data){
@@ -833,7 +833,7 @@ define(['app','api'], function (app) {
 			
 			//getting applicable fee depending on year level
 			function getFees(){
-				var data = {year_level_id:$scope.ActiveSection.year_level_id,sy:$scope.ActiveSy}
+				var data = {year_level_id:$scope.ActiveSection.year_level_id,sy:$scope.ActiveSy,applicable_to:$scope.ActiveOpt}
 				api.GET('tuitions',data, function success(response){
 					$scope.ActiveTuition = response.data[0];
 					if($scope.ActiveSection.program_id=='MIXED'){
