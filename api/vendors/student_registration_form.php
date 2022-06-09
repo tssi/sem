@@ -63,7 +63,7 @@ class StudentRegistrationForm extends Formsheet{
 			'rows'=> 4,	
 		);
 		$this->section($metrics);
-		//pr($data);exit;
+		//pr($sec);exit;
 		//pr($data); exit();
 		$y=1;
 		$this->DrawImage(5,-0.8,0.7,0.7,__DIR__."/images/logo.png");
@@ -80,7 +80,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
 		$this->leftText(5.5,$y,'','','');
-		$this->leftText(20.5,$y++,$sec['YearLevel']['description'],'','');
+		$this->leftText(20.5,$y++,$sec['YearLevel']['description'].' - '.$sec['name'],'','');
 		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->drawBox(0,5,38,2.5);

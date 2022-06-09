@@ -86,7 +86,7 @@ define(['app','api'], function (app) {
 				$scope.Student.prev_school=$scope.prevSchool;
 				$scope.Student.civil_status=$scope.civilStatus;
 				$scope.Student.lrn = $scope.lrn;
-				$scope.Student.student_type = $scope.studentType;
+				$scope.Student.student_type = $scope.studentType.id;
 				$scope.hasBasicInfo = true;
 			};
 			$scope.contactInfo=function(){
