@@ -9,9 +9,11 @@ class SectionsController extends AppController {
 		$sections = $this->paginate();
 		if($this->isAPIRequest()){
 			foreach($sections as $i=>$sec){
+				//pr($sec); exit();
 				$sec['Section']['year_level'] = $sec['YearLevel']['name'];
 				$sc = $sec['Section'];
 				$sc['year_level'] = $sec['YearLevel']['name'];
+				$sc['program'] = $sec['Program']['name'];
 				
 				$sections[$i]['Section'] = $sc;
 			}

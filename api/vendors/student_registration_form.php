@@ -17,7 +17,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	
 	function hdr($data,$ass,$complete){
-		//pr($ass); exit();
+		//pr($complete); exit();
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -40,19 +40,20 @@ class StudentRegistrationForm extends Formsheet{
 		$y=6;
 		$this->rightText(5,$y,'STUDENT ID:','','b');
 		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
+		$this->leftText(25.5,$y-1,'SECTION:','','b');
 		$this->rightText(5,$y,'NAME:','','b');
 		$this->leftText(25,$y,'DATE/TIME:','','b');
 		$y=6;
 		//pr($data);exit;
 		$this->leftText(5.5,$y,$data['sno'],'','');
-		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'],'','');
+		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'].'-'.$complete['Section']['Program']['name'],'','');
 		$this->leftText(5.5,$y,$data['print_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
+		$this->leftText(29,$y-1,$complete['Section']['name'],'','');
 		$this->drawBox(0,5,38,2.5);
 	}
 	
 	function newstudent($data,$ass,$sec){
-		
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
