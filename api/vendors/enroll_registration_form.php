@@ -27,7 +27,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 	}
 
 	function hdr($data,$ass,$complete){
-		
+		//pr($complete); exit();
 		//$this->showLines = true;
 		$metrics = array(
 			'base_x'=> 0.5,
@@ -150,6 +150,10 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->leftText($COL_1,$y,$NAME,'','');
 		$this->leftText($COL_2,$y,$DOB,'','');
 		$this->leftText($COL_3,$y-1,$complete['Section']['name'],'','');
+		//pr($data); exit();
+		if(!in_array($data['year_level_id'],array('G7','G8','G9','GX')))
+			$this->leftText($COL_2+2.75,$y-1,'-'.$complete['Section']['Program']['name'],'','');
+			
 		$this->leftText($COL_3,$y++,$SEX,'','');
 
 		$this->leftText($COL_1,$y,$LRN,'','');

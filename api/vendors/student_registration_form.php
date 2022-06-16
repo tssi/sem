@@ -46,7 +46,10 @@ class StudentRegistrationForm extends Formsheet{
 		$y=6;
 		//pr($data);exit;
 		$this->leftText(5.5,$y,$data['sno'],'','');
-		$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'].'-'.$complete['Section']['Program']['name'],'','');
+		if(in_array($data['year_level_id'],array('G7','G8','G9','GX')))
+			$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'],'','');
+		else
+			$this->leftText(20.5,$y++,$complete['Section']['YearLevel']['name'].'-'.$complete['Section']['Program']['name'],'','');
 		$this->leftText(5.5,$y,$data['print_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
 		$this->leftText(29,$y-1,$complete['Section']['name'],'','');
