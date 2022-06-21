@@ -54,7 +54,7 @@ define(['app','api','atomic/bomb'],function(app){
 		$scope.LoadReport = function(){
 			$scope.Loading = 1;
 			var data = {
-				esp:2021,
+				esp:2022,
 				transaction_type_id:'TUIXN',
 				transac_date:$scope.date,
 				limit:'less'
@@ -70,7 +70,7 @@ define(['app','api','atomic/bomb'],function(app){
 		
 		function getList(){
 			var data = {
-				esp:2021,
+				esp:2022,
 				transaction_type_id:'TUIXN',
 				limit:'less'
 			}

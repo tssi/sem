@@ -32,6 +32,7 @@ class EnrollmentListsController extends AppController {
 							'GZSTEM'=>array(),
 							'GZHUMS'=>array(),
 							'GZABM'=>array(),
+							'GZGAS'=>array(),
 							'GZTVL'=>array(),
 							'GZMIXED'=>array(),
 							);
@@ -77,6 +78,8 @@ class EnrollmentListsController extends AppController {
 					if(!isset($programs[$stud['program_id']])){pr($stud); exit();}
 					$program = $programs[$stud['program_id']];
 					$prog_display = $stud['year_level_id'].$program;
+					
+					if(!isset($levels[$prog_display])){pr($stud); exit();}
 					array_push($levels[$prog_display],$data);
 				}
 				$item = array(
