@@ -1,7 +1,7 @@
 <div ng-controller="EnrollmentController as EC" ng-init="EC.init()">
 	<a-module>
 		<a-container>
-			<a-header>
+			<a-header is-main='true'>
 				<a-row>
 					<a-col size="6">
 						<h4>Enrollment Report</h4>
@@ -54,6 +54,7 @@
 										<th colspan="6"></th>
 										<th colspan="6" class="text-center">Grade 11</th>
 										<th colspan="6" class="text-center">Grade 12</th>
+										
 									</tr>
 									<tr>
 										<th class="text-center">Date</th>
@@ -75,6 +76,7 @@
 										<th class="text-center">GAS</th>
 										<th class="text-center">IRREG</th>
 										<th class="text-center">Total</th>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -106,12 +108,14 @@
 					<a-row>
 						<a-col size="12">
 							<h4>Overall Enrollment as of Today</h4>
-							<table class="table table-bordered table-condensed">
+							<table class="table table-bordered table-condensed table-reponsive">
 								<thead>
 									<tr>
 										<th colspan="7"></th>
 										<th colspan="6" class="text-center">Grade 11</th>
 										<th colspan="6" class="text-center">Grade 12</th>
+										<th rowspan="2" class="text-center">Current Total</th>
+										<th colspan="3" class="text-center">Previous Year</th>
 									</tr>
 									<tr class="text-center">
 										<th class="text-center">ED</th>
@@ -133,7 +137,10 @@
 										<th class="text-center">HUMSS</th>
 										<th class="text-center">GAS</th>
 										<th class="text-center">IRREG</th>
-										<th class="text-center">total</th>
+										<!-- <th class="text-center">Total</th> -->
+										<th class="text-center">JHS</th>
+										<th class="text-center">SHS</th>
+										<th class="text-center">Total</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -158,6 +165,9 @@
 										<td>{{item.levels.GZGAS}}</td>
 										<td>{{item.levels.GZMIXED}}</td>
 										<td>{{item.total}}</td>
+										<td>{{item.levels.HS}}</td>
+										<td>{{item.levels.SH}}</td>
+										<td>{{item.levels.prevtotal}}</td>
 									</tr>
 								</tbody>
 								<tfoot>
@@ -179,7 +189,10 @@
 										<td>{{EC.Enrollment.totals.levels.GZHUMS}}</td>
 										<td>{{EC.Enrollment.totals.levels.GZGAS}}</td>
 										<td>{{EC.Enrollment.totals.levels.GZMIXED}}</td>
-										<td>{{EC.Enrollment.totals.total}}</td>
+										<td class="font-weight-bold" >{{EC.Enrollment.totals.total}}</td>
+										<td>{{EC.Enrollment.totals.levels.HS}}</td>
+										<td>{{EC.Enrollment.totals.levels.SH}}</td>
+										<td class="font-weight-bold" >{{EC.Enrollment.totals.levels.prevtotal}}</td>
 									</tr>
 								</tfoot>
 							</table>

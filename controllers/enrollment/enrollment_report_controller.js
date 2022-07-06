@@ -14,13 +14,18 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.ActiveOrder = 'Year Level';
 			$scope.ActiveOpt = 'Summary';
 			getList();
+			getPrev();
 			atomic.ready(function(){
-				/* $selfScope.$watch('SI.ActiveStudent.department_id',function(deptId){
-					
-				}); */
+				$scope.ActiveSY = atomic.ActiveSY;
 			});
 			
 		};
+		
+		$selfScope.$watch("EC.Active",function(active){
+			if(!active) return false;
+			$scope.ActiveSY = active.sy;
+			console.log($scope.ActiveSY);
+		});
 		
 		$scope.setActOption = function(opt){
 			$scope.ActiveOpt = opt;
@@ -54,14 +59,63 @@ define(['app','api','atomic/bomb'],function(app){
 		$scope.LoadReport = function(){
 			$scope.Loading = 1;
 			var data = {
-				esp:2022,
+				esp:$scope.ActiveSY,
 				transaction_type_id:'TUIXN',
 				transac_date:$scope.date,
 				limit:'less'
 			}
 			data.transac_date = $filter('date')(new Date(data.transac_date),'yyyy-MM-dd');
 			api.GET('enrollments',data, function success(response){
+				var overall = [];
+				var ctr = 0;
+				angular.forEach(response.data[0].overall, function(item){
+					if(item.day=='Sun')
+						return;
+					overall[ctr]=item;
+					ctr++;
+				});
+				response.data[0].overall = overall;
 				$scope.Enrollment = response.data[0];
+				getPrev(data)
+			}, function error(response){
+				
+			});
+		}
+		function getPrev(data){
+			data.esp = $scope.ActiveSY-1;
+			api.GET('enrollments',data, function success(response){
+				var HS = ['G7','G8','G9','GX'];
+				var counter = 0;
+				$scope.Enrollment.totals.levels['HS']=0;
+				$scope.Enrollment.totals.levels['SH']=0;
+				$scope.Enrollment.totals.levels['prevtotal']=0;
+				angular.forEach(response.data[0].overall, function(item){
+					if(item.day=='Sun')
+						return;
+					if(counter > $scope.Enrollment.overall.length-1)
+						return;
+					$scope.Enrollment.overall[counter].levels['HS']=0;
+					$scope.Enrollment.overall[counter].levels['SH']=0;
+					$scope.Enrollment.overall[counter].levels['prevtotal']=0;
+					for(var key in item.levels){
+						//console.log(item.levels[key]);
+						var level = item.levels[key];
+						if(HS.indexOf(key)!==-1 && level>0){
+							$scope.Enrollment.overall[counter].levels['HS']+=level;
+							$scope.Enrollment.overall[counter].levels['prevtotal']+=level;
+							$scope.Enrollment.totals.levels['HS']+=level;
+						}else{
+							$scope.Enrollment.overall[counter].levels['SH']+=level;
+							$scope.Enrollment.overall[counter].levels['prevtotal']+=level;
+							$scope.Enrollment.totals.levels['SH']+=level;
+						}
+						$scope.Enrollment.totals.levels['prevtotal']+=level;
+					}
+					counter++;
+					
+				});
+				console.log($scope.Enrollment);
+				
 				$scope.Loading = 0;
 			}, function error(response){
 				
@@ -70,7 +124,7 @@ define(['app','api','atomic/bomb'],function(app){
 		
 		function getList(){
 			var data = {
-				esp:2022,
+				esp:$scope.ActiveSY,
 				transaction_type_id:'TUIXN',
 				limit:'less'
 			}
@@ -113,6 +167,7 @@ define(['app','api','atomic/bomb'],function(app){
 				console.log($scope.Lists);
 			});
 		}
+		
 		
 	}]);
 });

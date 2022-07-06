@@ -22,6 +22,7 @@ class Enrollment extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		
 	);
 	
 	function beforeFind($queryData){

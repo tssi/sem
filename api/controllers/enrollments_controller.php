@@ -2,17 +2,61 @@
 class EnrollmentsController extends AppController {
 
 	var $name = 'Enrollments';
+	var $uses = array('Enrollment','Student','ClasslistBlock');
 
 	function index() {
 		$this->Enrollment->recursive = 0;
+		$esp = $_GET['esp'];
 		$Enrollments = $this->paginate();
+		
+		$ClasslistBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp,'ClasslistBlock.esp <'=>$esp+1))));
+		//$prevBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp-1,'ClasslistBlock.esp <'=>$esp))));
+		$students = array();
+		//$prevStu = array();
+		foreach($ClasslistBlock as $i=>$c){
+			$block = $c['ClasslistBlock'];
+			$students[$block['student_id']] = $c;
+		}
+		
+		
+		/* foreach($prevBlock as $i=>$b){
+			$block = $b['ClasslistBlock'];
+			$prevStu[$block['student_id']] = $c;
+		}
+		//pr($prevStu); exit(); */
+		$interval = new DateInterval('P1D');
+		/* 
+		$prevEnroll = $this->Enrollment->find('all',array('recursive'=>0,'conditions'=>array('Enrollment.esp'=>$esp-1,'Enrollment.transaction_type_id'=>'TUIXN')));
+		$lastRecord = end($prevEnroll);
+		$prevLastDate = $lastRecord['Enrollment']['transac_date'];
+		$prevStartDate = $prevEnroll[0]['Enrollment']['transac_date'];
+		$prevPeriod = new DatePeriod(new DateTime($prevStartDate), $interval, new DateTime($prevLastDate));
+		$prevDays = array();
+		foreach($prevPeriod as $day){
+			$prevDays[$day->format('Y-m-d')]= array(
+											'date'=>$day->format('Y-m-d'),
+											'day'=>date('D', strtotime($day->format('Y-m-d'))),
+											'JH'=>0,
+											'SH'=>0,
+											'total'=>0,
+											);
+		}
+		foreach($prevEnroll as $en){
+			$led = $en['Enrollment'];
+			$stud = $prevStu[$led['account_id']];
+			if($stud['Section']=='HS'){
+				$prevDays[]
+			}
+			pr($stud); exit();
+		}
+		
+		pr($prevDays); exit(); */
 		if($this->isAPIRequest()){
 			$date = $_GET['transac_date'];
-			$today = date("Y-m-d");
-			$interval = new DateInterval('P1D');
+			$today = $_GET['transac_date'];
 			$start = $Enrollments[0]['Enrollment']['transac_date'];
-			//pr($Enrollments); exit();
 			$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
+			//pr($today); exit();
 			$days = array();
 			$levels_empty = array(
 								'G7'=>0,
@@ -40,14 +84,14 @@ class EnrollmentsController extends AppController {
 												'levels'=>$levels_empty
 												);
 			}
-			//PR($period);
+			
 			$days[$today] = array(
 								'date'=>$today,
 								'day'=>date('D', strtotime($today)),
 								'total'=>0,
 								'levels'=>$levels_empty
 								);
-			//pr($days); exit();
+
 			$HS = array('G7','G8','G9','GX');
 			$programs = array(
 				'SHSTM'=>"STEM",
@@ -80,26 +124,27 @@ class EnrollmentsController extends AppController {
 			);
 			foreach($Enrollments as $i=>$l){
 				$totals['total']++;
-				$stud = $l['Student'];
 				$led = $l['Enrollment'];
+				$stud = $students[$led['account_id']];
 				// Skip loop if empty student or invalid date
-				if(!isset($stud['year_level_id']) || !isset($days[$led['transac_date']])):
+				//pr($stud); exit();
+				if(!isset($stud['Section']['year_level_id']) || !isset($days[$led['transac_date']])):
 					continue;
 				endif;
 				
 				$days[$led['transac_date']]['total']++;
 
-				if(in_array($stud['year_level_id'],$HS)){
-					$days[$led['transac_date']]['levels'][$stud['year_level_id']]++;
-					$totals['levels'][$stud['year_level_id']]++;
+				if(in_array($stud['Section']['year_level_id'],$HS)){
+					$days[$led['transac_date']]['levels'][$stud['Section']['year_level_id']]++;
+					$totals['levels'][$stud['Section']['year_level_id']]++;
 				}
 				else{
-					if(isset($stud['program_id'])){
-						if(!isset($programs[$stud['program_id']])){
+					if(isset($stud['Section']['program_id'])){
+						if(!isset($programs[$stud['Section']['program_id']])){
 							pr($stud); exit();
 						}
-						$program = $programs[$stud['program_id']];
-						$prog_display = $stud['year_level_id'].$program;
+						$program = $programs[$stud['Section']['program_id']];
+						$prog_display = $stud['Section']['year_level_id'].$program;
 						$days[$led['transac_date']]['levels'][$prog_display]++;
 						$totals['levels'][$prog_display]++;
 					}
