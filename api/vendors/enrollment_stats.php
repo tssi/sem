@@ -16,6 +16,7 @@ class EnrollmentStatSheet extends Formsheet{
 	}
 
 	function today_stat($today=null){
+		//pr($today); exit();
 		$metrics = array(
 			'base_x'=> 0.5,
 			'base_y'=> 1.5,
@@ -84,7 +85,7 @@ class EnrollmentStatSheet extends Formsheet{
 				$x+=$colW;
 			}
 
-			$this->centerText($x,2.25,$today['total'],$colW+0.5);
+			//$this->centerText($x,2.25,$today['total'],$colW+0.5);
 		}
 	}
 
@@ -104,11 +105,15 @@ class EnrollmentStatSheet extends Formsheet{
 		$colW = 2.5;
 		$bxH = 4 * $lnH;
 
-		if(count($overall)>3)
-			$bxH =  (count($overall)+2) *$lnH;
+	
+		$bxH =  (count($overall)+2) *$lnH;
+		
 		$this->section($metrics);
-		$this->DrawBox(0,0,51, $bxH);
-		$this->DrawNEWSLine(0,1,51,1,'S');
+		$this->DrawBox(0,0,56, $bxH-1.25);
+		$this->DrawNEWSLine(0,1,56,1,'S');
+		$this->DrawNEWSLine(52,0,1.5,$bxH-1.25,'E');
+		$this->DrawNEWSLine(49.5,0,1.5,$bxH-1.25,'E');
+		$this->DrawNEWSLine(47.25,0,1.5,$bxH-1.25,'E');
 		$this->GRID['font_size']=11;
 		$this->leftText(0,-1,'Overall Enrollment',1,'b');
 
@@ -117,16 +122,16 @@ class EnrollmentStatSheet extends Formsheet{
 		//ED
 		// x, y, w, h, o
 		$this->GRID['font_size']=8;
-		$this->centerText(0,0.75,'ED',2);
-		$this->DrawNEWSLine(0,0,2,$bxH,'E');
+		$this->centerText(-.25,0.75,'ED',2);
+		$this->DrawNEWSLine(0,0,1.5,$bxH-1.25,'E');
 		// Date
-		$this->centerText(2,0.75,'Date',4);
-		$this->DrawNEWSLine(2,0,4,$bxH,'E');
+		$this->centerText(1.5,0.75,'Date',4);
+		$this->DrawNEWSLine(2,0,3,$bxH-1.25,'E');
 		// Day
-		$this->centerText(6,0.75,'Day',2);
-		$this->DrawNEWSLine(6,0,2,$bxH,'E');
+		$this->centerText(4.75,0.75,'Day',2);
+		$this->DrawNEWSLine(4.5,0,2,$bxH-1.25,'E');
 
-		$x = 8;
+		$x = 6.25;
 		$tracks = array("ABM","STEM","HUMSS","TVL","GAS","IRREG");
 		$ctrT = count($tracks);
 		for($l=1;$l<=16;$l++){
@@ -137,23 +142,26 @@ class EnrollmentStatSheet extends Formsheet{
 				$label = $tracks[($l+1)%$ctrT];
 			}
 			$this->centerText($x,0.75,$label,$colW);
-			$this->DrawNEWSLine($x,0,$colW,$bxH,'E');
+			$this->DrawNEWSLine($x,0,$colW,$bxH-1.25,'E');
 			$x+=$colW;
 		}
 
 		$GW = $colW*$ctrT;
 		// Grade 11
-		$this->DrawBox(18,-1,$GW, 1);
-		$this->centerText(18,-0.25,'Grade 11',$GW);
+		$this->DrawBox(16.25,-1,$GW, 1);
+		$this->centerText(16,-0.25,'Grade 11',$GW);
 		// Grade 12
-		$this->DrawBox(33,-1,$GW, 1);
-		$this->centerText(33,-0.25,'Grade 12',$GW);
+		$this->DrawBox(31.25,-1,$GW, 1);
+		$this->centerText(31.25,-0.25,'Grade 12',$GW);
+		// Previouse school year
+		$this->DrawBox(48.75,-1,7.25, 1);
+		$this->centerText(45,-0.25,'Previous SY',$GW);
+		$this->centerText(42.5,.75,'HS',$GW);
+		$this->centerText(45,.75,'SH',$GW);
+		$this->centerText(47.5,.75,'Total',$GW);
 		// Total
 		$this->centerText($x,0.75,'Total',$colW+0.5);
-		// Grand Total
-		$this->SetFillColor(255,255,255);
-		$this->DrawBox(0,$bxH-1.2,8, 1.24,'FD');
-		$this->centerText(0,$bxH-0.3,'Grade Total',8,'B');
+		
 
 
 		// Display today enrollment stats
@@ -164,32 +172,47 @@ class EnrollmentStatSheet extends Formsheet{
 			foreach($overall  as $O):
 				
 				$cnt++;
-				$this->centerText(0,$y-.1,$cnt,2);
+				$this->centerText(-.25,$y-.1,$O['cnt'],2);
 				$O['date'] = date("d-M-y", strtotime($O['date']));
-				$this->centerText(2,$y-.1,$O['date'],4);
+				$this->centerText(1.25,$y-.1,$O['date'],4);
 				$day = $O['day'][0];
-				$this->centerText(6,$y-.1,$day,2);
+				$this->centerText(4.75,$y-.1,$day,2);
 
-				$x = 8;
+				$x = 6.25;
 				foreach($O['levels'] as $l){
 					$this->centerText($x,$y-.1,$l,$colW);
 					$x+=$colW;
 				}
 
-				$this->centerText($x,$y-.1,$O['total'],$colW+0.5);
+				//$this->centerText($x,$y-.1,$O['total'],$colW+0.5);
 				$y+=$lnH;
-				$this->DrawNEWSLine(0,$y-1,51,$y-1,'S');
+				$this->DrawNEWSLine(0,$y-1,56,$y-1,'S');
 			endforeach;
-			$x = 8;
+			$x = 6.25;
 			$y = $bxH-0.5; 
-			foreach($totals['levels'] as $l){
-				$this->centerText($x,$y,$l,$colW,'b');
-				$x+=$colW;
+			if(isset($totals['levels'])){
+				$this->DrawNEWSLine($x,$y+.55,49.75,$y+.55,'S');
+				$c=0;
+				foreach($totals['levels'] as $l){
+					$this->centerText($x,$y+.25,$l,$colW,'b');
+					$x+=$colW;
+					if($c<=16)
+						$this->DrawNEWSLine($x-2.5,$y+.55,$colW,$bxH-1.25,'E');
+					$c++;
+				}
+				$this->DrawNEWSLine(52,0,1.5,5.5,'E');
+				$this->DrawNEWSLine(49.5,0,1.5,5.5,'E');
+				$this->DrawNEWSLine(47.25,0,1.5,5.5,'E');
+				$this->DrawNEWSLine(54.5,0,1.5,5.5,'E');
+				//pr($totals); exit();
+				//$this->centerText($x,$y+1,$totals['total'],$colW+0.5,'b');
+						// Grand Total
+				$this->SetFillColor(255,255,255);
+				$this->DrawBox(0,$bxH-1.2,6.5, 1.24,'FD');
+				$this->centerText(-.75,$bxH-.3,'Grand Total',8,'B');
 			}
-
-			$this->centerText($x,$y,$totals['total'],$colW+0.5,'b');
 		}
-
+		
 	}
 	
 	function enrollment_list($level,$data){

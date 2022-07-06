@@ -98,23 +98,24 @@ define(['app','api','atomic/bomb'],function(app){
 					$scope.Enrollment.overall[counter].levels['SH']=0;
 					$scope.Enrollment.overall[counter].levels['prevtotal']=0;
 					for(var key in item.levels){
-						//console.log(item.levels[key]);
 						var level = item.levels[key];
 						if(HS.indexOf(key)!==-1 && level>0){
 							$scope.Enrollment.overall[counter].levels['HS']+=level;
 							$scope.Enrollment.overall[counter].levels['prevtotal']+=level;
 							$scope.Enrollment.totals.levels['HS']+=level;
-						}else{
+						}
+						if(HS.indexOf(key)===-1 && level>0 &&key != 'total'){
 							$scope.Enrollment.overall[counter].levels['SH']+=level;
 							$scope.Enrollment.overall[counter].levels['prevtotal']+=level;
 							$scope.Enrollment.totals.levels['SH']+=level;
 						}
-						$scope.Enrollment.totals.levels['prevtotal']+=level;
+						if(key!='total')
+							$scope.Enrollment.totals.levels['prevtotal']+=level;
 					}
+					//console.log($scope.Enrollment.totals.levels['HS']);
 					counter++;
 					
 				});
-				console.log($scope.Enrollment);
 				
 				$scope.Loading = 0;
 			}, function error(response){

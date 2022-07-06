@@ -75,12 +75,12 @@ class EnrollmentsController extends AppController {
 								'GZHUMS'=>0,
 								'GZGAS'=>0,
 								'GZMIXED'=>0,
+								'total'=>0
 								);
 			foreach($period as $day){
 				$days[$day->format('Y-m-d')]= array(
 												'date'=>$day->format('Y-m-d'),
 												'day'=>date('D', strtotime($day->format('Y-m-d'))),
-												'total'=>0,
 												'levels'=>$levels_empty
 												);
 			}
@@ -88,7 +88,6 @@ class EnrollmentsController extends AppController {
 			$days[$today] = array(
 								'date'=>$today,
 								'day'=>date('D', strtotime($today)),
-								'total'=>0,
 								'levels'=>$levels_empty
 								);
 
@@ -102,7 +101,6 @@ class EnrollmentsController extends AppController {
 				'MIXED'=>'MIXED'
 			);
 			$totals = array(
-							'total'=>0,
 							'levels'=>array(
 										'G7'=>0,
 										'G8'=>0,
@@ -120,10 +118,11 @@ class EnrollmentsController extends AppController {
 										'GZTVL'=>0,
 										'GZGAS'=>0,
 										'GZMIXED'=>0,
+										'total'=>0
 									)
 			);
 			foreach($Enrollments as $i=>$l){
-				$totals['total']++;
+				$totals['levels']['total']++;
 				$led = $l['Enrollment'];
 				$stud = $students[$led['account_id']];
 				// Skip loop if empty student or invalid date
@@ -132,7 +131,7 @@ class EnrollmentsController extends AppController {
 					continue;
 				endif;
 				
-				$days[$led['transac_date']]['total']++;
+				$days[$led['transac_date']]['levels']['total']++;
 
 				if(in_array($stud['Section']['year_level_id'],$HS)){
 					$days[$led['transac_date']]['levels'][$stud['Section']['year_level_id']]++;
