@@ -10,47 +10,16 @@ class EnrollmentsController extends AppController {
 		$Enrollments = $this->paginate();
 		
 		$ClasslistBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp,'ClasslistBlock.esp <'=>$esp+1))));
-		//$prevBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp-1,'ClasslistBlock.esp <'=>$esp))));
 		$students = array();
-		//$prevStu = array();
+		
 		foreach($ClasslistBlock as $i=>$c){
 			$block = $c['ClasslistBlock'];
 			$students[$block['student_id']] = $c;
 		}
 		
 		
-		/* foreach($prevBlock as $i=>$b){
-			$block = $b['ClasslistBlock'];
-			$prevStu[$block['student_id']] = $c;
-		}
-		//pr($prevStu); exit(); */
 		$interval = new DateInterval('P1D');
-		/* 
-		$prevEnroll = $this->Enrollment->find('all',array('recursive'=>0,'conditions'=>array('Enrollment.esp'=>$esp-1,'Enrollment.transaction_type_id'=>'TUIXN')));
-		$lastRecord = end($prevEnroll);
-		$prevLastDate = $lastRecord['Enrollment']['transac_date'];
-		$prevStartDate = $prevEnroll[0]['Enrollment']['transac_date'];
-		$prevPeriod = new DatePeriod(new DateTime($prevStartDate), $interval, new DateTime($prevLastDate));
-		$prevDays = array();
-		foreach($prevPeriod as $day){
-			$prevDays[$day->format('Y-m-d')]= array(
-											'date'=>$day->format('Y-m-d'),
-											'day'=>date('D', strtotime($day->format('Y-m-d'))),
-											'JH'=>0,
-											'SH'=>0,
-											'total'=>0,
-											);
-		}
-		foreach($prevEnroll as $en){
-			$led = $en['Enrollment'];
-			$stud = $prevStu[$led['account_id']];
-			if($stud['Section']=='HS'){
-				$prevDays[]
-			}
-			pr($stud); exit();
-		}
 		
-		pr($prevDays); exit(); */
 		if($this->isAPIRequest()){
 			$date = $_GET['transac_date'];
 			$today = $_GET['transac_date'];

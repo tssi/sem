@@ -13,10 +13,9 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Order = ['Year Level','Date'];
 			$scope.ActiveOrder = 'Year Level';
 			$scope.ActiveOpt = 'Summary';
-			getList();
-			getPrev();
 			atomic.ready(function(){
 				$scope.ActiveSY = atomic.ActiveSY;
+				getList();
 			});
 			
 		};

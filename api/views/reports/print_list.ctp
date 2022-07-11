@@ -1,9 +1,10 @@
 <?php
 App::import('Vendor','enrollment_stats');
 
-	$ESS = new EnrollmentStatSheet();
+	$ESS = new EnrollmentListSheet();
 	//pr($data); exit();
 	if(isset($data[0]['level'])){
+		
 		foreach($data as $d){
 			$chunk_data = array_chunk($d['lists'],50,true);
 			foreach($chunk_data as $breakdown){

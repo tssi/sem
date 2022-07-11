@@ -215,6 +215,24 @@ class EnrollmentStatSheet extends Formsheet{
 		
 	}
 	
+	
+}
+
+class EnrollmentListSheet extends Formsheet{
+	protected static $_width = 11;
+	protected static $_height = 8.5;
+	protected static $_unit = 'in';
+	protected static $_orient = 'P';	
+	
+
+	
+	
+	function EnrollmentListSheet(){
+		$this->showLines = !true;
+		$this->FPDF(EnrollmentListSheet::$_orient, EnrollmentListSheet::$_unit,array(EnrollmentListSheet::$_width,EnrollmentListSheet::$_height));
+		$this->createSheet();
+	}
+	
 	function enrollment_list($level,$data){
 		//pr($data); exit();
 		$metrics = array(

@@ -2,22 +2,22 @@
 class EnrollmentListsController extends AppController {
 
 	var $name = 'EnrollmentLists';
+	var $uses = array('EnrollmentList','Student','ClasslistBlock');
+
 
 	function index() {
 		$this->EnrollmentList->recursive = 0;
 		$list = $this->paginate();
-		//pr($_GET); exit();
-		$conds = array('EnrollmentList.esp'=>$_GET['esp'],'EnrollmentList.ref_no LIKE'=>'X%');
-		//pr($conds); exit();
-		//$cancelled = $this->EnrollmentList->find('all',array('recursive'=>0,'conditions'=>$conds));
-		//$cancelled_ors = array();
-		//pr($cancelled); exit();
-		/* foreach($cancelled as $c){
-			$ref_no = explode(" ",$c['EnrollmentList']['ref_no']);
-			//pr($ref_no);
-			array_push($cancelled_ors,$ref_no[1]);
-		} */
-		//pr($cancelled_ors); exit();
+		$esp = $_GET['esp'];
+		$conds = array('EnrollmentList.esp'=>$esp,'EnrollmentList.ref_no LIKE'=>'X%');
+		$ClasslistBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp,'ClasslistBlock.esp <'=>$esp+1))));
+		$students = array();
+		
+		foreach($ClasslistBlock as $i=>$c){
+			$block = $c['ClasslistBlock'];
+			$students[$block['student_id']] = $c;
+		}
+		
 		$levels = array(
 							'G7'=>array(),
 							'G8'=>array(),
@@ -56,28 +56,26 @@ class EnrollmentListsController extends AppController {
 		}
 		$days[$today] = array();
 		if($this->isAPIRequest()){
-			//pr($days); exit();
+			//pr($students); exit();
 			foreach($list as $i=>$l){
 				$ref_no = explode(" ",$l['EnrollmentList']['ref_no']);
-				/* if(in_array($ref_no[1],$cancelled_ors)){
-					continue;
-				} */
-				$stud = $l['Student'];
-				$data = $l['EnrollmentList'];
 				
-				$data['name'] = $stud['last_name'].', '.$stud['first_name'].' '.$stud['middle_name'];
+				$data = $l['EnrollmentList'];
+				$stud = $students[$data['account_id']]['Student'];
+				$sec = $students[$data['account_id']]['Section'];
+				//pr($stud); exit();
+				
+				$data['name'] = $stud['full_name'];
 				$data['sno'] = $stud['sno'];
-				if(!isset($l['Student']['id'])){
-					pr($l); exit();
-				}
-				$data['year_level_id'] = $stud['year_level_id'];
-				$data['program_id'] = $stud['program_id'];
-				if(in_array($stud['year_level_id'],$HS)){
-					array_push($levels[$stud['year_level_id']],$data);
+				
+				$data['year_level_id'] = $sec['year_level_id'];
+				$data['program_id'] = $sec['program_id'];
+				if(in_array($sec['year_level_id'],$HS)){
+					array_push($levels[$sec['year_level_id']],$data);
 				}else{
-					if(!isset($programs[$stud['program_id']])){pr($stud); exit();}
-					$program = $programs[$stud['program_id']];
-					$prog_display = $stud['year_level_id'].$program;
+					if(!isset($programs[$sec['program_id']])){pr($stud); exit();}
+					$program = $programs[$sec['program_id']];
+					$prog_display = $sec['year_level_id'].$program;
 					
 					if(!isset($levels[$prog_display])){pr($stud); exit();}
 					array_push($levels[$prog_display],$data);
