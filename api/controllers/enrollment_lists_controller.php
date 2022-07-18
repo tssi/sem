@@ -66,6 +66,10 @@ class EnrollmentListsController extends AppController {
 				//pr($stud); exit();
 				
 				$data['name'] = $stud['full_name'];
+				if($stud['full_name']==null){
+					$data['name']=$stud['class_name'];
+					//pr($stud['class_name']); exit();
+				}
 				$data['sno'] = $stud['sno'];
 				
 				$data['year_level_id'] = $sec['year_level_id'];
