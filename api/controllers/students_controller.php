@@ -8,7 +8,7 @@ class StudentsController extends AppController {
 		foreach($students as $i=>$s){
 			//pr($s); exit();
 			if(!isset($s['Account']['subsidy_status'])){
-				pr($s); exit();
+				//pr($s); exit();
 			}
 			if(isset($s['YearLevel']['Section'][0]['department_id']))
 				$s['Student']['department_id'] = $s['YearLevel']['Section'][0]['department_id'];
