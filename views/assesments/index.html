@@ -379,8 +379,8 @@
 								<tr ng-repeat="sched in sec.details " >
 									<td>{{sched.subject}}</td>
 									<!-- <td rowspan="{{ActiveSchedule.schedule_details.length}}" ng-show="$index==0">{{ActiveSchedule.section}}</td> -->
-									<td ng-show="!sched.no_sched">{{sched.sched}}</td>
-									<td ng-show="sched.no_sched">Schedule not set</td>
+									<td ng-show="sched.sched">{{sched.sched}}</td>
+									<td ng-show="!sched.sched">Schedule not set</td>
 									<td>
 										<button class="btn btn-success" ng-click="AddSched(sched,$index,sec)"><span class="glyphicon glyphicon-plus"></span></button>
 									</td>

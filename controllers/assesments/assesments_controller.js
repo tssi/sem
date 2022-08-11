@@ -668,10 +668,11 @@ define(['app','api'], function (app) {
 				var day = 1;
 				//console.log(day);
 				var lastDate = '';
-				angular.forEach($scope.ActiveTuition.schemes, function(sc){
-					if(sc.scheme_id=='MONT')
+				//angular.forEach($scope.ActiveTuition.schemes, function(sc){
+					//if(sc.scheme_id=='MONT')
+						var sc = $scope.ActiveTuition.schemes[0];
 						lastDate = new Date(sc.schedule[sc.schedule.length-1].due_dates);
-				});
+				//});
 				//for irregular only 5 months
 				var lastMonth = lastDate.getMonth()-4;
 				//console.log($scope.ActiveTuition.schemes);
@@ -953,27 +954,32 @@ define(['app','api'], function (app) {
 										sec.schedule = sched;
 									}
 								});
-								console.log(sec);
+								console.log($scope.Subjects);
 								angular.forEach($scope.Subjects, function(sub){
 									if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
 										var subject_data = {'subject':sub.name,'subject_id':sub.code};
 										console.log(sec);
-										if(sec.schedule.id)
+										if(sec.schedule)
 											subject_data.schedule_id = sec.schedule.id;
 										details.push(subject_data);
 									}
 								});
 								sec.details = details;
+								console.log(sec.details);
 							});
+							
+							console.log($scope.Sections);
 							angular.forEach($scope.Sections, function(sec){
 								if(sec.program_id!=='MIXED'){
-									angular.forEach(sec.schedule.schedule_details, function(sched){
-										angular.forEach(sec.details, function(det){
-											if(det.subject_id==sched.subject_id){
-												det.sched = sched.sched;
-											}
+									if(sec.schedule){
+										angular.forEach(sec.schedule.schedule_details, function(sched){
+											angular.forEach(sec.details, function(det){
+												if(det.subject_id==sched.subject_id){
+													det.sched = sched.sched;
+												}
+											});
 										});
-									});
+									}
 								}
 							});
 							console.log($scope.Sections);
