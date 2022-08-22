@@ -63,7 +63,6 @@ class EnrollmentListsController extends AppController {
 				$data = $l['EnrollmentList'];
 				$stud = $students[$data['account_id']]['Student'];
 				$sec = $students[$data['account_id']]['Section'];
-				//pr($stud); exit();
 				
 				$data['name'] = $stud['full_name'];
 				if($stud['full_name']==null){

@@ -12,15 +12,21 @@ class EnrollmentList extends AppModel {
 		'Student' => array(
 			'className' => 'Student',
 			'foreignKey' => 'account_id',
-			'dependent' => false,
-			'conditions' =>'',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'conditions' => '',
+			'fields' => array(
+				'Student.sno',
+				'Student.gender',
+				'Student.short_name',
+				'Student.full_name',
+				'Student.class_name',
+				'Student.status',
+				'Student.year_level_id',
+				'Student.section_id',
+				'Student.last_name',
+				'Student.first_name',
+				'Student.middle_name',
+			),
+			'order' => ''
 		),
 	);
 	
