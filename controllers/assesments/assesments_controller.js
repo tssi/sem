@@ -159,7 +159,7 @@ define(['app','api'], function (app) {
 					
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
 
-					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount;
+					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount-$scope.ActiveScheme.variance_amount;
 
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
@@ -870,6 +870,7 @@ define(['app','api'], function (app) {
 						}
 					});
 					$scope.TotalAmount=$scope.TotalDue;
+					console.log(breakdown);
 					$scope.ActiveTuition.fee_breakdowns = breakdown;
 			}
 			
