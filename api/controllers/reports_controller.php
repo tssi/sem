@@ -318,8 +318,16 @@ class ReportsController extends AppController{
 				endif;
 
 				$INQ =  $data['Inquiry'];
+				$hasHH = $this->Household->hasHousehold($ACC);
+				
+				if($hasHH){
+					$HHO  = $this->Household->getInfo($SID);
+					if(isset($HHO['members'])):
+						$hasHH = count($HHO['members'])>0;
+					endif;
+				}
 				//Init household if not exist
-				if(!$this->Household->hasHousehold($ACC)){
+				if(!$hasHH){
 					// Init home address & contact
 					$home = array();
 					

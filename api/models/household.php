@@ -26,7 +26,9 @@ class Household extends AppModel {
 	);
 	function getInfo($student){
 		$hhObj = array('members'=>array(),'address'=>null, 'mobile_number'=>null, 'email'=>'');
-		$HOM = $this->HouseholdMember->findByEntityId($student);
+		$cond = array('HouseholdMember.entity_id'=>$student);
+		$order = array('HouseholdMember.id'=>'DESC');
+		$HOM = $this->HouseholdMember->find('first',array('conditions'=>$cond,'order'=>$order));
 		if($HOM['HouseholdMember']){
 			$HID = $HOM['HouseholdMember']['household_id'];
 			$HHL = $this->find('first',array('conditions'=>array('id'=>$HID)));
@@ -71,6 +73,7 @@ class Household extends AppModel {
 		$this->save($home);
 		$SID = $home['student'];
 		$GRD = $home['guardian'];
+		$this->HouseholdMember->Guardian->create();
 		$this->HouseholdMember->Guardian->save($GRD);
 		$GID = $this->HouseholdMember->Guardian->id;
 		$members = array();
