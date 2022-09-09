@@ -87,13 +87,17 @@ class ReportsController extends AppController{
 		$tuition = $this->Tuition->getTuiDetail($sy,$yl);
 		$isIrreg = $tuition['assessment_total']!=$data['Assessment']['assessment_total'];
     	// Check if ASB is updated compared to ASM modified	
-    	$isAssSubjUpdated = $asbCreate > $asmModified;
+		$isAssSubjUpdated = 0;
+		if($asbCreate > $asmModified)
+			$isAssSubjUpdated = 1;
 
     	//Check if section is block or mixed
     	$isBlock =  $data['Section']['program_id']!='MIXED';
-
+		/* pr($asbCreate); 
+		pr($asmModified); 
+		exit(); */
     	// Re-initialize Assesssment Subject for regular student
-    	if(!$isIrreg && !$isAssSubjUpdated):
+    	if(!$isIrreg && $isAssSubjUpdated==1):
 			$sCond =  array(array('Schedule.section_id'=>$sectId, 'Schedule.esp'=>$esp));
 			if(!in_array($yl,array('GY','GZ')))
 				$sCond =  array(array('Schedule.section_id'=>$sectId,'Schedule.esp'=>floor($esp)));

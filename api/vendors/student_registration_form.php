@@ -102,7 +102,7 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
 		//$this->centerText(15,$y,'UNITS',2,'b');
 		//$this->leftText(15,$y,'SECTION','','b');
-		$this->centerText(11,$y,'DAY',2,'b');
+		$this->centerText(12,$y,'DAY',2,'b');
 		$this->centerText(15,$y,'PERIOD',2,'b');
 		$this->centerText(20,$y,'TIME',4,'b');
 		$this->centerText(27,$y,'TIME2',4,'b');
@@ -136,7 +136,7 @@ class StudentRegistrationForm extends Formsheet{
 				$grading = $sched['grading'];
 				//pr($sched); exit();
 				if($sched['id']!=$lastItem['id']||$length==1){
-					$this->centerText(11,$y,$day,2,'');
+					$this->centerText(12,$y,$day,2,'');
 					$this->centerText($x_day,$y,$grading,4,'');
 				}
 				$this->centerText($x_time,$y,$time,4,'');
