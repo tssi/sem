@@ -86,6 +86,10 @@
 									<td>Modules & Ebooks</td>
 									<td><div class="amount peso">{{Module | currency}}</div></td>
 								</tr>
+								<tr ng-if="TutCount">
+									<td>Tutorial</td>
+									<td><div class="amount peso">{{7000 * TutCount | currency}}</div></td>
+								</tr>
 							</tfoot>
 						</table>
 					</div>

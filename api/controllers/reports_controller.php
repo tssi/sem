@@ -151,13 +151,14 @@ class ReportsController extends AppController{
 		foreach($fees as $f){
 			$type =  $f['Fee']['type'];
 			$name =  $f['Fee']['name'];
-			
+			//pr($f);
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
 				switch($type){
 					case 'TF': $label = 'Tuition Fee'; break;
 					case 'LAB': $label = 'Laboratory Fee'; break;
 					case 'MSC': $label = 'Misc. Fee'; break;
+					case 'TUT': $label = 'Tutorial Fee'; break;
 					
 					// If fee is different from the 3 main types use the fee name
 					default: $label = $name; break; 
@@ -166,7 +167,7 @@ class ReportsController extends AppController{
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
-		
+		//pr($feeTotals); exit();
 		
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
 		//pr($spons); exit();

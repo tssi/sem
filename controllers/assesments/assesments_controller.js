@@ -552,7 +552,10 @@ define(['app','api'], function (app) {
 			
 			function ComputeSubjects(){
 				var subjects = [];
+				$scope.TutCount = 0;
 				angular.forEach($scope.CustomizedScheds,function(sub){
+					if(sub.section_id==2121)
+						$scope.TutCount++;
 					subjects.push(sub.subject_id);
 				});
 				api.GET('fee_tuihr_subjects',{subject_id:subjects,limit:'less'},function success(response){
@@ -577,6 +580,7 @@ define(['app','api'], function (app) {
 						fees.push(sub.fee_id);
 					});
 					angular.forEach($scope.OrigFees, function(fee){
+						console.log(fee);
 						if(fees.indexOf(fee.fee_id)!==-1){
 							$scope.TotalDue+=fee.amount;
 							$scope.ActiveTuition.fee_breakdowns.push(fee);
@@ -654,6 +658,8 @@ define(['app','api'], function (app) {
 			//computes for irregular student
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
+				let tutorial_fee = 7000 * $scope.TutCount;
+				$scope.TotalAmount+=tutorial_fee;
 				var uponnrol = 0;
 				console.log($scope.ActiveTuition.fee_breakdowns);
 				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
