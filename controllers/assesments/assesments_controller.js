@@ -160,7 +160,8 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
 
 					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount-$scope.ActiveScheme.variance_amount;
-
+					if(!$scope.ActiveStudent.assessment_total)
+						$scope.ActiveStudent.assessment_total = $scope.TotalAmount;
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -552,12 +553,16 @@ define(['app','api'], function (app) {
 			
 			function ComputeSubjects(){
 				var subjects = [];
+				$scope.TutCount = 0;
 				angular.forEach($scope.CustomizedScheds,function(sub){
+					if(sub.section_id==2121)
+						$scope.TutCount++;
 					subjects.push(sub.subject_id);
 				});
 				api.GET('fee_tuihr_subjects',{subject_id:subjects,limit:'less'},function success(response){
 					var tuition = 0;
 					angular.forEach(response.data, function(sub){
+						console.log(sub);
 						tuition += sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr;
 						console.log(sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr);
 					});
@@ -577,6 +582,7 @@ define(['app','api'], function (app) {
 						fees.push(sub.fee_id);
 					});
 					angular.forEach($scope.OrigFees, function(fee){
+						console.log(fee);
 						if(fees.indexOf(fee.fee_id)!==-1){
 							$scope.TotalDue+=fee.amount;
 							$scope.ActiveTuition.fee_breakdowns.push(fee);
@@ -654,6 +660,8 @@ define(['app','api'], function (app) {
 			//computes for irregular student
 			function IrregPaymentScheme(){
 				$scope.TotalAmount=$scope.TotalDue;
+				let tutorial_fee = 7000 * $scope.TutCount;
+				$scope.TotalAmount+=tutorial_fee;
 				var uponnrol = 0;
 				console.log($scope.ActiveTuition.fee_breakdowns);
 				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){

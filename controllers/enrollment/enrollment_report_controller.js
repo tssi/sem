@@ -75,6 +75,7 @@ define(['app','api','atomic/bomb'],function(app){
 				});
 				response.data[0].overall = overall;
 				$scope.Enrollment = response.data[0];
+				console.log($scope.Enrollment);
 				getPrev(data)
 			}, function error(response){
 				
@@ -111,7 +112,7 @@ define(['app','api','atomic/bomb'],function(app){
 						if(key!='total')
 							$scope.Enrollment.totals.levels['prevtotal']+=level;
 					}
-					//console.log($scope.Enrollment.totals.levels['HS']);
+					console.log($scope.Enrollment.totals.levels['HS']);
 					counter++;
 					
 				});

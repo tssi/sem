@@ -43,7 +43,7 @@ class EnrollmentListsController extends AppController {
 			'SHTVL'=>"TVL",
 			'SHABM'=>"ABM",
 			'SHGAS'=>"GAS",
-			'SHMIXED'=>"MIXED",
+			'MIXED'=>"MIXED",
 		);
 		$today = date("Y-m-d");
 		$interval = new DateInterval('P1D');
@@ -76,7 +76,7 @@ class EnrollmentListsController extends AppController {
 				if(in_array($sec['year_level_id'],$HS)){
 					array_push($levels[$sec['year_level_id']],$data);
 				}else{
-					if(!isset($programs[$sec['program_id']])){pr($stud); exit();}
+					if(!isset($programs[$sec['program_id']])){pr($programs); exit();}
 					$program = $programs[$sec['program_id']];
 					$prog_display = $sec['year_level_id'].$program;
 					
