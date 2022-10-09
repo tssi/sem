@@ -160,8 +160,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
 
 					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount-$scope.ActiveScheme.variance_amount;
-					if(!$scope.ActiveStudent.assessment_total)
-						$scope.ActiveStudent.assessment_total = $scope.TotalAmount;
+
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -562,7 +561,6 @@ define(['app','api'], function (app) {
 				api.GET('fee_tuihr_subjects',{subject_id:subjects,limit:'less'},function success(response){
 					var tuition = 0;
 					angular.forEach(response.data, function(sub){
-						console.log(sub);
 						tuition += sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr;
 						console.log(sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr);
 					});
@@ -1109,4 +1107,3 @@ define(['app','api'], function (app) {
 	}]);
 	
 });
-
