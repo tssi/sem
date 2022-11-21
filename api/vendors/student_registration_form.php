@@ -103,9 +103,10 @@ class StudentRegistrationForm extends Formsheet{
 		//$this->centerText(15,$y,'UNITS',2,'b');
 		//$this->leftText(15,$y,'SECTION','','b');
 		$this->centerText(12,$y,'DAY',2,'b');
-		$this->centerText(15,$y,'PERIOD',2,'b');
-		$this->centerText(20,$y,'TIME',4,'b');
-		$this->centerText(27,$y,'TIME2',4,'b');
+		$this->centerText(15,$y,'DAY2',2,'b');
+		$this->centerText(18,$y,'PERIOD',2,'b');
+		$this->centerText(22,$y,'TIME',4,'b');
+		$this->centerText(28,$y,'TIME2',4,'b');
 		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
@@ -123,11 +124,11 @@ class StudentRegistrationForm extends Formsheet{
 			//$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
 				//$this->leftText(15,$y,$d['Section']['name'],'','');
-			$x_time = 20;
-			$x_day = 14;
+			$x_time = 22;
+			$x_day = 11;
 			$lastItem = end($d['ScheduleDetail']);
 			$length = count($d['ScheduleDetail']);
-			//pr($d['ScheduleDetail']); exit();
+			//pr($d['ScheduleDetail']); 
 			foreach($d['ScheduleDetail'] as $sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
@@ -136,13 +137,14 @@ class StudentRegistrationForm extends Formsheet{
 				$grading = $sched['grading'];
 				//pr($sched); exit();
 				if($sched['id']!=$lastItem['id']||$length==1){
-					$this->centerText(12,$y,$day,2,'');
-					$this->centerText($x_day,$y,$grading,4,'');
+					//$this->centerText(12,$y,$day,2,'');
+					$this->centerText(17,$y,$grading,4,'');
 				}
 				$this->centerText($x_time,$y,$time,4,'');
+				$this->centerText($x_day,$y,$day,4,'');
 				
 				$x_time+=7;
-				$x_day+=7;
+				$x_day+=3;
 			endforeach;
 			$y++;
 			//if(!count($d['ScheduleDetail'])) $y++;

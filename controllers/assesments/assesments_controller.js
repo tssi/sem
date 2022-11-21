@@ -1,3 +1,4 @@
+
 "use strict";
 define(['app','api'], function (app) {
     app.register.controller('AssesmentController',['$scope','$rootScope','$uibModal','api', '$filter', function ($scope,$rootScope,$uibModal,api,$filter) {
@@ -160,8 +161,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
 
 					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount-$scope.ActiveScheme.variance_amount;
-					if(!$scope.ActiveStudent.assessment_total)
-						$scope.ActiveStudent.assessment_total = $scope.TotalAmount;
+
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
@@ -364,7 +364,7 @@ define(['app','api'], function (app) {
 			$scope.filterStudent=function(student){
 				var searchBox = $scope.searchStudent;
 				var keyword = new RegExp(searchBox,'i');	
-				var test = keyword.test(student.first_name) || keyword.test(student.id) || keyword.test(student.rfid);
+				var test = keyword.test(student.first_name) || keyword.test(student.id);
 				return !searchBox || test;
 			};
 			$scope.clearSearchStudent=function(){
@@ -379,15 +379,13 @@ define(['app','api'], function (app) {
 				$scope.Students = '';
 				var data = {
 					keyword:$scope.SearchWord,
-					fields:['first_name','middle_name','last_name','id','rfid'],
+					fields:['first_name','middle_name','last_name','id'],
 					limit:'less',
 				}
 				var success = function(response){
 					if(response.meta.code)
 						$scope.NoStudent = true;
 					$scope.Students = response.data;
-					
-					}
 				}
 				var error = function(response){
 					
@@ -1110,4 +1108,3 @@ define(['app','api'], function (app) {
 	}]);
 	
 });
-
