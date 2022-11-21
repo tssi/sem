@@ -145,7 +145,7 @@ class StudentRegistrationForm extends Formsheet{
 				$x_day+=7;
 			endforeach;
 			$y++;
-			if(!count($d['ScheduleDetail'])) $y++;
+			//if(!count($d['ScheduleDetail'])) $y++;
 
 
 			//$this->leftText(29.2,$y,'--','','');
@@ -237,7 +237,7 @@ class StudentRegistrationForm extends Formsheet{
 		}
 	
 		$this->drawLine($y-0.6,'h',array(22,11));
-		$this->rightText(30,$y,number_format($totaldue,2),3,'b');
+		$this->rightText(30,$y,number_format(round($totaldue),2),3,'b');
 	}
 
 	function foot_notes($data,$end){
