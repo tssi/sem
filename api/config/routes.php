@@ -56,6 +56,11 @@ Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'
 			"/reports/:action",
 			array("controller"=>"reports", "[method]" => "POST")
 	);
+
+	Router::connect(
+			"/reports/reg_form",
+			array("controller"=>"reports", "[method]" => "GET", "action"=>"reg_form")
+	);
 	
 	
 	App::import('Lib', 'Api.SlugRoute');

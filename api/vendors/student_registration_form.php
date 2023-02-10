@@ -113,13 +113,22 @@ class StudentRegistrationForm extends Formsheet{
 		//ASSESSMENT
 		//$totalunits=0;
 		$y++;
-		//pr($data['AssessmentSubject']);exit;
+		$isSH =  preg_match('/G[YZ]/',$data['Section']['year_level_id']);
+		$is2ndSEM =  isset($data['isSecondSem']);
+		$tot_subjs = 0;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
-
+			$length = count($d['ScheduleDetail']);
+			if(!$length) continue;
+			if($isSH):
+				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
+				if($isS2Sched && !$is2ndSEM) continue;
+				if(!$isS2Sched && $is2ndSEM) continue;
+			endif;
 			if(strlen($d['Subject']['name'])>=45){
 				$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
 			}
+			$tot_subjs++;
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
 			//$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
@@ -127,9 +136,8 @@ class StudentRegistrationForm extends Formsheet{
 			$x_time = 22;
 			$x_day = 11;
 			$lastItem = end($d['ScheduleDetail']);
-			$length = count($d['ScheduleDetail']);
-			//pr($d['ScheduleDetail']); 
-			foreach($d['ScheduleDetail'] as $sched):
+
+              foreach($d['ScheduleDetail'] as $sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
@@ -147,7 +155,7 @@ class StudentRegistrationForm extends Formsheet{
 				$x_day+=3;
 			endforeach;
 			$y++;
-			if(!count($d['ScheduleDetail'])) $y++;
+			//if(!count($d['ScheduleDetail'])) $y++;
 
 
 			//$this->leftText(29.2,$y,'--','','');
@@ -155,7 +163,7 @@ class StudentRegistrationForm extends Formsheet{
 		
 		}
 		$this->drawLine($y-0.6,'h');
-		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
+		$this->leftText(0.2,$y,'Total No. of Subject: '.$tot_subjs,'','b');
 		//$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+2;
 		$this->fee_breakdown($data,$end);

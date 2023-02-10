@@ -240,16 +240,16 @@ class ReportsController extends AppController{
 		$sectId = 7004;
 		$type = 'batch';
 		$student = null;
-
-		if(isset($_POST['Sy'])){
-			$esp = $_POST['Sy'].'.'.$_POST['Sem'];
-			$sem = $_POST['Sem'];
-			$sy = $_POST['Sy'];
-			$sectId = $_POST['Section'];
-			$type =  $_POST['Type'];
-			$student =  $_POST['Student'];
+		if(isset($_REQUEST['Sy'])){
+			$esp = $_REQUEST['Sy'].'.'.$_REQUEST['Sem'];
+			$sem = $_REQUEST['Sem'];
+			$sy = $_REQUEST['Sy'];
+			$sectId = $_REQUEST['Section'];
+			
+			$student =  $_REQUEST['Student'];
+			$type =  $student?"single":"batch";
 		}
-		
+
 		if($type=='single'){
 			$refNo = $this->Assessment->getAssessment($student,$esp);
 			if(!isset($refNo))
@@ -382,7 +382,6 @@ class ReportsController extends AppController{
 			array_push($DATA_BANK,$data);
 
 		endforeach;
-		
 
 		$this->set(compact('DATA_BANK'));
 		

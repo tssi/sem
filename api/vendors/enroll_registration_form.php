@@ -46,6 +46,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$SCHOOL_ID =  '424538';
 		$SCHOOL_SM = intval(explode('.',$ass['esp'].'')[1]);
 		
+		
 		$SCHOOL_YR = intval($ass['esp']);
 
 		$isSH =  $data['year_level_id']=='GY' ||  $data['year_level_id']=='GZ';
@@ -55,9 +56,10 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$SCHID =  sprintf("School ID: %s",$SCHOOL_ID);
 		$SCHID =  sprintf("School ID: %s",$SCHOOL_ID);
 		$SCH_DURA =  sprintf("SCHOOL YEAR %d - %d /  ",$SCHOOL_YR, $SCHOOL_YR+1);
-
+		$is2ndSEM  = false;
 		if($isSH):
-			$SCH_DURA .=$SCHOOL_SM==0?'1st Semester':'2nd Semester';
+			$is2ndSEM =  isset($complete['isSecondSem']);
+			$SCH_DURA .=$is2ndSEM?'1st Semester':'2nd Semester';
 		else:
 			$SCH_DURA .='FULL';
 		endif;
