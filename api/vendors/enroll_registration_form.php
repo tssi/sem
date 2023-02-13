@@ -190,8 +190,8 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$data['offsetX'] = 0;
 		parent::data($data);
 		$data['offsetX'] = 2;
-		
-		if(isset($data['isSecondSem'])){
+		$isRegular  =  $data['Assessment']['account_details']!='Irregular';
+		if(isset($data['isSecondSem'])&& $isRegular){
 			$this->hardcode($data);
 		}
 		else{
