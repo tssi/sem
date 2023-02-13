@@ -684,7 +684,7 @@ define(['app','api'], function (app) {
 				var assess_date = new Date();
 				var year = assess_date.getFullYear();
 				var nextMonth = assess_date.getMonth()+2;
-				var day = 1;
+				var day = 15;
 				//console.log(day);
 				var lastDate = '';
 				//angular.forEach($scope.ActiveTuition.schemes, function(sc){
@@ -738,8 +738,7 @@ define(['app','api'], function (app) {
 				}
 				
 				if($scope.InitialFee>=$scope.TotalAmount){
-					var day = 15;
-					var due_date = new Date(year+'-'+nextMonth+'-'+day);
+					var due_date =year+'-'+nextMonth+'-'+day;
 					var sched = {
 						billing_period_id : 'UPONNROL',
 						due_dates:due_date,
