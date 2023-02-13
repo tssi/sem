@@ -572,16 +572,16 @@ define(['app','api'], function (app) {
 						console.log(sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr);
 					});
 					totalDue+=tuition;
-					console.log($scope.ActiveTuition.fee_breakdowns);
-					$scope.ActiveTuition.fee_breakdowns.push({fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1, type:"TF"});
-					getSpecialFees(subjects,totalDue);
+					var tuiFee = {fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1, type:"TF"};
+					breakdowns.push(tuiFee);
+					getSpecialFees(subjects,totalDue,breakdowns);
 				})
 				
 			}
 			
 			
 			//computes for special subjects
-			function getSpecialFees(subjects,totalDue){
+			function getSpecialFees(subjects,totalDue,breakdowns){
 				api.GET('fee_special_subjects',{subject_id:subjects,limit:'less'}, function success(response){
 					var fees = [];
 					angular.forEach(response.data,function(sub){
@@ -591,14 +591,14 @@ define(['app','api'], function (app) {
 						console.log(fee);
 						if(fees.indexOf(fee.fee_id)!==-1){
 							totalDue+=fee.amount;
-							$scope.ActiveTuition.fee_breakdowns.push(fee);
+							breakdowns.push(fee);
 						}
 						
 					});
 					
-					IrregPaymentScheme(totalDue);
+					IrregPaymentScheme(totalDue,breakdowns);
 				},function error(response){
-					IrregPaymentScheme(totalDue);
+					IrregPaymentScheme(totalDue,breakdowns);
 				});
 				
 			}
@@ -664,13 +664,17 @@ define(['app','api'], function (app) {
 			}
 			
 			//computes for irregular student
-			function IrregPaymentScheme(){
-				$scope.TotalAmount=$scope.TotalDue;
-				let tutorial_fee = 7000 * $scope.TutCount;
-				$scope.TotalAmount+=tutorial_fee;
+			function IrregPaymentScheme(totalDue,breakdowns){
+				$scope.TotalAmount=totalDue;
+
+				// Add tutorial subjects 7k per subject
+				if($scope.TutCount){
+					let tutorial_fee = 7000 * $scope.TutCount;
+					$scope.TotalAmount+=tutorial_fee;
+				}
 				var uponnrol = 0;
-				console.log($scope.ActiveTuition.fee_breakdowns);
-				angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
+				
+				angular.forEach(breakdowns, function(fee){
 					if(fee.type=='MSC'){
 						uponnrol+=fee.amount;
 						console.log(fee);
