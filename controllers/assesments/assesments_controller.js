@@ -558,7 +558,8 @@ define(['app','api'], function (app) {
 			function ComputeSubjects(){
 				var subjects = [];
 				$scope.TutCount = 0;
-				var totalDue = $scope.TotalDue;
+				var totalDue = $scope.OrigTotalDue;
+				var breakdowns = angular.copy($scope.OrigFees);
 				angular.forEach($scope.CustomizedScheds,function(sub){
 					if(sub.section_id==2121)
 						$scope.TutCount++;
@@ -857,6 +858,7 @@ define(['app','api'], function (app) {
 					}else{
 						calculateReg();
 					}
+					$scope.OrigTotalDue =  angular.copy($scope.TotalDue);
 				});
 			}
 			
