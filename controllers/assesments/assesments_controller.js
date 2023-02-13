@@ -693,19 +693,25 @@ define(['app','api'], function (app) {
 				//});
 				//for irregular only 5 months
 				var lastMonth = lastDate.getMonth()-4;
+				console.log(lastDate,lastMonth);
 				//console.log($scope.ActiveTuition.schemes);
 				//console.log(lastDate.getMonth());
-				if(lastMonth==0)
+				// If Last month is less than or equal to zero set to 12 or Dec
+				if(lastMonth<=0)
 					lastMonth = 12;
+
 				if($scope.ActiveSem.id==45)
 					lastMonth = lastDate.getMonth()+1;
 				var count = 1;
 				var schedules = [];
+				
+
 				for(var i=nextMonth-1;i!=lastMonth;i++){
 					if(i==13)
 						i=1;
 					count++;
 				}
+				
 				//console.log(nextMonth,lastMonth);
 				if($scope.ActiveSem.id==45){
 					if($scope.IsIrreg){
@@ -725,7 +731,7 @@ define(['app','api'], function (app) {
 						$scope.ActiveStudent['month']=mo_short+year;
 						$scope.ActiveStudent['month']=$scope.ActiveStudent.month.toUpperCase();
 						
-						console.log($scope.ActiveStudent.month);
+						console.log($scope.ActiveStudent.month,lastMonth,count, nextMonth);
 						getFirstAssess();
 					}
 				}
