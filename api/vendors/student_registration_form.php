@@ -103,32 +103,41 @@ class StudentRegistrationForm extends Formsheet{
 		//$this->centerText(15,$y,'UNITS',2,'b');
 		//$this->leftText(15,$y,'SECTION','','b');
 		$this->centerText(12,$y,'DAY',2,'b');
-		$this->centerText(15,$y,'PERIOD',2,'b');
-		$this->centerText(20,$y,'TIME',4,'b');
-		$this->centerText(27,$y,'TIME2',4,'b');
+		$this->centerText(15,$y,'DAY2',2,'b');
+		$this->centerText(18,$y,'PERIOD',2,'b');
+		$this->centerText(22,$y,'TIME',4,'b');
+		$this->centerText(28,$y,'TIME2',4,'b');
 		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
 		//ASSESSMENT
 		//$totalunits=0;
 		$y++;
-		//pr($data['AssessmentSubject']);exit;
+		$isSH =  preg_match('/G[YZ]/',$data['Section']['year_level_id']);
+		$is2ndSEM =  isset($data['isSecondSem']);
+		$tot_subjs = 0;
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
-
+			$length = count($d['ScheduleDetail']);
+			if(!$length) continue;
+			if($isSH):
+				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
+				if($isS2Sched && !$is2ndSEM) continue;
+				if(!$isS2Sched && $is2ndSEM) continue;
+			endif;
 			if(strlen($d['Subject']['name'])>=45){
 				$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
 			}
+			$tot_subjs++;
 			$this->leftText(0,$y,$d['Subject']['name'],'','');
 			//$this->centerText(15,$y,'--',2,'');
 			if(isset($d['Section']['name']))
 				//$this->leftText(15,$y,$d['Section']['name'],'','');
-			$x_time = 20;
-			$x_day = 14;
+			$x_time = 22;
+			$x_day = 11;
 			$lastItem = end($d['ScheduleDetail']);
-			$length = count($d['ScheduleDetail']);
-			//pr($d['ScheduleDetail']); exit();
-			foreach($d['ScheduleDetail'] as $sched):
+
+              foreach($d['ScheduleDetail'] as $sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
@@ -136,16 +145,17 @@ class StudentRegistrationForm extends Formsheet{
 				$grading = $sched['grading'];
 				//pr($sched); exit();
 				if($sched['id']!=$lastItem['id']||$length==1){
-					$this->centerText(12,$y,$day,2,'');
-					$this->centerText($x_day,$y,$grading,4,'');
+					//$this->centerText(12,$y,$day,2,'');
+					$this->centerText(17,$y,$grading,4,'');
 				}
 				$this->centerText($x_time,$y,$time,4,'');
+				$this->centerText($x_day,$y,$day,4,'');
 				
 				$x_time+=7;
-				$x_day+=7;
+				$x_day+=3;
 			endforeach;
 			$y++;
-			if(!count($d['ScheduleDetail'])) $y++;
+			//if(!count($d['ScheduleDetail'])) $y++;
 
 
 			//$this->leftText(29.2,$y,'--','','');
@@ -153,7 +163,7 @@ class StudentRegistrationForm extends Formsheet{
 		
 		}
 		$this->drawLine($y-0.6,'h');
-		$this->leftText(0.2,$y,'Total No. of Subject: '.count($data['AssessmentSubject']),'','b');
+		$this->leftText(0.2,$y,'Total No. of Subject: '.$tot_subjs,'','b');
 		//$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+2;
 		$this->fee_breakdown($data,$end);
@@ -237,7 +247,7 @@ class StudentRegistrationForm extends Formsheet{
 		}
 	
 		$this->drawLine($y-0.6,'h',array(22,11));
-		$this->rightText(30,$y,number_format($totaldue,2),3,'b');
+		$this->rightText(30,$y,number_format(round($totaldue),2),3,'b');
 	}
 
 	function foot_notes($data,$end){

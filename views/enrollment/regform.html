@@ -78,7 +78,7 @@
 						frameborder="0" 
 						style="width:100%;height:100%;display:block;">
 					</iframe>
-					<form action="api/reports/reg_form/" method="POST"  target="RegFormFrame" id="PrintRegForm">
+					<form action="api/reports/reg_form" method="POST"  target="RegFormFrame" id="PrintRegForm">
 						<input type="hidden" name="Type" value="{{RFC.isBatch?'batch':'single'}}"/>
 						<input type="hidden" name="Student" value="{{RFC.ActiveStudent.id}}"/>
 						<input type="hidden" name="Sy" value="{{RFC.ActiveSY}}"/>
