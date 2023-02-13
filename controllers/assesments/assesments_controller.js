@@ -738,8 +738,11 @@ define(['app','api'], function (app) {
 				}
 				
 				if($scope.InitialFee>=$scope.TotalAmount){
+					var day = 15;
+					var due_date = new Date(year+'-'+nextMonth+'-'+day);
 					var sched = {
 						billing_period_id : 'UPONNROL',
+						due_dates:due_date,
 						amount : uponnrol,
 						description : 'Initial Payment'
 					};
