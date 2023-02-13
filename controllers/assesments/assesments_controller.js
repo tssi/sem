@@ -482,16 +482,21 @@ define(['app','api'], function (app) {
 				$scope.$watch('hasSchemeInfo',updateHasInfo);
 				$scope.$watch('hasAdjustmentInfo',updateHasInfo);
 				
-				$scope.$watch('ActiveStudent', function(){
+				$scope.$watch('ActiveStudent', function(activeStud){
+					if(!activeStud) return;
 					$scope.hasStudentInfo = $scope.ActiveStudent.id;
 				});
-				$scope.$watch('ActiveLevel',function(){
+				$scope.$watch('ActiveLevel',function(activeLvl){
+					if(!activeLvl) return;
 					$scope.hasLevelInfo = $scope.ActiveLevel.id;
 				});
-				$scope.$watch('ActiveSection',function(){
+				$scope.$watch('ActiveSection',function(activeSect){
+					if(!activeSect) return;
 					$scope.hasSectionInfo = $scope.ActiveSection.id;
 				});
-				$scope.$watchGroup(['ActiveScheme','TotalDiscount'],function(){
+				$scope.$watchGroup(['ActiveScheme','TotalDiscount'],function(activeGroup){
+					if(!activeGroup[0]) return;
+					if(!activeGroup[1]) return;
 					$scope.hasScheduleInfo = $scope.hasSchemeInfo = $scope.ActiveScheme.id;
 					$scope.hasAdjustmentInfo = $scope.ActiveScheme.variance_amount || $scope.TotalDiscount;
 					//if($scope.TotalDiscount&&$scope.hasScheduleInfo)
