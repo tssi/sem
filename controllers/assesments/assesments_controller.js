@@ -870,7 +870,7 @@ define(['app','api'], function (app) {
 			//fees if irreg
 			function calculateIrreg(){
 				var breakdown = [];
-					$scope.OrigFees = $scope.ActiveTuition.fee_breakdowns;
+					$scope.OrigFees = [];
 					$scope.InitialFee = 0;
 					angular.forEach($scope.ActiveTuition.fee_breakdowns, function(fee){
 						if($scope.ActiveSem.id==45&&($scope.IsIrreg||$scope.ActiveOpt=='Old')){
@@ -891,6 +891,7 @@ define(['app','api'], function (app) {
 					});
 					$scope.TotalAmount=$scope.TotalDue;
 					console.log(breakdown);
+					$scope.OrigFees = breakdown;
 					$scope.ActiveTuition.fee_breakdowns = breakdown;
 			}
 			
