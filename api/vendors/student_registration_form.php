@@ -102,11 +102,11 @@ class StudentRegistrationForm extends Formsheet{
 		$this->leftText(0,$y,'SUBJECTS',10,'b');
 		//$this->centerText(15,$y,'UNITS',2,'b');
 		//$this->leftText(15,$y,'SECTION','','b');
-		$this->centerText(12,$y,'DAY',2,'b');
-		$this->centerText(15,$y,'DAY2',2,'b');
+		$this->centerText(12,$y,'DAY 1',2,'b');
+		$this->centerText(15,$y,'DAY 2',2,'b');
 		$this->centerText(18,$y,'PERIOD',2,'b');
-		$this->centerText(22,$y,'TIME',4,'b');
-		$this->centerText(28,$y,'TIME2',4,'b');
+		$this->centerText(22,$y,'TIME 1',4,'b');
+		$this->centerText(28,$y,'TIME 2',4,'b');
 		//$this->leftText(28.2,$y++,'TEACHER','','b');
 		//pr($data);exit;
 
@@ -119,6 +119,7 @@ class StudentRegistrationForm extends Formsheet{
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 			$length = count($d['ScheduleDetail']);
+
 			if(!$length) continue;
 			if($isSH):
 				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
@@ -137,20 +138,27 @@ class StudentRegistrationForm extends Formsheet{
 			$x_day = 11;
 			$lastItem = end($d['ScheduleDetail']);
 
-              foreach($d['ScheduleDetail'] as $sched):
+              foreach($d['ScheduleDetail'] as $si=>$sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
 				$time = sprintf("%s-%s",$startT,$endT);
 				$grading = $sched['grading'];
+
+				if($si==2):
+					$x_time = 22;
+					$x_day = 11;
+					$y+=1;
+					$this->leftText(0,$y,$d['Subject']['name'],'','');
+				endif;
 				//pr($sched); exit();
-				if($sched['id']!=$lastItem['id']||$length==1){
+				if($si==0){
 					//$this->centerText(12,$y,$day,2,'');
 					$this->centerText(17,$y,$grading,4,'');
 				}
 				$this->centerText($x_time,$y,$time,4,'');
 				$this->centerText($x_day,$y,$day,4,'');
-				
+
 				$x_time+=7;
 				$x_day+=3;
 			endforeach;
@@ -193,7 +201,7 @@ class StudentRegistrationForm extends Formsheet{
 	}
 	function fee_breakdown($data,$end){
 		//pr($data); exit();
-		if(isset($data['isSecondSem']))
+		if(isset($data['isSecondSem']) &&$data['Assessment']['account_details']!='Irregular')
 			return;
 		
 		$metrics =$this->setUpMetrics($data);
