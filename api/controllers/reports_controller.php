@@ -38,8 +38,15 @@ class ReportsController extends AppController{
     	$stud_program = $data['Section']['program_id'];
     	$level = $data['Section']['year_level_id'];
     	$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
-		
+
+
 		$isSecondSem=false;
+
+		if(preg_match('/\d{4}\.45/',$esp)){
+			$sem=45;
+			$isSecondSem = true;
+		}
+
 		if($data['Assessment']['account_details']==''&&$sem==45){
 			//pr('dumaan'); exit();
 			$isSecondSem=true;
@@ -219,7 +226,8 @@ class ReportsController extends AppController{
 		$data['Important'] = $config;
 		
 		if($isSecondSem){
-			$data['AssessmentSubject'] = $subjects;
+			if(count($data['AssessmentSubject'])==0)
+				$data['AssessmentSubject'] = $subjects;
 			$data['isSecondSem'] = true;
 			//pr('dumaan'); exit();
 		}
