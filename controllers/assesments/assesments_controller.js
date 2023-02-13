@@ -770,7 +770,8 @@ define(['app','api'], function (app) {
 					}
 				}
 				$scope.PaymentSchemes = [{name:'Irregular Payment Scheme',total_amount:$scope.TotalAmount,schedule:schedules}];
-				//console.log($scope.PaymentSchemes);
+				$scope.ActiveTuition.fee_breakdowns = breakdowns;
+				$scope.TotalDue  = totalDue;
 				//console.log(schedules);
 			}
 			
