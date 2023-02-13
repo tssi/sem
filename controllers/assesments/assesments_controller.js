@@ -87,7 +87,7 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===4){
-					$scope.ActiveTab.id = 2;
+					$scope.setActiveTab($scope.Tabs[1]);
 					$scope.HasSched = true;
 					if($scope.ActiveSection.program_id=='MIXED'){
 						$scope.ActiveSchedule = {};
@@ -98,7 +98,7 @@ define(['app','api'], function (app) {
 				};
 				
 				if($scope.ActiveStep===5){
-					$scope.ActiveTab.id = 3;
+					$scope.setActiveTab($scope.Tabs[2]);
 					$scope.ActiveScheme = angular.copy($scope.SelectedScheme);
 					if(!$scope.ActiveStudent.special_case){
 						$scope.PaymentTotal = 0;
