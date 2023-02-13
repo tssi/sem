@@ -558,6 +558,7 @@ define(['app','api'], function (app) {
 			function ComputeSubjects(){
 				var subjects = [];
 				$scope.TutCount = 0;
+				var totalDue = $scope.TotalDue;
 				angular.forEach($scope.CustomizedScheds,function(sub){
 					if(sub.section_id==2121)
 						$scope.TutCount++;
@@ -569,16 +570,17 @@ define(['app','api'], function (app) {
 						tuition += sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr;
 						console.log(sub.tuition_hr*$scope.ActiveTuition.tuition_per_hr);
 					});
-					$scope.TotalDue+=tuition;
-					$scope.ActiveTuition.fee_breakdowns.push({fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1});
-					getSpecialFees(subjects);
+					totalDue+=tuition;
+					console.log($scope.ActiveTuition.fee_breakdowns);
+					$scope.ActiveTuition.fee_breakdowns.push({fee_id:'TUI',amount:tuition,description:'Tuition Fee',order:1, type:"TF"});
+					getSpecialFees(subjects,totalDue);
 				})
 				
 			}
 			
 			
 			//computes for special subjects
-			function getSpecialFees(subjects){
+			function getSpecialFees(subjects,totalDue){
 				api.GET('fee_special_subjects',{subject_id:subjects,limit:'less'}, function success(response){
 					var fees = [];
 					angular.forEach(response.data,function(sub){
@@ -587,15 +589,15 @@ define(['app','api'], function (app) {
 					angular.forEach($scope.OrigFees, function(fee){
 						console.log(fee);
 						if(fees.indexOf(fee.fee_id)!==-1){
-							$scope.TotalDue+=fee.amount;
+							totalDue+=fee.amount;
 							$scope.ActiveTuition.fee_breakdowns.push(fee);
 						}
 						
 					});
 					
-					IrregPaymentScheme();
+					IrregPaymentScheme(totalDue);
 				},function error(response){
-					IrregPaymentScheme();
+					IrregPaymentScheme(totalDue);
 				});
 				
 			}
@@ -702,13 +704,13 @@ define(['app','api'], function (app) {
 				//console.log(nextMonth,lastMonth);
 				if($scope.ActiveSem.id==45){
 					if($scope.IsIrreg){
-						if($scope.InitialFee<=$scope.TotalDue)
+						if($scope.InitialFee<=totalDue)
 							uponnrol+=$scope.InitialFee;
 						else
 							uponnrol=$scope.TotalAmount;
 					}
 					if($scope.ActiveOpt=='Old'&&!$scope.IsIrreg){
-						if($scope.InitialFee<=$scope.TotalDue)
+						if($scope.InitialFee<=totalDue)
 							uponnrol+=$scope.InitialFee;
 						else
 							uponnrol=$scope.TotalAmount;
