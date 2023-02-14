@@ -985,18 +985,18 @@ define(['app','api'], function (app) {
 										sec.schedule = sched;
 									}
 								});
-								console.log($scope.Subjects);
+								//console.log($scope.Subjects);
 								angular.forEach($scope.Subjects, function(sub){
 									if(sub.sec_id.indexOf(sec.id)!==-1&&sub.year_level_id==sec.year_level_id){
 										var subject_data = {'subject':sub.name,'subject_id':sub.code};
-										console.log(sec);
+										//console.log(sec);
 										if(sec.schedule)
 											subject_data.schedule_id = sec.schedule.id;
 										details.push(subject_data);
 									}
 								});
 								sec.details = details;
-								console.log(sec.details);
+								// /console.log(sec.details);
 							});
 							
 							console.log($scope.Sections);
