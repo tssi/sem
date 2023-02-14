@@ -158,7 +158,7 @@ class ReportsController extends AppController{
 		$feeTotals = array();
 		foreach($fees as $f){
 			if($f['fee_id']=='OTH'):
-				$f['Fee']['type']='OTH';
+				$f['Fee']['type']='2OTH';
 				$f['Fee']['name']='Others';
 			endif;
 			$type =  $f['Fee']['type'];
@@ -175,7 +175,9 @@ class ReportsController extends AppController{
 					// If fee is different from the 3 main types use the fee name
 					default: $label = $name; break; 
 				}
-				$feeTotals[$type] = array('label'=>$label,'total'=>0);
+				if($type!="2OTH")
+					$type="1".$type;
+				$feeTotals[$type] = array('label'=>$label,'total'=>0,'order'=>1);
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
@@ -189,7 +191,7 @@ class ReportsController extends AppController{
 			switch($key){
 				case 'discount_amount':
 					if($val<0){
-						$feeTotals['SUBS']= array('label'=>'Subsidy','total'=>$val);
+						$feeTotals['3SUBS']= array('label'=>'Subsidy','total'=>$val);
 					}
 					break;
 			}
@@ -198,25 +200,24 @@ class ReportsController extends AppController{
 			foreach($res as $r){
 				switch($r['Reservation']['field_type']){
 					case 'RSRVE':
-						$feeTotals['RSRV']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
+						$feeTotals['3RSRV']= array('label'=>'Reservation','total'=>-$r['Reservation']['amount']);
 					break;
 					case 'ADVTP':
-						$feeTotals['ADVTP']= array('label'=>'Advance Payment','total'=>-$r['Reservation']['amount']);
+						$feeTotals['3ADVTP']= array('label'=>'Advance Payment','total'=>-$r['Reservation']['amount']);
 					break;
 				}
 			}
 		}
 		if(isset($spons[0])){
-			$feeTotals['SPONS']= array('label'=>'Sponsorship','total'=>-$spons[0]['Ledger']['amount']);
+			$feeTotals['3SPONS']= array('label'=>'Sponsorship','total'=>-$spons[0]['Ledger']['amount']);
 		}
 		if(isset($othrs[0])){
 			$othr =  $othrs[0]['Ledger'];
 			$oth_lbl =  sprintf("%s - %s",$othr['details'],$othr['notes'] );
-			$feeTotals['OTH']= array('label'=>$oth_lbl,'total'=>$othr['amount']);
+			$feeTotals['2OTH']= array('label'=>$oth_lbl,'total'=>$othr['amount']);
 		}
 
-
-		
+		ksort($feeTotals);
 		foreach($feeTotals as $i=>$f){
 			$feeSum = array('Fee'=>array('name'=>$f['label']),'due_amount'=>$f['total']);
 			array_push($feeSummary,$feeSum);
