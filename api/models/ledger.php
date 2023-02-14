@@ -75,7 +75,7 @@ class Ledger extends AppModel {
 					'limit'=>999,
 			);
 		if($prefix)
-			$resConfig['conditions'][] = array('Ledger.ref_no LIKE'=>'SPO'.$esp.'%');
+			$resConfig['conditions'][] = array('Ledger.ref_no LIKE'=>$prefix.$esp.'%');
 		else
 			$resConfig['conditions'][] = array('Ledger.esp'=>$esp);
 		$this->recursive=0;
