@@ -175,8 +175,11 @@ class ReportsController extends AppController{
 					// If fee is different from the 3 main types use the fee name
 					default: $label = $name; break; 
 				}
-				if($type!="2OTH")
+				if($type!="2OTH"):
 					$type="1".$type;
+					if($type=="1TF")
+						$type = "0TF";
+				endif;
 				$feeTotals[$type] = array('label'=>$label,'total'=>0,'order'=>1);
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
