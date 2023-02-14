@@ -57,6 +57,7 @@ define(['app','api'], function (app) {
 				if($scope.ActiveStep===2){
 					getReservations();
 					getSponsorships();
+					getOtherCharges();
 					$scope.ActiveLevel = $scope.SelectedLevel;
 					if($scope.ActiveLevel.id=='IR')
 						$scope.ActiveStudent.program_id = 'MIXED';
@@ -465,6 +466,14 @@ define(['app','api'], function (app) {
 				});
 			}
 			
+			function getOtherCharges(){
+				var data = {account_id:$scope.ActiveStudent.id,ref_no:'OTH',sy:$scope.ActiveSy,};
+				api.GET('ledgers', data, function success(response){
+					$scope.OtherCharges = response.data[0];
+				},function error(response){
+					$scope.OtherCharges = '';
+				});
+			}
 			function bootstrap(){
 				$rootScope.__MODULE_NAME = 'Assessment';
 				$scope.Steps = [
@@ -872,10 +881,25 @@ define(['app','api'], function (app) {
 					}else{
 						calculateReg();
 					}
+					addOtherCharges();
 					$scope.OrigTotalDue =  angular.copy($scope.TotalDue);
 				});
 			}
-			
+			function addOtherCharges(){
+				if($scope.OtherCharges!==''){
+					var oth_fee = {
+						amount:$scope.OtherCharges.amount,
+						description:$scope.OtherCharges.notes,
+						fee_id:'OTH',
+						type:'OTH'
+					};
+					$scope.ActiveTuition.fee_breakdowns.push(oth_fee);
+					$scope.TotalDue+=oth_fee.amount;
+					$scope.TotalAmount=$scope.TotalDue;
+					console.log(oth_fee,oth_fee.amount,$scope.TotalDue);
+
+				}
+			}
 			//fees if irreg
 			function calculateIrreg(){
 				var breakdown = [];
