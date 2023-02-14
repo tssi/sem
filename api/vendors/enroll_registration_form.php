@@ -278,12 +278,23 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->leftText(1,25.5,"_________________________________________",12,'b');
 		$this->leftText(23,25.5,"____________________",12,'b'); */
 		$this->wrapText(33.5,.5,"Fees for the Second semester are inclusive in the first semester assessment",12);
+		$year =  ceil($data['Assessment']['esp']);
+		$pay_calendar =array("2022"=>[1,5], "2023"=>[2,6]);
+
 		$this->leftText(34,5,"Installment Payment Schedule:",12,'b');
-		$this->leftText(34,7,"January 15, 2022",12,'b');
-		$this->leftText(34,9,"February 15, 2022",12,'b');
-		$this->leftText(34,11,"March 15, 2022",12,'b');
-		$this->leftText(34,13,"April 15, 2022",12,'b');
-		$this->leftText(34,15,"May 1, 2022",12,'b');
+		$month_start =  $pay_calendar[$year][0];
+		$month_count =  $pay_calendar[$year][1];
+		$moy=7;
+
+		for($ctr=1,$mo=$month_start;$ctr<=$month_count;$ctr++,$mo++):
+			$month =  date("F", strtotime("$year-$mo-15"));
+			$this->leftText(34,$moy,"$month 15, $year",12,'');
+			$moy+=1.5;
+		endfor;
+		/*$this->leftText(34,9,"February 15, $year",12,'b');
+		$this->leftText(34,11,"March 15, $year",12,'b');
+		$this->leftText(34,13,"April 15, $year",12,'b');
+		$this->leftText(34,15,"May 1, $year",12,'b');*/
 		
 		
 		$metrics =$this->setUpMetrics($data);
