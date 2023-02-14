@@ -59,8 +59,9 @@ define(['app','api'], function (app) {
 					getSponsorships();
 					getOtherCharges();
 					$scope.ActiveLevel = $scope.SelectedLevel;
-					if($scope.ActiveLevel.id=='IR')
+					if($scope.ActiveLevel.id=='IR'){
 						$scope.ActiveStudent.program_id = 'MIXED';
+					}
 					getCurriculum($scope.ActiveLevel.department_id);
 					getSections($scope.ActiveLevel);
 					$scope.Disabled = 1;
@@ -725,6 +726,7 @@ define(['app','api'], function (app) {
 				//console.log(nextMonth,lastMonth);
 				if($scope.ActiveSem.id==45){
 					if($scope.IsIrreg){
+						console.log($scope.InitialFee, totalDue, $scope.TotalAmount)
 						if($scope.InitialFee<=totalDue)
 							uponnrol+=$scope.InitialFee;
 						else
@@ -1086,6 +1088,9 @@ define(['app','api'], function (app) {
 					data.esp = $scope.ActiveSy+.25;
 				api.GET('curriculums',data, function success(response){
 					$scope.Curriculum = response.data;
+					if($scope.ActiveLevel.id=='IR')
+						return $scope.IsIrreg = true;
+					
 					checkIrreg();
 				});
 			}
