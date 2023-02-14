@@ -169,7 +169,7 @@ class ReportsController extends AppController{
 				switch($type){
 					case 'TF': $label = 'Tuition Fee'; break;
 					case 'LAB': $label = 'Laboratory Fee'; break;
-					case 'MSC': $label = $isSecondSem?'Procesisng Fee':'Misc. Fee'; break;
+					case 'MSC': $label = $isSecondSem?'Processing Fee':'Misc. Fee'; break;
 					case 'TUT': $label = 'Tutorial Fee'; break;
 					
 					// If fee is different from the 3 main types use the fee name
