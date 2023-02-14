@@ -151,11 +151,16 @@ class ReportsController extends AppController{
 		$res = $this->Reservation->getRecords($id,$resESP);
 		// Request records from Ledger with SPO prefix
 		$spons = $this->Ledger->getRecords($id,$esp,'SPO');
+		$othrs = $this->Ledger->getRecords($id,$esp,'OTH');
 		
 		// Map Assessment Fees to display totals by fee type
 		$fees =  $data['AssessmentFee'];
 		$feeTotals = array();
 		foreach($fees as $f){
+			if($f['fee_id']=='OTH'):
+				$f['Fee']['type']='OTH';
+				$f['Fee']['name']='Others';
+			endif;
 			$type =  $f['Fee']['type'];
 			$name =  $f['Fee']['name'];
 			//pr($f);
@@ -164,7 +169,7 @@ class ReportsController extends AppController{
 				switch($type){
 					case 'TF': $label = 'Tuition Fee'; break;
 					case 'LAB': $label = 'Laboratory Fee'; break;
-					case 'MSC': $label = 'Misc. Fee'; break;
+					case 'MSC': $label = $isSecondSem?'Procesisng Fee':'Misc. Fee'; break;
 					case 'TUT': $label = 'Tutorial Fee'; break;
 					
 					// If fee is different from the 3 main types use the fee name
@@ -204,6 +209,13 @@ class ReportsController extends AppController{
 		if(isset($spons[0])){
 			$feeTotals['SPONS']= array('label'=>'Sponsorship','total'=>-$spons[0]['Ledger']['amount']);
 		}
+		if(isset($othrs[0])){
+			$othr =  $othrs[0]['Ledger'];
+			$oth_lbl =  sprintf("%s - %s",$othr['details'],$othr['notes'] );
+			$feeTotals['OTH']= array('label'=>$oth_lbl,'total'=>$othr['amount']);
+		}
+
+
 		
 		foreach($feeTotals as $i=>$f){
 			$feeSum = array('Fee'=>array('name'=>$f['label']),'due_amount'=>$f['total']);
