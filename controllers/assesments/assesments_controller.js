@@ -167,7 +167,7 @@ define(['app','api'], function (app) {
 					$scope.ActiveStudent.section_id = $scope.ActiveSection.id;
 					$scope.ActiveStudent.subsidy_status = $scope.ActiveScheme.subsidy_status;
 					$scope.ActiveStudent.esp = $scope.ActiveEsp;
-					$scope.ActiveStudent.module_balance = $scope.Module;
+					$scope.ActiveStudent.module_balance = $scope.ActiveSem.id==45?0:$scope.Module;
 					$scope.ActiveStudent.status = 'ACTIV';
 					$scope.Assessment = {
 						assessment:$scope.ActiveStudent,

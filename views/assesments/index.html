@@ -82,7 +82,7 @@
 									<td>Total Due</td>
 									<td><div class="amount peso">{{TotalDue | currency}}</div></td>
 								</tr>
-								<tr ng-if="ActiveTuition.fee_breakdowns.length">
+								<tr ng-if="ActiveTuition.fee_breakdowns.length && ActiveSem.id!=45">
 									<td>Modules & Ebooks</td>
 									<td><div class="amount peso">{{Module | currency}}</div></td>
 								</tr>

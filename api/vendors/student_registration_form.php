@@ -171,7 +171,7 @@ class StudentRegistrationForm extends Formsheet{
 		
 		}
 		$this->drawLine($y-0.6,'h');
-		$this->leftText(0.2,$y,'Total No. of Subject: '.$tot_subjs,'','b');
+		$this->leftText(0.2,$y,'Total No. of Subjects: '.$tot_subjs,'','b');
 		//$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+2;
 		$this->fee_breakdown($data,$end);
@@ -232,8 +232,11 @@ class StudentRegistrationForm extends Formsheet{
 		$this->drawLine($y-0.6,'h',array(0,16));
 		$this->leftText(0.2,$y,'Total','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
-		$this->leftText(0.2,$y+1,'Modules & Ebooks','','b');
-		$this->rightText(15,$y+1,number_format($data['Assessment']['module_balance'],2),'','b');
+		$mod_bal = $data['Assessment']['module_balance'];
+		if($mod_bal>0):
+			$this->leftText(0.2,$y+1,'Modules & Ebooks','','b');
+			$this->rightText(15,$y+1,number_format($mod_bal,2),'','b');
+		endif;
 
 	}
 
