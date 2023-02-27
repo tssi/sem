@@ -12,6 +12,9 @@ class StudentsController extends AppController {
 			}
 			if(isset($s['YearLevel']['Section'][0]['department_id']))
 				$s['Student']['department_id'] = $s['YearLevel']['Section'][0]['department_id'];
+			if(!isset($s['Student']['subsidy_status'])):
+				continue;
+			endif;
 			$s['Student']['subsidy_status'] = $s['Account']['subsidy_status'];
 			$s['Student']['year_level'] = $s['YearLevel']['name'];
 			
