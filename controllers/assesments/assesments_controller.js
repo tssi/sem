@@ -162,7 +162,9 @@ define(['app','api'], function (app) {
 					
 					$scope.ActiveStudent.payment_scheme = $scope.ActiveScheme.scheme_id;
 
-					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount-$scope.ActiveScheme.variance_amount;
+					$scope.ActiveStudent.assessment_total = $scope.ActiveScheme.total_amount;
+					if($scope.ActiveScheme.variance_amount)
+						$scope.ActiveStudent.assessment_total -=$scope.ActiveScheme.variance_amount;
 
 					$scope.ActiveStudent.year_level_id = $scope.ActiveSection.year_level_id;
 					$scope.ActiveStudent.outstanding_balance = $scope.TotalAmount;
@@ -176,6 +178,10 @@ define(['app','api'], function (app) {
 						paysched:$scope.ActiveScheme.schedule,
 						fees:$scope.ActiveTuition.fee_breakdowns
 					};
+					if($scope.TutFee>0){
+						var tutFee = {fee_id:'TUT',amount:$scope.TutFee,order:3,type:'TU'};
+						$scope.Assessment.fees.push(tutFee);
+					}
 					if($scope.ActiveSection.program_id=='MIXED')
 						$scope.Assessment.schedule = $scope.CustomizedScheds;
 					else
@@ -185,7 +191,7 @@ define(['app','api'], function (app) {
 						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
 					}
 					
-					//console.log($scope.Assessment); return;
+					//console.log($scope.ActiveScheme,$scope.Assessment); return;
 					api.POST('assessments',$scope.Assessment, function success(response){
 						$scope.AssessmentId = response.data.id;
 						$scope.openModal();
@@ -677,10 +683,11 @@ define(['app','api'], function (app) {
 			//computes for irregular student
 			function IrregPaymentScheme(totalDue,breakdowns){
 				$scope.TotalAmount=totalDue;
-
+				$scope.TutFee = 0;
 				// Add tutorial subjects 7k per subject
 				if($scope.TutCount){
 					let tutorial_fee = 7000 * $scope.TutCount;
+					$scope.TutFee = tutorial_fee;
 					$scope.TotalAmount+=tutorial_fee;
 				}
 				var uponnrol = 0;
