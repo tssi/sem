@@ -5,21 +5,24 @@ class StudentsController extends AppController {
 	function index() {
 		$this->Student->recursive = 0;
 		$students = $this->paginate();
+		
 		foreach($students as $i=>$s){
 			//pr($s); exit();
 			if(!isset($s['Account']['subsidy_status'])){
 				//pr($s); exit();
+				continue;
 			}
+			
 			if(isset($s['YearLevel']['Section'][0]['department_id']))
 				$s['Student']['department_id'] = $s['YearLevel']['Section'][0]['department_id'];
-			if(!isset($s['Student']['subsidy_status'])):
-				continue;
-			endif;
+			
 			$s['Student']['subsidy_status'] = $s['Account']['subsidy_status'];
 			$s['Student']['year_level'] = $s['YearLevel']['name'];
 			
 			$students[$i]=$s;
+			//pr($s);exit;
 		}
+		// /pr($students);
 		$this->set('students', $students);
 	}
 
