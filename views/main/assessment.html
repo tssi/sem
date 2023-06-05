@@ -1,0 +1,81 @@
+<div ng-controller="AssessmentController as ASC" ng-init="ASC.init()">
+	<a-module>
+		<a-container>
+			<a-header>
+				<m-search-student ng-model="ASC.ActiveStudent"
+				is-large="true"/>
+			</a-header>
+			<a-canvas>
+				<a-content>
+					<a-row>
+						<!-- Fees and Subjects -->
+						<a-col size="7">
+							<uib-tabset type="pills" active="ASC.ActiveTabIndex">
+
+								<uib-tab index="0" heading="Tuition" classes="btn-lg">
+									<a-row>
+										<a-col>
+											<!-- Replace with a-table see app/#/atomic/docs -->
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Fees</th>
+														<th>Amount</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Tuition</td>
+														<td>14,000.00</td>
+													</tr>
+												</tbody>
+											</table>
+										</a-col>
+									</a-row>
+
+								</uib-tab>
+								<uib-tab index="1" heading="Subjects" classes="btn-lg">
+									<a-row>
+										<a-col>
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Subjects</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Filipino</td>
+													</tr>
+													<tr>
+														<td>English</td>
+													</tr>
+												</tbody>
+											</table>
+										</a-col>
+									</a-row>
+
+								</uib-tab>
+							</uib-tabset>
+						</a-col>
+
+						<a-col size="5">
+							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true" ></m-formgroup>
+
+							<m-formgroup ng-model="ASC.YearLevel" label="YearLevel" ></m-formgroup>
+							<m-formgroup ng-model="ASC.Section" label="Section" ></m-formgroup>
+
+							<m-formgroup ng-model="ASC.StudentType" label="Type" options="ASC.StudTypes" ></m-formgroup>
+
+							<div class="pull-right" ng-show="ASC.ActiveStudent">
+								<a-button size="lg">Close</a-button>
+								<a-button size="lg" type="success">Save</a-button>
+							</div>
+						</a-col>
+					</a-row>
+				</a-content>
+			</a-canvas>
+		</a-container>
+		
+	</a-module>
+</div>
