@@ -62,10 +62,10 @@
 						<a-col size="5">
 							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true" ></m-formgroup>
 
-							<m-formgroup ng-model="ASC.YearLevel" label="YearLevel" ></m-formgroup>
-							<m-formgroup ng-model="ASC.Section" label="Section" ></m-formgroup>
+							<m-formgroup ng-model="ASC.YearLevel" label="YearLevel" options="ASC.YearLevels"></m-formgroup>
+							<m-formgroup ng-model="ASC.Section" label="Section" options="ASC.Sections"  option-group="year_level"></m-formgroup>
 
-							<m-formgroup ng-model="ASC.StudentType" label="Type" options="ASC.StudTypes" ></m-formgroup>
+							<m-formgroup ng-model="ASC.StudentType" label="Type" options="ASC.StudTypes"  ></m-formgroup>
 
 							<div class="pull-right" ng-show="ASC.ActiveStudent">
 								<a-button size="lg">Close</a-button>
