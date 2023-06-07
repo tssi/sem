@@ -13,23 +13,30 @@
 							<uib-tabset type="pills" active="ASC.ActiveTabIndex">
 
 								<uib-tab index="0" heading="Tuition" classes="btn-lg">
-									<a-row>
+									<a-row ng-show="ASC.ShowSched">
 										<a-col>
 											<!-- Replace with a-table see app/#/atomic/docs -->
 											<table class="table table-bordered">
 												<thead>
 													<tr>
-														<th>Fees</th>
+														<th>Description</th>
 														<th>Amount</th>
 													</tr>
 												</thead>
-												<tbody>
-													<tr>
-														<td>Tuition</td>
-														<td>14,000.00</td>
+												<tbdoy>
+													<tr ng-repeat="sched in ASC.Tuition.fee_breakdowns">
+														<td>{{sched.description}}</td>
+														<td>{{sched.amount}}</td>
 													</tr>
-												</tbody>
+												</tbdoy>
 											</table>
+										</a-col>
+									</a-row>
+									<a-row ng-show="ASC.ShowSched">
+										<a-col>
+											<a-table headers="ASC.Headers" props="ASC.Props" data="ASC.PaySched">
+
+											</a-table>
 										</a-col>
 									</a-row>
 
@@ -61,12 +68,28 @@
 
 						<a-col size="5">
 							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true" ></m-formgroup>
-
-							<m-formgroup ng-model="ASC.YearLevel" label="YearLevel" ></m-formgroup>
-							<m-formgroup ng-model="ASC.Section" label="Section" ></m-formgroup>
-
-							<m-formgroup ng-model="ASC.StudentType" label="Type" options="ASC.StudTypes" ></m-formgroup>
-
+							<label for="">Year Level</label>
+							<select name="" id="" class="form-control" 
+								ng-options="yl.id as yl.description for yl in ASC.YL | filter:{department_id:ASC.ActiveStudent.department_id}" 
+								ng-model="ASC.year_level_id"
+								ng-disabled="!ASC.ActiveStudent.id">
+								<option value="">Select Year Level</option>
+							</select>
+							<label for="">Section</label>
+							<select name="" id="" class="form-control" 
+								ng-options="sc.id as sc.name for sc in ASC.Sections | filter:{year_level_id:ASC.year_level_id}" 
+								ng-model="ASC.section_id"
+								ng-change="ASC.selectSection()"
+								ng-disabled="!ASC.year_level_id">
+								<option value="">Select Section</option>
+							</select>
+							<label for="">Student Type</label>
+							<select name="" id="" class="form-control"
+								ng-options="s as s.name for s in ASC.Schemes"
+								ng-change="ASC.SelectScheme(ASC.s)"
+								ng-model="ASC.s">
+							</select>
+							
 							<div class="pull-right" ng-show="ASC.ActiveStudent">
 								<a-button size="lg">Close</a-button>
 								<a-button size="lg" type="success">Save</a-button>
