@@ -11,6 +11,7 @@ define(['app','api','atomic/bomb'],function(app){
 							{id:'REG',name:'Regular'},
 							{id:'ESC',name:'ESC'}
 						];
+			$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status']
 			$scope.ShowSched = 0;
 			$scope.Headers = ['Billing Period','Amount'];
 			$scope.Props = ['billing_period_id','amount'];
