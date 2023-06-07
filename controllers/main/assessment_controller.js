@@ -1,6 +1,7 @@
 "use strict";
 define(['app','api','atomic/bomb'],function(app){
 	app.register.controller('AssessmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter',
+
 	function($rootScope,$scope,api,atomic, aModal,$http,$filter){
 		const $selfScope = $scope;
 		$scope = this;
@@ -53,6 +54,5 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.PaySched = scheme.schedule;
 			$scope.ShowSched = 1;
 		}
-
 	}]);
 });
