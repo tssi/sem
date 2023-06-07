@@ -12,6 +12,8 @@ define(['app','api','atomic/bomb'],function(app){
 								{id:'ESC',name:'ESC'}
 							];
 
+				$scope.StudFields = ['id','first_name','middle_name','last_name','subsidy_status'];
+
 				// atomic.ready to access core data ex. SchoolYear, Section etc.
 				atomic.ready(function(){
 					console.log(atomic);
