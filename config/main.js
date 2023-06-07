@@ -27,6 +27,7 @@ require.config({
 		'enrollment':'../controllers/enrollment',
         'custom-window':'vendors/custom_window',
         'md5':'../vendors/node_modules/js-md5/build/md5.min',
+        'exceljs':'../vendors/node_modules/exceljs/dist/exceljs',
 		'atomic':'vendors/atomic_design',
 		'util':'../config/util',
         'main':'../controllers/main',
