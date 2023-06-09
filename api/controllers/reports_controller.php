@@ -258,6 +258,7 @@ class ReportsController extends AppController{
 	}
 	
 	function reg_form($aid=null){
+
 		ini_set('max_execution_time', '0');
 		
 		$sy = 2021;

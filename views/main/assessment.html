@@ -8,8 +8,6 @@
 			<a-canvas>
 				<a-content>
 					<a-row>
-						{{ASC.ActiveStudent}}
-						{{ASC.StudFields}}
 						<!-- Fees and Subjects -->
 						<a-col size="7">
 							<uib-tabset type="pills" active="ASC.ActiveTabIndex">
@@ -28,25 +26,52 @@
 												<tbdoy>
 													<tr ng-repeat="sched in ASC.Tuition.fee_breakdowns">
 														<td>{{sched.description}}</td>
-														<td>{{sched.amount}}</td>
+														<td>{{sched.amount | currency}}</td>
+													</tr>
+													<tr ng-if="ASC.Scheme.variance_amount!=null">
+														<td>Subsidy</td>
+														<td>{{ASC.Scheme.variance_amount | currency}}</td>
 													</tr>
 												</tbdoy>
+												<tfoot>
+													<tr>
+														<td>Total</td>
+														<td>{{ASC.TotalDue | currency}}</td>
+													</tr>
+												</tfoot>
 											</table>
 										</a-col>
 									</a-row>
 									<a-row ng-show="ASC.ShowSched">
 										<a-col>
-											<a-table headers="ASC.Headers" props="ASC.Props" data="ASC.PaySched">
-
-											</a-table>
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Billing Period</th>
+														<th>Amount</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="s in ASC.PaySched">
+														<td>{{s.billing_period_id}}</td>
+														<td>{{s.amount}}</td>
+													</tr>
+												</tbody>
+												<tfoot>
+													<tr>
+														<td>Total</td>
+														<td>{{ASC.TotalDue | currency}}</td>
+													</tr>
+												</tfoot>
+											</table>
 										</a-col>
+										
 									</a-row>
 
 								</uib-tab>
 								<uib-tab index="1" heading="Subjects" classes="btn-lg">
-									<a-row>
+									<a-row ng-show="ASC.ShowSched">
 										<a-col>
-											{{ASC.ActiveStudent}}
 											<table class="table table-bordered">
 												<thead>
 													<tr>
@@ -54,11 +79,8 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>Filipino</td>
-													</tr>
-													<tr>
-														<td>English</td>
+													<tr ng-repeat="sub in ASC.Subjects">
+														<td>{{sub.name}}</td>
 													</tr>
 												</tbody>
 											</table>
@@ -71,7 +93,6 @@
 
 						<a-col size="5">
 							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true" ></m-formgroup>
-
 							<label for="">Year Level</label>
 							<select name="" id="" class="form-control" 
 								ng-options="yl.id as yl.description for yl in ASC.YL | filter:{department_id:ASC.ActiveStudent.department_id}" 
@@ -95,8 +116,9 @@
 							</select>
 							
 							<div class="pull-right" ng-show="ASC.ActiveStudent">
-								<a-button size="lg">Close</a-button>
-								<a-button size="lg" type="success">Save</a-button>
+								<a-button >Close</a-button>
+								<a-button  type="primary" ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.s'>Save</a-button>
+								<a-button type="primary" disabled ng-show="ASC.Saving">Saving...</a-button>
 							</div>
 						</a-col>
 					</a-row>
@@ -104,5 +126,23 @@
 			</a-canvas>
 		</a-container>
 		
+		
 	</a-module>
+	<script type="text/ng-template" id="assessmentModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-success btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-ok"></span></button>
+			<h1>Success</h1>
+			<p>Student can now proceed to the casheir.</p>
+			
+			<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">
+				<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-success btn-block" type="button" ng-click="dismissAssesment()">OK</button>
+		</div>
+		<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">
+			<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
+		</form>
+	</script>
 </div>

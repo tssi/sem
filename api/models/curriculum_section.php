@@ -23,8 +23,8 @@ class CurriculumSection extends AppModel {
 		)
 	);
 	
-	function findBySectId($sectId,$esp){
-		//pr($sectId); exit();
+	function findBySectionId($sectId,$esp){
+		//pr('dumaan'); exit();
 		$sections = $this->Section->find('first',
 										array('conditions'=>
 											array('Section.id'=>$sectId)

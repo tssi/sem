@@ -2,7 +2,13 @@
 class Record extends AppModel {
 	var $name = 'Record';
 	var $useTable = false;
-	var $baseDir = APP.'..'.DS.'..'.DS.'ser'.DS.'api'.DS.'records'.DS;
+	var $baseDir ="";
+	//".."..'.DS.'..'.DS.'ser'.DS.'api'.DS.'records'.DS;
+
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->baseDir  =dirname(dirname(APP)).DS.'ser'.DS.'api'.DS.'records'.DS;;
+	}	
 	function getProfilePic($student){
 		$formats = array('png','jpg','jpeg');
 		$i=0;

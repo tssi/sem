@@ -191,7 +191,7 @@ define(['app','api'], function (app) {
 						$scope.Assessment.assessment.discount_amount = $scope.TotalDiscount;
 					}
 					
-					//console.log($scope.ActiveScheme,$scope.Assessment); return;
+					console.log($scope.Assessment); return;
 					api.POST('assessments',$scope.Assessment, function success(response){
 						$scope.AssessmentId = response.data.id;
 						$scope.openModal();
