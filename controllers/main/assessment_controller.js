@@ -17,7 +17,7 @@ define(['app','api','atomic/bomb'],function(app){
 							{id:'REG',name:'Regular'},
 							{id:'ESC',name:'ESC'}
 						];
-					$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status','program_id']
+					$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status','program_id'];
 					$scope.ShowSched = 0;
 					getBP();
 					getYearLevels();
@@ -55,10 +55,30 @@ define(['app','api','atomic/bomb'],function(app){
 				let tuition = $scope.Tuition;
 				$scope.Schemes = [];
 				angular.forEach(tuition.schemes, function(s){
-					$scope.Schemes.push(s);					
+					$scope.Schemes.push(s);		
 				});
-				
+				setDefaultScheme();
 			})
+		}
+		
+		function setDefaultScheme(){
+			console.log($scope.ActiveStudent);
+			angular.forEach($scope.Schemes, function(s){
+				if(s.subsidy_status==$scope.ActiveStudent.subsidy_status){
+					let net = 0;
+					angular.forEach(s.schedule, function(sc){
+						net+=sc.amount;
+						angular.forEach($scope.billing_periods, function(bp){
+							if(bp.id==s.billing_period_id)
+								s['billing_period'] = bp.name;
+						})
+					})
+					$scope.PaySched = scheme.schedule;
+					$scope.TotalDue = net;
+					$scope.s = s;
+					$scope.ShowSched = 1;
+				}
+			});
 		}
 		
 		function getBP(){
@@ -92,6 +112,7 @@ define(['app','api','atomic/bomb'],function(app){
 			});
 		}
 		
+		
 		$scope.selectSection = function(){
 			getTuitions();
 			getCurriSec();
@@ -103,20 +124,17 @@ define(['app','api','atomic/bomb'],function(app){
 			let net = 0;
 			angular.forEach(scheme.schedule, function(s){
 				net+=s.amount;
+				angular.forEach($scope.billing_periods, function(bp){
+					if(bp.id==s.billing_period_id)
+						s['billing_period'] = bp.name;
+				})
 			})
 			$scope.PaySched = scheme.schedule;
 			$scope.TotalDue = net;
 			$scope.ShowSched = 1;
 		}
 		
-		$scope.SetYearLevel = function(stud){
-			let yls = [];
-			angular.forEach($scope.YL, function(y){
-				yls.push(y.id);
-			})
-			console.log(yls);
-			console.log(yls[stud.year_level_id]);
-		}
+		
 		
 		$scope.SaveAssessment = function(){
 			$scope.Saving = 1;
@@ -168,9 +186,49 @@ define(['app','api','atomic/bomb'],function(app){
 			modalInstance.result.then(function (source) {
 				
 			}, function (source) {
-				$scope.initData();
+				$scope.ClearRecord();
 			});
 		}
+		
+		$scope.ClearRecord = function(){
+			$scope.ActiveStudent = null;
+			$scope.year_level_id = null;
+			$scope.section_id = null;
+			$scope.s = null;
+			$scope.ShowSched = 0;
+		}
+		
+		$selfScope.$watch('ASC.ActiveStudent', function(stud){
+			if(stud){
+				if(stud.year_level_id=='GX')
+					stud.department_id = 'SH';
+				else
+					$scope.SetDefaults(stud);
+			}
+			
+		})
+		
+		$scope.SetDefaults = function(stud){
+			let yls = [];
+			angular.forEach($scope.YL, function(y){
+				yls.push(y.id);
+			})
+			let yindx = yls.indexOf($scope.ActiveStudent.year_level_id);
+			$scope.year_level_id = yls[yindx+1];
+			angular.forEach($scope.Sections, function(sec){
+				if(stud.department_id==sec.department_id&&yls[yindx+1]==sec.year_level_id){
+					$scope.section_id = sec.id;
+					return;
+				}
+			})
+		}
+		
+		$selfScope.$watch('ASC.section_id', function(sid){
+			if(sid){
+				getTuitions();
+				getCurriSec();
+			}
+		})
 	}]);
 	
 	app.register.controller('SuccessAssessModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api','assessmentId', function ($scope,$rootScope,$timeout, $uibModalInstance, api,assessmentId){
