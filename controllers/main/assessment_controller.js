@@ -205,7 +205,12 @@ define(['app','api','atomic/bomb'],function(app){
 				else
 					$scope.SetDefaults(stud);
 			}
-			
+		})
+
+		$selfScope.$watch('ASC.ActiveStudent.name', function(stud){
+			if(!stud)
+				$scope.ClearRecord();
+				
 		})
 		
 		$scope.SetDefaults = function(stud){

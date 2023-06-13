@@ -163,7 +163,6 @@ class ReportsController extends AppController{
 			endif;
 			$type =  $f['Fee']['type'];
 			$name =  $f['Fee']['name'];
-			//pr($f);
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
 				switch($type){
@@ -179,6 +178,8 @@ class ReportsController extends AppController{
 					$type="1".$type;
 					if($type=="1TF")
 						$type = "0TF";
+					if($type=="1DSC")
+						$type = "4DSC";
 				endif;
 				$feeTotals[$type] = array('label'=>$label,'total'=>0,'order'=>1);
 			}
