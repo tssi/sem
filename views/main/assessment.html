@@ -95,9 +95,8 @@
 							
 							<m-formgroup ng-model="ASC.ActiveSy" label="School Year" options="ASC.SYs" option-label="label"></m-formgroup>
 							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true"></m-formgroup>
-							<h4>Discount Type</h4>
-							<a-navpill ng-model="ASC.ActiveType" options="ASC.StudTypes" ></a-navpill>
 							<m-formgroup label="Section" ng-model="ASC.section_id" options="ASC.Sections" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
+							 <m-formgroup label="Discount Type" ng-model="ASC.ActiveType" options="ASC.StudTypes" type="'btn-group'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							
 							<div class="pull-right" ng-show="ASC.ActiveStudent">
 								<a-button ng-click="ASC.ClearRecord()" >Close</a-button>
