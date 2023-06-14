@@ -2,15 +2,65 @@
 	<a-module>
 		<a-container>
 			<a-header is-main="true">
-				<m-search-entity ng-model="ASC.ActiveStudent" endpoint="'students/search'" search-fields="['first_name','last_name','middle_name']" obj-fields="ASC.StudFields" is-large="true" display-field="'display_name'">
+				<a-row>
+					<a-col size="3">
+						<div class="btn-group btn-group-lg" style="margin-right:5px;margin-top:12px;margin-bottom: 2px;">
+							<a-button type="default"  style="width:100px;" ng-click="ASC.isBatch=!ASC.isBatch">
+								{{ASC.isBatch?'Level':'Student'}}
+							</a-button>
+							<a-button type="default" is-active="ASC.isBatch" ng-click="ASC.isBatch=true">
+								<a-glyph icon="th-list"></a-glyph>
+							</a-button>
+							<a-button type="default" is-active="!ASC.isBatch" ng-click="ASC.isBatch=false">
+								<a-glyph icon="user"></a-glyph>
+							</a-button>
+
+						</div>
+					</a-col>
+					<a-col size="9"  ng-show="!ASC.isBatch">
+						<m-search-entity style="margin-top:12px;" ng-model="ASC.ActiveStudent" endpoint="'students/search'" search-fields="['first_name','last_name','middle_name']" obj-fields="ASC.StudFields" is-large="true" display-field="'display_name'"/>
+					</a-col>
+					<a-col size="9"  ng-show="ASC.isBatch">
+						<a-row is-fluid="true">
+							<a-col size="4">
+								<label>Department</label>
+								<m-navpill-dept   ng-model="ASC.BatchDeptId"></m-navpill-dept>
+							</a-col>
+							<a-col size="6">
+								<label>Year Level</label><br>
+								<a-navpill ng-model="ASC.BatchLevel" options="ASC.BatchLevels" type="button"></a-navpill>
+								<span ng-show="!ASC.BatchLevels.length">
+									{{ASC.BatchDeptId?'Not Applicable':'No Selection'}}
+								</span>
+							</a-col>
+							<a-col size="2" align="right">
+								<a-button style="margin-top:12px;" type="primary" size="lg" ng-click="ASC.LoadBatch()" ng-disabled="ASC.BatchStatus=='BATCH_LOADING'"
+								ng-show="ASC.BatchStatus!=='BATCH_LOADED'&&ASC.BatchStatus!=='BATCH_RUNNING'&&ASC.BatchIndex==null"
+								>
+									{{ASC.BatchStatus=='BATCH_LOADING'?'Loading...':'Load Batch'}}
+								</a-button>
+								<a-button style="margin-top:12px;" type="success" size="lg" ng-click="ASC.StartBatch()"
+								ng-disabled="ASC.BatchStatus=='BATCH_RUNNING'"
+								ng-show="ASC.BatchStud.length" >
+									{{ASC.BatchStatus=='BATCH_RUNNING'?'Running...':'Start Batch'}}
+								</a-button>
+
+							</a-col>
+						</a-row>
+					</a-col>
+				</a-row>
 			</a-header>
 			<a-canvas>
 				<a-content>
+					<a-row ng-show="ASC.isBatch">
+						<a-col>
+							<a-table headers="ASC.Headers" props="ASC.Props" data="ASC.BatchStud" ng-model="ASC.ActiveBatchStud" is-preload="ASC.isBatch && ASC.BatchStatus=='BATCH_LOADING'" ng-model="ASC.ActiveBatchStud"></a-table>
+						</a-col>
+					</a-row>
 					<a-row>
 						<!-- Fees and Subjects -->
 						<a-col size="7">
 							<uib-tabset type="pills" active="ASC.ActiveTabIndex">
-
 								<uib-tab index="0" heading="Tuition" classes="btn-lg">
 									<a-row ng-show="ASC.ShowSched">
 										<a-col>

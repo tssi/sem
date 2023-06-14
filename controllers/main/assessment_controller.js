@@ -1,8 +1,8 @@
 "use strict";
 define(['app','api','atomic/bomb'],function(app){
-	app.register.controller('AssessmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter','$uibModal',
+	app.register.controller('AssessmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter','$timeout','$uibModal',
 
-	function($rootScope,$scope,api,atomic, aModal,$http,$filter,$uibModal){
+	function($rootScope,$scope,api,atomic, aModal,$http,$filter,$timeout,$uibModal){
 		const $selfScope = $scope;
 		$scope = this;
 		$scope.init = function(){
@@ -15,25 +15,35 @@ define(['app','api','atomic/bomb'],function(app){
 			];
 			$scope.StudFields = ['sno','lrn','enroll_status','department_id',
 								'year_level_id','section_id','student_type','program_id'];
-
+			$scope.Headers = ['Sno','Student', 'Track','Type'];
+			$scope.Props = ['sno','full_name','program_id','subsidy_status'];
+			$scope.isBatchLoading = false;
 			$scope.ClearRecord();
 			atomic.ready(function(){
 				$scope.SYs = atomic.SchoolYears;
-				$scope.AllYL = atomic.YearLevels;
+				$scope.AllYearLevels = atomic.YearLevels;
 				$scope.AllSections = atomic.Sections;
 				$scope.ActiveSy = atomic.ActiveSY;
 				getTuitions();
 				getBP();
 			})
 		}
-		
-		$selfScope.$watch('ASC.ActiveStudent', function(stud){
+		$selfScope.$watch('ASC.BatchDeptId',function(deptId){
+			if(!deptId) return;
+			$scope.BatchLevels = $filter("filter")($scope.AllYearLevels,{department_id:deptId});
+		});
+
+		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
-				stud.subsidy_status = stud.student_type;
+				if(stud.student_type)
+					stud.subsidy_status = stud.student_type;
+				if(!stud.name)
+					stud.name =  stud.full_name;
 				$scope.ActiveType = stud.subsidy_status;
 				$scope.SetDefaults(stud);
 			}
 		})
+
 
 		$selfScope.$watch('ASC.ActiveType', function(type){
 			if($scope.Scheme!=null){
@@ -42,14 +52,65 @@ define(['app','api','atomic/bomb'],function(app){
 						$scope.SelectScheme(s);
 				})
 			}
-		})
+		});
+
+		$selfScope.$watch('ASC.Subjects',function(subjects){
+			if(!subjects) return;
+			if(subjects.length==0) return;
+			if($scope.isBatch && $scope.BatchStatus=='BATCH_RUNNING'){
+				$scope.BatchStatus='ASSESS_SAVING';
+				$scope.SaveAssessment();
+			}
+		});
+		$scope.LoadBatch = function(){
+			$scope.BatchStatus = 'BATCH_LOADING';
+			$scope.BatchStud = [];
+			var YEAR_LVLID =  $scope.BatchLevel;
+			var filter ={year_level_id:YEAR_LVLID,'limit':20, page:1};
+			var success =function(response){
+				$scope.BatchStud =  response.data;
+				$scope.BatchStatus = 'BATCH_LOADED';
+			}
+			var error = function(response){
+				$scope.BatchStatus = 'BATCH_LOAD_ERROR';
+			}
+			api.GET('students',filter,success,error);
+		}
+		$scope.StartBatch = function(){
+			triageBatchItem('START_BATCH');
+		}
+		function triageBatchItem(source){
+			switch(source){
+				case 'START_BATCH':
+					$scope.BatchIndex=0;
+				break;
+				case 'ASSESS_OK':
+					$scope.BatchStatus = 'BATCH_RUN_SAVED';
+					$scope.BatchIndex+=1;
+					$scope.ClearRecord();
+				break;
+			}
+			
+			if($scope.BatchIndex<$scope.BatchStud.length){
+				$timeout(function(){
+					runBatchItem($scope.BatchIndex);	
+				},300);
+				
+			}
+		}
+		function runBatchItem(index){
+			$scope.BatchStatus = 'BATCH_RUNNING';
+			$scope.ActiveBatchStud =  $scope.BatchStud[index];
+			$scope.ActiveStudent = angular.copy($scope.ActiveBatchStud);
+		}
+
 		// Improve Default values based on student info
 		$scope.SetDefaults = function(stud){
 			// Check for basic info such as enrollment status, year level and program(track)
 			var ENROL_STAT = stud.enroll_status;
 			var YEAR_LVLID = stud.year_level_id;
 			var DEPT_ID = YEAR_LVLID=='GX'?'SH':stud.department_id;
-			var YEAR_LEVELS = $filter("filter")($scope.AllYL,{department_id:DEPT_ID,program_id:'!MIXED'});
+			var YEAR_LEVELS = $filter("filter")($scope.AllYearLevels,{department_id:DEPT_ID,program_id:'!MIXED'});
 
 			// Filter sections based on current year level
 			var SECTIONS = $filter("filter")($scope.AllSections,{department_id:DEPT_ID,year_level_id:YEAR_LVLID});
@@ -199,7 +260,13 @@ define(['app','api','atomic/bomb'],function(app){
 			api.POST('assessments', Assessment, function success(response){
 				$scope.AssessmentId = response.data.id;
 				$scope.Saving = 0;
-				$scope.openModal();
+				if($scope.isBatch && $scope.BatchStatus=='ASSESS_SAVING'){
+					$scope.BatchStatus = 'ASSESS_OK';
+					triageBatchItem('ASSESS_OK');
+				}else{
+					$scope.openModal();	
+				}
+				
 			})
 		}
 		
