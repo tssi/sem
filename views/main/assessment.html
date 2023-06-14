@@ -54,7 +54,7 @@
 												<tbody>
 													<tr ng-repeat="s in ASC.PaySched">
 														<td>{{s.billing_period}}</td>
-														<td>{{s.amount}}</td>
+														<td>{{s.amount | currency}}</td>
 													</tr>
 												</tbody>
 												<tfoot>
@@ -92,34 +92,16 @@
 						</a-col>
 
 						<a-col size="5">
-							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true" style="margin-top: 13%;"></m-formgroup>
-							<label for="">Year Level</label>
-							<select name="" id="" class="form-control" 
-								ng-options="yl.id as yl.description for yl in ASC.YL | filter:{department_id:ASC.ActiveStudent.department_id}" 
-								ng-model="ASC.year_level_id"
-								ng-disabled="!ASC.ActiveStudent.id" style="margin-bottom: 15px;">
-								<option value="">Select Year Level</option>
-							</select>
-							<label for="">Section</label>
-							<select name="" id="" class="form-control" 
-								ng-options="sc.id as sc.name for sc in ASC.Sections | filter:{year_level_id:ASC.year_level_id}" 
-								ng-model="ASC.section_id"
-								ng-change="ASC.selectSection()"
-								ng-disabled="!ASC.year_level_id" style="margin-bottom: 15px;">
-								<option value="">Select Section</option>
-							</select>
-							<label for="">Student Type</label>
-							<select name="" id="" class="form-control"
-								ng-options="s as s.name for s in ASC.Schemes"
-								ng-change="ASC.SelectScheme(ASC.s)"
-								ng-model="ASC.s"
-								ng-disabled="!ASC.section_id" style="margin-bottom: 15px;">
-								<option value="">Select Type</option>
-							</select>
+							
+							<m-formgroup ng-model="ASC.ActiveSy" label="School Year" options="ASC.SYs" option-label="label"></m-formgroup>
+							<m-formgroup ng-model="ASC.ActiveStudent.name" label="Student" ng-disabled="true"></m-formgroup>
+							<h4>Discount Type</h4>
+							<a-navpill ng-model="ASC.ActiveType" options="ASC.StudTypes" ></a-navpill>
+							<m-formgroup label="Section" ng-model="ASC.section_id" options="ASC.Sections" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							
 							<div class="pull-right" ng-show="ASC.ActiveStudent">
 								<a-button ng-click="ASC.ClearRecord()" >Close</a-button>
-								<a-button  type="primary" ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.s'>Save</a-button>
+								<a-button  type="primary" ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched'>Save</a-button>
 								<a-button type="primary" disabled ng-show="ASC.Saving">Saving...</a-button>
 							</div>
 						</a-col>

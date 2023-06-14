@@ -7,78 +7,80 @@ define(['app','api','atomic/bomb'],function(app){
 		$scope = this;
 		$scope.init = function(){
 			$rootScope.__MODULE_NAME = 'Assessment';
-			$rootScope.$watch('_APP', function (data){
-				if(data){
-					$scope.ActiveSy  =  data.ACTIVE_SY;
-					$scope.Defaults  =  data.DEFAULT_;
-					$scope.ActiveSem = $scope.Defaults.SEMESTER
-					$scope.ActiveEsp = $scope.ActiveSy+($scope.ActiveSem.id/100);
-					$scope.StudTypes = [
-							{id:'REG',name:'Regular'},
-							{id:'ESC',name:'ESC'}
-						];
-					$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status','program_id'];
-					$scope.ShowSched = 0;
-					getBP();
-					getYearLevels();
-					getSections();
-					$scope.Saving = 0;
-				}
-			});
-			
-		}
-		
-		function initData(){
-			$scope.ActiveStudent = {};
-			$scope.Subjects = [];
-		}
-		
-		function getYearLevels(){
-			api.GET('year_levels',{limit:'less'}, function success(response){
-				$scope.YL = response.data;
+			$scope.StudTypes = [
+				{id:'DSESC',name:'ESC'},
+				{id:'REGXX',name:'Regular'},
+				{id:'DSPUB',name:'Public'},
+			];
+			$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status','program_id'];
+			$scope.ActiveType =  'DSESC';
+			$scope.ShowSched = 0;
+			$scope.Saving = 0;
+			$scope.Scheme = null;
+			atomic.ready(function(){
+				console.log(atomic)
+				$scope.SYs = atomic.SchoolYears;
+				$scope.AllYL = atomic.YearLevels;
+				$scope.AllSections = atomic.Sections;
+				$scope.ActiveSy = atomic.ActiveSY;
+				getTuitions();
+				getBP();
 			})
 		}
-		function getSections(){
-			api.GET('sections',{limit:'less'}, function success(response){
-				$scope.Sections = response.data;
-			})
-		}
+		
+		$selfScope.$watch('ASC.ActiveStudent', function(stud){
+			if(stud){
+				$scope.ActiveStudent.name = stud.sno + ' | ' + stud.name;
+				if(stud.year_level_id=='GX')
+					stud.department_id = 'SH';
+				$scope.SetDefaults(stud);
+				$scope.ActiveType = stud.subsidy_status;
+			}
+		})
 
+		$selfScope.$watch('ASC.ActiveType', function(type){
+			if($scope.Scheme!=null){
+				angular.forEach($scope.Tuition.schemes, function(s){
+					if(type==s.subsidy_status)
+						$scope.SelectScheme(s);
+				})
+			}
+		})
+		//program_id not binding when picking up students
+		$scope.SetDefaults = function(stud){
+			let yls = [];
+			angular.forEach($scope.AllYL, function(y){
+				yls.push(y.id);
+			})
+			let yindx = yls.indexOf($scope.ActiveStudent.year_level_id);
+			$scope.year_level_id = yls[yindx+1];
+			angular.forEach($scope.AllSections, function(sec){
+				if(stud.program_id==sec.program_id&&yls[yindx+1]==sec.year_level_id){
+					$scope.section_id = sec.id;
+					return;
+				}
+			})
+			$scope.Sections = $filter("filter")($scope.AllSections, {year_level_id:$scope.year_level_id, program_id: '!MIXED'});
+			let tui = $filter("filter")($scope.Tuitions, {year_level_id:$scope.year_level_id});
+			$scope.Tuition = tui[0];
+			pickScheme(stud);
+		}
+		//update applicable to depending on student
 		function getTuitions(){
 			let filter = {
 				applicable_to: 'Old',
-				sy: $scope.ActiveSy,
-				year_level_id: $scope.year_level_id
+				sy: $scope.ActiveSy
 			}
 			api.GET('tuitions',filter, function success(response){
-				$scope.Tuition = response.data[0];
-				let tuition = $scope.Tuition;
-				$scope.Schemes = [];
-				angular.forEach(tuition.schemes, function(s){
-					$scope.Schemes.push(s);		
-				});
-				setDefaultScheme();
+				$scope.Tuitions = response.data;
 			})
 		}
-		
-		function setDefaultScheme(){
-			console.log($scope.ActiveStudent);
-			angular.forEach($scope.Schemes, function(s){
-				if(s.subsidy_status==$scope.ActiveStudent.subsidy_status){
-					let net = 0;
-					angular.forEach(s.schedule, function(sc){
-						net+=sc.amount;
-						angular.forEach($scope.billing_periods, function(bp){
-							if(bp.id==s.billing_period_id)
-								s['billing_period'] = bp.name;
-						})
-					})
-					$scope.PaySched = scheme.schedule;
-					$scope.TotalDue = net;
-					$scope.s = s;
-					$scope.ShowSched = 1;
-				}
-			});
+
+		function pickScheme(stud){
+			angular.forEach($scope.Tuition.schemes, function(s){
+				if(stud.subsidy_status==s.subsidy_status)
+					$scope.SelectScheme(s);
+			})
 		}
 		
 		function getBP(){
@@ -113,14 +115,9 @@ define(['app','api','atomic/bomb'],function(app){
 		}
 		
 		
-		$scope.selectSection = function(){
-			getTuitions();
-			getCurriSec();
-		}
 
 		$scope.SelectScheme = function(scheme){
 			$scope.Scheme = scheme;
-			
 			let net = 0;
 			angular.forEach(scheme.schedule, function(s){
 				net+=s.amount;
@@ -150,7 +147,7 @@ define(['app','api','atomic/bomb'],function(app){
 				subsidy_status: $scope.Scheme.subsidy_status,
 				department_id: $scope.Curriculum.department_id,
 				program_id: '',
-				esp: $scope.ActiveEsp
+				esp: $scope.ActiveSy + .25
 			}
 			angular.forEach($scope.Subjects, function(sub){
 				sub['section_id'] = $scope.section_id;
@@ -163,7 +160,6 @@ define(['app','api','atomic/bomb'],function(app){
 				Schedule : $scope.Subjects
 			};
 			
-			//console.log($scope.ActiveStudent); return;
 			api.POST('assessments', Assessment, function success(response){
 				$scope.AssessmentId = response.data.id;
 				$scope.Saving = 0;
@@ -195,44 +191,25 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.year_level_id = null;
 			$scope.section_id = null;
 			$scope.s = null;
+			$scope.Scheme = null;
 			$scope.ShowSched = 0;
 		}
 		
-		$selfScope.$watch('ASC.ActiveStudent', function(stud){
-			if(stud){
-				if(stud.year_level_id=='GX')
-					stud.department_id = 'SH';
-				else
-					$scope.SetDefaults(stud);
-			}
-		})
+		
 
 		$selfScope.$watch('ASC.ActiveStudent.name', function(stud){
-			if(!stud)
+			if(stud=='undefined | null')
 				$scope.ClearRecord();
 				
 		})
 		
-		$scope.SetDefaults = function(stud){
-			let yls = [];
-			angular.forEach($scope.YL, function(y){
-				yls.push(y.id);
-			})
-			let yindx = yls.indexOf($scope.ActiveStudent.year_level_id);
-			$scope.year_level_id = yls[yindx+1];
-			angular.forEach($scope.Sections, function(sec){
-				if(stud.department_id==sec.department_id&&yls[yindx+1]==sec.year_level_id){
-					$scope.section_id = sec.id;
-					return;
-				}
-			})
-		}
+		
 		
 		$selfScope.$watch('ASC.section_id', function(sid){
-			if(sid){
-				getTuitions();
+			$scope.Subjects = [];
+			if(sid)
 				getCurriSec();
-			}
+			
 		})
 	}]);
 	
