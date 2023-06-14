@@ -1,9 +1,8 @@
 <div ng-controller="AssessmentController as ASC" ng-init="ASC.init()">
 	<a-module>
 		<a-container>
-			<a-header>
-				<m-search-student ng-model="ASC.ActiveStudent"
-				is-large="true" obj-fields="ASC.StudFields"/>
+			<a-header is-main="true">
+				<m-search-entity ng-model="ASC.ActiveStudent" endpoint="'students/search'" search-fields="['first_name','last_name','middle_name']" obj-fields="ASC.StudFields" is-large="true" display-field="'display_name'">
 			</a-header>
 			<a-canvas>
 				<a-content>

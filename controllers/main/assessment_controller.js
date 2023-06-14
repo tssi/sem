@@ -12,7 +12,7 @@ define(['app','api','atomic/bomb'],function(app){
 				{id:'REGXX',name:'Regular'},
 				{id:'DSPUB',name:'Public'},
 			];
-			$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','subsidy_status','program_id'];
+			$scope.StudFields = ['sno','lrn','gender','year_level','section','department_id','year_level_id','section_id','student_type','program_id'];
 			$scope.ActiveType =  'DSESC';
 			$scope.ShowSched = 0;
 			$scope.Saving = 0;
@@ -30,7 +30,8 @@ define(['app','api','atomic/bomb'],function(app){
 		
 		$selfScope.$watch('ASC.ActiveStudent', function(stud){
 			if(stud){
-				$scope.ActiveStudent.name = stud.sno + ' | ' + stud.name;
+				stud.subsidy_status = stud.student_type;
+				//$scope.ActiveStudent.name = stud.sno + ' | ' + stud.name;
 				if(stud.year_level_id=='GX')
 					stud.department_id = 'SH';
 				$scope.SetDefaults(stud);
