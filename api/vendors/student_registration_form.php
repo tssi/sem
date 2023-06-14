@@ -116,11 +116,23 @@ class StudentRegistrationForm extends Formsheet{
 		$isSH =  preg_match('/G[YZ]/',$data['Section']['year_level_id']);
 		$is2ndSEM =  isset($data['isSecondSem']);
 		$tot_subjs = 0;
+		$unavail = '------';
 		foreach($data['AssessmentSubject'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 			$length = count($d['ScheduleDetail']);
 
-			if(!$length) continue;
+			if(!$length){
+				if(strlen($d['Subject']['name'])>=45)
+					$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
+				$this->leftText(0,$y,$d['Subject']['name'],'','');
+				$this->centerText(11,$y,$unavail,4,'');
+				$this->centerText(14,$y,$unavail,4,'');
+				$this->centerText(17,$y,$unavail,4,'');
+				$this->centerText(22,$y,$unavail,4,'');
+				$this->centerText(28,$y,$unavail,4,'');
+				$y++;
+				continue;
+			}
 			if($isSH):
 				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
 				if($isS2Sched && !$is2ndSEM) continue;

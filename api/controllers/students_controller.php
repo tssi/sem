@@ -25,8 +25,14 @@ class StudentsController extends AppController {
 		// /pr($students);
 		$this->set('students', $students);
 	}
-
 	function view($id = null) {
+		// Student Unified Search
+		if($id=='search' && $this->isAPIRequest()):
+			$keyword=$this->params['url']['keyword'];
+			$fields=explode(',', $this->params['url']['fields']);
+			$S = $this->Student->search($keyword,$fields);
+			return $this->set('student',$S);
+		endif;	
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid student', true));
 			$this->redirect(array('action' => 'index'));

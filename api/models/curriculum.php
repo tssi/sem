@@ -49,6 +49,7 @@ class Curriculum extends AppModel {
 	
 	function beforeFind($queryData){
 		//pr($queryData); exit();
+		
 		if($conds=$queryData['conditions']){
 			$flags = array(
 						'Curriculum.year_level_id'=>0,
@@ -92,8 +93,11 @@ class Curriculum extends AppModel {
 			if($flags['Curriculum.section_id']&&$flags['Curriculum.esp']){
 				$sectId = $vals['Curriculum.section_id'];
 				$esp = $vals['Curriculum.esp'];
-				$CurriSections = $this->CurriculumSection->findBySectId($sectId,$esp);
-				 
+				pr($esp);
+				pr($this->CurriculumSection->findBySectionId($sectId,$esp)); exit();
+				exit();
+				$CurriSections = $this->CurriculumSection->findBySectionId($sectId,$esp);
+				pr($CurriculumSection); exit();
 				$this->unbindModel(array('hasMany'=>array('CurriculumDetail')));
 				$this->bindModel(array('hasMany'=>
 								array('CurriculumDetail'=>
@@ -117,7 +121,7 @@ class Curriculum extends AppModel {
 				
 		}
 		return $queryData;
-	}
+	} 
 	
 	
 	function getSubjects($esp,$sect){

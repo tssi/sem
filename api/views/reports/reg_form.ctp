@@ -1,6 +1,6 @@
 <?php
 App::import('Vendor','enroll_registration_form');
-
+pr($DATA_BANK); exit();
 
 $pr= new EnrollRegistrationForm();
 //pr($DATA_BANK); exit();

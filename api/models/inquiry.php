@@ -2,7 +2,7 @@
 class Inquiry extends AppModel {
 	var $name = 'Inquiry';
 	var $displayField = 'name';
-	
+	var $actsAs ='Containable';
 	var $virtualFields = array(
 				'full_name'=>"CONCAT( Inquiry.last_name,', ',Inquiry.first_name,', ',COALESCE(Inquiry.middle_name,''))"
 				);
