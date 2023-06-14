@@ -35,7 +35,7 @@
 							</a-col>
 							<a-col size="2" align="right">
 								<a-button style="margin-top:12px;" type="primary" size="lg" ng-click="ASC.LoadBatch()" ng-disabled="ASC.BatchStatus=='BATCH_LOADING'"
-								ng-show="ASC.BatchStatus!=='BATCH_LOADED'&&ASC.BatchStatus!=='BATCH_RUNNING'&&ASC.BatchIndex==null"
+								ng-show="ASC.BatchStatus!=='BATCH_LOADED'&&ASC.BatchStatus!=='BATCH_RUNNING'"
 								>
 									{{ASC.BatchStatus=='BATCH_LOADING'?'Loading...':'Load Batch'}}
 								</a-button>

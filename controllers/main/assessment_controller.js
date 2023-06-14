@@ -39,6 +39,15 @@ define(['app','api','atomic/bomb'],function(app){
 					stud.subsidy_status = stud.student_type;
 				if(!stud.name)
 					stud.name =  stud.full_name;
+				switch(stud.subsidy_status){
+					case 'ESC': stud.subsidy_status = 'DSESC';break;
+					case 'PUB': stud.subsidy_status = 'DSPUB';break;
+					case 'QVR': stud.subsidy_status = 'DSESC';break;
+					case 'REG': case null:
+						stud.subsidy_status = 'REGXX';
+					break;
+				}
+
 				$scope.ActiveType = stud.subsidy_status;
 				$scope.SetDefaults(stud);
 			}
@@ -96,11 +105,14 @@ define(['app','api','atomic/bomb'],function(app){
 					runBatchItem($scope.BatchIndex);	
 				},300);
 				
+			}else{
+				$scope.BatchStatus = 'BATCH_RUN_ENDED';
 			}
 		}
 		function runBatchItem(index){
 			$scope.BatchStatus = 'BATCH_RUNNING';
 			$scope.ActiveBatchStud =  $scope.BatchStud[index];
+			$scope.ActiveBatchStud.enroll_status = 'OLD';
 			$scope.ActiveStudent = angular.copy($scope.ActiveBatchStud);
 		}
 
@@ -113,29 +125,44 @@ define(['app','api','atomic/bomb'],function(app){
 			var YEAR_LEVELS = $filter("filter")($scope.AllYearLevels,{department_id:DEPT_ID,program_id:'!MIXED'});
 
 			// Filter sections based on current year level
-			var SECTIONS = $filter("filter")($scope.AllSections,{department_id:DEPT_ID,year_level_id:YEAR_LVLID});
-			
+			var SECTIONS = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LVLID});
 			// Filter applicable sections 
+			console.log(YEAR_LEVELS,YEAR_LVLID, ENROL_STAT );
 			if(YEAR_LVLID!='GZ' && ENROL_STAT =='OLD'){
 				var nextYL;
-				// Look for the year level and match the next  year level
-				YEAR_LEVELS.map(function(YL,index){
-					if(YL.id==YEAR_LVLID){
-						// Filter all sections and add 1 to index to get the next year level
-						nextYL = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LEVELS[index+1].id});
-						// Concatenate the current  and next year level for NEW or Repeater and Promoted 
-						SECTIONS = SECTIONS.concat(nextYL);
-						return;
-					}
-				});
+				if(YEAR_LVLID=='GX'){
+					delete stud.program_id;
+					nextYL = $filter("filter")($scope.AllSections,{year_level_id:'GY'});
+					SECTIONS = SECTIONS.concat(nextYL);
+					alert("Grade 10 assign track individually!");
+				}else{
+					// Look for the year level and match the next  year level
+					YEAR_LEVELS.map(function(YL,index){
+						if(YL.id==YEAR_LVLID){
+							// Filter all sections and add 1 to index to get the next year level
+							nextYL = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LEVELS[index+1].id});
+							// Concatenate the current  and next year level for NEW or Repeater and Promoted 
+							SECTIONS = SECTIONS.concat(nextYL);
+							return;
+						}
+					});
+				}
+				
 				// Update the year level id as promoted
 				YEAR_LVLID = nextYL[0].year_level_id;
 			}
 			// Bind the filtered sections
 			$scope.Sections =  SECTIONS;
-
+			if(YEAR_LVLID=='GY' && !stud.program_id ) return;
 			// Default Section based on program
-			var VALID_SECTS	 	=  $filter("filter")(SECTIONS,{year_level_id:YEAR_LVLID,program_id:stud.program_id});
+
+			var sectFltr = {year_level_id:YEAR_LVLID};
+			if(stud.program_id)
+				sectFltr.program_id = stud.program_id;
+		
+			
+
+			var VALID_SECTS	 	= $filter("filter")(SECTIONS,sectFltr);
 			$scope.section_id	= VALID_SECTS[0].id;
 			
 		}
@@ -150,6 +177,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Tuitions = $filter("filter")($scope.AllTuitions, {year_level_id:YEAR_LVLID,applicable_to:ENROL_STAT});
 			$scope.Tuition = $scope.Tuitions[0];
 			$scope.TuitionId = $scope.Tuition.id;	
+
 			pickScheme($scope.ActiveStudent);
 
 			// Reset subjects and reload curriculum
@@ -300,6 +328,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Sections = null;
 			$scope.Tuitions = null;
 			$scope.TuitionId = null;
+			$scope.ActiveType = null;
 		}
 		
 		
