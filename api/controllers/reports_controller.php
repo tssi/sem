@@ -66,6 +66,9 @@ class ReportsController extends AppController{
 					array_push($subjects,$subItem);
 				}
 			}
+			$isSH =  $level=='GY' || $level=='GZ';
+			if(!$isSH)
+				$curri_esp =  floor($curri_esp);
 			$schedule = $this->Schedule->getSched($sectId,$curri_esp);
 			foreach($subjects as $i=>$sub){
 				$scheds = array();
@@ -161,12 +164,17 @@ class ReportsController extends AppController{
 				$f['Fee']['type']='2OTH';
 				$f['Fee']['name']='Others';
 			endif;
-			$type =  $f['Fee']['type'];
+			$ogType = $type =  $f['Fee']['type'];
 			$name =  $f['Fee']['name'];
 			//pr($f);
+			if($type!="2OTH"):
+					$type="1".$type;
+					if($type=="1TF")
+						$type = "0TF";
+				endif;
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
-				switch($type){
+				switch($ogType){
 					case 'TF': $label = 'Tuition Fee'; break;
 					case 'LAB': $label = 'Laboratory Fee'; break;
 					case 'MSC': $label = $isSecondSem?'Registration':'Misc. Fee'; break;
@@ -175,16 +183,11 @@ class ReportsController extends AppController{
 					// If fee is different from the 3 main types use the fee name
 					default: $label = $name; break; 
 				}
-				if($type!="2OTH"):
-					$type="1".$type;
-					if($type=="1TF")
-						$type = "0TF";
-				endif;
+				
 				$feeTotals[$type] = array('label'=>$label,'total'=>0,'order'=>1);
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
-		//pr($feeTotals); exit();
 		
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
 		//pr($spons); exit();

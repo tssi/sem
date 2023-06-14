@@ -59,7 +59,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$is2ndSEM  = false;
 		if($isSH):
 			$is2ndSEM =  isset($complete['isSecondSem']);
-			$SCH_DURA .=$is2ndSEM?'1st Semester':'2nd Semester';
+			$SCH_DURA .=!$is2ndSEM?'1st Semester':'2nd Semester';
 		else:
 			$SCH_DURA .='FULL';
 		endif;
