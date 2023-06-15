@@ -35,7 +35,7 @@ define(['app','api','atomic/bomb'],function(app){
 
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
-				if(stud.student_type)
+				if(stud.hasOwnProperty('student_type'))
 					stud.subsidy_status = stud.student_type;
 				if(!stud.name)
 					stud.name =  stud.full_name;
