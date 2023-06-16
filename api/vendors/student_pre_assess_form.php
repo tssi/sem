@@ -16,9 +16,9 @@ class StudentPreAssessForm extends Formsheet{
 		$this->createSheet();
 	}
 	
-	function hdr($data,$ass,$complete){
-		//pr($complete); exit();
+	function hdr($data,$ass,$complete,$start){
 		$this->showLines = !true;
+        
 		$metrics = array(
 			'base_x'=> 0.25,
 			'base_y'=> 0.25,
@@ -28,20 +28,22 @@ class StudentPreAssessForm extends Formsheet{
 			'rows'=> 4,	
 		);
 		$this->section($metrics);
-		
-		$y=1;
-		$this->DrawImage(0,-0.8,2,0.7,__DIR__."/images/newlogo.png");
+        $y=1;
+        $this->drawLine(32,'h',array(-2,42));
+		if(isset($start))
+            $y=$start;
+		//pr($start); exit();
+		$this->DrawImage(0,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
 		$this->GRID['font_size']=14;
-		$this->rightText(25.5,1.6,'ASSESSMENT FORM','','b');
+		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
 		
 		$this->GRID['font_size']=8;
 		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
-        $this->leftText(.7,5,'CAT/Prefix: O/23','','b');
-		$y=6;
-		
-		$this->leftText(.7,$y,'NAME OF STUDENT:','','b');
-		$this->leftText(8,$y,$data['sno'].' / ','','');
-		$this->leftText(12.2,$y,$data['print_name'],'','');
+        $this->leftText(.7,$y+4,'CAT/Prefix: O/23','','b');
+	
+		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
+		$this->leftText(8,$y+5,$data['sno'].' / ','','');
+		$this->leftText(12.2,$y+5,$data['print_name'],'','');
 		
 	}
 	
@@ -74,21 +76,20 @@ class StudentPreAssessForm extends Formsheet{
 		$this->leftText(20.5,$y++,$sec['YearLevel']['description'].' - '.$sec['name'],'','');
 		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
 		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
-		$this->drawBox(0,5,38,2.5);
+		
 
 	}
 	
-	function data($data){
+	function data($data,$start){
+        
 		$this->showLines = !true;
-        $this->drawBox(0,6.2,38,10);
-		//$metrics = $this->setUpMetrics($data);
-		//$this->section($metrics);
+        $this->drawBox(0,$start-.8,38,13);
 		$this->GRID['font_size']=8;
-		$y=7;
+		$y=$start;
 		$this->leftText(5,$y,'SCHOOL FEES',10,'b');
 		$this->centerText(28,$y,'PAYMENT OPTIONS',4,'b');
 
-		$end = $y+2;
+		$end = $y+1;
 		$this->fee_breakdown($data,$end);
 		
 		if(!isset($data['isRegForm'])):
@@ -99,15 +100,14 @@ class StudentPreAssessForm extends Formsheet{
 	}	
 	
 	function fee_breakdown($data,$end){
-		//pr($data); exit();
 		if(isset($data['isSecondSem']) &&$data['Assessment']['account_details']!='Irregular')
 			return;
 		
-		$this->GRID['font_size']=7;
+		$this->GRID['font_size']=8;
 
 		//FEE BREAKDOWN
 		
-		$y=$end-1.2;
+		$y=$end;
 		$total=0;
 		foreach($data['AssessmentFee'] as $d){
 			if($data['Assessment']['account_details']=='Adjust')			
@@ -124,7 +124,7 @@ class StudentPreAssessForm extends Formsheet{
 			$total+=$d['due_amount'];
 			$y++;
 		}
-		$this->drawLine($y-0.6,'h',array(0,16));
+		//$this->drawLine($y-0.6,'h',array(0,16));
 		$this->leftText(0.2,$y,'Total','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
 		$mod_bal = $data['Assessment']['module_balance'];
@@ -136,24 +136,47 @@ class StudentPreAssessForm extends Formsheet{
 	}
 
 	function payment_sched($data,$end){
-		$metrics =$this->setUpMetrics($data);
-		$this->section($metrics);
-		$this->GRID['font_size']=7;
+		$this->GRID['font_size']=8;
 
 		//PAYMENT SCHED
 		$y=$end;
 		$totaldue=0;
-		$this->leftText(22.2,$y++,'PAYMENT SCHEDULE','','b');
-		foreach($data['AssessmentPaysched'] as $d){
-			$this->leftText(22.2,$y,date("M d, Y", strtotime($d['due_date'])),'','');
-			if($d['due_amount']) $this->rightText(30,$y,number_format($d['due_amount'],2),3,'');
+        $this->leftText(30,$y,'OPTION A',10,'b');
+        $this->leftText(34,$y,'OPTION B',10,'b');
+        
+        $y++;
+		foreach($data['AssessmentPaysched'] as $i=>$d){
+            if($i!=0)
+			    $this->leftText(22.2,$y,date("F Y", strtotime($d['due_date'])),'','');
+            else
+                $this->leftText(22.2,$y,'Upon Enrollment','','');
+
+                if($d['due_amount']) $this->rightText(30,$y,number_format($d['due_amount'],2),3,'');
 			else $this->rightText(30,$y,'--',3,'');
 			$totaldue+=$d['due_amount'];
 			$y++;
 		}
-	
-		$this->drawLine($y-0.6,'h',array(22,11));
+        $this->leftText(34,$y-10,number_format($totaldue,2),10,'');
+		//$this->drawLine($y-0.6,'h',array(22,11));
 		$this->rightText(30,$y,number_format(round($totaldue),2),3,'b');
+		$this->rightText(34,$y,number_format(round($totaldue),2),3,'b');
+        $y=$y+1.5;
+        $this->leftText(1,$y,'Payment Option:','','b');
+        $this->drawBox(9,$y-.7,.8,.8);
+        $this->leftText(10,$y,'Option A (Installment)','','');
+        $this->drawBox(19,$y-.7,.8,.8);
+        $this->leftText(20,$y,'Option B (Fullpayment)','','');
+        $note = 'Note: Early enrollment will start this June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
+        $note1 = 'LSEI for the enrollment this SY 2023 - 2024. Date: _______________ Time: _______________';
+        $this->GRID['font_size']=7;
+        
+        $this->leftText(1,$y+1,$note,'i','');
+        $this->leftText(1,$y+2,$note1,'i','');
+        $this->GRID['font_size']=8;
+        $y=$y+4;
+        $this->leftText(27,$y,'____________________________','i','');
+        $this->leftText(28,$y+1,'Signiture Over Printed Name','i','');
+        $this->leftText(30,$y+2,'Parent/Guardian','i','');
 	}
 
 	function foot_notes($data,$end){

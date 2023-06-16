@@ -176,6 +176,8 @@ class ReportsController extends AppController{
 					$type="1".$type;
 					if($type=="1TF")
 						$type = "0TF";
+					if($type=='1DSC')
+						$type = '4DSC';
 				endif;
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
@@ -193,7 +195,7 @@ class ReportsController extends AppController{
 			}
 			$feeTotals[$type]['total']+=$f['due_amount'];
 		}
-		
+		//pr($feeTotals); exit();
 		// Create new array collection using the feeSummary and swap the AssessmentFee data
 		//pr($spons); exit();
 		$feeSummary = array();
