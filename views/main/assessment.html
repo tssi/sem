@@ -170,15 +170,12 @@
 			<h1>Success</h1>
 			<p>Student can now proceed to the casheir.</p>
 			
-			<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">
+			<form action="api/student_pre_assess_form" method="POST" target="_blank" id="PrintAssess">
 				<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
 			</form>
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissAssesment()">OK</button>
 		</div>
-		<form action="api/student_registration_form" method="POST" target="_blank" id="PrintAssess">
-			<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
-		</form>
 	</script>
 </div>

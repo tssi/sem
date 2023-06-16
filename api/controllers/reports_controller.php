@@ -3,6 +3,11 @@ class ReportsController extends AppController{
 	var $name = 'Reports';
 	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','TransactionType',
 						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
+	
+	function student_pre_assess_form(){
+		//pr('dumaan'); exit();
+		$this->student_registration_form();
+	}
 
 	function student_registration_form($aid=null,$curri_esp=null,$sem=null){
 		$AID = $aid;
@@ -243,7 +248,6 @@ class ReportsController extends AppController{
 			
 		$data['AssessmentFee'] =  $feeSummary;
 		$data['Important'] = $config;
-		
 		if($isSecondSem){
 			if(count($data['AssessmentSubject'])==0)
 				$data['AssessmentSubject'] = $subjects;

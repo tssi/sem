@@ -1,8 +1,8 @@
 <?php
-App::import('Vendor','student_registration_form');
+App::import('Vendor','student_pre_assess_form');
 
 
-$pr= new StudentRegistrationForm();
+$pr= new StudentPreAssessForm();
 if(!empty($data['Student'])){
 	$pr->hdr($data['Student'],$data['Assessment'],$data);
 }else{
