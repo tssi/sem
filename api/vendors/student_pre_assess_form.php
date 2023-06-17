@@ -1,5 +1,6 @@
 <?php
 require('vendors/fpdf17/formsheet.php');
+require(__DIR__.'/fpdf17/barcode/php-barcode.php');
 class StudentPreAssessForm extends Formsheet{
 	protected static $_width = 8.5;
 	protected static $_height = 6.5;
@@ -40,10 +41,24 @@ class StudentPreAssessForm extends Formsheet{
 		$this->GRID['font_size']=8;
 		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
         $this->leftText(.7,$y+4,'CAT/Prefix: O/23','','b');
-	
+		$SNO = trim($data['sno']);
 		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
-		$this->leftText(8,$y+5,$data['sno'].' / ','','');
+		$this->leftText(8,$y+5,$SNO.' / ','','');
 		$this->leftText(12.2,$y+5,$data['print_name'],'','');
+
+
+		// Barcode Display
+		$bx = 5.3; // X Position
+		$by = 0.85; // Y Position
+		$code=$SNO; // Data to be encode can be alphanumeric and dash ex. 2022-1234
+		$color = '000'; // RGB color
+		$w = 0.015; // width
+		$h = 0.2; // Height
+		$angle = 0; // Angle rotation
+		$type = 'code128'; // Format code128 make shorter barcode
+		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);  
+		// TODO: Display barcode top and bottom portion underneath assessment form label
+
 		
 	}
 	
