@@ -34,15 +34,16 @@
 								</span>
 							</a-col>
 							<a-col size="2" align="right">
-								<a-button style="margin-top:12px;" type="primary" size="lg" ng-click="ASC.LoadBatch()" ng-disabled="ASC.BatchStatus=='BATCH_LOADING'"
-								ng-show="ASC.BatchStatus!=='BATCH_LOADED'&&ASC.BatchStatus!=='BATCH_RUNNING'"
+								<a-button style="margin-top:12px;" type="primary" size="lg" ng-click="ASC.LoadBatch()" 
+								ng-disabled="ASC.BatchStatus=='BATCH_LOADING'||!ASC.BatchLevel"
+								ng-show="!ASC.isBatchLoaded"
 								>
 									{{ASC.BatchStatus=='BATCH_LOADING'?'Loading...':'Load Batch'}}
 								</a-button>
 								<a-button style="margin-top:12px;" type="success" size="lg" ng-click="ASC.StartBatch()"
-								ng-disabled="ASC.BatchStatus=='BATCH_RUNNING'"
-								ng-show="ASC.BatchStud.length" >
-									{{ASC.BatchStatus=='BATCH_RUNNING'?'Running...':'Start Batch'}}
+								ng-disabled="ASC.isBatchStarted||!ASC.BatchStud.length"
+								ng-show="ASC.isBatchLoaded" >
+									{{ASC.isBatchStarted?'Running...':'Start Batch'}}
 								</a-button>
 
 							</a-col>
@@ -54,6 +55,7 @@
 				<a-content>
 					<a-row ng-show="ASC.isBatch">
 						<a-col>
+							<a-pager meta="ASC.BatchMeta" on-navigate="ASC.Nav" class="pull-right" ng-show="ASC.BatchStatus!==''" style="margin-bottom: 10px;"></a-pager>
 							<a-table headers="ASC.Headers" props="ASC.Props" data="ASC.BatchStud" ng-model="ASC.ActiveBatchStud" is-preload="ASC.isBatch && ASC.BatchStatus=='BATCH_LOADING'" ng-model="ASC.ActiveBatchStud"></a-table>
 						</a-col>
 					</a-row>

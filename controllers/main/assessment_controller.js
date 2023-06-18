@@ -18,6 +18,8 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
 			$scope.Props = ['sno','full_name','program_id','subsidy_status'];
 			$scope.isBatchLoading = false;
+			$scope.isBatchLoaded = 0;
+			$scope.isBatchStarted = 0;
 			$scope.ClearRecord();
 			atomic.ready(function(){
 				$scope.SYs = atomic.SchoolYears;
@@ -71,14 +73,18 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.SaveAssessment();
 			}
 		});
-		$scope.LoadBatch = function(){
+		$scope.LoadBatch = function(page){
+			
 			$scope.BatchStatus = 'BATCH_LOADING';
 			$scope.BatchStud = [];
 			var YEAR_LVLID =  $scope.BatchLevel;
-			var filter ={year_level_id:YEAR_LVLID,'limit':20, page:1};
+			var filter ={year_level_id:YEAR_LVLID,'limit':10, page:page};
 			var success =function(response){
 				$scope.BatchStud =  response.data;
+				$scope.BatchMeta = response.meta;
+				$scope.CurrentPage = response.meta.page;
 				$scope.BatchStatus = 'BATCH_LOADED';
+				$scope.isBatchLoaded = 1;
 			}
 			var error = function(response){
 				$scope.BatchStatus = 'BATCH_LOAD_ERROR';
@@ -88,6 +94,7 @@ define(['app','api','atomic/bomb'],function(app){
 
 		$scope.StartBatch = function(){
 			$scope.AssessmentId = [];
+			$scope.isBatchStarted = 1;
 			triageBatchItem('START_BATCH');
 		}
 
@@ -110,9 +117,16 @@ define(['app','api','atomic/bomb'],function(app){
 				
 			}else{
 				$scope.BatchStatus = 'BATCH_RUN_ENDED';
+				$scope.isBatchStarted = 0;
 				$scope.openModal();
 			}
 		}
+
+		$scope.Nav = function(page){
+			$scope.LoadBatch(page);
+		}
+
+
 		function runBatchItem(index){
 			$scope.BatchStatus = 'BATCH_RUNNING';
 			$scope.ActiveBatchStud =  $scope.BatchStud[index];

@@ -8,8 +8,11 @@ if(!isset($data_bank)){
 		$pr->hdr($data['Student'],$data['Assessment'],$data,1);
 		$pr->hdr($data['Student'],$data['Assessment'],$data,35);
 	}
-	else
-		$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section']);
+	else{
+
+		$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section'],1);
+		$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section'],35);
+	}
 	
 	$pr->data($data,7);
 	$pr->data($data,41 );
@@ -20,8 +23,11 @@ if(!isset($data_bank)){
 			$pr->hdr($data['Student'],$data['Assessment'],$data,1);
 			$pr->hdr($data['Student'],$data['Assessment'],$data,35);
 		}
-		else
-			$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section']);
+		else{
+			$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section'],1);
+			$pr->newstudent($data['Inquiry'],$data['Assessment'],$data['Section'],35);
+		}
+			
 		
 		$pr->data($data,7);
 		$pr->data($data,41 );

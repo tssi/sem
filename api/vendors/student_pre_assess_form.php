@@ -62,7 +62,7 @@ class StudentPreAssessForm extends Formsheet{
 		
 	}
 	
-	function newstudent($data,$ass,$sec){
+	function newstudent($data,$ass,$sec,$start){
 		$this->showLines = !true;
 		$metrics = array(
 			'base_x'=> 0.25,
@@ -73,25 +73,22 @@ class StudentPreAssessForm extends Formsheet{
 			'rows'=> 4,	
 		);
 		$this->section($metrics);
+		$this->drawLine(32,'h',array(-2,42));
 		$y=1;
-		$this->DrawImage(5,-0.8,0.7,0.7,__DIR__."/images/logo.png");
-		$this->GRID['font_size']=10;
-		$this->centerText(0,$y++,'LAKE SHORE EDUCATIONAL INSTITUTION',38,'b');
-		$this->GRID['font_size']=7;
-		$this->centerText(0,$y++,'BONIFACIO ST., CANLALAY, BINAN, LAGUNA',38,'');
-		$this->centerText(0,$y++,'STUDENT REGISTRATION FORM',38,'b');
-		$this->centerText(0,$y++,'ONE YEAR DURATION SCHOOL YEAR ' . intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
-		$y=6;
-		$this->rightText(5,$y,'STUDENT ID:','','b');
-		$this->leftText(15,$y++,'LEVEL/COURSE:','','b');
-		$this->rightText(5,$y,'NAME:','','b');
-		$this->leftText(25,$y,'DATE/TIME:','','b');
-		$y=6;
-		$this->leftText(5.5,$y,'','','');
-		$this->leftText(20.5,$y++,$sec['YearLevel']['description'].' - '.$sec['name'],'','');
-		$this->leftText(5.5,$y,$data['last_name'].','.$data['first_name'].' '.$data['middle_name'],'','');
-		$this->leftText(29,$y,date("M d,Y h:i:s A"),'','');
+		//pr($start); exit();
+		if(isset($start))
+            $y=$start;
+		$this->DrawImage(0,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
+		$this->GRID['font_size']=14;
+		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
 		
+		$this->GRID['font_size']=8;
+		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
+        $this->leftText(.7,$y+4,'CAT/Prefix: O/23','','b');
+		//$SNO = trim($data['sno']);
+		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
+		$this->leftText(8,$y+5,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','');
+
 
 	}
 	
