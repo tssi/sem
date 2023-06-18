@@ -85,9 +85,12 @@ define(['app','api','atomic/bomb'],function(app){
 			}
 			api.GET('students',filter,success,error);
 		}
+
 		$scope.StartBatch = function(){
+			$scope.AssessmentId = [];
 			triageBatchItem('START_BATCH');
 		}
+
 		function triageBatchItem(source){
 			switch(source){
 				case 'START_BATCH':
@@ -107,6 +110,7 @@ define(['app','api','atomic/bomb'],function(app){
 				
 			}else{
 				$scope.BatchStatus = 'BATCH_RUN_ENDED';
+				$scope.openModal();
 			}
 		}
 		function runBatchItem(index){
@@ -127,7 +131,7 @@ define(['app','api','atomic/bomb'],function(app){
 			// Filter sections based on current year level
 			var SECTIONS = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LVLID});
 			// Filter applicable sections 
-			console.log(YEAR_LEVELS,YEAR_LVLID, ENROL_STAT );
+			//console.log(YEAR_LEVELS,YEAR_LVLID, ENROL_STAT );
 			if(YEAR_LVLID!='GZ' && ENROL_STAT =='OLD'){
 				var nextYL;
 				if(YEAR_LVLID=='GX'){
@@ -286,14 +290,18 @@ define(['app','api','atomic/bomb'],function(app){
 			};
 			
 			api.POST('assessments', Assessment, function success(response){
-				$scope.AssessmentId = response.data.id;
-				$scope.Saving = 0;
+				
+				
 				if($scope.isBatch && $scope.BatchStatus=='ASSESS_SAVING'){
+					console.log(response.data.id);
+					$scope.AssessmentId.push(response.data.id);
 					$scope.BatchStatus = 'ASSESS_OK';
 					triageBatchItem('ASSESS_OK');
 				}else{
+					$scope.AssessmentId = response.data.id;
 					$scope.openModal();	
 				}
+				$scope.Saving = 0;
 				
 			})
 		}
