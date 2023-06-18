@@ -33,7 +33,12 @@ define(['app','api','atomic/bomb'],function(app){
 		$selfScope.$watch('ASC.BatchDeptId',function(deptId){
 			if(!deptId) return;
 			$scope.BatchLevels = $filter("filter")($scope.AllYearLevels,{department_id:deptId});
+			
 		});
+		$selfScope.$watch('ASC.BatchLevel',function(level){
+			$scope.BatchStud = [];
+			$scope.isBatchLoaded = 0;
+		})
 
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
@@ -307,7 +312,6 @@ define(['app','api','atomic/bomb'],function(app){
 				
 				
 				if($scope.isBatch && $scope.BatchStatus=='ASSESS_SAVING'){
-					console.log(response.data.id);
 					$scope.AssessmentId.push(response.data.id);
 					$scope.BatchStatus = 'ASSESS_OK';
 					triageBatchItem('ASSESS_OK');
