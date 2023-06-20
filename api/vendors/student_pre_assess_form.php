@@ -30,7 +30,7 @@ class StudentPreAssessForm extends Formsheet{
 		);
 		$this->section($metrics);
         $y=1;
-        $this->drawLine(32,'h',array(-2,42));
+        //$this->drawLine(32,'h',array(-2,42));
 		if(isset($start))
             $y=$start;
 		//pr($start); exit();
@@ -178,7 +178,7 @@ class StudentPreAssessForm extends Formsheet{
         $this->leftText(10,$y,'Option A (Installment)','','');
         $this->drawBox(19,$y-.7,.8,.8);
         $this->leftText(20,$y,'Option B (Fullpayment)','','');
-        $note = 'Note: Early enrollment will start this June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
+        $note = 'Note: Enrollment will start this June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
         $note1 = 'LSEI for the enrollment this SY 2023 - 2024. Date: _______________ Time: _______________';
         $this->GRID['font_size']=7;
         
