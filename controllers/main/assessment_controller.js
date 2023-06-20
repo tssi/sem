@@ -84,6 +84,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.BatchStud = [];
 			var YEAR_LVLID =  $scope.BatchLevel;
 			var filter ={year_level_id:YEAR_LVLID,'limit':10, page:page};
+				filter.sy  = $scope.ActiveSy-1;
 			var success =function(response){
 				$scope.BatchStud =  response.data;
 				$scope.BatchMeta = response.meta;
@@ -197,7 +198,20 @@ define(['app','api','atomic/bomb'],function(app){
 			var ENROL_STAT = $scope.ActiveStudent.enroll_status;
 			var YEAR_LVLID =  $scope.ActiveSection.year_level_id;
 			// Filter all tuitions by year level and enroll status
-			$scope.Tuitions = $filter("filter")($scope.AllTuitions, {year_level_id:YEAR_LVLID,applicable_to:ENROL_STAT});
+			var sidFltr = ENROL_STAT;
+
+			// Assign applicable_to if OLD student
+			if(sidFltr!='NEW'){
+				var sno = $scope.ActiveStudent.sno;
+				var sid = parseInt(sno.substring(4,2));
+				if(sid==22){
+					// SNO 2022 and below
+					sidFltr = YEAR_LVLID!='GY'?'S22':'B22';
+				}else{
+					sidFltr = 'B21'; // SNO 2021 and below
+				}
+			}
+			$scope.Tuitions = $filter("filter")($scope.AllTuitions, {year_level_id:YEAR_LVLID,applicable_to:sidFltr});
 			$scope.Tuition = $scope.Tuitions[0];
 			$scope.TuitionId = $scope.Tuition.id;	
 
