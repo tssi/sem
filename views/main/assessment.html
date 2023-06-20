@@ -18,7 +18,7 @@
 						</div>
 					</a-col>
 					<a-col size="9"  ng-show="!ASC.isBatch">
-						<m-search-entity style="margin-top:12px;" ng-model="ASC.ActiveStudent" endpoint="'students/search'" search-fields="['first_name','last_name','middle_name']" obj-fields="ASC.StudFields" is-large="true" display-field="'display_name'"/>
+						<m-search-entity style="margin-top:12px;" ng-model="ASC.ActiveStudent" endpoint="'students/search'" search-fields="['first_name','last_name','middle_name','rfid','sno']" obj-fields="ASC.StudFields" is-large="true" display-field="'display_name'"/>
 					</a-col>
 					<a-col size="9"  ng-show="ASC.isBatch">
 						<a-row is-fluid="true">

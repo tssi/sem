@@ -141,11 +141,14 @@ class Student extends AppModel {
 			endforeach;
 			$cond = array('OR'=>$cond); // Make sure to use OR operator
 		endif;
+		$condInq = $cond;
+		unset($condInq['OR']['rfid LIKE']);
+		unset($condInq['OR']['sno LIKE']);
 
 		// Define response fields
 		$flds = array('id','lrn','full_name','program_id','year_level_id','student_type','department_id');
 		// Find all Inquiry based on the filter
-		$I = $INQ->find('all',array('conditions'=>$cond,'recursive'=>-1,'fields'=>$flds));
+		$I = $INQ->find('all',array('conditions'=>$condInq,'recursive'=>-1,'fields'=>$flds));
 		
 		// Update flds for students
 		array_pop($flds); // Remove deparment_id
