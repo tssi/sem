@@ -52,6 +52,22 @@ class Student extends AppModel {
 		)
 		
 	);
+
+	var $hasOne = array(
+			'ClasslistBlock' => array(
+				'className' => 'ClasslistBlock',
+				'foreignKey' => 'student_id',
+				'dependent' => false,
+				'conditions' => '',
+				'fields' => '',
+				'order' => array('ClasslistBlock.esp'=>'desc'),
+				'limit' => '',
+				'offset' => '',
+				'exclusive' => '',
+				'finderQuery' => '',
+				'counterQuery' => ''
+			)
+	);
 	function beforeFind($queryData){
 		//pr($queryData); exit();
 		parent::beforeFind($queryData);
@@ -62,7 +78,7 @@ class Student extends AppModel {
 					break;
 				$keys =  array_keys($cond);
 				$search = 'Student.department_id';
-			
+				
 				if(in_array($search,$keys)){
 					$val = array_values($cond);
 					$secs = $this->Section->findByDeptId($val[0]);
@@ -70,11 +86,18 @@ class Student extends AppModel {
 					unset($cond[$search]);
 					$cond = array('Student.section_id'=>$secId);
 				}
+				$search = 'Student.sy';
+				if(in_array($search,$keys)){
+					$val = array_values($cond);
+					
+					$cond = array('FLOOR(ClasslistBlock.esp)'=>$val);
+				}
 				
 				$conds[$i]=$cond;
 			}
 			
 			$queryData['conditions']=$conds;
+			
 		}
 
 		return $queryData;

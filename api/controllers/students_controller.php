@@ -4,8 +4,9 @@ class StudentsController extends AppController {
 	var $name = 'Students';
 	function index() {
 		$this->Student->recursive = 0;
-		$students = $this->paginate();
 		
+		$this->paginate['Student']['contain']=array('YearLevel','Account','ClasslistBlock');
+		$students = $this->paginate();
 		foreach($students as $i=>$s){
 			//pr($s); exit();
 			if(!isset($s['Account']['subsidy_status'])){
