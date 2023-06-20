@@ -33,7 +33,6 @@ class StudentPreAssessForm extends Formsheet{
         //$this->drawLine(32,'h',array(-2,42));
 		if(isset($start))
             $y=$start;
-		//pr($start); exit();
 		$this->DrawImage(0,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
 		$this->GRID['font_size']=14;
 		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
@@ -49,7 +48,10 @@ class StudentPreAssessForm extends Formsheet{
 
 		// Barcode Display
 		$bx = 5.3; // X Position
-		$by = 0.85; // Y Position
+		if($y==1)
+			$by = 0.85; // Y Position
+		else 
+			$by=5.1;
 		$code=$SNO; // Data to be encode can be alphanumeric and dash ex. 2022-1234
 		$color = '000'; // RGB color
 		$w = 0.015; // width
@@ -57,6 +59,7 @@ class StudentPreAssessForm extends Formsheet{
 		$angle = 0; // Angle rotation
 		$type = 'code128'; // Format code128 make shorter barcode
 		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);  
+		
 		// TODO: Display barcode top and bottom portion underneath assessment form label
 
 		
@@ -88,7 +91,7 @@ class StudentPreAssessForm extends Formsheet{
 		//$SNO = trim($data['sno']);
 		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
 		$this->leftText(8,$y+5,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','');
-
+		
 
 	}
 	
