@@ -50,7 +50,8 @@ define(['app','api','atomic/bomb'],function(app){
 					case 'ESC': stud.subsidy_status = 'DSESC';break;
 					case 'PUB': stud.subsidy_status = 'DSPUB';break;
 					case 'QVR': stud.subsidy_status = 'DSESC';break;
-					case 'REG': case null:
+					case 'REG': 
+					default:
 						stud.subsidy_status = 'REGXX';
 					break;
 				}
