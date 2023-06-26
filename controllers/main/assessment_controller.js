@@ -208,7 +208,7 @@ define(['app','api','atomic/bomb'],function(app){
 					// SNO 2022 and below
 					sidFltr = YEAR_LVLID!='GY'?'S22':'B22';
 				}else{
-					sidFltr = YEAR_LVLID!='GY'?'S22':'B21'; // SNO 2021 and below
+					sidFltr = YEAR_LVLID!='GY'?'B21':'B22'; // SNO 2021 and below
 				}
 			}
 			$scope.Tuitions = $filter("filter")($scope.AllTuitions, {year_level_id:YEAR_LVLID,applicable_to:sidFltr});
