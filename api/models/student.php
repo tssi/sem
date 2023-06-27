@@ -132,7 +132,7 @@ class Student extends AppModel {
 		App::import('Model','Inquiry');
 		$ASM =  new Assessment();
 		$INQ =  new Inquiry();
-		$aCond = array('Assessment.status'=>'NROLD');
+		$aCond = array('Assessment.status'=>'NROLD','Assessment.student_id LIKE'=>'LSN%');
 		$aFlds =  array('id','student_id');
 		$ALS = $ASM->find('list',array('conditions'=>$aCond,'fields'=>$aFlds));
 		$a_ids = array_values($ALS);
@@ -152,12 +152,10 @@ class Student extends AppModel {
 		unset($condInq['OR']['sno LIKE']);
 		$condInq[]=array('NOT Inquiry.id'=>$a_ids);
 		
-
 		// Define response fields
 		$flds = array('id','lrn','full_name','program_id','year_level_id','student_type','department_id');
 		// Find all Inquiry based on the filter
 		$I = $INQ->find('all',array('conditions'=>$condInq,'recursive'=>-1,'fields'=>$flds));
-		
 		// Update flds for students
 		array_pop($flds); // Remove deparment_id
 		array_pop($flds); // remove student_type
