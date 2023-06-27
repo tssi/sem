@@ -43,7 +43,10 @@ class StudentPreAssessForm extends Formsheet{
 		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
 		$y+=4;
 		$this->leftText(.7,$y,'Name of Student:','','');
-		$this->leftText(7,$y,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','b');
+		$name =  ($data['last_name'].', '.$data['first_name'].' '.$data['middle_name']);
+		$name =  ucwords(strtolower($name));
+		$name =  utf8_decode($name);
+		$this->leftText(7,$y,$name,'','b');
 		$y++;
 		$yearLevel = 'Incoming '.$complete['Section']['YearLevel']['description'];
 		if($complete['Section']['department_id']=='SH')
@@ -103,7 +106,10 @@ class StudentPreAssessForm extends Formsheet{
         
 		//$SNO = trim($data['sno']);
 		$this->leftText(.7,$y,'Name of Student:','','');
-		$this->leftText(7,$y,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','b');
+		$name =  ($data['last_name'].', '.$data['first_name'].' '.$data['middle_name']);
+		$name =  ucwords(strtolower($name));
+		$name =  utf8_decode($name);
+		$this->leftText(7,$y,$name,'','b');
 		$y++;
 		$yearLevel = 'Incoming '.$sec['YearLevel']['description'];
 		
