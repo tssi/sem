@@ -40,8 +40,8 @@ class ReportsController extends AppController{
 			'conditions' => array(array('Assessment.id' => $AID)),
 			'contain'=>array(
 				'Inquiry',
-				'Student'=>array('Account'),
-				'Section'=>array('id','name','program_id','YearLevel','Program'),
+				'Student'=>array('Account','Section','YearLevel'),
+				'Section'=>array('id','name','program_id','department_id','YearLevel','Program'),
 				'AssessmentFee'=>array('id','due_amount','Fee'),
 				'AssessmentPaysched',
 				'AssessmentSubject'=>array('id','schedule_id','created','Subject','Section','ScheduleDetail')

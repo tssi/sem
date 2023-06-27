@@ -30,6 +30,7 @@ class StudentPreAssessForm extends Formsheet{
 		);
 		$this->section($metrics);
         $y=1;
+
         //$this->drawLine(32,'h',array(-2,42));
 		if(isset($start))
             $y=$start;
@@ -37,18 +38,28 @@ class StudentPreAssessForm extends Formsheet{
 		$this->GRID['font_size']=14;
 		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
 		
+		$SNO =  trim($data['sno']);
 		$this->GRID['font_size']=8;
 		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
-        $this->leftText(.7,$y+4,'CAT/Prefix: O/23','','b');
-		$SNO = trim($data['sno']);
-		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
-		$this->leftText(8,$y+5,$SNO.' / ','','');
-		$this->leftText(12.2,$y+5,$data['print_name'],'','');
+		$y+=4;
+		$this->leftText(.7,$y,'Name of Student:','','');
+		$this->leftText(7,$y,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','b');
+		$y++;
+		$yearLevel = 'Incoming '.$complete['Section']['YearLevel']['description'];
+		if($complete['Section']['department_id']=='SH')
+			$yearLevel .= ' '.$complete['Section']['Program']['name'];
+		$this->leftText(.7,$y,'Grade Level: ' ,'','');
+		$this->leftText(7,$y,$yearLevel,'','b');
+		$this->GRID['font_size']=6;
+		$yearLevel = 'Current '.$data['YearLevel']['description'];
+		$yearLevel .= ' '.$data['Section']['name'];
+		$this->leftText(7,$y+1,$yearLevel,'','');
+		$this->GRID['font_size']=8;
 
 
 		// Barcode Display
 		$bx = 5.3; // X Position
-		if($y==1)
+		if($start==1)
 			$by = 0.85; // Y Position
 		else 
 			$by=5.1;
@@ -59,7 +70,7 @@ class StudentPreAssessForm extends Formsheet{
 		$angle = 0; // Angle rotation
 		$type = 'code128'; // Format code128 make shorter barcode
 		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);  
-		
+		$this->rightText(34,5.5+$start,$data['sno'],5,'');
 		// TODO: Display barcode top and bottom portion underneath assessment form label
 
 		
@@ -76,8 +87,9 @@ class StudentPreAssessForm extends Formsheet{
 			'rows'=> 4,	
 		);
 		$this->section($metrics);
-		$this->drawLine(32,'h',array(-2,42));
+		//$this->drawLine(32,'h',array(-2,42));
 		$y=1;
+
 		//pr($start); exit();
 		if(isset($start))
             $y=$start;
@@ -87,23 +99,45 @@ class StudentPreAssessForm extends Formsheet{
 		
 		$this->GRID['font_size']=8;
 		$this->rightText(0,$y+2,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
-        $this->leftText(.7,$y+4,'CAT/Prefix: O/23','','b');
+		$y+=4;
+        
 		//$SNO = trim($data['sno']);
-		$this->leftText(.7,$y+5,'NAME OF STUDENT:','','b');
-		$this->leftText(8,$y+5,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','');
+		$this->leftText(.7,$y,'Name of Student:','','');
+		$this->leftText(7,$y,$data['last_name'].', '.$data['first_name'].' '.$data['middle_name'],'','b');
+		$y++;
+		$yearLevel = 'Incoming '.$sec['YearLevel']['description'];
 		
+		if($sec['department_id']=='SH')
+			$yearLevel .= ' '.$sec['Program']['name'];
+		$this->leftText(.7,$y,'Grade Level: ' ,'','');
+		$this->leftText(7,$y,$yearLevel,'','b');
+		$this->GRID['font_size']=8;
+		// Barcode Display
+		$bx = 5.3; // X Position
+		if($start==1)
+			$by = 0.85; // Y Position
+		else 
+			$by=5.1;
+		$code=$data['id']; // Data to be encode can be alphanumeric and dash ex. 2022-1234
+		$color = '000'; // RGB color
+		$w = 0.015; // width
+		$h = 0.2; // Height
+		$angle = 0; // Angle rotation
+		$type = 'code128'; // Format code128 make shorter barcode
+		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);
+		$this->rightText(33,5.5+$start,$data['id'],5,'');
 
 	}
 	
 	function data($data,$start){
         
 		$this->showLines = !true;
-        $this->drawBox(0,$start-.8,38,13);
+        $this->drawBox(0,$start-1,38,13.5);
 		$this->GRID['font_size']=8;
 		$y=$start;
-		$this->leftText(5,$y,'SCHOOL FEES',10,'b');
-		$this->centerText(28,$y,'PAYMENT OPTIONS',4,'b');
-
+		$this->leftText(5,$y,'SCHOOL FEES',10,'');
+		$this->centerText(28,$y,'PAYMENT OPTIONS',4,'');
+		$this->GRID['font_size']=7;
 		$end = $y+1;
 		$this->fee_breakdown($data,$end);
 		
@@ -151,7 +185,7 @@ class StudentPreAssessForm extends Formsheet{
 	}
 
 	function payment_sched($data,$end){
-		$this->GRID['font_size']=8;
+		$this->GRID['font_size']=7;
 
 		//PAYMENT SCHED
 		$y=$end;
@@ -160,6 +194,7 @@ class StudentPreAssessForm extends Formsheet{
         $this->leftText(34,$y,'OPTION B',10,'b');
         
         $y++;
+        $this->GRID['font_size']=7;
 		foreach($data['AssessmentPaysched'] as $i=>$d){
             if($i!=0)
 			    $this->leftText(22.2,$y,date("F Y", strtotime($d['due_date'])),'','');
@@ -175,14 +210,14 @@ class StudentPreAssessForm extends Formsheet{
 		//$this->drawLine($y-0.6,'h',array(22,11));
 		$this->rightText(30,$y,number_format(round($totaldue),2),3,'b');
 		$this->rightText(34,$y,number_format(round($totaldue),2),3,'b');
-        $y=$y+1.5;
+        $y=$y+2;
         $this->leftText(1,$y,'Payment Option:','','b');
         $this->drawBox(9,$y-.7,.8,.8);
         $this->leftText(10,$y,'Option A (Installment)','','');
         $this->drawBox(19,$y-.7,.8,.8);
-        $this->leftText(20,$y,'Option B (Fullpayment)','','');
-        $note = 'Note: Enrollment will start this June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
-        $note1 = 'LSEI for the enrollment this SY 2023 - 2024. Date: _______________ Time: _______________';
+        $this->leftText(20,$y,'Option B (Full Payment)','','');
+        $note = 'Note: Enrollment starts on June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
+        $note1 = 'LSEI for the enrollment this S.Y. 2023 - 2024. Date: _______________ Time: _______________';
         $this->GRID['font_size']=7;
         
         $this->leftText(1,$y+1,$note,'i','');
@@ -190,8 +225,10 @@ class StudentPreAssessForm extends Formsheet{
         $this->GRID['font_size']=8;
         $y=$y+4;
         $this->leftText(27,$y,'____________________________','i','');
-        $this->leftText(28,$y+1,'Signiture Over Printed Name','i','');
-        $this->leftText(30,$y+2,'Parent/Guardian','i','');
+        $this->GRID['font_size']=6;
+        $this->leftText(28,$y+1,'SIGNATURE OVER PRINTED NAME','','');
+        $this->GRID['font_size']=8;
+        $this->leftText(30,$y+2,'Parent/Guardian','','b');
 	}
 
 	function foot_notes($data,$end){
