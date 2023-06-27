@@ -70,7 +70,7 @@ class StudentPreAssessForm extends Formsheet{
 		$angle = 0; // Angle rotation
 		$type = 'code128'; // Format code128 make shorter barcode
 		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);  
-		$this->rightText(34,5.5+$start,$data['sno'],5,'');
+		$this->rightText(32,5.5+$start,trim($data['sno']),5,'');
 		// TODO: Display barcode top and bottom portion underneath assessment form label
 
 		

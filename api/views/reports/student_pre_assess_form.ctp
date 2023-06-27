@@ -5,7 +5,7 @@ App::import('Vendor','student_pre_assess_form');
 $pr= new StudentPreAssessForm();
 if(!isset($data_bank)){
 	if(!empty($data['Student'])){
-		
+
 		$pr->hdr($data['Student'],$data['Assessment'],$data,1);
 		$pr->hdr($data['Student'],$data['Assessment'],$data,35);
 	}
@@ -29,8 +29,8 @@ if(!isset($data_bank)){
 		}
 			
 		
-		$pr->data($data,7);
-		$pr->data($data,41 );
+		$pr->data($data,8.5);
+		$pr->data($data,42.5 );
 		if($i<count($data_bank)-1)
 			$pr->createSheet();
 	}
