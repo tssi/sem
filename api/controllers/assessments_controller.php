@@ -74,9 +74,11 @@ class AssessmentsController extends AppController {
 			if($isAdjust)
 				$assessment['account_details']='Adjust';
 			if(!isset($assessment['student_id'])){
-				$assessment['student_id']=$assessment['id'];
+				$esp = $assessment['esp'];
+				$SID = $assessment['student_id']=$assessment['id'];
 				$ID = $this->Assessment->generateAID();
 				$assessment['id']=$ID;
+				$this->Assessment->updateStatus($SID,$esp, 'ARCHV');
 			}
 			$paysched = $this->data['Paysched'];
 			$fee = $this->data['Fee'];

@@ -146,4 +146,13 @@ class Assessment extends AppModel {
 		return $assesment['Assessment']['id'];
 	}
 
+	function updateStatus($student,$esp, $status){
+		$cond = array(
+			'Assessment.student_id'=>$student,
+			'Assessment.esp'=>$esp
+		 );
+		$update = array('Assessment.status'=>"'$status'");
+		return $this->updateAll($update,$cond);
+	}
+
 }
