@@ -128,8 +128,14 @@ class Student extends AppModel {
 	// Student Unified Search
 	function search($keyword,$fields =null){
 		// Import Inquiry Model
+		App::import('Model','Assessment');
 		App::import('Model','Inquiry');
+		$ASM =  new Assessment();
 		$INQ =  new Inquiry();
+		$aCond = array('Assessment.status'=>'NROLD');
+		$aFlds =  array('id','student_id');
+		$ALS = $ASM->find('list',array('conditions'=>$aCond,'fields'=>$aFlds));
+		$a_ids = array_values($ALS);
 		// Set up conditions filter by fields and keywords
 		if(!$fields):
 			$cond = array("full_name LIKE"=>"$keyword%");
@@ -144,6 +150,8 @@ class Student extends AppModel {
 		$condInq = $cond;
 		unset($condInq['OR']['rfid LIKE']);
 		unset($condInq['OR']['sno LIKE']);
+		$condInq[]=array('NOT Inquiry.id'=>$a_ids);
+		
 
 		// Define response fields
 		$flds = array('id','lrn','full_name','program_id','year_level_id','student_type','department_id');
