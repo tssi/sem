@@ -188,7 +188,16 @@ define(['app','api','atomic/bomb'],function(app){
 			
 
 			var VALID_SECTS	 	= $filter("filter")(SECTIONS,sectFltr);
-			$scope.section_id	= VALID_SECTS[0].id;
+			var DEF_SECT 		= VALID_SECTS[0].id;
+
+			// Default section if OLD students use Temp Section
+			if(ENROL_STAT=='OLD'){
+				if(YEAR_LVLID=='G7') DEF_SECT = 7003;
+				if(YEAR_LVLID=='G8') DEF_SECT = 8005;
+				if(YEAR_LVLID=='G9') DEF_SECT = 9005;
+				if(YEAR_LVLID=='G10') DEF_SECT = 1013;
+			}
+			$scope.section_id	= DEF_SECT;
 			
 		}
 		$selfScope.$watch('ASC.section_id',function(sectId){
