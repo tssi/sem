@@ -37,6 +37,7 @@ define(['app','api','atomic/bomb'],function(app){
 		});
 		$selfScope.$watch('ASC.BatchLevel',function(level){
 			$scope.BatchStud = [];
+			$scope.BatchSection = $filter("filter")($scope.AllSections,{year_level_id:level});
 			$scope.isBatchLoaded = 0;
 		})
 
@@ -81,11 +82,10 @@ define(['app','api','atomic/bomb'],function(app){
 			}
 		});
 		$scope.LoadBatch = function(page){
-			
 			$scope.BatchStatus = 'BATCH_LOADING';
 			$scope.BatchStud = [];
 			var YEAR_LVLID =  $scope.BatchLevel;
-			var filter ={year_level_id:YEAR_LVLID,'limit':10, page:page};
+			var filter ={year_level_id:YEAR_LVLID,'limit':10, page:page,section_id:$scope.SectionFilter};
 				filter.sy  = $scope.ActiveSy-1;
 			var success =function(response){
 				$scope.BatchStud =  response.data;
@@ -415,6 +415,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Tuitions = null;
 			$scope.TuitionId = null;
 			$scope.ActiveType = null;
+			$scope.BatchSection = null;
 		}
 		
 		
