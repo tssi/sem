@@ -42,6 +42,7 @@ define(['app','api','atomic/bomb'],function(app){
 
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
+				checkAssessment(stud.id);
 				if(stud.hasOwnProperty('student_type'))
 					stud.subsidy_status = stud.student_type;
 				if(!stud.name)
@@ -103,6 +104,20 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.AssessmentId = [];
 			$scope.isBatchStarted = 1;
 			triageBatchItem('START_BATCH');
+		}
+
+		function checkAssessment(sid){
+			let filter = {
+				student_id:sid,
+				esp:$scope.ActiveSy+.25,
+				status:'ACTIV',
+			}
+			api.GET('assessments',filter, function success(response){
+				$scope.AssessmentId = response.data[0].id;
+				$scope.Reprint();
+			}, function error(response){
+				return false;
+			})
 		}
 
 		function triageBatchItem(source){
@@ -233,8 +248,9 @@ define(['app','api','atomic/bomb'],function(app){
 		});
 		
 		function pickScheme(stud){
+			console.log(stud);
 			angular.forEach($scope.Tuition.schemes, function(s){
-				if(stud.subsidy_status==s.subsidy_status)
+				if(stud.student_type==s.subsidy_status)
 					$scope.SelectScheme(s);
 			})
 		}
@@ -366,6 +382,26 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.ClearRecord();
 			});
 		}
+
+		$scope.Reprint = function(){
+			var modalInstance = $uibModal.open({
+				animation: true,
+				size:'sm',
+				templateUrl: 'ReprintModal.html',
+				controller: 'ReprintModalController',
+				resolve:{
+					assessmentId:function(){
+						return $scope.AssessmentId;
+					}
+				}
+			});
+			modalInstance.result.then(function (source) {
+				
+			}, function (source) {
+				if(source!='reass')
+					$scope.ClearRecord();
+			});
+		}
 		
 		$scope.ClearRecord = function(){
 			$scope.ActiveStudent = null;
@@ -403,6 +439,33 @@ define(['app','api','atomic/bomb'],function(app){
 			document.getElementById('PrintAssess').submit();
 			$uibModalInstance.dismiss('ok');
 		};
+	}]);
+	app.register.controller('ReprintModalController',['$scope','$rootScope','$timeout','$uibModalInstance','api','assessmentId', function ($scope,$rootScope,$timeout, $uibModalInstance, api,assessmentId){
+		$scope.AssessmentId = assessmentId;
+		$rootScope.__MODAL_OPEN = true;
+		$timeout(function(){
+			$scope.ShowButton = true;
+		},333);
+		//Dismiss modal
+		$scope.ReprintAssessment = function(){
+			$rootScope.__MODAL_OPEN = false;
+			document.getElementById('PrintAssess').submit();
+			$uibModalInstance.dismiss('ok');
+		};
+		$scope.Cancel = function(){
+			$rootScope.__MODAL_OPEN = false;
+			$uibModalInstance.dismiss();
+		}
+		$scope.ReAssess = function(){
+			var data = {
+				id: $scope.AssessmentId,
+				status: 'ARCHV'
+			}
+			api.POST('assessments',data, function success(response){
+				$rootScope.__MODAL_OPEN = false;
+				$uibModalInstance.dismiss('reass');
+			})
+		}
 	}]);
 	
 });

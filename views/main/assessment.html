@@ -181,4 +181,19 @@
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissAssesment()">OK</button>
 		</div>
 	</script>
+	<script type="text/ng-template" id="ReprintModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-warning btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-exclamation-sign"></span></button>
+			<h1>Assessment Exists!</h1>
+			<p>Would you like to reprint or reasses?</p>
+			
+			<form action="api/student_pre_assess_form" method="POST" target="_blank" id="PrintAssess">
+				<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary btn-block" type="button" ng-click="ReprintAssessment()">Reprint</button>
+			<button class="btn btn-default btn-block" type="button" ng-click="Cancel()">Cancel</button>
+		</div>
+	</script>
 </div>
