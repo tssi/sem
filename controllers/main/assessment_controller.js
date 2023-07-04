@@ -20,6 +20,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.isBatchLoading = false;
 			$scope.isBatchLoaded = 0;
 			$scope.isBatchStarted = 0;
+			$scope.ShowSec = 0;
 			$scope.ClearRecord();
 			atomic.ready(function(){
 				$scope.SYs = atomic.SchoolYears;
@@ -36,6 +37,7 @@ define(['app','api','atomic/bomb'],function(app){
 			
 		});
 		$selfScope.$watch('ASC.BatchLevel',function(level){
+			$scope.ShowSec = 1;
 			$scope.BatchStud = [];
 			$scope.BatchSection = $filter("filter")($scope.AllSections,{year_level_id:level});
 			$scope.isBatchLoaded = 0;
@@ -425,7 +427,6 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Tuitions = null;
 			$scope.TuitionId = null;
 			$scope.ActiveType = null;
-			$scope.BatchSection = null;
 		}
 		
 		
