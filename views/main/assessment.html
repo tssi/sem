@@ -35,7 +35,7 @@
 							</a-col>
 							<a-col size="2" align="right">
 								<a-button style="margin-top:12px;" type="primary" size="lg" ng-click="ASC.LoadBatch()" 
-								ng-disabled="ASC.BatchStatus=='BATCH_LOADING'||!ASC.BatchLevel||ASC.isBatchLoaded"
+								ng-disabled="ASC.BatchStatus=='BATCH_LOADING'||!ASC.SectionFilter||ASC.isBatchLoaded"
 								>
 									{{ASC.BatchStatus=='BATCH_LOADING'?'Loading...':'Load Batch'}}
 								</a-button>
@@ -50,14 +50,21 @@
 				<a-content>
 					<a-row ng-show="ASC.isBatch">
 						<a-col>
-							<a-button style="margin:0 0 12px 0;" type="success" ng-click="ASC.StartBatch()"
-							ng-disabled="ASC.isBatchStarted||!ASC.BatchStud.length"
-							ng-show="ASC.isBatchLoaded" 
-							class="pull-right">
-								{{ASC.isBatchStarted?'Running...':'Start Batch'}}
-							</a-button>
-							<a-pager meta="ASC.BatchMeta" on-navigate="ASC.Nav" class="pull-right" ng-show="ASC.isBatchLoaded" style="margin: 0 10px 0 0;"></a-pager>
+							<a-col size="6">
+								<m-formgroup label="Section" ng-model="ASC.SectionFilter" options="ASC.BatchSection" option-group="year_level" ng-disabled="!ASC.BatchSection.length"></m-formgroup>
+							</a-col>
+							<a-col size="6" style="padding-top:25px">
+								<a-button style="margin:0 0 12px 0;" type="success" ng-click="ASC.StartBatch()"
+								ng-disabled="ASC.isBatchStarted||!ASC.BatchStud.length"
+								ng-show="ASC.isBatchLoaded" 
+								class="pull-right">
+									{{ASC.isBatchStarted?'Running...':'Start Batch'}}
+								</a-button>
+								<a-pager meta="ASC.BatchMeta" on-navigate="ASC.Nav" class="pull-right" ng-show="ASC.isBatchLoaded" style="margin: 0 10px 0 0;"></a-pager>
+								
+							</a-col>
 							<a-table headers="ASC.Headers" props="ASC.Props" data="ASC.BatchStud" ng-model="ASC.ActiveBatchStud" is-preload="ASC.isBatch && ASC.BatchStatus=='BATCH_LOADING'" ng-model="ASC.ActiveBatchStud"></a-table>
+							
 						</a-col>
 					</a-row>
 					<a-row>
@@ -179,6 +186,21 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-success btn-block" type="button" ng-click="dismissAssesment()">OK</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="ReprintModal.html">
+		<div class="modal-body text-center">
+			<button class="btn btn-warning btn-fab btn-fab-drop" ng-class="{show:ShowButton}"><span class="glyphicon glyphicon-exclamation-sign"></span></button>
+			<h1>Assessment Exists!</h1>
+			<p>Would you like to reprint or reasses?</p>
+			
+			<form action="api/student_pre_assess_form" method="POST" target="_blank" id="PrintAssess">
+				<input type="hidden" value="{{AssessmentId}}" name="AssessmentId" />
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary btn-block" type="button" ng-click="ReprintAssessment()">Reprint</button>
+			<button class="btn btn-default btn-block" type="button" ng-click="Cancel()">Cancel</button>
 		</div>
 	</script>
 </div>
