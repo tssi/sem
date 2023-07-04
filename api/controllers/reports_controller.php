@@ -70,7 +70,7 @@ class ReportsController extends AppController{
 			//pr('dumaan'); exit();
 			$isSecondSem=true;
 			$subjects = array();
-			$curId = $this->CurriculumSection->findBySectId($sectId,$curri_esp);
+			$curId = $this->CurriculumSection->findBySectionId($sectId,$curri_esp);
 			$curId = $curId['CurriculumSection']['curriculum_id'];
 			//pr($curId); exit();
 			$curriculum = $this->Curriculum->find('all',array('conditions'=>array('Curriculum.id'=>array($curId))));
