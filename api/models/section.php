@@ -91,4 +91,9 @@ class Section extends AppModel {
 		$sections = $this->find('list',array('conditions'=>array('Section.department_id'=>$dept_id)));
 		return $sections;
 	}
+
+	function findByYl($yl){
+		$sections = $this->find('list',array('conditions'=>array('Section.year_level_id'=>$yl)));
+		return $sections;
+	}
 }

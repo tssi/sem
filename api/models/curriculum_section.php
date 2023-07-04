@@ -100,9 +100,18 @@ class CurriculumSection extends AppModel {
 					$search = 'CurriculumSection.sy';
 					if(in_array($search,$keys)){
 						$value = $cond[$search];
-						//pr($value);
 						unset($cond[$search]);
 						$cond = array('and'=>array('CurriculumSection.esp >='=>$value,'CurriculumSection.esp <'=>$value + 1));;
+					}
+					$yl = 'CurriculumSection.year_level_id';
+					if(in_array($yl,$keys)){
+						$value = $cond[$yl];
+						unset($cond[$search]);
+						$secIds = $this->Section->findByYl($value);
+						$secIds = array_keys($secIds);
+						$cond = array('CurriculumSection.section_id'=>$secIds);
+						//pr($secIds); exit();
+						
 					}
 				endif;
 				$conds[$i] = $cond;

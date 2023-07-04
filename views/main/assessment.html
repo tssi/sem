@@ -51,7 +51,7 @@
 					<a-row ng-show="ASC.isBatch">
 						<a-col>
 							<a-col size="6">
-								<m-formgroup label="Section" ng-model="ASC.SectionFilter" options="ASC.BatchSection" option-group="year_level" ng-disabled="!ASC.BatchSection.length"></m-formgroup>
+								<m-formgroup label="Section" ng-model="ASC.SectionFilter" options="ASC.BatchSection" option-group="year_level" ng-show="ASC.BatchSection.length"></m-formgroup>
 							</a-col>
 							<a-col size="6" style="padding-top:25px">
 								<a-button style="margin:0 0 12px 0;" type="success" ng-click="ASC.StartBatch()"
