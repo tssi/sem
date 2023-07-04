@@ -317,7 +317,7 @@ define(['app','api','atomic/bomb'],function(app){
 				payment_scheme : $scope.Scheme.scheme_id,
 				status: 'ACTIVE',
 				subsidy_status: $scope.Scheme.subsidy_status,
-				department_id: $scope.Curriculum.department_id,
+				//department_id: $scope.Curriculum.department_id,
 				program_id: $scope.ActiveSection.program_id,
 				esp: $scope.ActiveSy + .25
 			}
