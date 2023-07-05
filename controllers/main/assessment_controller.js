@@ -46,16 +46,16 @@ define(['app','api','atomic/bomb'],function(app){
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
 				
-				checkAssessment(stud.id);
+				//checkAssessment(stud.id);
 				if(stud.hasOwnProperty('student_type'))
 					stud.subsidy_status = stud.student_type;
 				if(!stud.name)
 					stud.name =  stud.full_name;
 				switch(stud.subsidy_status){
-					case 'ESC': stud.subsidy_status = 'DSESC';break;
-					case 'PUB': stud.subsidy_status = 'DSPUB';break;
+					case 'ESC': case 'DSESC' : stud.subsidy_status = 'DSESC';break;
+					case 'PUB': case 'DSPUB' : stud.subsidy_status = 'DSPUB';break;
 					case 'QVR': stud.subsidy_status = 'DSESC';break;
-					case 'REG': 
+					case 'REG':  
 					default:
 						stud.subsidy_status = 'REGXX';
 					break;
@@ -292,10 +292,11 @@ define(['app','api','atomic/bomb'],function(app){
 				esp:2022.25,
 				year_level_id:yrlvId
 			}
-			if(deptId!='SH'&&yrlvId!='GX')
+			if(deptId!='SH')
 				filter.esp = 2022
 			if(!$scope.isBatchLoaded)
 				filter.section_id=$scope.section_id;
+			//console.log(yrlvId); return;
 			api.GET('curriculum_sections',filter,function success(response){
 				let cid = response.data[0].curriculum_id;
 				getCurriculum(cid,yrlvId);
