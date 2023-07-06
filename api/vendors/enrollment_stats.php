@@ -90,7 +90,7 @@ class EnrollmentStatSheet extends Formsheet{
 	}
 
 	function overall_stat($overall=null,$totals = null){
-
+		
 		$metrics = array(
 			'base_x'=> 0.5,
 			'base_y'=> 3,
@@ -200,10 +200,10 @@ class EnrollmentStatSheet extends Formsheet{
 						$this->DrawNEWSLine($x-2.5,$y+.55,$colW,$bxH-1.25,'E');
 					$c++;
 				}
-				$this->DrawNEWSLine(52,0,1.5,5.5,'E');
-				$this->DrawNEWSLine(49.5,0,1.5,5.5,'E');
-				$this->DrawNEWSLine(47.25,0,1.5,5.5,'E');
-				$this->DrawNEWSLine(54.5,0,1.5,5.5,'E');
+				$this->DrawNEWSLine(52,count($overall)+3.15,1.5,5.5,'E');
+				$this->DrawNEWSLine(49.5,count($overall)+3.15,1.5,5.5,'E');
+				$this->DrawNEWSLine(47.25,count($overall)+3.15,1.5,5.5,'E');
+				$this->DrawNEWSLine(54.5,count($overall)+3.15,1.5,5.5,'E');
 				//pr($totals); exit();
 				//$this->centerText($x,$y+1,$totals['total'],$colW+0.5,'b');
 						// Grand Total

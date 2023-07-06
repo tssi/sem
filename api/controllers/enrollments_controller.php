@@ -22,7 +22,7 @@ class EnrollmentsController extends AppController {
 		
 		if($this->isAPIRequest()){
 			$date = $_GET['transac_date'];
-			$today = $_GET['transac_date'];
+			$today = date('Y-m-d');
 			$start = $Enrollments[0]['Enrollment']['transac_date'];
 			$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
 			//pr($today); exit();
@@ -75,16 +75,16 @@ class EnrollmentsController extends AppController {
 										'G8'=>0,
 										'G9'=>0,
 										'GX'=>0,
-										'GYSTEM'=>0,
-										'GYHUMS'=>0,
 										'GYABM'=>0,
+										'GYSTEM'=>0,
 										'GYTVL'=>0,
+										'GYHUMS'=>0,
 										'GYGAS'=>0,
 										'GYMIXED'=>0,
-										'GZSTEM'=>0,
-										'GZHUMS'=>0,
 										'GZABM'=>0,
+										'GZSTEM'=>0,
 										'GZTVL'=>0,
+										'GZHUMS'=>0,
 										'GZGAS'=>0,
 										'GZMIXED'=>0,
 										'total'=>0

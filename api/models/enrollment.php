@@ -39,10 +39,8 @@ class Enrollment extends AppModel {
 				$conds[$i]=$cond;
 				
 			}
-			//pr($conds); exit();
 			$queryData['conditions'] = $conds;
 		}
-		//pr($queryData); exit();
 		return $queryData;
 	}
 }

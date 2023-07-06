@@ -39,6 +39,7 @@ define(['app','api','atomic/bomb'],function(app){
 		}
 		
 		$scope.Print = function(){
+			console.log($scope.Enrollment);
 			$timeout(function(){
 				document.getElementById('PrintEnrollment').submit();
 			},1000);
@@ -126,7 +127,7 @@ define(['app','api','atomic/bomb'],function(app){
 		function getList(){
 			var data = {
 				esp:$scope.ActiveSY,
-				transaction_type_id:'TUIXN',
+				transaction_type_id:'INIPY',
 				limit:'less'
 			}
 			api.GET('enrollment_lists',data, function success(response){
@@ -136,16 +137,16 @@ define(['app','api','atomic/bomb'],function(app){
 						case 'G8': item.level = 'Grade 8'; break;
 						case 'G9': item.level = 'Grade 9'; break;
 						case 'GX': item.level = 'Grade 10'; break;
-						case 'GYSTEM': item.level = 'Grade 11 STEM'; break;
-						case 'GYHUMS': item.level = 'Grade 11 HUMMS'; break;
 						case 'GYABM': item.level = 'Grade 11 ABM'; break;
+						case 'GYSTEM': item.level = 'Grade 11 STEM'; break;
 						case 'GYTVL': item.level = 'Grade 11 TVL'; break;
+						case 'GYHUMS': item.level = 'Grade 11 HUMMS'; break;
 						case 'GYGAS': item.level = 'Grade 11 GAS'; break;
 						case 'GYMIXED': item.level = 'Grade 11 IRREG'; break;
-						case 'GZSTEM': item.level = 'Grade 12 STEM'; break;
-						case 'GZHUMS': item.level = 'Grade 12 HUMMS'; break;
 						case 'GZABM': item.level = 'Grade 12 ABM'; break;
+						case 'GZSTEM': item.level = 'Grade 12 STEM'; break;
 						case 'GZTVL': item.level = 'Grade 12 TVL'; break;
+						case 'GZHUMS': item.level = 'Grade 12 HUMMS'; break;
 						case 'GZGAS': item.level = 'Grade 12 GAS'; break;
 						case 'GZMIXED': item.level = 'Grade 12 IRREG'; break;
 					};
