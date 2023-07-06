@@ -54,32 +54,41 @@
 						<thead>
 							<tr>
 								<th class="text-center">Level</th>
-								<th class="text-center">New</th>
-								<th class="text-center">Assess</th>
+								<th class="text-center">Enrollees</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>Grade 7</td>
-								<td class="text-right">5</td>
-								<td class="text-right">95</td>
+								<td class="text-right">{{Totals.G7}}</td>
 							</tr>
 							<tr>
 								<td>Grade 8</td>
-								<td class="text-right">9</td>
-								<td class="text-right">12</td>
+								<td class="text-right">{{Totals.G8}}</td>
 							</tr>
 							<tr>
 								<td>Grade 9</td>
-								<td class="text-right">27</td>
-								<td class="text-right">85</td>
+								<td class="text-right">{{Totals.G9}}</td>
 							</tr>
 							<tr>
 								<td>Grade 10</td>
-								<td class="text-right">101</td>
-								<td class="text-right">195</td>
+								<td class="text-right">{{Totals.GX}}</td>
+							</tr>
+							<tr>
+								<td>Grade 11</td>
+								<td class="text-right">{{Totals.SH.GY}}</td>
+							</tr>
+							<tr>
+								<td>Grade 11</td>
+								<td class="text-right">{{Totals.SH.GZ}}</td>
 							</tr>
 						</tbody>
+						<tfoot>
+							<tr>
+								<td>Total</td>
+								<td class="text-right">{{Totals.total}}</td>
+							</tr>
+						</tfoot>
 					</table>
 				</div>
 			</div>
