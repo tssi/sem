@@ -84,7 +84,7 @@
 													</tr>
 												</thead>
 												<tbdoy>
-													<tr ng-repeat="sched in ASC.Tuition.fee_breakdowns">
+													<tr ng-repeat="sched in ASC.Tuition.fee_breakdowns | orderBy: 'order'">
 														<td>{{sched.description}}</td>
 														<td>{{sched.amount | currency}}</td>
 													</tr>
