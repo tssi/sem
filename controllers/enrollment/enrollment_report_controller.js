@@ -13,6 +13,8 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Order = ['Year Level','Date'];
 			$scope.ActiveOrder = 'Year Level';
 			$scope.ActiveOpt = 'Summary';
+			$scope.DateToday = new Date();
+			console.log(new Date());
 			atomic.ready(function(){
 				$scope.ActiveSY = atomic.ActiveSY;
 				getList();
@@ -76,13 +78,15 @@ define(['app','api','atomic/bomb'],function(app){
 				});
 				response.data[0].overall = overall;
 				$scope.Enrollment = response.data[0];
-				console.log($scope.Enrollment);
-				getPrev(data)
+				
+				getPrev(data,ctr)
 			}, function error(response){
 				
 			});
 		}
-		function getPrev(data){
+		function getPrev(data,ctr){
+			data.ctr = ctr;
+			data.transac_date = '';
 			data.esp = $scope.ActiveSY-1;
 			api.GET('enrollments',data, function success(response){
 				var HS = ['G7','G8','G9','GX'];
@@ -113,10 +117,24 @@ define(['app','api','atomic/bomb'],function(app){
 						if(key!='total')
 							$scope.Enrollment.totals.levels['prevtotal']+=level;
 					}
-					console.log($scope.Enrollment.totals.levels['HS']);
 					counter++;
 					
 				});
+				angular.forEach($scope.Enrollment.overall, function(o) {
+					angular.forEach(o.levels, function(lvl, index) {
+						if (lvl == 0)
+							o.levels[index] = '-';
+					});
+				});
+				angular.forEach($scope.Enrollment.today.levels, function(lvl,index){
+					if(lvl==0)
+						$scope.Enrollment.today.levels[index]='-';
+				})
+				console.log($scope.Enrollment)
+				angular.forEach($scope.Enrollment.totals.levels, function(lvl,index){
+					if(lvl==0)
+						$scope.Enrollment.totals.levels[index]='-';
+				})
 				
 				$scope.Loading = 0;
 			}, function error(response){

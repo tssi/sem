@@ -35,6 +35,8 @@ class Enrollment extends AppModel {
 						$value = $cond[$search];//
 						unset($cond[$search]);
 					}
+					if(in_array('Enrollment.ctr',$keys))
+						unset($cond['Enrollment.ctr']);
 				endif;
 				$conds[$i]=$cond;
 				

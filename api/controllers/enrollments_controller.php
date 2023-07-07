@@ -22,7 +22,17 @@ class EnrollmentsController extends AppController {
 		
 		if($this->isAPIRequest()){
 			$date = $_GET['transac_date'];
+			
 			$today = date('Y-m-d');
+			$today = explode('-',$today);
+			if(isset($_GET['ctr'])){
+				$ctr = $_GET['ctr'];
+				$today[1]+=2;
+			}
+				
+			$today = $esp.'-'.$today[1].'-'.$today[2];
+			
+			//pr($today); exit();
 			$start = $Enrollments[0]['Enrollment']['transac_date'];
 			$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
 			//pr($today); exit();
@@ -46,14 +56,20 @@ class EnrollmentsController extends AppController {
 								'GZMIXED'=>0,
 								'total'=>0
 								);
+			$counter = 1;
 			foreach($period as $day){
+				if(isset($ctr)&&$counter>$ctr){
+					break;
+				}
+				if(date('D', strtotime($day->format('Y-m-d')))!='Sun')
+					$counter++;
 				$days[$day->format('Y-m-d')]= array(
 												'date'=>$day->format('Y-m-d'),
 												'day'=>date('D', strtotime($day->format('Y-m-d'))),
 												'levels'=>$levels_empty
 												);
 			}
-			
+			//pr($days); exit();
 			$days[$today] = array(
 								'date'=>$today,
 								'day'=>date('D', strtotime($today)),
@@ -90,12 +106,17 @@ class EnrollmentsController extends AppController {
 										'total'=>0
 									)
 			);
+			
 			foreach($Enrollments as $i=>$l){
+				
+				if($l['Enrollment']['transac_date']>$today&&!isset($ctr))
+					continue;
+				$counter++;
 				$totals['levels']['total']++;
 				$led = $l['Enrollment'];
 				$stud = $students[$led['account_id']];
 				// Skip loop if empty student or invalid date
-				//pr($stud); exit();
+				
 				if(!isset($stud['Section']['year_level_id']) || !isset($days[$led['transac_date']])):
 					continue;
 				endif;
@@ -129,12 +150,15 @@ class EnrollmentsController extends AppController {
 				$overall[$index] = $day;
 				$index++;
 			}
+			
 			$data = array(
 				'coverage'=>$today,
-				'today'=>$days[$date],
+				//'today'=>$days[$date],
 				'overall'=>$overall,
 				'totals'=>$totals
 			);
+			if(isset($days[$date]))
+				$data['today']=$days[$date];
 			$enrollment_data[0]['Enrollment'] = $data;
 			//pr($data); exit();
 		}
