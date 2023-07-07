@@ -45,8 +45,8 @@ define(['app','api','atomic/bomb'],function(app){
 
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
 			if(stud){
-				
-				//checkAssessment(stud.id);
+				if(!$scope.isBatchLoaded)
+					checkAssessment(stud.id);
 				if(stud.hasOwnProperty('student_type'))
 					stud.subsidy_status = stud.student_type;
 				if(!stud.name)
@@ -113,21 +113,27 @@ define(['app','api','atomic/bomb'],function(app){
 			let filter = {
 				student_id:sid,
 				esp:$scope.ActiveSy+.25,
-				status:'ACTIV',
+				status:'NROLD',
 			}
 			api.GET('assessments',filter, function success(response){
-				let assId = response.data[0].id;
-				if($scope.isBatchLoaded){
-					api.POST('assessments',{id:assId,'status':'ARCHV'}, function done(response){
-
-					});
-				}else{
-					$scope.AssessmentId= response.data[0].id;
-					$scope.Reprint();
-				}
-					
+				$scope.AssessmentId= response.data[0].id;
+				$scope.Reprint();
 			}, function error(response){
-				return false;
+				checkNewStud(sid);
+			})
+		}
+
+		function checkNewStud(sid){
+			let data = {
+				account_id:sid,
+				esp:$scope.ActiveSy,
+				transaction_type_id:'TUIXN'
+			}
+			api.GET('ledgers',data, function success(response){
+				$scope.AssessmentId = response.data[0].ref_no;
+				$scope.Reprint();
+			},function error(response){
+
 			})
 		}
 
@@ -259,7 +265,6 @@ define(['app','api','atomic/bomb'],function(app){
 		});
 		
 		function pickScheme(stud){
-			console.log(stud);
 			angular.forEach($scope.Tuition.schemes, function(s){
 				if(stud.subsidy_status==s.subsidy_status)
 					$scope.SelectScheme(s);
