@@ -274,8 +274,10 @@ class EnrollmentListSheet extends Formsheet{
 			$this->leftText(8.5,$y-.2,$d['sno'],'');
 			
 			$this->DrawBox(13,$y-1,16, 1);
-			$this->leftText(13.5,$y-.2,$d['cnt'].'.   '.$d['name'],'');
-		
+			$sname = mb_convert_case($d['name'], MB_CASE_TITLE, "UTF-8");
+			$this->leftText(13.5,$y-.2,$d['cnt'].'.   '.utf8_decode($sname),'');
+		    //utf8_decode("name")
+			
 			$this->DrawBox(29,$y-1,6, 1);
 			$this->leftText(29.5,$y-.2,$d['transac_date'],'');
 			
