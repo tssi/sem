@@ -188,6 +188,13 @@ class StudentPreAssessForm extends Formsheet{
 			$this->rightText(15,$y+1,number_format($mod_bal,2),'','b');
 		endif;
 
+		$this->GRID['font_size']=7;
+		
+		if($data['Section']['department_id']=='SH'):
+			$y+=6;
+			$this->wrapText(0.2,$y,'Notice: Modules and eBook waived for Grade 11 & 12 effective on 17 July 2023.',16);
+		endif;
+
 	}
 
 	function payment_sched($data,$end){

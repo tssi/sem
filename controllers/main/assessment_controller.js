@@ -26,7 +26,7 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.SYs = atomic.SchoolYears;
 				$scope.AllYearLevels = atomic.YearLevels;
 				$scope.AllSections = atomic.Sections;
-				$scope.ActiveSy = atomic.ActiveSY;
+				$scope.ActiveSy = 2023;
 				getTuitions();
 				getBP();
 			})
