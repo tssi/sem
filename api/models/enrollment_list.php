@@ -28,6 +28,14 @@ class EnrollmentList extends AppModel {
 			),
 			'order' => ''
 		),
+		'Account' => array(
+			'className' => 'Account',
+			'foreignKey' => 'account_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 	);
 	
 	/* function beforeFind($queryData){

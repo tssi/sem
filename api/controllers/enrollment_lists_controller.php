@@ -2,22 +2,28 @@
 class EnrollmentListsController extends AppController {
 
 	var $name = 'EnrollmentLists';
-	var $uses = array('EnrollmentList','Student','ClasslistBlock');
+	var $uses = array('EnrollmentList','Student','ClasslistBlock','Account');
 
 
 	function index() {
 		$this->EnrollmentList->recursive = 0;
 		$list = $this->paginate();
+		//pr($list); exit;
 		$esp = $_GET['esp'];
 		$conds = array('EnrollmentList.esp'=>$esp,'EnrollmentList.ref_no LIKE'=>'X%');
 		$ClasslistBlock = $this->ClasslistBlock->find('all',array('recursive'=>0,'conditions'=>array('and'=>array('ClasslistBlock.esp >='=>$esp,'ClasslistBlock.esp <'=>$esp+1))));
 		$students = array();
-		
+		$Accounts = $this->Account->find('all',array('recursive'=>0));
+				
 		foreach($ClasslistBlock as $i=>$c){
 			$block = $c['ClasslistBlock'];
 			$students[$block['student_id']] = $c;
 		}
 		
+		foreach($Accounts as $a){
+			$acc = $a['Account'];
+			$students[$acc['id']]['Account'] = $acc;
+		}
 		$levels = array(
 							'G7'=>array(),
 							'G8'=>array(),
@@ -48,7 +54,7 @@ class EnrollmentListsController extends AppController {
 		$today = date("Y-m-d");
 		$interval = new DateInterval('P1D');
 		$start = $list[0]['EnrollmentList']['transac_date'];
-		//pr($start); exit();
+		
 		$period = new DatePeriod(new DateTime($start), $interval, new DateTime($today));
 		$days = array();
 		foreach($period as $day){
@@ -56,21 +62,26 @@ class EnrollmentListsController extends AppController {
 		}
 		$days[$today] = array();
 		if($this->isAPIRequest()){
-			//pr($students); exit();
 			foreach($list as $i=>$l){
 				$ref_no = explode(" ",$l['EnrollmentList']['ref_no']);
 				
 				$data = $l['EnrollmentList'];
 				$stud = $students[$data['account_id']]['Student'];
+				if(!isset($stud)) {pr($data); exit;}
 				$sec = $students[$data['account_id']]['Section'];
 				
 				$data['name'] = $stud['full_name'];
 				if($stud['full_name']==null){
 					$data['name']=$stud['class_name'];
-					//pr($stud['class_name']); exit();
 				}
 				$data['sno'] = $stud['sno'];
-				
+				switch($students[$data['account_id']]['Account']['subsidy_status']){
+					case 'DSESC': $status = 'ESC'; break;
+					case 'DSPUB': $status = 'Public'; break;
+					case 'REGXX': $status = 'Regular'; break;
+					case null: $status = ''; break;
+				}
+				$data['subsidy'] = $status;
 				$data['year_level_id'] = $sec['year_level_id'];
 				$data['program_id'] = $sec['program_id'];
 				if(in_array($sec['year_level_id'],$HS)){
@@ -95,14 +106,9 @@ class EnrollmentListsController extends AppController {
 			$list = array();
 			$list['days'] = array();
 			
-			
-			//pr($list['days']); exit();
-			
-			function array_sort($array, $on, $order=SORT_ASC)
-			{
+			function array_sort($array, $on, $order=SORT_ASC){
 				$new_array = array();
 				$sortable_array = array();
-
 				if (count($array) > 0) {
 					foreach ($array as $k => $v) {
 						if (is_array($v)) {
@@ -129,7 +135,6 @@ class EnrollmentListsController extends AppController {
 						$new_array[$k] = $array[$k];
 					}
 				}
-
 				return $new_array;
 			}
 			foreach($days as $i=>$d){
@@ -152,15 +157,12 @@ class EnrollmentListsController extends AppController {
 					$l['cnt'] = $cnt++;
 					array_push($newL,$l);
 				}
-				//pr($level);
 				$item = array('level'=>$i,'lists'=>$newL);
 				array_push($list['level'],$item);
 				
 			}
-			//pr($list); exit();
 			$coll = array(array('EnrollmentList'=>$list));
 		}
-		//pr($list); exit();
 		$this->set('enrollmentLists', $coll);
 	}
 

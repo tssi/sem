@@ -251,42 +251,49 @@ class EnrollmentListSheet extends Formsheet{
 		$this->GRID['font_size']=11;
 		$this->leftText(10,-5,'Enrollment List Report for '.$level.' as of '.date("d-M-Y"),1,'b');
 		$this->GRID['font_size']=9;
-		$this->DrawBox(1,-1,7, 1);
-		$this->centerText(4,-0.25,'Level','');
+
+		$this->DrawBox(1,-1,5, 1);
+		$this->centerText(3,-0.25,'Level','');
 	
-		$this->DrawBox(8,-1,5, 1);
-		$this->centerText(10,-.25,'Sno','');
+		$this->DrawBox(6,-1,5, 1);
+		$this->centerText(8,-.25,'Sno','');
 		
-		$this->DrawBox(13,-1,16, 1);
+		$this->DrawBox(11,-1,16, 1);
 		$this->centerText(18,-.25,'Name','');
+
+		$this->DrawBox(27,-1,5, 1);
+		$this->centerText(29.5,-.25,'Discount Type','');
 	
-		$this->DrawBox(29,-1,6, 1);
-		$this->centerText(31.5,-.25,'Date Enrolled','');
+		$this->DrawBox(32,-1,5, 1);
+		$this->centerText(34.5,-.25,'Date Enrolled','');
 		
-		$this->DrawBox(35,-1,5, 1);
-		$this->centerText(37,-.25,'OR','');
+		$this->DrawBox(37,-1,5, 1);
+		$this->centerText(39.5,-.25,'OR','');
 		
 		$y = 1;
 		
 		foreach($data as $d){
 			$d['transac_date'] = date("d-M-y", strtotime($d['transac_date']));
-			$this->DrawBox(8,$y-1,5, 1);
-			$this->leftText(8.5,$y-.2,$d['sno'],'');
+			$this->DrawBox(6,$y-1,5, 1);
+			$this->leftText(6.5,$y-.2,$d['sno'],'');
 			
-			$this->DrawBox(13,$y-1,16, 1);
+			$this->DrawBox(11,$y-1,16, 1);
 			$sname = mb_convert_case($d['name'], MB_CASE_TITLE, "UTF-8");
-			$this->leftText(13.5,$y-.2,$d['cnt'].'.   '.utf8_decode($sname),'');
+			$this->leftText(11.5,$y-.2,$d['cnt'].'.   '.utf8_decode($sname),'');
 		    //utf8_decode("name")
 			
-			$this->DrawBox(29,$y-1,6, 1);
-			$this->leftText(29.5,$y-.2,$d['transac_date'],'');
+			$this->DrawBox(27,$y-1,5, 1);
+			$this->leftText(27.5,$y-.2,$d['subsidy'],'');
+
+			$this->DrawBox(32,$y-1,5, 1);
+			$this->leftText(32.5,$y-.2,$d['transac_date'],'');
 			
-			$this->DrawBox(35,$y-1,5, 1);
-			$this->leftText(35.5,$y-.2,$d['ref_no'],'');
+			$this->DrawBox(37,$y-1,5, 1);
+			$this->leftText(37.5,$y-.2,$d['ref_no'],'');
 			$y++;
 		}
-		$this->DrawBox(1,0,7, count($data));
-		$this->leftText(1.5,1,$level,'');
+		$this->DrawBox(1,0,5, count($data));
+		$this->leftText(1.2,1,substr($level, 0, 11) . "...",'');
 		
 	}
 	

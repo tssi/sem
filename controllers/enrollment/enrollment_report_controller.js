@@ -145,7 +145,7 @@ define(['app','api','atomic/bomb'],function(app){
 		function getList(){
 			var data = {
 				esp:$scope.ActiveSY,
-				transaction_type_id:'INIPY',
+				transaction_type_id:['INIPY','FULLP'],
 				limit:'less'
 			}
 			api.GET('enrollment_lists',data, function success(response){
