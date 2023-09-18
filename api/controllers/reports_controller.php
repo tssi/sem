@@ -1,7 +1,7 @@
 <?php
 class ReportsController extends AppController{
 	var $name = 'Reports';
-	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','TransactionType',
+	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','TransactionType','Subject',
 						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
 	
 	function student_pre_assess_form(){
@@ -162,7 +162,6 @@ class ReportsController extends AppController{
 			$this->Assessment->usePaginationCache = false;
 			$data = $this->paginate()[0];
 		endif;
-
 		
 		$id = $data['Assessment']['student_id'];
 		$resESP = $esp = round($data['Assessment']['esp'],0);
@@ -268,7 +267,45 @@ class ReportsController extends AppController{
 				$data['AssessmentSubject'] = $subjects;
 			$data['isSecondSem'] = true;
 		}
-
+		
+		//pr($sectId); 
+		//pr($sy); 
+		$subjectScheds = $this->Schedule->getSched($sectId,$sy);
+		//pr($subjectScheds);
+		if(!isset($subjectScheds[0])){
+			echo $sectId;
+			pr($data);
+			pr($subjectScheds); exit;
+		}
+		$studSubjects = array();
+		foreach($subjectScheds[0]['ScheduleDetail'] as $i=>$sched){
+			if(!in_array($sched['subject_id'],$studSubjects)) array_push($studSubjects,$sched['subject_id']);
+			
+			//if(isset($sub[0]['Subject'])) $subjectScheds[0]['ScheduleDetail'][$i]['subject'] = $sub[0]['Subject'];
+			
+		}
+		$studSchedules = array();
+		foreach($studSubjects as $i=>$sub){
+			//echo $sub;
+			$studSchedules[$sub] = array();
+			foreach($subjectScheds[0]['ScheduleDetail'] as $detail){
+				
+				if($sub==$detail['subject_id']){
+					$subject = $this->Subject->getSubjectById($sub);
+					if(isset($subject[0]))
+						$detail['Subject'] = $subject[0]['Subject'];
+					else $dtail['Subject']['name'] = $sub;
+					array_push($studSchedules[$sub],$detail);
+					//$studSubjects[$i]['SchduleDetail'] = $detail;
+					//array_push($studSchedules,$detail);
+				}
+			}
+		}
+		//pr($subjectScheds);
+		$data['studSchedules'] = $studSchedules;
+		//pr($studSchedules);
+		//pr($subjectScheds[0]['ScheduleDetail']);
+		//exit;
 		$this->set(compact('data'));
 		
 			
