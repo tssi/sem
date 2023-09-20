@@ -54,9 +54,9 @@ class StudentPreAssessForm extends Formsheet{
 		$this->leftText(.7,$y,'Grade Level: ' ,'','');
 		$this->leftText(7,$y,$yearLevel,'','b');
 		$this->GRID['font_size']=6;
-		$yearLevel = 'Current '.$data['YearLevel']['description'];
-		$yearLevel .= ' '.$data['Section']['name'];
-		$this->leftText(7,$y+1,$yearLevel,'','');
+		//$yearLevel = 'Current '.$data['YearLevel']['description'];
+		//$yearLevel .= ' '.$data['Section']['name'];
+		//$this->leftText(7,$y+1,$yearLevel,'','');
 		$this->GRID['font_size']=8;
 
 
