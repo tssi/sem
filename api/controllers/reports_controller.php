@@ -271,17 +271,15 @@ class ReportsController extends AppController{
 		//pr($sectId); 
 		//pr($sy); 
 		$subjectScheds = $this->Schedule->getSched($sectId,$sy);
-		//pr($subjectScheds);
+		//pr($subjectScheds); exit;
 		if(!isset($subjectScheds[0])){
-			echo $sectId;
-			pr($data);
-			pr($subjectScheds); exit;
+			//echo $sectId;
+			$subjectScheds = $this->Schedule->getSched($sectId,$sy+.25);
+			//pr($subjectScheds); exit;
 		}
 		$studSubjects = array();
 		foreach($subjectScheds[0]['ScheduleDetail'] as $i=>$sched){
 			if(!in_array($sched['subject_id'],$studSubjects)) array_push($studSubjects,$sched['subject_id']);
-			
-			//if(isset($sub[0]['Subject'])) $subjectScheds[0]['ScheduleDetail'][$i]['subject'] = $sub[0]['Subject'];
 			
 		}
 		$studSchedules = array();

@@ -138,15 +138,15 @@ class StudentRegistrationForm extends Formsheet{
 				$y++;
 				continue;
 			}
-			if($isSH):
+			/*if($isSH):
 				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
 				if($isS2Sched && !$is2ndSEM) continue;
 				if(!$isS2Sched && $is2ndSEM) continue;
-			endif;
+			endif;*/
 			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
 				
 			if(strlen($d[0]['Subject']['name'])>=45){
-				$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
+				$d[0]['Subject']['name'] = substr($d[0]['Subject']['name'],0,30) . '...';
 			}
 			$tot_subjs++;
 			/*if(!isset($d['Subject']['name'])){
@@ -171,15 +171,20 @@ class StudentRegistrationForm extends Formsheet{
 					$x_time = 22;
 					$x_day = 11;
 					$y+=1;
-					$this->leftText(0,$y,$d[0]['Subject']['name'],'','');
+					$this->centerText($x_time,$y,$time,4,'');
+					$this->centerText($x_day,$y,$day,4,'');
+					//$this->leftText(0,$y,$d[0]['Subject']['name'],'','');
 				endif;
 				//pr($sched); exit();
 				if($si==0){
 					//$this->centerText(12,$y,$day,2,'');
 					$this->centerText(17,$y,$grading,4,'');
 				}
-				$this->centerText($x_time,$y,$time,4,'');
-				$this->centerText($x_day,$y,$day,4,'');
+				if($si<2){
+					$this->centerText($x_time,$y,$time,4,'');
+					$this->centerText($x_day,$y,$day,4,'');
+				}
+				
 
 				$x_time+=7;
 				$x_day+=3;
