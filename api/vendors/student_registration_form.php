@@ -117,12 +117,17 @@ class StudentRegistrationForm extends Formsheet{
 		$is2ndSEM =  isset($data['isSecondSem']);
 		$tot_subjs = 0;
 		$unavail = '------';
-		foreach($data['AssessmentSubject'] as $d){
+		//echo '<pre>';
+		//print_r($data['studSchedules']); exit;
+		foreach($data['studSchedules'] as $d){
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
-			$length = count($d['ScheduleDetail']);
-
+			$length = count($d);
+			//pr($d); exit;
+			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
+			if(!isset($d[0]['Subject']['name'])) print_r($d);
 			if(!$length){
-				if(strlen($d['Subject']['name'])>=45)
+				
+				if(strlen($d[0]['Subject']['name'])>=45)
 					$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
 				$this->leftText(0,$y,$d['Subject']['name'],'','');
 				$this->centerText(11,$y,$unavail,4,'');
@@ -133,24 +138,29 @@ class StudentRegistrationForm extends Formsheet{
 				$y++;
 				continue;
 			}
-			if($isSH):
+			/*if($isSH):
 				$isS2Sched = preg_match('/S2$/', $d['ScheduleDetail'][0]['schedule_id']);
 				if($isS2Sched && !$is2ndSEM) continue;
 				if(!$isS2Sched && $is2ndSEM) continue;
-			endif;
-			if(strlen($d['Subject']['name'])>=45){
-				$d['Subject']['name'] = substr($d['Subject']['name'],0,30) . '...';
+			endif;*/
+			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
+				
+			if(strlen($d[0]['Subject']['name'])>=45){
+				$d[0]['Subject']['name'] = substr($d[0]['Subject']['name'],0,30) . '...';
 			}
 			$tot_subjs++;
-			$this->leftText(0,$y,$d['Subject']['name'],'','');
+			/*if(!isset($d['Subject']['name'])){
+				pr($d); exit;
+			}*/
+			$this->leftText(0,$y,$d[0]['Subject']['name'],'','');
 			//$this->centerText(15,$y,'--',2,'');
-			if(isset($d['Section']['name']))
+			//if(isset($d['Section']['name']))
 				//$this->leftText(15,$y,$d['Section']['name'],'','');
 			$x_time = 22;
 			$x_day = 11;
-			$lastItem = end($d['ScheduleDetail']);
+			$lastItem = end($d);
 
-              foreach($d['ScheduleDetail'] as $si=>$sched):
+              foreach($d as $si=>$sched):
 				$day =  $sched['day'];
 				$startT =  date('h:i A',strtotime($sched['start_time']));
 				$endT =  date('h:i A',strtotime($sched['end_time']));
@@ -161,15 +171,20 @@ class StudentRegistrationForm extends Formsheet{
 					$x_time = 22;
 					$x_day = 11;
 					$y+=1;
-					$this->leftText(0,$y,$d['Subject']['name'],'','');
+					$this->centerText($x_time,$y,$time,4,'');
+					$this->centerText($x_day,$y,$day,4,'');
+					//$this->leftText(0,$y,$d[0]['Subject']['name'],'','');
 				endif;
 				//pr($sched); exit();
 				if($si==0){
 					//$this->centerText(12,$y,$day,2,'');
 					$this->centerText(17,$y,$grading,4,'');
 				}
-				$this->centerText($x_time,$y,$time,4,'');
-				$this->centerText($x_day,$y,$day,4,'');
+				if($si<2){
+					$this->centerText($x_time,$y,$time,4,'');
+					$this->centerText($x_day,$y,$day,4,'');
+				}
+				
 
 				$x_time+=7;
 				$x_day+=3;

@@ -78,4 +78,7 @@ class Subject extends AppModel {
 		),
 	);
 
+	function getSubjectById($subId){
+		return $sub = $this->find('all',array('recursive'=>0,'conditions'=>array('Subject.id'=>array($subId))));
+	}
 }
