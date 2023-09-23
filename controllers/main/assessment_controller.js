@@ -17,6 +17,7 @@ define(['app','api','atomic/bomb'],function(app){
 								'year_level_id','section_id','student_type','program_id'];
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
 			$scope.Props = ['sno','full_name','program_id','subsidy_status'];
+			$scope.ActiveSy = 2023;
 			$scope.isBatchLoading = false;
 			$scope.isBatchLoaded = 0;
 			$scope.isBatchStarted = 0;
@@ -26,7 +27,7 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.SYs = atomic.SchoolYears;
 				$scope.AllYearLevels = atomic.YearLevels;
 				$scope.AllSections = atomic.Sections;
-				$scope.ActiveSy = 2023;
+				
 				getTuitions();
 				getBP();
 			})
