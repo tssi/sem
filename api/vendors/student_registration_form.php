@@ -123,7 +123,16 @@ class StudentRegistrationForm extends Formsheet{
 			//$this->leftText(0.2,$y,$d['subject_id'],'','');
 			$length = count($d);
 			//pr($d); exit;
-			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
+			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') {
+				$subItem = $d[0]['subject_id'];
+				switch($subItem){
+					case 'HOME': $d[0]['Subject']['name'] = 'Homeroom'; break;
+					case 'CLUB': $d[0]['Subject']['name'] = 'Club Day'; break;
+					case 'REC': $d[0]['Subject']['name'] = 'Recess'; break;
+					case 'LUNCH': $d[0]['Subject']['name'] = 'Lunch'; break;
+				}
+			}
+			//pr($d); exit;
 			if(!isset($d[0]['Subject']['name'])) print_r($d);
 			if(!$length){
 				
@@ -143,7 +152,7 @@ class StudentRegistrationForm extends Formsheet{
 				if($isS2Sched && !$is2ndSEM) continue;
 				if(!$isS2Sched && $is2ndSEM) continue;
 			endif;*/
-			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
+			//if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
 				
 			if(strlen($d[0]['Subject']['name'])>=45){
 				$d[0]['Subject']['name'] = substr($d[0]['Subject']['name'],0,30) . '...';

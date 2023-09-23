@@ -2,7 +2,7 @@
 class ReportsController extends AppController{
 	var $name = 'Reports';
 	var $uses = array('Assessment','Student','Inquiry','Reservation','MasterConfig','TransactionType','Subject',
-						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection');
+						'Ledger','Household','Section','Schedule','Tuition','Curriculum','CurriculumSection','AdvisorySection','Teacher');
 	
 	function student_pre_assess_form(){
 		$AID = $_POST['AssessmentId'];
@@ -300,9 +300,11 @@ class ReportsController extends AppController{
 			}
 		}
 		//pr($subjectScheds);
+		$advisory = $this->AdvisorySection->getAdvisorySection($sectId,$sy);
 		$data['studSchedules'] = $studSchedules;
 		//pr($studSchedules);
-		//pr($subjectScheds[0]['ScheduleDetail']);
+		$data['Teacher'] = $advisory[0]['Teacher']['first_name'].' '.$advisory[0]['Teacher']['last_name'];
+		//pr($advisory);
 		//exit;
 		$this->set(compact('data'));
 		

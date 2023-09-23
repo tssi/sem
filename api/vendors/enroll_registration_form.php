@@ -202,10 +202,13 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 	function foot_notes($data,$end){
 		$metrics =$this->setUpMetrics($data);
 
-		$this->GRID['font_size']=7;
+		
 
 		//NOTE
-		$y=19;
+		$y=26;
+		$this->GRID['font_size']=9;
+		$this->wrapText(7,$y-6,'Adviser: '.$data['Teacher'],27);
+		$this->GRID['font_size']=7;
 		$this->wrapText(7,$y,'IMPORTANT: '.$data['Important'],27);
 		$this->SetFillColor(255,255,255);
 		$this->DrawBox(7,$y,4,1.2,'F');
@@ -256,14 +259,15 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$this->RotateText(0.5+$offsetX ,31+$offsetY,$PASS,90,'b');
 		$this->RotateText(-0.25+$offsetX ,31+$offsetY,$USER,90);
 
-		$this->leftText(6.5+$offsetX ,30.5+$offsetY,"PARENT/STUDENT PORTAL",12,'');
-		$this->leftText(6.5+$offsetX ,31.5+$offsetY,'SCAN CODE OR GO TO',12,'');
+		$this->leftText(6.5+$offsetX ,30.5+$offsetY-1.5,"PARENT/STUDENT PORTAL",12,'');
+		$this->leftText(6.5+$offsetX ,31.5+$offsetY-1.5,'SCAN CODE OR GO TO',12,'');
 		$this->GRID['font_size']=8;
-		$this->leftText(6.5+$offsetX ,32.5+$offsetY,$URL,12,'b');
+		$this->leftText(6.5+$offsetX ,32.5+$offsetY-1,$URL,12,'b');
+		$this->leftText(6.5+$offsetX ,32.5+$offsetY,'Visit: www.lsei.edu.ph',12,'b');
 
 		$this->GRID['font_size']=10;
 		$COPY_OF = strtoupper(sprintf("%s'S COPY",$data['copyOf']));
-		$this->leftText(6.5+$offsetX ,29+$offsetY,$COPY_OF, 0,'b');
+		$this->leftText(6.5+$offsetX ,29+$offsetY-1.5,$COPY_OF, 0,'b');
 		
 		
 	}
