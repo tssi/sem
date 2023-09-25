@@ -132,6 +132,7 @@ class StudentRegistrationForm extends Formsheet{
 					case 'LUNCH': $d[0]['Subject']['name'] = 'Lunch'; break;
 				}
 			}
+			//pr($d); exit;
 			if(!isset($d[0]['Subject']['name'])) print_r($d);
 			if(!$length){
 				
@@ -151,7 +152,7 @@ class StudentRegistrationForm extends Formsheet{
 				if($isS2Sched && !$is2ndSEM) continue;
 				if(!$isS2Sched && $is2ndSEM) continue;
 			endif;*/
-			if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
+			//if($d[0]['subject_id']=='HOME'||$d[0]['subject_id']=='CLUB'||$d[0]['subject_id']=='REC'||$d[0]['subject_id']=='LUNCH') continue;
 				
 			if(strlen($d[0]['Subject']['name'])>=45){
 				$d[0]['Subject']['name'] = substr($d[0]['Subject']['name'],0,30) . '...';
