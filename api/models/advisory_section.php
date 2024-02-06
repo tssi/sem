@@ -20,7 +20,7 @@ class AdvisorySection extends AppModel {
 	);
 
     function getAdvisorySection($sid,$esp){
-        return $advisory = $this->find('all',array('conditions'=>array('AdvisorySection.section_id'=>array($sid),'AdvisorySection.esp'=>$esp+.10)));
+        return $advisory = $this->find('all',array('conditions'=>array('AdvisorySection.section_id'=>array($sid),'AdvisorySection.esp'=>$esp)));
     }
 
 }

@@ -208,6 +208,9 @@ class StudentRegistrationForm extends Formsheet{
 		}
 		$this->drawLine($y-0.6,'h');
 		$this->leftText(0.2,$y,'Total No. of Subjects: '.$tot_subjs,'','b');
+		$this->GRID['font_size']=8;
+		$this->rightText(32,$y+.1,'Adviser: '.$data['Teacher'],'','b');
+
 		//$this->centerText(15,$y,number_format($totalunits,2),2,'b');
 		$end = $y+2;
 		$this->fee_breakdown($data,$end);

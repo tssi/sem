@@ -194,7 +194,7 @@ class ReportsController extends AppController{
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
 				switch($ogType){
-					case 'TF': $label = 'Tuition Fee'; break;
+					case 'TF': $label = 'Tuition and other fees'; break;
 					case 'LAB': $label = 'Laboratory Fee'; break;
 					case 'MSC': $label = $isSecondSem?'Registration':'Misc. Fee'; break;
 					case 'TUT': $label = 'Tutorial Fee'; break;
@@ -300,9 +300,26 @@ class ReportsController extends AppController{
 			}
 		}
 		//pr($subjectScheds);
+		if($data['Section']['department_id']=='SH') $sy = $sy+.10;
+		
 		$advisory = $this->AdvisorySection->getAdvisorySection($sectId,$sy);
 		$data['studSchedules'] = $studSchedules;
-		//pr($studSchedules);
+		//pr($data['studSchedules']);
+		if($data['Assessment']['subsidy_status']=='IRREG'){
+			$irregSched = array();
+			foreach($data['AssessmentSubject'] as $sub){
+				$irregSched[$sub['subject_id']] = array();
+				foreach($sub['ScheduleDetail'] as $details){
+					$details['Subject'] = $sub['Subject'];
+					array_push($irregSched[$sub['subject_id']],$details);
+				}
+			}
+			$data['studSchedules'] = $irregSched;
+		} 
+		//pr($data['AssessmentSubject']); 
+		//pr($data['AssessmentSubject']);
+		//pr($data['studSchedules']);
+		//exit;
 		$data['Teacher'] = $advisory[0]['Teacher']['first_name'].' '.$advisory[0]['Teacher']['last_name'];
 		//pr($advisory);
 		//exit;

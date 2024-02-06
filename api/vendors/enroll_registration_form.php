@@ -207,7 +207,7 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		//NOTE
 		$y=26;
 		$this->GRID['font_size']=9;
-		$this->wrapText(7,$y-6,'Adviser: '.$data['Teacher'],27);
+		//$this->wrapText(7,$y-3,'Adviser: '.$data['Teacher'],27);
 		$this->GRID['font_size']=7;
 		$this->wrapText(7,$y,'IMPORTANT: '.$data['Important'],27);
 		$this->SetFillColor(255,255,255);
@@ -251,23 +251,24 @@ class EnrollRegistrationForm extends StudentRegistrationForm{
 		$MILL = sprintf('%s  %s',$SY[0],$SY[1]);
 		$DECA = sprintf('%s  %s',$SY[2],$SY[3]);
 		
-		$this->DrawImage(0+$offsetX ,26+$offsetY,1.1,1.1,$fullPath);
+		//$this->DrawImage(0+$offsetX ,26+$offsetY,1.1,1.1,$fullPath);
 		$this->GRID['font_size']=8;
-		$this->leftText(-0.5+$offsetX ,31.75+$offsetY,$MILL,12,'b');
-		$this->leftText(-0.5+$offsetX ,32.5+$offsetY,$DECA,12,'b');
+		//$this->leftText(-0.5+$offsetX ,31.75+$offsetY,$MILL,12,'b');
+		//$this->leftText(-0.5+$offsetX ,32.5+$offsetY,$DECA,12,'b');
 		$this->GRID['font_size']=7.5;
-		$this->RotateText(0.5+$offsetX ,31+$offsetY,$PASS,90,'b');
-		$this->RotateText(-0.25+$offsetX ,31+$offsetY,$USER,90);
+		//$this->RotateText(0.5+$offsetX ,31+$offsetY,$PASS,90,'b');
+		//$this->RotateText(-0.25+$offsetX ,31+$offsetY,$USER,90);
 
-		$this->leftText(6.5+$offsetX ,30.5+$offsetY-1.5,"PARENT/STUDENT PORTAL",12,'');
-		$this->leftText(6.5+$offsetX ,31.5+$offsetY-1.5,'SCAN CODE OR GO TO',12,'');
+		//$this->leftText(6.5+$offsetX ,30.5+$offsetY-1.5,"PARENT/STUDENT PORTAL",12,'');
+		//$this->leftText(6.5+$offsetX ,31.5+$offsetY-1.5,'SCAN CODE OR GO TO',12,'');
 		$this->GRID['font_size']=8;
-		$this->leftText(6.5+$offsetX ,32.5+$offsetY-1,$URL,12,'b');
-		$this->leftText(6.5+$offsetX ,32.5+$offsetY,'Visit: www.lsei.edu.ph',12,'b');
+		//$this->leftText(6.5+$offsetX ,32.5+$offsetY-1,$URL,12,'b');
+		$this->leftText($offsetX-1 ,32.5+$offsetY-1,'Visit us at: www.lsei.edu.ph',12,'b');
+		$this->leftText($offsetX-1 ,32.5+$offsetY,'Email us at: registrar@lakeshore.edu.ph',12,'b');
 
 		$this->GRID['font_size']=10;
 		$COPY_OF = strtoupper(sprintf("%s'S COPY",$data['copyOf']));
-		$this->leftText(6.5+$offsetX ,29+$offsetY-1.5,$COPY_OF, 0,'b');
+		$this->leftText(25 ,32,$COPY_OF, 0,'b');
 		
 		
 	}
