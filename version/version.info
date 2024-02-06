@@ -1,0 +1,9 @@
+PRODUCT=Simplified Enrollment Module
+ALIAS=SEM
+DESCRIPTION=Simply enroll.
+AUTHOR=Dave A Dev Web Solutions
+COPYRIGHT=2020-2024
+MAJOR=1
+MINOR=1
+PATCH=0
+HASH=df5d2d0a9ceccce1118823b8d72b14a3a4272a62
