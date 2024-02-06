@@ -4,6 +4,9 @@ define(['app','api','atomic/bomb'], function (app) {
 	function ($scope,$rootScope,api,atomic,$filter) {
        $scope.init = function (module_name) { 
 			$rootScope.__MODULE_NAME = module_name || app.settings.DEFAULT_MODULE_NAME;
+			$rootScope._APP = $rootScope._APP ||{};
+			$rootScope._APP.CopyRight =  document.querySelector('meta[name="copyright"]').getAttribute('content');
+			$rootScope._APP.VersionNo =  document.querySelector('meta[name="version"]').getAttribute('content');
 			$rootScope.__MODULE_NAME = 'SEM';
 			atomic.ready(function(){
 				$scope.ActiveSY = atomic.ActiveSY;
