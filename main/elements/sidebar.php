@@ -69,5 +69,6 @@
             </a>
         </li>
     </ul>
+    <div id="app-version">SEM <?php echo $versionNo;?></div>
 </div>
 <!-- /#sidebar-wrapper -->
