@@ -13,6 +13,11 @@ define(['app','api','atomic/bomb'],function(app){
 				{id:'REGXX',name:'Regular'},
 				{id:'DSPUB',name:'Public'},
 			];
+
+			$scope.SchoolTypes = [
+				{id:'PRV',name:'Private'},
+				{id:'PUB',name:'Public'},
+			];
 			$scope.StudFields = ['sno','lrn','enroll_status','department_id',
 								'year_level_id','section_id','student_type','program_id'];
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
@@ -270,7 +275,10 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Subjects = [];
 			getCurriSec();
 		});
-		
+		$selfScope.$watch('ASC.TuitionId',function(tuiId){
+			if(!tuiId) return;
+			$scope.Tuition =  $filter("filter")($scope.AllTuitions,{id:tuiId})[0];
+		});
 		function pickScheme(stud){
 			angular.forEach($scope.Tuition.schemes, function(s){
 				if(stud.subsidy_status==s.subsidy_status)
