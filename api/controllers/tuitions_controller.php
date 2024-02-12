@@ -38,6 +38,14 @@ class TuitionsController extends AppController {
 					foreach($sched as $s=>$sc){
 						array_push($schedules,$sc);
 					}
+					if(count($schedules)==0):
+						$totalAmount = $scheme['total_amount'];
+						$initialPayment = 5000;
+						$billStart = '2024-08-15';
+						$billEnd = '2025-05-15';
+						$schedules = $this->Tuition->PaymentScheme->buildPaysched($totalAmount,$initialPayment,$billStart,$billEnd);
+					endif;
+
 					$sch['schedule'] = $schedules;
 					array_push($schemes,$sch);
 				}

@@ -80,4 +80,62 @@ class PaymentScheme extends AppModel {
 		$pay_schem_info = array('sy'=>$tuition['Tuition']['sy'],'pay_scheme_id'=>$pay_scheme_id);
 		return $pay_schem_info;
 	}
+
+	function buildPaysched($totalAmount, $initialPayment, $billStart, $billEnd) {
+        $payments = array(
+            array(
+                'billing_period_id' => 'UPONNROL',
+                'amount' => $initialPayment,
+                'due_date' => '2024-08-01 00:00:00'
+            )
+        );
+
+        $start = new DateTime($billStart);
+        $end = new DateTime($billEnd);
+        $end = $end->modify('+1 month'); // Ensure inclusion of the end month
+        $interval = new DateInterval('P1M');
+        $periods = new DatePeriod($start, $interval, $end);
+
+        $remainingAmount = $totalAmount - $initialPayment;
+        $numberOfPayments = iterator_count($periods) - 1; // Exclude initial payment
+
+        if ($numberOfPayments > 0) {
+            $monthlyPayment = $remainingAmount / $numberOfPayments;
+            // Round to nearest hundred
+            $monthlyPaymentRounded = round($monthlyPayment / 100) * 100;
+        } else {
+            $monthlyPaymentRounded = 0;
+        }
+
+        // Calculate total of rounded payments
+        $totalRoundedPayments = $monthlyPaymentRounded * $numberOfPayments;
+        // Adjust the final payment if there's a rounding difference
+        $finalPaymentAdjustment = ($remainingAmount - $totalRoundedPayments) + $monthlyPaymentRounded;
+
+        $paymentCounter = 0;
+        foreach ($periods as $date) {
+            if ($paymentCounter == 0) {
+                // Skip the initial payment period
+                $paymentCounter++;
+                continue;
+            }
+            
+            $amount = $monthlyPaymentRounded;
+            // Adjust the last payment
+            if ($paymentCounter == $numberOfPayments) {
+                $amount = $finalPaymentAdjustment;
+            }
+            
+            $billingPeriodId = strtoupper($date->format('MY'));
+            $payments[] = array(
+                'billing_period_id' => $billingPeriodId,
+                'amount' => $amount,
+                'due_date' => $date->format('Y-m-15 00:00:00')
+            );
+            
+            $paymentCounter++;
+        }
+
+        return $payments;
+    }
 }
