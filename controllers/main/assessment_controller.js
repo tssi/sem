@@ -1,5 +1,7 @@
 "use strict";
 define(['app','api','atomic/bomb'],function(app){
+	const SUBSIDY_TYPE = {ESC:'DSESC',PUBLIC:'DSPUB',REGULAR:'REGXX'};
+	const PREV_SCHOOL = {PRIVATE:'PRV',PUBLIC:'PUB'};
 	app.register.controller('AssessmentController',['$rootScope','$scope','api','Atomic','aModal','$http','$filter','$timeout','$uibModal',
 
 	function($rootScope,$scope,api,atomic, aModal,$http,$filter,$timeout,$uibModal){
@@ -22,6 +24,8 @@ define(['app','api','atomic/bomb'],function(app){
 								'year_level_id','section_id','student_type','program_id'];
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
 			$scope.Props = ['sno','full_name','program_id','subsidy_status'];
+
+			// Default VALUES
 			$scope.ActiveSy = 2024;
 			$scope.isBatchLoading = false;
 			$scope.isBatchLoaded = 0;
@@ -64,12 +68,12 @@ define(['app','api','atomic/bomb'],function(app){
 				if(!stud.name)
 					stud.name =  stud.full_name;
 				switch(stud.subsidy_status){
-					case 'ESC': case 'DSESC' : stud.subsidy_status = 'DSESC';break;
-					case 'PUB': case 'DSPUB' : stud.subsidy_status = 'DSPUB';break;
-					case 'QVR': stud.subsidy_status = 'DSESC';break;
+					case 'ESC': case 'DSESC' : stud.subsidy_status = SUBSIDY_TYPE.ESC;break;
+					case 'PUB': case 'DSPUB' : stud.subsidy_status = SUBSIDY_TYPE.PUBLIC;break;
+					case 'QVR': stud.subsidy_status = SUBSIDY_TYPE.ESC;break;
 					case 'REG':  
 					default:
-						stud.subsidy_status = 'REGXX';
+						stud.subsidy_status = SUBSIDY_TYPE.REGULAR;
 					break;
 				}
 
@@ -242,9 +246,14 @@ define(['app','api','atomic/bomb'],function(app){
 				if(YEAR_LVLID=='G10') DEF_SECT = 1013;
 			}
 			$scope.section_id	= DEF_SECT;
+			$scope.IsEarlyEnroll = 'Y';
 			
 		}
-		$selfScope.$watch('ASC.section_id',function(sectId){
+		$selfScope.$watchGroup(['ASC.section_id','ASC.PrevSchool','ASC.HasSubsidy','ASC.IsEarlyEnroll'],function(values){
+			let sectId = values[0];
+			let prevSch =  values[1];
+			let hasSubs =  values[2];
+			let isEarly =  values[3];
 			if(!sectId) return;
 			// Set ActiveSection to section_id
 			$scope.ActiveSection = $filter("filter")($scope.AllSections,{id:sectId})[0];
@@ -265,7 +274,27 @@ define(['app','api','atomic/bomb'],function(app){
 					sidFltr = YEAR_LVLID!='GY'?'B21':'B22'; // SNO 2021 and below
 				}
 			}
-			$scope.Tuitions = $filter("filter")($scope.AllTuitions, {year_level_id:YEAR_LVLID,applicable_to:sidFltr});
+			let TUIFltr = {year_level_id:YEAR_LVLID,applicable_to:sidFltr};
+			
+			// Description Filter
+			// Early enrollment and previous school
+			let descFiltr = 'New ';
+			if(isEarly=='Y')	descFiltr = 'Early ';
+			let isPrivate = prevSch ==PREV_SCHOOL.PRIVATE;
+			let isPublic = prevSch ==PREV_SCHOOL.PUBLIC;
+			if(isPrivate) 	descFiltr += 'Private';
+			if(isPublic) 	descFiltr += 'Public';
+			
+			TUIFltr.description = descFiltr;
+			
+			// Subsidy Filter
+			$scope.ActiveType = SUBSIDY_TYPE.REGULAR;
+			if(hasSubs=='Y'){
+				if(isPrivate)  $scope.ActiveType = SUBSIDY_TYPE.ESC;
+				if(isPublic)  $scope.ActiveType = SUBSIDY_TYPE.PUBLIC;
+			}
+			$scope.ActiveStudent.subsidy_status =  angular.copy($scope.ActiveType);
+			$scope.Tuitions = $filter("filter")($scope.AllTuitions, TUIFltr);
 			$scope.Tuition = $scope.Tuitions[0];
 			$scope.TuitionId = $scope.Tuition.id;	
 
@@ -448,6 +477,9 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Tuitions = null;
 			$scope.TuitionId = null;
 			$scope.ActiveType = null;
+			$scope.PrevSchool = null;
+			$scope.HasSubsidy = null;
+			$scope.IsEarlyEnroll = null;
 		}
 		
 		

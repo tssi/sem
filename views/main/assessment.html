@@ -75,7 +75,9 @@
 									<a-row ng-show="ASC.ShowSched">
 										<a-col>
 											<!-- Replace with a-table see app/#/atomic/docs -->
-											<m-formgroup ng-model="ASC.TuitionId" label="Tuitions" options="ASC.Tuitions" option-label="description" ></m-formgroup>
+											<m-formgroup ng-model="ASC.TuitionId" label="Tuitions" options="ASC.Tuitions"
+											size="'input-lg'"
+											option-label="description"></m-formgroup>
 											<table class="table table-bordered">
 												<thead>
 													<tr>
@@ -162,19 +164,19 @@
 
 
 							 <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes" type="'btn-group'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
-
-							 <m-formgroup label="Subsidy Grant" ng-model="ASC.HasSubsidy"type="'yesno'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
-
-							  <m-formgroup label="Early Registration Discount" ng-model="ASC.IsEarlyEnroll"type="'yesno'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
-
+							 
+							 	<m-formgroup label="Subsidy Grant" ng-model="ASC.HasSubsidy"type="'yesno'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
+							  	<m-formgroup label="Early Registration Discount" ng-model="ASC.IsEarlyEnroll"type="'yesno'"ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							  
 
 							
-							<div class="pull-right" ng-show="ASC.ActiveStudent">
-								<a-button ng-click="ASC.ClearRecord()" >Close</a-button>
-								<a-button  type="primary" ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched'>Save</a-button>
-								<a-button type="primary" disabled ng-show="ASC.Saving">Saving...</a-button>
-							</div>
+							
+							<a-row style="margin-top:250px;">
+								<a-col>	
+									<a-button  type="primary btn-block" size="lg"  ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched' ng-disabled="!ASC.ActiveStudent">Save Assessment</a-button>
+									<a-button type="primary btn-block"  size="lg"  disabled ng-show="ASC.Saving">Saving...</a-button>
+								</a-col>
+							</a-row>
 						</a-col>
 					</a-row>
 				</a-content>
