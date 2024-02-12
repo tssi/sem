@@ -247,6 +247,11 @@ define(['app','api','atomic/bomb'],function(app){
 			}
 			$scope.section_id	= DEF_SECT;
 			$scope.IsEarlyEnroll = 'Y';
+
+			if(ENROL_STAT=='OLD'){
+				$scope.PrevSchool = PREV_SCHOOL.PRIVATE;
+				$scope.HasSubsidy = 'Y';
+			}
 			
 		}
 		$selfScope.$watchGroup(['ASC.section_id','ASC.PrevSchool','ASC.HasSubsidy','ASC.IsEarlyEnroll'],function(values){
@@ -267,31 +272,49 @@ define(['app','api','atomic/bomb'],function(app){
 			if(sidFltr!='NEW'){
 				var sno = $scope.ActiveStudent.sno;
 				var sid = parseInt(sno.substring(4,2));
-				if(sid==22){
-					// SNO 2022 and below
-					sidFltr = YEAR_LVLID!='GY'?'S22':'B22';
-				}else{
-					sidFltr = YEAR_LVLID!='GY'?'B21':'B22'; // SNO 2021 and below
+				var sy =  $scope.ActiveSy;
+				if(sy==2024){
+					if(sid==23){
+						// SNO 2023 and below
+						sidFltr = YEAR_LVLID!='GY'?'S23':'B23';
+					}else{
+						// SNO 2022 and below
+						sidFltr = YEAR_LVLID!='GY'?'B23':'B22';
+					}	
+				}
+				else{ 
+					if(sid==22){
+						// SNO 2022 and below
+						sidFltr = YEAR_LVLID!='GY'?'S22':'B22';
+					}else{
+						sidFltr = YEAR_LVLID!='GY'?'B21':'B22'; // SNO 2021 and below
+					}
 				}
 			}
 			let TUIFltr = {year_level_id:YEAR_LVLID,applicable_to:sidFltr};
 			
 			// Description Filter
 			// Early enrollment and previous school
-			let descFiltr = 'New ';
-			if(isEarly=='Y')	descFiltr = 'Early ';
-			let isPrivate = prevSch ==PREV_SCHOOL.PRIVATE;
-			let isPublic = prevSch ==PREV_SCHOOL.PUBLIC;
-			if(isPrivate) 	descFiltr += 'Private';
-			if(isPublic) 	descFiltr += 'Public';
-			
-			TUIFltr.description = descFiltr;
-			
-			// Subsidy Filter
-			$scope.ActiveType = SUBSIDY_TYPE.REGULAR;
-			if(hasSubs=='Y'){
-				if(isPrivate)  $scope.ActiveType = SUBSIDY_TYPE.ESC;
-				if(isPublic)  $scope.ActiveType = SUBSIDY_TYPE.PUBLIC;
+			if(ENROL_STAT=='NEW'){
+				let descFiltr = 'New ';
+				if(isEarly=='Y')	descFiltr = 'Early ';
+				let isPrivate = prevSch ==PREV_SCHOOL.PRIVATE;
+				let isPublic = prevSch ==PREV_SCHOOL.PUBLIC;
+				if(isPrivate) 	descFiltr += 'Private';
+				if(isPublic) 	descFiltr += 'Public';
+				
+				TUIFltr.description = descFiltr;
+				
+				// Subsidy Filter
+				$scope.ActiveType = SUBSIDY_TYPE.REGULAR;
+				if(hasSubs=='Y'){
+					if(isPrivate)  $scope.ActiveType = SUBSIDY_TYPE.ESC;
+					if(isPublic)  $scope.ActiveType = SUBSIDY_TYPE.PUBLIC;
+				}
+			}else{
+				let descFiltr = 'Old ';
+				if(isEarly=='Y')	descFiltr = 'Early ';
+				TUIFltr.description = descFiltr;
 			}
 			$scope.ActiveStudent.subsidy_status =  angular.copy($scope.ActiveType);
 			$scope.Tuitions = $filter("filter")($scope.AllTuitions, TUIFltr);
