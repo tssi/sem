@@ -30,5 +30,6 @@
                 </li>
             </ul>
             <div class="loader fade in" ng-class="{'out':__APP_READY,'in':!__APP_READY}"></div>
+        </div>
     </div>
 </div>
