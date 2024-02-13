@@ -29,7 +29,8 @@
     $cssFiles = array(
     'app/assets/css/simple-uix.css',
     'app/assets/css/animate.css',
-    'app/assets/css/custom-window.css'
+    'app/assets/css/custom-window.css',
+    'app/vendors/atomic_design/css/style.css'
     );
 foreach($cssFiles as $fileName)
     echo Utility::loadStatic('css',$fileName);
