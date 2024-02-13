@@ -17,10 +17,6 @@
             <div id="company-name">{{__USER.user.username}}</div>
         </li>
         <li class="separator">
-        </li>
-            <li>
-            <a href="/app" ng-click="__toggleSideBar()">App</a>
-        </li>
         <li>
             <a href="#/" ng-click="__toggleSideBar()">Home</a>
         </li>
