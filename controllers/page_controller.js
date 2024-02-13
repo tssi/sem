@@ -2,7 +2,9 @@
 define(['app','api','atomic/bomb'], function (app) {
     app.register.controller('PageController',['$scope','$rootScope','api','Atomic','$filter',
 	function ($scope,$rootScope,api,atomic,$filter) {
-       $scope.init = function (module_name) { 
+		const $selfScope = $scope;
+		$scope = this;
+       	$scope.init = function (module_name) { 
 			$rootScope.__MODULE_NAME = module_name || app.settings.DEFAULT_MODULE_NAME;
 			$rootScope._APP = $rootScope._APP ||{};
 			$rootScope._APP.CopyRight =  document.querySelector('meta[name="copyright"]').getAttribute('content');
@@ -12,12 +14,11 @@ define(['app','api','atomic/bomb'], function (app) {
 				$scope.ActiveSY = atomic.ActiveSY;
 				getEnrollment();
 			});
-			api.GET('test',function(response){
-				$scope.List = response.data;
-			});
-			$scope.openListItem = function($index){
-				$scope.ActiveListItem = $scope.List[$index];
-			}
+
+			$scope.Headers = ['Student',{label:'Year Level',class:'col-md-3'}];
+			$scope.Props = ['student','year_level'];
+			$scope.Data = [{student:'Juan Dela Cruz',year_level:'Grade 7'}];
+			
 			
 	   }
 
