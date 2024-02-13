@@ -45,8 +45,9 @@ define(['app','api','atomic/bomb'],function(app){
 				
 				getTuitions();
 				getBP();
-			})
+			}).fuse();
 		}
+
 		$selfScope.$watch('ASC.BatchDeptId',function(deptId){
 			if(!deptId) return;
 			$scope.BatchLevels = $filter("filter")($scope.AllYearLevels,{department_id:deptId});
