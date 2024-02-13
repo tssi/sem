@@ -201,6 +201,13 @@ define(['app','api','atomic/bomb'],function(app){
 			var SECTIONS = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LVLID});
 			// Filter applicable sections 
 			//console.log(YEAR_LEVELS,YEAR_LVLID, ENROL_STAT );
+
+			$scope.IsEarlyEnroll = 'Y';
+			if(ENROL_STAT=='OLD'){
+				$scope.PrevSchool = PREV_SCHOOL.PRIVATE;
+				$scope.HasSubsidy = $scope.ActiveStudent.subsidy_status=='REGXX'?'N':'Y';
+			}
+
 			if(YEAR_LVLID!='GZ' && ENROL_STAT =='OLD'){
 				var nextYL;
 				if(YEAR_LVLID=='GX'){
@@ -246,12 +253,8 @@ define(['app','api','atomic/bomb'],function(app){
 				if(YEAR_LVLID=='G10') DEF_SECT = 1013;
 			}
 			$scope.section_id	= DEF_SECT;
-			$scope.IsEarlyEnroll = 'Y';
 
-			if(ENROL_STAT=='OLD'){
-				$scope.PrevSchool = PREV_SCHOOL.PRIVATE;
-				$scope.HasSubsidy = 'Y';
-			}
+			
 			
 		}
 		$selfScope.$watchGroup(['ASC.section_id','ASC.PrevSchool','ASC.HasSubsidy','ASC.IsEarlyEnroll'],function(values){
@@ -295,11 +298,12 @@ define(['app','api','atomic/bomb'],function(app){
 			
 			// Description Filter
 			// Early enrollment and previous school
+			let isPrivate = prevSch ==PREV_SCHOOL.PRIVATE;
+			let isPublic = prevSch ==PREV_SCHOOL.PUBLIC;
+
 			if(ENROL_STAT=='NEW'){
 				let descFiltr = 'New ';
 				if(isEarly=='Y')	descFiltr = 'Early ';
-				let isPrivate = prevSch ==PREV_SCHOOL.PRIVATE;
-				let isPublic = prevSch ==PREV_SCHOOL.PUBLIC;
 				if(isPrivate) 	descFiltr += 'Private';
 				if(isPublic) 	descFiltr += 'Public';
 				
@@ -315,7 +319,25 @@ define(['app','api','atomic/bomb'],function(app){
 				let descFiltr = 'Old ';
 				if(isEarly=='Y')	descFiltr = 'Early ';
 				TUIFltr.description = descFiltr;
+
+				if(TUIFltr.year_level_id=='GY'){
+					if(sid<=23)
+						TUIFltr.description='Loyal';
+					
+					TUIFltr.applicable_to='NEW';
+					if($scope.ActiveSection.program_id=="SHSTM")
+						TUIFltr.applicable_to='STM';
+				}
+
+				if($scope.ActiveSection.department_id=='SH'){
+					if(hasSubs=='Y'){
+						if(isPrivate)  $scope.ActiveType = SUBSIDY_TYPE.ESC;
+						if(isPublic)  $scope.ActiveType = SUBSIDY_TYPE.PUBLIC;
+					}
+				}
 			}
+
+			console.log(TUIFltr,$scope.ActiveSection);
 			$scope.ActiveStudent.subsidy_status =  angular.copy($scope.ActiveType);
 			$scope.Tuitions = $filter("filter")($scope.AllTuitions, TUIFltr);
 			$scope.Tuition = $scope.Tuitions[0];

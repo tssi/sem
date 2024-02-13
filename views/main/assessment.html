@@ -1,4 +1,4 @@
-<div ng-controller="AssessmentController as ASC" ng-init="ASC.init()" style="margin-top:-55px;">
+<div ng-controller="AssessmentController as ASC" ng-init="ASC.init()">
 	<a-module>
 		<a-container>
 			<a-header is-main="true">
@@ -155,7 +155,7 @@
 
 								</uib-tab>
 							</uib-tabset>
-							<div class="empty-state" ng-show="!ASC.ActiveStudent">
+							<div class="empty-state" ng-show="!ASC.ActiveStudent || !ASC.section_id">
 								<div class="well text-center">
 									<div class="empty-state-icon">
 										<a-glyph icon="user"></a-glyph>
@@ -171,11 +171,11 @@
 							
 							<m-formgroup label="Section" ng-model="ASC.section_id" options="ASC.Sections" ng-disabled="!ASC.ActiveStudent" option-group="year_level"></m-formgroup>
 
+{{ASC.ActiveType}}
 							<m-formgroup label="Subsidy Type" ng-model="ASC.ActiveType" options="ASC.StudTypes" type="'btn-group'"ng-disabled="!ASC.ActiveStudent" ng-hide="true"></m-formgroup>
 
-							 <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes" type="'btn-group'"  ng-hide="ASC.ActiveStudent.enroll_status=='OLD' || !ASC.ActiveStudent" ></m-formgroup>
-
-							  <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes"   ng-show="ASC.ActiveStudent.enroll_status=='OLD' || !ASC.ActiveStudent"  ng-disabled="true"></m-formgroup>
+							
+							  <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes"   ng-disabled="!ASC.ActiveStudent"></m-formgroup>
 							 
 							 	<m-formgroup label="Subsidy Grant" ng-model="ASC.HasSubsidy"type="'yesno'" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							  	<m-formgroup label="Early Registration Discount" ng-model="ASC.IsEarlyEnroll" type="'yesno'" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
