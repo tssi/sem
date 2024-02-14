@@ -229,7 +229,7 @@
 			<div ng-show="SI.ActiveTyp=='New'">
 				<a-button ng-show="SI.ActiveTab==1" ng-click="SI.ActiveTab=2">Next <a-glyph icon="chevron-right"></a-glyph></a-button>
 				<a-button ng-show="SI.ActiveTab==2" ng-click="SI.ActiveTab=1"> <a-glyph icon="chevron-left"></a-glyph> Back</a-button>
-				<a-button  ng-show="SI.ActiveTab==2" ng-disabled="SI.saving || SI.isGatheringData || SI.ActiveTyp=='Old'" type="primary" ng-click="SI.confirmModal()">
+				<a-button  ng-show="SI.ActiveTab>=2" ng-disabled="SI.saving || SI.isGatheringData || SI.ActiveTyp=='Old'" type="primary" ng-click="SI.confirmModal()">
 					<span ng-if="!SI.saving">Confirm</span>
 					<span ng-if="SI.saving">Saving...</span>
 				</a-button>	
