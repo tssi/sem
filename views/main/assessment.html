@@ -202,8 +202,11 @@
 							<a-row style="margin-top:250px;">
 								<a-col align="right">	
 									<m-formgroup ng-disabled="true" size="'input-lg'"  align="right" label="Total Due" ng-model="ASC.TotalDueDisp"></m-formgroup>
-									<a-button  type="primary btn-block" size="lg"  ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched' ng-disabled="!ASC.ActiveStudent">Save Assessment</a-button>
-									<a-button type="primary btn-block"  size="lg"  disabled ng-show="ASC.Saving">Saving...</a-button>
+									<a-button  type="warning btn-block" size="lg"  ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched' ng-disabled="!ASC.ActiveStudent">
+										<a-glyph icon="folder-open"></a-glyph>
+										 &nbsp; Save Assessment
+									</a-button>
+									<a-button type="warning btn-block"  size="lg"  ng-disabled="true" ng-show="ASC.Saving">Saving...</a-button>
 								</a-col>
 							</a-row>
 						</a-col>
