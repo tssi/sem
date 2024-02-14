@@ -46,6 +46,7 @@ class Inquiry extends AppModel {
 	);
 	
 	function beforeFind($queryData){
+		$queryData['order']=array('Inquiry.id'=>'desc');
 		//pr($queryData['conditions']); exit();
 		if($conds=$queryData['conditions']){
 			foreach($conds as $i=>$cond){

@@ -10,6 +10,7 @@ class InquiriesController extends AppController {
 		foreach($students as $i=>$s){
 			//pr($s); exit();
 			$student = $s['Inquiry'];
+			if(isset($s['YearLevel']['name']))
 			$s['Inquiry']['year_level'] = $s['YearLevel']['name'];
 			$s['Inquiry']['full_name'] = $student['first_name'] .' '. $student['middle_name'] .' '. $student['last_name'];
 			$students[$i]=$s;

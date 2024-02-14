@@ -14,6 +14,24 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.GuardHeader = ['Last Name','First Name', 'Middle Name', 'Relationship'];
 				$scope.GuardProp = ['last_name','first_name','middle_name','rel'];
 				$scope.SearchBy = ['lrn','full_name'];// Fields you can search from the items 			
+				// TODO: Move this to general types config 
+				$scope.PrevSchType = [
+					{id:'PRV',name:'Private'},
+					{id:'PUB',name:'Public'}
+				];
+				$scope.SexTypes = [
+					{id:'M',name:'Male'},
+					{id:'F',name:'Female'},
+				];
+				$scope.LearnSource = [
+					{id:'relative',name:'Relatives'},
+					{id:'alumni',name:'Alumni'},
+					{id:'friends',name:'Friends'},
+					{id:'posters',name:'Posters'},
+					{id:'neighbors',name:'Neighbors'},
+					{id:'school_campaign',name:'School Campaign'},
+					{id:'others',name:'Others'},
+				];
 				
 				$scope.entryStats = [{id:"RETURN",name:'Returnee'},{id:"TRNSIN",name:"Transfer In"},{id:"REGLAR",name:"Regular"}];
 				$scope.Types = ['Old','New'];
@@ -21,20 +39,22 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.setActiveTyp('New');
 				atomic.ready(function(){
 					// Map defaults and options
-					console.log(atomic);
 					$scope.entrySY = atomic.ActiveSY;
 					$scope.entryPeriod =atomic.SelectedPeriod.id;
 					$scope.entryPeriods = atomic.Periods;
 					$scope.entryDepts =  atomic.Departments;
+					$scope.entryYrLevels =  atomic.YearLevels;
 					$scope.entryProgs =  atomic.Programs;
 					$scope.isReady =  true;
 					// Filter section dropdown by student department id
 					$selfScope.$watch('SI.ActiveStudent.department_id',function(deptId){
 						 var sections =  $filter('filter')(atomic.Sections,{department_id:deptId});
+						 var yearLevels =  $filter('filter')(atomic.YearLevels,{department_id:deptId});
 						 $scope.entrySections = sections;
+						 $scope.entryYrLevels = yearLevels;
 
 					});
-				});
+				}).fuse();
 				loadStudents(1);
 			};
 			$selfScope.$watch('SI.ActiveTyp',function(type){
@@ -42,6 +62,7 @@ define(['app','api','atomic/bomb'],function(app){
 			});
 			
 			function loadStudents(page,search){
+				$scope.Students = [];
 				var filter = {limit:10,page:page};
 				if(search){
 					filter.keyword = search.keyword;
@@ -58,8 +79,10 @@ define(['app','api','atomic/bomb'],function(app){
 				}
 				if($scope.ActiveTyp=='Old')
 					api.GET("students",filter,success,error);
-				else
+				else{
+					filter.sort='latest';
 					api.GET("inquiries",filter,success,error);
+				}
 			}
 			
 			//SEARCH
@@ -101,9 +124,9 @@ define(['app','api','atomic/bomb'],function(app){
 			
 			//MODAL
 			$scope.openModal = function(student){
-				console.log(student);
+
 				$scope.saving = false;
-				$scope.ActiveTab = 0;
+				$scope.ActiveTab = $scope.ActiveTyp=='New'?1:0;
 				$scope.Active = {};
 				$scope.ActiveStudent = '';
 				aModal.open('StudentInfoModal');  
@@ -118,6 +141,8 @@ define(['app','api','atomic/bomb'],function(app){
 					
 					
 				}else{
+					$scope.setActiveTyp('New');
+					$scope.ActiveTab = 1;
 					$scope.ModalLabel='New Student';
 					$scope.ActiveStudent.entry_sy =  $scope.entrySY;
 					$scope.ActiveStudent.entry_period =  $scope.entryPeriod;
@@ -161,7 +186,7 @@ define(['app','api','atomic/bomb'],function(app){
 							$scope.CurrentPage = $scope.Meta.last;
 						}
 						$scope.ActiveTyp = 'New';
-						$scope.goToPage($scope.CurrentPage);
+						$scope.goToPage(1);
 						$scope.Active = response.data;
 					});
 				}
