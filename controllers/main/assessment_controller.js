@@ -20,6 +20,10 @@ define(['app','api','atomic/bomb'],function(app){
 				{id:'PRV',name:'Private'},
 				{id:'PUB',name:'Public'},
 			];
+			$scope.YesNoBtns = [
+				{id:'Y', name:'Yes'},
+				{id:'N', name:'No'},
+			];
 			$scope.StudFields = ['sno','lrn','enroll_status','department_id',
 								'year_level_id','section_id','student_type','program_id'];
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
@@ -61,6 +65,10 @@ define(['app','api','atomic/bomb'],function(app){
 		})
 
 		$selfScope.$watch('ASC.ActiveStudent', function(stud,oldStud){
+			$scope.SchoolTypes[0].disable = !stud;
+			$scope.SchoolTypes[1].disable = !stud;
+			$scope.YesNoBtns[0].disable = !stud;
+			$scope.YesNoBtns[1].disable = !stud;
 			if(stud){
 				if(!$scope.isBatchLoaded)
 					checkAssessment(stud.id);
@@ -199,7 +207,7 @@ define(['app','api','atomic/bomb'],function(app){
 			var YEAR_LEVELS = $filter("filter")($scope.AllYearLevels,{department_id:DEPT_ID,program_id:'!MIXED'});
 
 			// Filter sections based on current year level
-			var SECTIONS = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LVLID});
+			var SECTIONS = $filter("filter")($scope.AllSections,{year_level_id:YEAR_LVLID,program_id:'!MIXED'});
 			// Filter applicable sections 
 			//console.log(YEAR_LEVELS,YEAR_LVLID, ENROL_STAT );
 
@@ -213,7 +221,7 @@ define(['app','api','atomic/bomb'],function(app){
 				var nextYL;
 				if(YEAR_LVLID=='GX'){
 					delete stud.program_id;
-					nextYL = $filter("filter")($scope.AllSections,{year_level_id:'GY'});
+					nextYL = $filter("filter")($scope.AllSections,{year_level_id:'GY',program_id:'!MIXED'});
 					SECTIONS = SECTIONS.concat(nextYL);
 					alert("Grade 10 assign track individually!");
 				}else{
@@ -233,6 +241,7 @@ define(['app','api','atomic/bomb'],function(app){
 				YEAR_LVLID = nextYL[0].year_level_id;
 			}
 			// Bind the filtered sections
+			SECTIONS = $filter('orderBy')(SECTIONS, ['-year_level','name']);
 			$scope.Sections =  SECTIONS;
 			if(YEAR_LVLID=='GY' && !stud.program_id ) return;
 			// Default Section based on program
@@ -426,6 +435,11 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.TotalDue = net;
 			$scope.ShowSched = 1;
 		}
+
+		$selfScope.$watch('ASC.TotalDue',function(due){
+			if(!due) due =0;
+			$scope.TotalDueDisp =  $filter('currency')(due,'₱  ');
+		});
 		
 		
 		
@@ -526,6 +540,7 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.PrevSchool = null;
 			$scope.HasSubsidy = null;
 			$scope.IsEarlyEnroll = null;
+			$scope.TotalDue = null;
 		}
 		
 		

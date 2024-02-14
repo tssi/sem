@@ -1,4 +1,16 @@
 <div ng-controller="AssessmentController as ASC" ng-init="ASC.init()">
+	<style>
+		.amount.peso{color:#000;}
+		div[align="right"] input[disabled]{
+			background: white;
+		    border: none;
+		    padding: 0;
+		    color: black;
+		    font-size: 21px;
+		    height: auto;
+		    text-align: right;
+		}
+	</style>
 	<a-module>
 		<a-container>
 			<a-header is-main="true">
@@ -92,22 +104,28 @@
 												<tbdoy>
 													<tr ng-repeat="sched in ASC.Tuition.fee_breakdowns | orderBy: 'order'">
 														<td>{{sched.description}}</td>
-														<td>{{sched.amount | currency}}</td>
+														<td class="text-right">{{sched.amount | currency}}</td>
 													</tr>
 													<tr ng-if="ASC.Scheme.variance_amount!=null">
 														<td>Subsidy</td>
-														<td>{{ASC.Scheme.variance_amount | currency}}</td>
+														<td class="text-right">{{ASC.Scheme.variance_amount | currency}}</td>
 													</tr>
 												</tbdoy>
 												<tfoot>
 													<tr>
-														<td>Total</td>
-														<td>{{ASC.TotalDue | currency}}</td>
+														<td>Total Due</td>
+														<td class="text-right">
+															<span class="peso amount amount-total">	
+																{{ASC.TotalDue | currency}}
+															</span>
+														</td>
 													</tr>
 												</tfoot>
 											</table>
 										</a-col>
 									</a-row>
+								</uib-tab>
+								<uib-tab index="1" heading="Pay Sched" classes="btn-lg">
 									<a-row ng-show="ASC.ShowSched">
 										<a-col>
 											<table class="table table-bordered">
@@ -120,22 +138,23 @@
 												<tbody>
 													<tr ng-repeat="s in ASC.PaySched">
 														<td>{{s.billing_period}}</td>
-														<td>{{s.amount | currency}}</td>
+														<td class="text-right">{{s.amount | currency}}</td>
 													</tr>
 												</tbody>
 												<tfoot>
 													<tr>
-														<td>Total</td>
-														<td>{{ASC.TotalDue | currency}}</td>
+														<td>Total Due</td>
+														<td>
+															<span class="peso amount amount-total">{{ASC.TotalDue | currency}}</span>
+														</td>
 													</tr>
 												</tfoot>
 											</table>
 										</a-col>
 										
 									</a-row>
-
 								</uib-tab>
-								<uib-tab index="1" heading="Subjects" classes="btn-lg">
+								<uib-tab index="2" heading="Subjects" classes="btn-lg">
 									<a-row ng-show="ASC.ShowSched">
 										<a-col>
 											<table class="table table-bordered">
@@ -168,21 +187,21 @@
 
 						<a-col size="5">
 							
-							
-							<m-formgroup label="Section" ng-model="ASC.section_id" options="ASC.Sections" ng-disabled="!ASC.ActiveStudent" option-group="year_level"></m-formgroup>
+							<m-formgroup label="Section" ng-model="ASC.section_id" options="ASC.Sections" ng-disabled="!ASC.ActiveStudent" option-group="year_level" size="'input-lg'"></m-formgroup>
 							<m-formgroup label="Subsidy Type" ng-model="ASC.ActiveType" options="ASC.StudTypes" type="'btn-group'"ng-disabled="!ASC.ActiveStudent" ng-hide="true"></m-formgroup>
 
 							
-							  <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes"   ng-disabled="!ASC.ActiveStudent"></m-formgroup>
+							  <m-formgroup label="Previous School" ng-model="ASC.PrevSchool" options="ASC.SchoolTypes"   ng-disabled="!ASC.ActiveStudent" type="'btn-group'" ></m-formgroup>
 							 
-							 	<m-formgroup label="Subsidy Grant" ng-model="ASC.HasSubsidy"type="'yesno'" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
+							 	<m-formgroup label="Subsidy Grant" ng-model="ASC.HasSubsidy" options="ASC.YesNoBtns"   type="'btn-group'" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							  	<m-formgroup label="Early Registration Discount" ng-model="ASC.IsEarlyEnroll" type="'yesno'" ng-disabled="!ASC.ActiveStudent" ></m-formgroup>
 							  
 
 							
 							
 							<a-row style="margin-top:250px;">
-								<a-col>	
+								<a-col align="right">	
+									<m-formgroup ng-disabled="true" size="'input-lg'"  align="right" label="Total Due" ng-model="ASC.TotalDueDisp"></m-formgroup>
 									<a-button  type="primary btn-block" size="lg"  ng-click="ASC.SaveAssessment()" ng-show="!ASC.Saving" ng-disabled='!ASC.ShowSched' ng-disabled="!ASC.ActiveStudent">Save Assessment</a-button>
 									<a-button type="primary btn-block"  size="lg"  disabled ng-show="ASC.Saving">Saving...</a-button>
 								</a-col>
