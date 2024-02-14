@@ -528,5 +528,12 @@ class ReportsController extends AppController{
 		$data =  $json;
 		$this->set(compact('data'));
 	}
+	function view($form){
+		$this->form_f1c();
+	}
+
+	function form_f1c(){
+		$this->render('form_f1c');
+	}
 	
 }
