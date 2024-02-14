@@ -17,6 +17,7 @@ define(['app','api','atomic/bomb'],function(app){
 				
 				$scope.entryStats = [{id:"RETURN",name:'Returnee'},{id:"TRNSIN",name:"Transfer In"},{id:"REGLAR",name:"Regular"}];
 				$scope.Types = ['Old','New'];
+				$scope.StudTypes = [{id:'Old',name:'Old Students'},{id:'New',name:'New Inquiry'}];
 				$scope.setActiveTyp('New');
 				atomic.ready(function(){
 					// Map defaults and options
@@ -36,6 +37,9 @@ define(['app','api','atomic/bomb'],function(app){
 				});
 				loadStudents(1);
 			};
+			$selfScope.$watch('SI.ActiveTyp',function(type){
+				loadStudents(1);
+			});
 			
 			function loadStudents(page,search){
 				var filter = {limit:10,page:page};
