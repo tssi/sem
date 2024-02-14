@@ -86,7 +86,7 @@ class PaymentScheme extends AppModel {
             array(
                 'billing_period_id' => 'UPONNROL',
                 'amount' => $initialPayment,
-                'due_date' => '2024-08-01 00:00:00'
+                'due_dates' => '2024-08-01 00:00:00'
             )
         );
 
@@ -130,7 +130,7 @@ class PaymentScheme extends AppModel {
             $payments[] = array(
                 'billing_period_id' => $billingPeriodId,
                 'amount' => $amount,
-                'due_date' => $date->format('Y-m-15 00:00:00')
+                'due_dates' => $date->format('Y-m-15 00:00:00')
             );
             
             $paymentCounter++;

@@ -190,7 +190,7 @@ class StudentPreAssessForm extends Formsheet{
 
 		$this->GRID['font_size']=7;
 		
-		if($data['Section']['department_id']=='SH'):
+		if($data['Section']['department_id']=='SH'&&$data['Assessment']['esp']<2024):
 			$y+=6;
 			$this->wrapText(0.2,$y,'Notice: Modules and eBook waived for Grade 11 & 12 effective on 17 July 2023.',16);
 		endif;
@@ -219,6 +219,8 @@ class StudentPreAssessForm extends Formsheet{
 			$totaldue+=$d['due_amount'];
 			$y++;
 		}
+		$year = floor($data['Assessment']['esp']);
+		$schoolYear =  sprintf("%s - %s",$year, $year+1);
         $this->leftText(34,$y-10,number_format($totaldue,2),10,'');
 		//$this->drawLine($y-0.6,'h',array(22,11));
 		$this->rightText(30,$y,number_format(round($totaldue),2),3,'b');
@@ -229,8 +231,8 @@ class StudentPreAssessForm extends Formsheet{
         $this->leftText(10,$y,'Option A (Installment)','','');
         $this->drawBox(19,$y-.7,.8,.8);
         $this->leftText(20,$y,'Option B (Full Payment)','','');
-        $note = 'Note: Enrollment starts on June 15, 2023. To serve you better, we request that you indicate the date and time you plan to go to';
-        $note1 = 'LSEI for the enrollment this S.Y. 2023 - 2024. Date: _______________ Time: _______________';
+        $note = 'Note: Enrollment starts on June 15, '.$year.'. To serve you better, we request that you indicate the date and time you plan to go to';
+        $note1 = 'LSEI for the enrollment this S.Y. '.$schoolYear.'. Date: _______________ Time: _______________';
         $this->GRID['font_size']=7;
         
         $this->leftText(1,$y+1,$note,'i','');
