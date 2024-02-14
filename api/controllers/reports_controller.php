@@ -278,10 +278,12 @@ class ReportsController extends AppController{
 			//pr($subjectScheds); exit;
 		}
 		$studSubjects = array();
-		foreach($subjectScheds[0]['ScheduleDetail'] as $i=>$sched){
-			if(!in_array($sched['subject_id'],$studSubjects)) array_push($studSubjects,$sched['subject_id']);
-			
-		}
+		if(count($subjectScheds)):
+			foreach($subjectScheds[0]['ScheduleDetail'] as $i=>$sched){
+				if(!in_array($sched['subject_id'],$studSubjects)) array_push($studSubjects,$sched['subject_id']);
+				
+			}
+		endif;
 		$studSchedules = array();
 		foreach($studSubjects as $i=>$sub){
 			//echo $sub;
@@ -320,7 +322,9 @@ class ReportsController extends AppController{
 		//pr($data['AssessmentSubject']);
 		//pr($data['studSchedules']);
 		//exit;
-		$data['Teacher'] = $advisory[0]['Teacher']['first_name'].' '.$advisory[0]['Teacher']['last_name'];
+		if($advisory):
+			$data['Teacher'] = $advisory[0]['Teacher']['first_name'].' '.$advisory[0]['Teacher']['last_name'];
+		endif;
 		//pr($advisory);
 		//exit;
 		$this->set(compact('data'));
