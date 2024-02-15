@@ -44,7 +44,7 @@ class AdmissionInquiryForm1C extends Formsheet{
 	function info(){
 		$metrics = array(
 			'base_x'=> 0.25,
-			'base_y'=> 1.7,
+			'base_y'=> 1.8,
 			'width'=> 8,
 			'height'=> 9,
 			'cols'=> 30,
@@ -53,10 +53,20 @@ class AdmissionInquiryForm1C extends Formsheet{
 		//$this->_colorful = true;
 		//$this->showLines = true;
 		$this->section($metrics);
-		$this->GRID['font_size']=9;
-		$note = 'REMINDER: Kindly write legibly when completing the form to ensure accurate processing of your admission application. Some information has already been filled up from your initial inquiry. If there are corrections indicate the changes for updating.';
-		$this->wrapText(0,-2,$note,30,'l',0.85);
+		$this->GRID['font_size']=9.5;
+		$note = 'INSTRUCTION: Kindly  WRITE  LEGIBLY IN  PRINT  when completing the form to ensure accurate  processing of your admission. Some information has already been filled up from your initial inquiry. If there are any corrections indicate the changes for updating.';
+		$this->wrapText(0.5,-2.5,$note,30,'l',0.85);
 		
+		$metrics = array(
+			'base_x'=> 0.4,
+			'base_y'=> 1.8,
+			'width'=> 7.75,
+			'height'=> 9,
+			'cols'=> 30,
+			'rows'=> 55
+		);
+		$this->section($metrics);
+
 		$fields = array(
 				array('label'=>'STUDENT NAME','x'=>0,'y'=>0.75,'width'=>8,'no_box'=>true),
 				array('label'=>'First','x'=>0,'y'=>2,'width'=>8.5),
@@ -92,10 +102,10 @@ class AdmissionInquiryForm1C extends Formsheet{
 				array('label'=>'Date of Birth','x'=>3,'y'=>38,'width'=>5.5,'watermark'=>'dd / mm / yyyy'),
 				array('label'=>'Citizenship','x'=>9,'y'=>38,'width'=>8),
 				array('label'=>'Religion','x'=>18,'y'=>38,'width'=>8),
-				array('label'=>'House Location Map (Sketch from the nearest landmark)','x'=>0,'y'=>42,'width'=>30,'height'=>12)
+				array('label'=>'House Location Map (Sketch from the nearest landmark)','x'=>0,'y'=>42,'width'=>30,'height'=>10)
 
 		);
-
+		$this->DrawBox(0,27.5,30,0.125,'F');
 		foreach($fields as $fld):
 			$fx =  $fld['x'];
 			$fy =  $fld['y'];
