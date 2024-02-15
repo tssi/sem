@@ -48,10 +48,10 @@ require(__DIR__.'/fpdf.php');
 		
 		public function fitText($x,$y,$txt,$w,$style=''){
 			$font_size = $this->GRID['font_size'];
-			$this->SetFont($this->FONT,'',10);
+			$this->SetFont($this->FONT,$style,10);
 			$const =round($this->GetStringWidth($txt),2);
 			while($const>$w*0.6){				
-				$this->SetFont($this->FONT,'',$font_size);
+				$this->SetFont($this->FONT,$style,$font_size);
 				$const =round($this->GetStringWidth($txt),2);
 				$font_size-=0.1;
 			}

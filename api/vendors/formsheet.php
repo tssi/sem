@@ -47,10 +47,10 @@ require('../fpdf17/fpdf.php');
 		
 		public function fitText($x,$y,$txt,$w,$style=''){
 			$font_size = $this->GRID['font_size'];
-			$this->SetFont('Arial','',10);
+			$this->SetFont('Arial',$style,10);
 			$const =round($this->GetStringWidth($txt),2);
 			while($const>$w*0.6){				
-				$this->SetFont('Arial','',$font_size);
+				$this->SetFont('Arial',$style,$font_size);
 				$const =round($this->GetStringWidth($txt),2);
 				$font_size-=0.1;
 			}
