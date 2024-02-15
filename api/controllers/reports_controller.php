@@ -533,6 +533,12 @@ class ReportsController extends AppController{
 	}
 
 	function form_f1c(){
+		$student = null;
+		if(isset($_GET['id'])):
+			$id =  $_GET['id'];
+			$student =  $this->Inquiry->findById($id);
+			$this->set(compact('student'));
+		endif;
 		$this->render('form_f1c');
 	}
 	

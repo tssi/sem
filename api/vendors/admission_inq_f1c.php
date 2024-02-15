@@ -44,7 +44,7 @@ class AdmissionInquiryForm1C extends Formsheet{
 		
 	}
 
-	function info(){
+	function info($student=null){
 		$metrics = array(
 			'base_x'=> 0.25,
 			'base_y'=> 1.8,
@@ -89,8 +89,8 @@ class AdmissionInquiryForm1C extends Formsheet{
 				array('label'=>'Student Mobile No.','x'=>0,'y'=>13,'width'=>8),
 				array('label'=>'Landline','x'=>9,'y'=>13,'width'=>8),
 				array('label'=>'CURRENT ADDRESS','x'=>0,'y'=>16.25,'width'=>8,'no_box'=>true),
-				array('label'=>'No and Street Name','x'=>0,'y'=>17.5,'width'=>12),
-				array('label'=>'Subdivision','x'=>13,'y'=>17.5,'width'=>12),
+				array('label'=>'House No., Street Name, Subdivision','x'=>0,'y'=>17.5,'width'=>26),
+				//array('label'=>'Subdivision','x'=>13,'y'=>17.5,'width'=>12),
 				array('label'=>'Barangay','x'=>0,'y'=>20.5,'width'=>8.5),
 				array('label'=>'City','x'=>9,'y'=>20.5,'width'=>8),
 				array('label'=>'Province','x'=>18,'y'=>20.5,'width'=>8),
@@ -100,8 +100,8 @@ class AdmissionInquiryForm1C extends Formsheet{
 				array('label'=>'Guardian Contact No.','x'=>18,'y'=>24,'width'=>8),
 				array('label'=>'PERMANENT ADDRESS','x'=>0,'y'=>29,'width'=>8,'no_box'=>true),
 				array('label'=>'Same as Current Address','x'=>8.75,'y'=>29,'width'=>2,'no_box'=>true, 'checkbox'=>true),
-				array('label'=>'No and Street Name','x'=>0,'y'=>30.5,'width'=>12),
-				array('label'=>'Subdivision','x'=>13,'y'=>30.5,'width'=>12),
+				array('label'=>'House No., Street Name, Subdivision','x'=>0,'y'=>30.5,'width'=>26),
+				//array('label'=>'Subdivision','x'=>13,'y'=>30.5,'width'=>12),
 				array('label'=>'Barangay','x'=>0,'y'=>33.5,'width'=>8.5),
 				array('label'=>'City','x'=>9,'y'=>33.5,'width'=>8),
 				array('label'=>'Province','x'=>18,'y'=>33.5,'width'=>8),
@@ -132,14 +132,48 @@ class AdmissionInquiryForm1C extends Formsheet{
 		$fields[10]['data']='09171234567';
 		$fields[11]['data']='**No info**';
 		$fields[13]['data']='1234 Fe Street';
-		$fields[14]['data']='New Village';
-		$fields[15]['data']='New Hope';
-		$fields[16]['data']='Lipa City';
-		$fields[17]['data']='Batangas';
-		$fields[18]['data']='PH';
-		$fields[19]['data']='Juanito Dela Cruz';
-		$fields[20]['data']='Father';
-		$fields[21]['data']='09172223333';
+		$fields[14]['data']='New Hope';
+		$fields[15]['data']='Lipa City';
+		$fields[16]['data']='Batangas';
+		$fields[17]['data']='PH';
+		$fields[18]['data']='Juanito Dela Cruz';
+		$fields[19]['data']='Father';
+		$fields[20]['data']='09172223333';
+		
+		if($student):
+			$inquiry = $student['Inquiry'];
+			$yearLevel =  $student['YearLevel'];
+			$program =  $student['Program'];
+
+			$fields[1]['data']=$inquiry['first_name'];
+			$fields[2]['data']=$inquiry['middle_name'];
+			$fields[3]['data']=$inquiry['last_name'];
+			$fields[4]['data']=$inquiry['suffix'];
+			$fields[5]['data']=$yearLevel['description'];
+			if(isset($program['name']))
+				$fields[6]['data']=$program['name'];
+
+			$fields[7]['data']=$inquiry['prev_school'];
+			$fields[8]['data']=$inquiry['prev_school_address'];
+			$fields[10]['data']=$inquiry['mobile'];
+			$fields[11]['data']=$inquiry['landline'];
+			$fields[13]['data']=$inquiry['c_address'];
+			$fields[14]['data']=$inquiry['c_barangay'];
+			$fields[15]['data']=$inquiry['c_city'];
+			$fields[16]['data']=$inquiry['c_province'];
+			$fields[17]['data']=$inquiry['c_country'];
+			$fields[18]['data']='Juanito Dela Cruz';
+			$fields[19]['data']='Father';
+			$fields[20]['data']='09172223333';
+		endif;
+
+		foreach($fields as $fi=>$fv):
+			if(isset($fv['data'])):
+				if(trim($fv['data'])=='')
+					$fv['data'] = 'N/A';
+				$fields[$fi]['data'] = utf8_decode($fv['data']);
+			endif;
+		endforeach;
 		$this->SetFillColor(0,156,72);
 		$this->DrawBox(0,27,30,0.15,'F');
 		foreach($fields as $fld):
@@ -179,7 +213,8 @@ class AdmissionInquiryForm1C extends Formsheet{
 					$fx = $fld['ix'];
 					$fy -=1.75;
 				endif;
-				$this->leftText($fx+0.25,$fy+1.5,$fd,$fw,'b');
+				$bxw =  $fw*1.3*$this->GRID['cell_width'];
+				$this->fitText($fx+0.25,$fy+1.5,$fd,$bxw,'b');
 			endif;
 		endforeach;
 	}
