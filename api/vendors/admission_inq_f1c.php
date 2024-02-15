@@ -29,15 +29,18 @@ class AdmissionInquiryForm1C extends Formsheet{
         //$this->drawLine(32,'h',array(-2,42));
 		if(isset($start))
             $y=$start;
-		$this->DrawImage(0,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
+		$this->DrawImage(0.5,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
 		$this->GRID['font_size']=10;
-		$this->rightText(24,1,'Admission INQ Form 1C (AIF-F1C)',10,'b');
+		$this->rightText(24,1,'Admission INQ Form 1C (AIF-F1C)',10.5,'b');
 		$this->GRID['font_size']=9;
 		
-		$this->leftText(39.25,2.5,'School Year 2024 - 2025',12,'');
-		$this->leftText(43.75,3.75,'Version 1.0',12,'i');
-		$this->GRID['font_size']=12;
-		$this->centerText(0,6,'APPLICATION FOR ADMISSION',50,'b');
+		$this->rightText(40,2.5,'School Year 2024 - 2025',10,'');
+		$this->rightText(40,3.75,'Version 1.0',8.5,'i');
+		$this->GRID['font_size']=14;
+		$this->centerText(1,6,'APPLICATION FOR ADMISSION',50,'b');
+		
+		//$this->SetFillColor(0,156,72);
+		//$this->DrawBox(19.5,4.75,29.5,1.5,'F');
 		
 	}
 
@@ -54,18 +57,23 @@ class AdmissionInquiryForm1C extends Formsheet{
 		//$this->showLines = true;
 		$this->section($metrics);
 		$this->GRID['font_size']=9.5;
-		$note = 'INSTRUCTION: Kindly  WRITE  LEGIBLY IN  PRINT  when completing the form to ensure accurate  processing of your admission. Some information has already been filled up from your initial inquiry. If there are any corrections indicate the changes for updating.';
+		$note = '                           Kindly  WRITE  LEGIBLY IN  PRINT  when completing the form to ensure accurate  processing of your admission. Some information has already been filled up from your initial inquiry. If there are any corrections indicate the changes for updating.';
 		$this->wrapText(0.5,-2.5,$note,30,'l',0.85);
+		$this->leftText(0.66,-1.85,'INSTRUCTION:','','b');
 		
 		$metrics = array(
 			'base_x'=> 0.4,
 			'base_y'=> 1.8,
 			'width'=> 7.75,
-			'height'=> 9,
+			'height'=> 8,
 			'cols'=> 30,
 			'rows'=> 55
 		);
 		$this->section($metrics);
+		$this->GRID['font_size']=8;
+		$this->leftText(24.5,0.5,'REF NO:',5,'');
+		$this->GRID['font_size']=10;
+		$this->leftText(26.5,0.5,'LSN234534',7,'b');
 
 		$fields = array(
 				array('label'=>'STUDENT NAME','x'=>0,'y'=>0.75,'width'=>8,'no_box'=>true),
@@ -90,22 +98,50 @@ class AdmissionInquiryForm1C extends Formsheet{
 				array('label'=>'Guardian Name','x'=>0,'y'=>24,'width'=>8.5),
 				array('label'=>'Relationship to Student','x'=>9,'y'=>24,'width'=>8),
 				array('label'=>'Guardian Contact No.','x'=>18,'y'=>24,'width'=>8),
-				array('label'=>'PERMANENT ADDRESS','x'=>0,'y'=>30,'width'=>8,'no_box'=>true),
-				array('label'=>'Same as Current Address','x'=>9.75,'y'=>30,'width'=>2,'no_box'=>true, 'checkbox'=>true),
-				array('label'=>'No and Street Name','x'=>0,'y'=>31.5,'width'=>12),
-				array('label'=>'Subdivision','x'=>13,'y'=>31.5,'width'=>12),
-				array('label'=>'Barangay','x'=>0,'y'=>34.5,'width'=>8.5),
-				array('label'=>'City','x'=>9,'y'=>34.5,'width'=>8),
-				array('label'=>'Province','x'=>18,'y'=>34.5,'width'=>8),
-				array('label'=>'Country','x'=>27,'y'=>34.5,'width'=>2.5),
-				array('label'=>'Gender','x'=>0,'y'=>38,'width'=>2.5),
-				array('label'=>'Date of Birth','x'=>3,'y'=>38,'width'=>5.5,'watermark'=>'dd / mm / yyyy'),
-				array('label'=>'Citizenship','x'=>9,'y'=>38,'width'=>8),
-				array('label'=>'Religion','x'=>18,'y'=>38,'width'=>8),
-				array('label'=>'House Location Map (Sketch from the nearest landmark)','x'=>0,'y'=>42,'width'=>30,'height'=>10)
+				array('label'=>'PERMANENT ADDRESS','x'=>0,'y'=>29,'width'=>8,'no_box'=>true),
+				array('label'=>'Same as Current Address','x'=>8.75,'y'=>29,'width'=>2,'no_box'=>true, 'checkbox'=>true),
+				array('label'=>'No and Street Name','x'=>0,'y'=>30.5,'width'=>12),
+				array('label'=>'Subdivision','x'=>13,'y'=>30.5,'width'=>12),
+				array('label'=>'Barangay','x'=>0,'y'=>33.5,'width'=>8.5),
+				array('label'=>'City','x'=>9,'y'=>33.5,'width'=>8),
+				array('label'=>'Province','x'=>18,'y'=>33.5,'width'=>8),
+				array('label'=>'Country','x'=>27,'y'=>33.5,'width'=>2.5),
+				array('label'=>'Gender','x'=>0,'y'=>37,'width'=>2.5),
+				array('label'=>'Date of Birth','x'=>3,'y'=>37,'width'=>5.5,'watermark'=>'dd / mm / yyyy'),
+				array('label'=>'Citizenship','x'=>9,'y'=>37,'width'=>8),
+				array('label'=>'Religion','x'=>18,'y'=>37,'width'=>8),
+				array('label'=>'Father\'s Name (First, Middle,Last)','x'=>0,'y'=>40.5,'width'=>8.5),
+				array('label'=>'Mobile No.','x'=>9,'y'=>40.5,'width'=>8),
+				array('label'=>'Occupation','x'=>18,'y'=>40.5,'width'=>8),
+				
+				array('label'=>'Mother\'s Name (First, Middle,Last)','x'=>0,'y'=>44,'width'=>8.5),
+				array('label'=>'Mobile No.','x'=>9,'y'=>44,'width'=>8),
+				array('label'=>'Occupation','x'=>18,'y'=>44,'width'=>8),
+				
+				array('label'=>'House Location Map (Sketch from the nearest landmark)','x'=>0,'y'=>47.5,'width'=>30,'height'=>12)
 
 		);
-		$this->DrawBox(0,27.5,30,0.125,'F');
+		$fields[1]['data']='Juan';
+		$fields[2]['data']='Andres';
+		$fields[3]['data']='Dela Cruz';
+		$fields[4]['data']='N/A';
+		$fields[5]['data']='Grade 7';
+		$fields[6]['data']='N/A';
+		$fields[7]['data']='Simplified Academy';
+		$fields[8]['data']='Lipa, Batangas';
+		$fields[10]['data']='09171234567';
+		$fields[11]['data']='**No info**';
+		$fields[13]['data']='1234 Fe Street';
+		$fields[14]['data']='New Village';
+		$fields[15]['data']='New Hope';
+		$fields[16]['data']='Lipa City';
+		$fields[17]['data']='Batangas';
+		$fields[18]['data']='PH';
+		$fields[19]['data']='Juanito Dela Cruz';
+		$fields[20]['data']='Father';
+		$fields[21]['data']='09172223333';
+		$this->SetFillColor(0,156,72);
+		$this->DrawBox(0,27,30,0.15,'F');
 		foreach($fields as $fld):
 			$fx =  $fld['x'];
 			$fy =  $fld['y'];
@@ -134,6 +170,16 @@ class AdmissionInquiryForm1C extends Formsheet{
 			endif;
 			if(isset($fld['checkbox'])):
 				$this->DrawBox($fx-0.75,$fy-0.6,0.5,0.75);
+			endif;
+
+			if(isset($fld['data'])):
+				$this->GRID['font_size']=10;
+				$fd = $fld['data'];
+				if(isset($fld['ix'])):
+					$fx = $fld['ix'];
+					$fy -=1.75;
+				endif;
+				$this->leftText($fx+0.25,$fy+1.5,$fd,$fw,'b');
 			endif;
 		endforeach;
 	}
