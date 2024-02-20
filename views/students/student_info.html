@@ -85,7 +85,7 @@
 							</a-row>
 							
 						</uib-tab>
-						<uib-tab index="1" heading="Inquiry" ng-show="SI.ActiveTyp=='New'" >
+						<uib-tab index="1" heading="Inquiry" ng-show="SI.ActiveTyp=='New'" >	
 								
 							<a-row >
 								<a-col>
@@ -162,7 +162,7 @@
 								</a-col>
 							</a-row>
 						</uib-tab>
-						<uib-tab index="3" heading="Personal" ng-show="SI.ActiveStudent.id">
+						<uib-tab index="3" heading="Personal">
 							<a-row>
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.gender" options="SI.SexTypes" type="'btn-group'" label="Biological Sex"></m-formgroup>
@@ -212,6 +212,35 @@
 						
 						<uib-tab index="5" heading="Credentials" ng-show="SI.ActiveTyp=='Old'">
 						</uib-tab>
+
+						<uib-tab index="6" heading="Forms" ng-show="SI.ActiveTyp=='New'" classes="pull-right" >	
+							<a-row>
+								<a-col size="7">
+									<m-formgroup label="Student Forms" ng-model="SI.SFormType" options="SI.SFormTypes" type="'btn-group'"></m-formgroup>
+								</a-col>
+								<a-col size="5">
+									<a-button type="default btn-block" style="margin-top:25px;"> 
+											<a-glyph icon="file"></a-glyph> 	
+											Print {{(SI.SFormTypes|filter:{id:SI.SFormType})[0].description}}
+									</a-button>
+								</a-col>
+							</a-row>
+							<hr/>
+							<a-row>
+								<a-col size="7">
+									<m-formgroup ng-model="SI.AttachmentType" label="Document" options="SI.AttachmentTypes"></m-formgroup>
+								</a-col>
+								<a-col size="5"  align="right">
+									<a-button style="margin-top:25px;" ng-disabled="!SI.AttachmentType || !SI.AttachmentFile" ng-click="SI.uploadAttachment()">
+										<a-glyph icon="upload"></a-glyph>
+										Upload document
+									</a-button>
+								</a-col>
+								<a-col>
+									<m-fileupload ng-show="SI.AttachmentType" ng-model="SI.AttachmentFile" upload-url="api/inquiries/upload"  accept="pdf" validate="SI.FileValidations"></m-fileupload>
+								</a-col>
+							</a-row>
+						</uib-tab>
 						
 					</uib-tabset>
 
@@ -227,9 +256,8 @@
 		<a-modal-footer>
 			<a-button opt-class="pull-left" ng-click="SI.closeModal()" > Close</a-button>
 			<div ng-show="SI.ActiveTyp=='New'">
-				<a-button ng-show="SI.ActiveTab==1" ng-click="SI.ActiveTab=2">Next <a-glyph icon="chevron-right"></a-glyph></a-button>
-				<a-button ng-show="SI.ActiveTab==2" ng-click="SI.ActiveTab=1"> <a-glyph icon="chevron-left"></a-glyph> Back</a-button>
-				<a-button  ng-show="SI.ActiveTab>=2" ng-disabled="SI.saving || SI.isGatheringData || SI.ActiveTyp=='Old'" type="primary" ng-click="SI.confirmModal()">
+				
+				<a-button ng-disabled="SI.saving || SI.isGatheringData || SI.ActiveTyp=='Old'" type="primary" ng-click="SI.confirmModal()">
 					<span ng-if="!SI.saving">Confirm</span>
 					<span ng-if="SI.saving">Saving...</span>
 				</a-button>	

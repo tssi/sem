@@ -5,6 +5,19 @@ define(['app','api','atomic/bomb'],function(app){
 			const $selfScope = $scope;
 			$scope = this;
 			$scope.init = function(){
+
+				$scope.SFormTypes = [
+						{id:'AIFF1C', name:'F1C', description:'Admission Inquiry Form'},
+						{id:'STU201', name:'201', description:'Admission 201 Form'},
+						{id:'STUCHF', name:'CF-1', description:'Clicnic Health Form'},
+						{id:'STUGHF', name:'GF-1', description:'Guidance Health Form'},
+					];
+				$scope.AttachmentTypes = [
+						{id:'DOXF1C',name:'Inquiry Form1-C'},
+						{id:'DOX201',name:'Student 201 Form Signed'}
+					];
+				$scope.SFormType = 'AIFF1C';
+				$scope.FileValidations = {maxSize:1024*1024};
 				$scope.Headers = ['LRN','Name','Year Level'];
 				$scope.Props = ['lrn','full_name','year_level'];
 				$scope.genders = [{'id':'M','name':'Male'},{'id':'F','name':'Female'}];
@@ -181,7 +194,7 @@ define(['app','api','atomic/bomb'],function(app){
 					});
 				}else{
 					api.POST('inquiries',data,function(response){
-						aModal.close("StudentInfoModal");
+						//aModal.close("StudentInfoModal");
 						if(!$scope.ActiveStudent.id){
 							$scope.CurrentPage = $scope.Meta.last;
 						}
@@ -194,6 +207,14 @@ define(['app','api','atomic/bomb'],function(app){
 
 			$scope.printInfoSheet = function(){
 				document.getElementById('PrintInfoSheet').submit();
+			}
+
+			$scope.uploadAttachment = function(){
+				let studId =  $scope.ActiveStudent.id;
+				console.log($scope.ActiveStudent);
+				let docType =  $scope.AttachmentType;
+				var meta  = {student_id:studId,type:'document',doc_type:docType}
+				$selfScope.$broadcast('FileUploadStart',meta);
 			}
 			
 			
