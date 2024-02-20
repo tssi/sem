@@ -2,7 +2,7 @@
 class InquiriesController extends AppController {
 
 	var $name = 'Inquiries';
-	var $uses = array('Inquiry','Student','Account');
+	var $uses = array('Inquiry','Student','Account','StudentHistory','Record');
 
 	function index() {
 		$this->Inquiry->recursive = 0;
@@ -28,21 +28,27 @@ class InquiriesController extends AppController {
 
 	function add() {
 		if (!empty($this->data)) {
-			
+			$hist  = array();
 			$student = $this->data['Inquiry'];
 			if(!isset($student['id'])):
 				$student['id']=$this->Inquiry->generateIID();
 				$student['student_id'] = $this->Student->generateSID('LS','X');
 			
 				//pr($student); exit();
+
+				$hist = array('student_id'=>$student['id'],'ref_no'=>$student['id'],'transaction'=>'INQ_INFO','status'=>'ADDNEW');
 				$acctObj = array('id'=>$student['id'],'account_type'=>'inquiry');
 				$this->Account->save($acctObj);
+			else:
+				$hist = array('student_id'=>$student['id'],'ref_no'=>$student['id'],'transaction'=>'INQ_INFO','status'=>'UPDATE');
 			endif;
 
 			if(!isset($student['preffix'])) $student['preffix'] = "";
 			if(!isset($student['suffix'])) $student['suffix'] = "";
-
+			//TODO: Load from  master config
+			$hist['esp']= 2024;
 			if ($this->Inquiry->save($student)) {
+				$this->StudentHistory->save($hist);
 				$this->Session->setFlash(__('The payment scheme has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
