@@ -93,4 +93,20 @@ class InquiriesController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
+	function upload(){
+		
+		$fileObj = $_FILES['file'];
+		$meta = json_decode($_POST['meta'],true);
+		$sid =  $meta['student_id'];
+		$fileInfo = $this->Record->uploadFile($fileObj, $meta);
+		$json =  array();
+        $json['meta'] = array('code'=>200,'message'=>'Success upload');
+        $json['data'] = array('file'=>$fileInfo);
+        header("Pragma: no-cache");
+		header("Cache-Control: no-store, no-cache, max-age=0, must-revalidate");
+		header('Content-Type: application/json');
+		echo json_encode($json);
+		exit;
+	}
+
 }
