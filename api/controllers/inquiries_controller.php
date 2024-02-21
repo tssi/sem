@@ -144,20 +144,23 @@ class InquiriesController extends AppController {
 	        $docs = $this->Record->getDocs($sid);
 	        $dir = $docs['file']->Folder->path;
 	        $fullPath = $dir . DS .'docs'.DS. $file;
-	        // Ensure the file exists
 	        if (!file_exists($fullPath)) {
-	            throw new NotFoundException('File not found.');
-	        }
-	        // Serve the file
-	        $this->view = 'Media';
-	        $params = array(
-	            'id'        => basename($file),
-	            'name'      => basename($file, '.' . pathinfo($file, PATHINFO_EXTENSION)),
-	            'download'  => false,
-	            'extension' => pathinfo($file, PATHINFO_EXTENSION),
-	            'path'      => $dir . DS
-	        );
-	        $this->set($params);
+		        $this->Session->setFlash('File not found.');
+		        $this->redirect(array('action' => 'error')); // Adjust as needed
+		        return;
+		    }
+
+		    /// Set headers for PDF output
+		    header('Content-Type: application/pdf');
+		    header('Content-Disposition: inline; filename="' . basename($fullPath) . '"');
+		    header('Content-Length: ' . filesize($fullPath));
+
+		    // Clear buffer to avoid any additional output
+		    ob_clean();
+		    flush();
+
+		    // Read and output the PDF file directly
+		    readfile($fullPath);
 	    } else {
 	        // Handle the case where $fid does not match $hash
 	        throw new ForbiddenException('Access denied.');
