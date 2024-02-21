@@ -543,7 +543,6 @@ class ReportsController extends AppController{
 				$this->form_gf1();
 			break;
 		endswitch;
-		
 	}
 
 	function form_f1c(){
@@ -551,7 +550,11 @@ class ReportsController extends AppController{
 		if(isset($_REQUEST['InquiryID'])):
 			$id =  $_REQUEST['InquiryID'];
 			$student =  $this->Inquiry->findById($id);
-			$this->set(compact('student'));
+			$inquiry = $student['Inquiry'];
+			$inquiry['full_name'] =str_replace(', ', '_', $inquiry['full_name']);
+			$timestamp = date('ymdHi',time());
+			$fileName = sprintf('F1C-%s__%s_%s.pdf',$inquiry['id'],$inquiry['full_name'],$timestamp);
+			$this->set(compact('student','fileName'));
 		endif;
 		$this->render('form_f1c');
 	}
