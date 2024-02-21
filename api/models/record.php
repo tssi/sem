@@ -29,7 +29,9 @@ class Record extends AppModel {
 		}
 		return $filePath;
 	}
-	
+	function getDocs($student){
+		return $this->readManifest($student);
+	}
 	
 	function uploadFile($fileObj, $meta){
 		$file =  new File($fileObj['tmp_name']);
