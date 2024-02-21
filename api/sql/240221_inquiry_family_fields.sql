@@ -1,0 +1,13 @@
+ALTER TABLE inquiries ADD f_first_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD f_middle_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD f_last_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD f_suffix varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD f_mobile varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD f_occupation varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_first_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_middle_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_last_name varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_suffix varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_mobile varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries ADD m_occupation varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE inquiries CHANGE created created timestamp DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL FIRST;
