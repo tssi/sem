@@ -12,7 +12,6 @@ class AdmissionInquiryForm1C extends Formsheet{
 		$this->FPDF(AdmissionInquiryForm1C::$_orient, AdmissionInquiryForm1C::$_unit,array(AdmissionInquiryForm1C::$_width,AdmissionInquiryForm1C::$_height));
 		$this->createSheet();
 	}
-
 	function hdr(){
 
 		$metrics = array(
@@ -73,7 +72,8 @@ class AdmissionInquiryForm1C extends Formsheet{
 		$this->GRID['font_size']=8;
 		$this->leftText(24.5,0.5,'REF NO:',5,'');
 		$this->GRID['font_size']=10;
-		$this->leftText(26.5,0.5,'LSN234534',7,'b');
+		$refNo = $student['Inquiry']['id'];
+		$this->leftText(26.5,0.5,$refNo,7,'b');
 
 		$fields = array(
 				array('label'=>'STUDENT NAME','x'=>0,'y'=>0.75,'width'=>8,'no_box'=>true),
