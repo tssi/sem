@@ -19,6 +19,8 @@ class InquiriesController extends AppController {
 	}
 
 	function view($id = null) {
+		if($id=='docs')
+			return $this->docs();
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid payment scheme', true));
 			$this->redirect(array('action' => 'index'));
@@ -93,12 +95,31 @@ class InquiriesController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
+	function docs(){
+		$sid = $_REQUEST['id'];
+		$docs = $this->Record->getDocs($sid);
+		$docsData = $docs['data']['img'];
+		$docsInfo = [];
+		foreach($docsData as $i=>$doc):
+			$dox = array();
+			$dox['id']=md5($doc.''.$sid);
+			$dox['file']=$doc;
+			$docsInfo[]=$dox;
+		endforeach;
+		$inquiry = array('Inquiry'=>array('docs'=>$docsInfo));
+		$this->set(compact('inquiry'));
+	}
+
 	function upload(){
 		
 		$fileObj = $_FILES['file'];
 		$meta = json_decode($_POST['meta'],true);
 		$sid =  $meta['student_id'];
+		$docType =  $meta['doc_type'];
 		$fileInfo = $this->Record->uploadFile($fileObj, $meta);
+		$hist = array('student_id'=>$sid,'ref_no'=>$docType,'transaction'=>'DOC_UPLD','status'=>'OK');
+		$hist['esp']= 2024;
+		$this->StudentHistory->save($hist);
 		$json =  array();
         $json['meta'] = array('code'=>200,'message'=>'Success upload');
         $json['data'] = array('file'=>$fileInfo);
@@ -106,6 +127,8 @@ class InquiriesController extends AppController {
 		header("Cache-Control: no-store, no-cache, max-age=0, must-revalidate");
 		header('Content-Type: application/json');
 		echo json_encode($json);
+
+
 		exit;
 	}
 
