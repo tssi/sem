@@ -162,30 +162,55 @@
 								</a-col>
 							</a-row>
 						</uib-tab>
-						<uib-tab index="3" heading="Personal">
+						<uib-tab index="3" heading="Household">
 							<a-row>
-								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.gender" options="SI.SexTypes" type="'btn-group'" label="Biological Sex"></m-formgroup>
-								</a-col>
-								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.civil_status" label="Civil Status"></m-formgroup>
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.address" label="Permanent Address"></m-formgroup>
 								</a-col>
 							</a-row>
 							<a-row>
 								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.birthday" label="Birthday" type="'date'"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.barangay" label="Barangay"></m-formgroup>
 								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.city" label="City"></m-formgroup>
+								</a-col>
+							</a-row>
+							<a-row>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.province" label="Province"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.country" label="Country"></m-formgroup>
+								</a-col>
+							</a-row>
+						</uib-tab>
+						<uib-tab index="4" heading="Personal">
+							<a-row>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.gender" options="SI.SexTypes" type="'btn-group'" label="Gender"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.birthday" label="Birthday" type="'date'"></m-formgroup>
+									
+								</a-col>
+							</a-row>
+							<a-row>
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.citizenship" label="Citizenship"></m-formgroup>
 								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.religion" label="Religion"></m-formgroup>
+								</a-col>
 							</a-row>
-							<a-row>
+							<a-row ng-hide="true">
 								<a-col>
 									<m-formgroup ng-model="SI.ActiveStudent.birth_place" label="Birth Place"></m-formgroup>
 								</a-col>
 							</a-row>
 						</uib-tab>
-						<uib-tab index="4" heading="Scholastic"  ng-show="SI.ActiveTyp=='Old'">
+						
+						<uib-tab index="5" heading="Scholastic"  ng-show="SI.ActiveTyp=='Old'">
 							<a-row>
 								<a-col size="4">
 									<m-formgroup ng-model="SI.ActiveStudent.entry_status" label="Entry Status" options="SI.entryStats" option-label="name" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
@@ -209,8 +234,8 @@
 								</a-col>
 							</a-row>
 						</uib-tab>
-						
-						<uib-tab index="5" heading="Credentials" ng-show="SI.ActiveTyp=='Old'">
+
+						<uib-tab index="6" heading="Credentials" ng-show="SI.ActiveTyp=='Old'">
 						</uib-tab>
 
 						<uib-tab index="6" heading="Forms" ng-show="SI.ActiveTyp=='New'" classes="pull-right" >	
@@ -219,7 +244,7 @@
 									<m-formgroup label="Student Forms" ng-model="SI.SFormType" options="SI.SFormTypes" type="'btn-group'"></m-formgroup>
 								</a-col>
 								<a-col size="5">
-									<a-button type="default btn-block" style="margin-top:25px;"> 
+									<a-button type="default btn-block" style="margin-top:25px;" ng-click="SI.printForm()"> 
 											<a-glyph icon="file"></a-glyph> 	
 											Print {{(SI.SFormTypes|filter:{id:SI.SFormType})[0].description}}
 									</a-button>
