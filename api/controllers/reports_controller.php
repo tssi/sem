@@ -546,6 +546,24 @@ class ReportsController extends AppController{
 	}
 
 	function form_f1c(){
+		$this->loadInqInfo();
+		$this->render('form_f1c');
+	}
+	
+
+	function form_201(){
+		$this->loadInqInfo();
+		$this->render('form_201');
+
+	}
+	function form_cf1(){
+
+	}
+	function form_gf1(){
+
+	}
+
+	protected function loadInqInfo(){
 		$student = null;
 		if(isset($_REQUEST['InquiryID'])):
 			$id =  $_REQUEST['InquiryID'];
@@ -556,17 +574,5 @@ class ReportsController extends AppController{
 			$fileName = sprintf('F1C-%s__%s_%s.pdf',$inquiry['id'],$inquiry['full_name'],$timestamp);
 			$this->set(compact('student','fileName'));
 		endif;
-		$this->render('form_f1c');
-	}
-	
-
-	function form_201(){
-
-	}
-	function form_cf1(){
-
-	}
-	function form_gf1(){
-
 	}
 }
