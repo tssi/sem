@@ -128,7 +128,7 @@
 						<uib-tab index="2" heading="Contact">
 							<a-row>
 								<a-col size="6">
-									<m-formgroup ng-model="SI.ActiveStudent.mobile" label="Mobile"></m-formgroup>
+									<m-formgroup ng-model="SI.ActiveStudent.mobile" label="Student's Mobile No."></m-formgroup>
 								</a-col>
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.landline" label="Landline"></m-formgroup>
@@ -158,11 +158,32 @@
 							<a-row>
 								<a-col>
 									<hr>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.g_first_name" label="Guardian's First Name">
+										
+									</m-formgroup>
+								</a-col>
+								<a-col size="6">
+
+									<m-formgroup ng-model="SI.ActiveStudent.g_last_name" label="Last Name">
+									</m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.g_rel" label="Relationship to Student"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.g_occupation" label="Occupation"></m-formgroup>
+								</a-col>
+							</a-row>
+							<a-row>
+								<a-col>
+									<hr>
 									<m-formgroup ng-model="SI.ActiveStudent.source" options="SI.LearnSource" label="How did you learn about LSEI?"></m-formgroup>
 								</a-col>
 							</a-row>
 						</uib-tab>
-						<uib-tab index="3" heading="Household">
+						<uib-tab index="3" heading="Personal">
 							<a-row>
 								<a-col>
 									<m-formgroup ng-model="SI.ActiveStudent.address" label="Permanent Address"></m-formgroup>
@@ -184,8 +205,6 @@
 									<m-formgroup ng-model="SI.ActiveStudent.country" label="Country"></m-formgroup>
 								</a-col>
 							</a-row>
-						</uib-tab>
-						<uib-tab index="4" heading="Personal">
 							<a-row>
 								<a-col size="6">
 									<m-formgroup ng-model="SI.ActiveStudent.gender" options="SI.SexTypes" type="'btn-group'" label="Gender"></m-formgroup>
@@ -209,8 +228,54 @@
 								</a-col>
 							</a-row>
 						</uib-tab>
+
+						<uib-tab index="4" heading="Parents">
+							<a-row>
+								<a-col>
+									<m-formgroup ng-model="SI.PInfoShow" options="SI.PInfos"  type="'btn-group'" label="Parent's Information"></m-formgroup>
+								</a-col>
+							</a-row>
+							<a-row ng-show="SI.PInfoShow=='PINFF' || SI.PInfoShow=='PINFA'">
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.f_first_name" label="Father's First Name"></m-formgroup>
+								</a-col>
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.f_middle_name" label="Middle Name"></m-formgroup>
+								</a-col>
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.f_last_name" label="Last Name"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.f_mobile" label="Mobile No."></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.f_occupation" label="Occupation"></m-formgroup>
+								</a-col>
+								</a-row>
+								<a-row ng-show="SI.PInfoShow=='PINFA'">
+									<a-col><hr></a-col>
+								</a-row>
+								<a-row ng-show="SI.PInfoShow=='PINFM' || SI.PInfoShow=='PINFA'">
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.m_first_name" label="Mother's First Name"></m-formgroup>
+								</a-col>
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.m_middle_name" label="Middle Name"></m-formgroup>
+								</a-col>
+								<a-col>
+									<m-formgroup ng-model="SI.ActiveStudent.m_last_name" label="Last Name"></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.m_mobile" label="Mobile No."></m-formgroup>
+								</a-col>
+								<a-col size="6">
+									<m-formgroup ng-model="SI.ActiveStudent.m_occupation" label="Occupation"></m-formgroup>
+								</a-col>
+							</a-row>
+
+						</uib-tab>
 						
-						<uib-tab index="5" heading="Scholastic"  ng-show="SI.ActiveTyp=='Old'">
+						<uib-tab index="6" heading="Scholastic"  ng-show="SI.ActiveTyp=='Old'">
 							<a-row>
 								<a-col size="4">
 									<m-formgroup ng-model="SI.ActiveStudent.entry_status" label="Entry Status" options="SI.entryStats" option-label="name" ng-disabled="SI.ActiveTyp=='Old'" ></m-formgroup>
@@ -235,10 +300,35 @@
 							</a-row>
 						</uib-tab>
 
-						<uib-tab index="6" heading="Credentials" ng-show="SI.ActiveTyp=='Old'">
+						<uib-tab index="7" heading="Credentials" ng-show="SI.ActiveTyp=='Old'">
 						</uib-tab>
+						<uib-tab index="98" heading="Verify" ng-show="SI.ActiveTyp=='New' && 0" classes="pull-right" >
 
-						<uib-tab index="6" heading="Forms" ng-show="SI.ActiveTyp=='New'" classes="pull-right" >	
+							<a-row>
+								<a-col size="4">
+									<m-formgroup ng-model="SI.VMType" options="SI.VMTypes" label="Verify Mobile"></m-formgroup>
+								</a-col>
+								<a-col size="5">
+									<m-formgroup ng-model="SI.VerifyMobile" type="'display'" label="Mobile No."></m-formgroup>
+								</a-col>
+								<a-col size="3">
+									<a-button type="default btn-block" style="margin-top:25px;" ng-disabled="!SI.VerifyMobile">
+										Send OTP
+									</a-button>
+								</a-col>
+							</a-row>
+							<a-row>
+								<a-col size="8">
+									<m-formgroup ng-model="SI.VerifyOTP" size="'input-lg'" type="'otp'" label="Enter OTP"></m-formgroup>
+								</a-col>
+								<a-col size="4">
+									<a-button type="default btn-block" size="lg" style="margin-top:25px;"> 
+									Verify
+								</a-button>
+								</a-col>
+							</a-row>
+						</uib-tab>
+						<uib-tab index="99" heading="Forms" ng-show="SI.ActiveTyp=='New' && SI.ActiveStudent.id" classes="pull-right" >	
 							<a-row>
 								<a-col size="7">
 									<m-formgroup label="Student Forms" ng-model="SI.SFormType" options="SI.SFormTypes" type="'btn-group'"></m-formgroup>
@@ -252,6 +342,7 @@
 							</a-row>
 							<hr/>
 							<a-row>
+
 								<a-col size="7">
 									<m-formgroup ng-model="SI.AttachmentType" label="Document" options="SI.AttachmentTypes"></m-formgroup>
 								</a-col>
@@ -262,7 +353,16 @@
 									</a-button>
 								</a-col>
 								<a-col>
-									<m-fileupload ng-show="SI.AttachmentType" ng-model="SI.AttachmentFile" upload-url="api/inquiries/upload"  accept="pdf" validate="SI.FileValidations"></m-fileupload>
+									<m-fileupload ng-show="SI.AttachmentType || SI.AttachmentFile" ng-model="SI.AttachmentFile" upload-url="api/inquiries/upload"  accept="pdf" validate="SI.FileValidations"></m-fileupload>
+								</a-col>
+							</a-row>
+							<a-row>
+								<a-col>
+									<a-table headers="SI.IDHeaders" props="SI.IDProps" data="SI.InqDocs" is-preload="false" ng-model="SI.IDActiveFile"></a-table>
+									<a-button type="success btn-block" ng-show="SI.IDActiveFile.id">
+										<a-glyph icon="eye-open"></a-glyph>
+										View File
+									</a-button>
 								</a-col>
 							</a-row>
 						</uib-tab>
