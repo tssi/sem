@@ -9,8 +9,8 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.SFormTypes = [
 						{id:'AIFF1C', name:'F1C', description:'Admission Inquiry Form'},
 						{id:'STU201', name:'201', description:'Admission 201 Form'},
-						{id:'STUCHF', name:'CF-1', description:'Clicnic Health Form'},
-						{id:'STUGHF', name:'GF-1', description:'Guidance Health Form'},
+						{id:'STUCLN', name:'CF-1', description:'Clinic Health Form'},
+						{id:'STUGUI', name:'GF-1', description:'Guidance Health Form'},
 					];
 				$scope.AttachmentTypes = [
 						{id:'DOXF1C',name:'Inquiry Form1-C'},
@@ -198,6 +198,7 @@ define(['app','api','atomic/bomb'],function(app){
 						if(!$scope.ActiveStudent.id){
 							$scope.CurrentPage = $scope.Meta.last;
 						}
+						$scope.saving = false;
 						$scope.ActiveTyp = 'New';
 						$scope.goToPage(1);
 						$scope.Active = response.data;
@@ -215,6 +216,26 @@ define(['app','api','atomic/bomb'],function(app){
 				let docType =  $scope.AttachmentType;
 				var meta  = {student_id:studId,type:'document',doc_type:docType}
 				$selfScope.$broadcast('FileUploadStart',meta);
+			}
+
+			$scope.printForm = function(){
+				let formType = $scope.SFormType;
+				let formId = 'PrintInfoSheet';
+				switch(formType){
+					case 'AIFF1C':
+						formId = 'PrintInqForm1C';
+					break;
+					case 'STU201':
+						formId = 'PrintInqForm201';
+					break;
+					case 'STUCLN':
+						formId = 'PrintInqFormCF1';
+					break;
+					case 'STUGUI':
+						formId = 'PrintInqFormGF1';
+					break;
+				}
+				document.getElementById(formId).submit();
 			}
 			
 			

@@ -529,17 +529,41 @@ class ReportsController extends AppController{
 		$this->set(compact('data'));
 	}
 	function view($form){
-		$this->form_f1c();
+		switch($form):
+			case 'f1c':
+				$this->form_f1c();
+			break;
+			case '201':
+				$this->form_201();
+			break;
+			case 'cf1':
+				$this->form_cf1();
+			break;
+			case 'gf1':
+				$this->form_gf1();
+			break;
+		endswitch;
+		
 	}
 
 	function form_f1c(){
 		$student = null;
-		if(isset($_GET['id'])):
-			$id =  $_GET['id'];
+		if(isset($_REQUEST['InquiryID'])):
+			$id =  $_REQUEST['InquiryID'];
 			$student =  $this->Inquiry->findById($id);
 			$this->set(compact('student'));
 		endif;
 		$this->render('form_f1c');
 	}
 	
+
+	function form_201(){
+
+	}
+	function form_cf1(){
+
+	}
+	function form_gf1(){
+
+	}
 }
