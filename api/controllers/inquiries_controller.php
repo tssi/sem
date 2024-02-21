@@ -21,6 +21,8 @@ class InquiriesController extends AppController {
 	function view($id = null) {
 		if($id=='docs')
 			return $this->docs();
+		if($id=='files')
+			return $this->files();
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid payment scheme', true));
 			$this->redirect(array('action' => 'index'));
@@ -131,5 +133,36 @@ class InquiriesController extends AppController {
 
 		exit;
 	}
+
+	function files() {
+	    $sid = $_REQUEST['inquiry_id'];
+	    $fid = $_REQUEST['file_id'];
+	    $file = $_REQUEST['file_name'];
+	    $hash = md5($file . '' . $sid);
+	    
+	    if ($fid == $hash) {
+	        $docs = $this->Record->getDocs($sid);
+	        $dir = $docs['file']->Folder->path;
+	        $fullPath = $dir . DS .'docs'.DS. $file;
+	        // Ensure the file exists
+	        if (!file_exists($fullPath)) {
+	            throw new NotFoundException('File not found.');
+	        }
+	        // Serve the file
+	        $this->view = 'Media';
+	        $params = array(
+	            'id'        => basename($file),
+	            'name'      => basename($file, '.' . pathinfo($file, PATHINFO_EXTENSION)),
+	            'download'  => false,
+	            'extension' => pathinfo($file, PATHINFO_EXTENSION),
+	            'path'      => $dir . DS
+	        );
+	        $this->set($params);
+	    } else {
+	        // Handle the case where $fid does not match $hash
+	        throw new ForbiddenException('Access denied.');
+	    }
+	}
+
 
 }

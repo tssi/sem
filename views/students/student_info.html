@@ -359,7 +359,7 @@
 							<a-row>
 								<a-col>
 									<a-table headers="SI.IDHeaders" props="SI.IDProps" data="SI.InqDocs" is-preload="false" ng-model="SI.IDActiveFile"></a-table>
-									<a-button type="success btn-block" ng-show="SI.IDActiveFile.id">
+									<a-button type="success btn-block" ng-show="SI.IDActiveFile.id" ng-click="SI.viewFile()">
 										<a-glyph icon="eye-open"></a-glyph>
 										View File
 									</a-button>
@@ -410,5 +410,11 @@
 	</form>
 	<form action="api/reports/form_gf1" id="PrintInqFormGF1" method="POST" target="_blank">
 		<input type="hidden" id="InquiryID" name="InquiryID" value="{{SI.ActiveStudent.id}}">
+	</form>
+
+	<form action="api/inquiries/files" id="ViewInqFile" method="GET" target="_blank">
+		<input type="hidden" id="InquiryID" name="inquiry_id" value="{{SI.ActiveStudent.id}}">
+		<input type="hidden" id="FileID" name="file_id" value="{{SI.IDActiveFile.id}}" />
+		<input type="hidden" id="FileName" name="file_name" value="{{SI.IDActiveFile.file}}" />
 	</form>
 </div>

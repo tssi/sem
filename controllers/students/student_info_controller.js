@@ -273,6 +273,9 @@ define(['app','api','atomic/bomb'],function(app){
 				document.getElementById(formId).submit();
 			}
 			
+			$scope.viewFile = function(){
+				document.getElementById('ViewInqFile').submit();
+			}
 
 			function loadInquiryDocs(){
 				let inqId = $scope.ActiveStudent.id;
