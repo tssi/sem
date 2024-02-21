@@ -16,6 +16,17 @@ define(['app','api','atomic/bomb'],function(app){
 						{id:'DOXF1C',name:'Inquiry Form1-C'},
 						{id:'DOX201',name:'Student 201 Form Signed'}
 					];
+				$scope.PInfos = [
+						{id:'PINFF',name:'Father'},
+						{id:'PINFM',name:'Mother'},
+						{id:'PINFA',name:'All'},
+					];
+				$scope.VMTypes= [
+						{id:'VMGU',name:'Guardian'},
+						{id:'VMFA',name:'Father'},
+						{id:'VMMO',name:'Mother'},
+						{id:'VMST',name:'Student'}
+					];
 				$scope.SFormType = 'AIFF1C';
 				$scope.FileValidations = {maxSize:1024*1024};
 				$scope.Headers = ['LRN','Name','Year Level'];
@@ -73,7 +84,30 @@ define(['app','api','atomic/bomb'],function(app){
 			$selfScope.$watch('SI.ActiveTyp',function(type){
 				loadStudents(1);
 			});
+			$selfScope.$watch('SI.VMType',function(type){
+				let verifyMob;
+				switch(type){
+					case 'VMGU':
+						verifyMob =$scope.ActiveStudent.g_contact_no;
+					break;
+					case 'VMFA':
+						verifyMob =$scope.ActiveStudent.f_mobile;
+					break;
+					case 'VMMO':
+						verifyMob =$scope.ActiveStudent.m_mobile;
+					break;
+					case 'VMST':
+						verifyMob =$scope.ActiveStudent.mobile;
+					break;
+				}
+				$scope.VerifyMobile = verifyMob;
+			});
 			
+			$selfScope.$watch('SI.AttachmentFile.success',function(isOK){
+				if(isOK) {
+					loadInquiryDocs();
+				}
+			});
 			function loadStudents(page,search){
 				$scope.Students = [];
 				var filter = {limit:10,page:page};
@@ -142,6 +176,8 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.ActiveTab = $scope.ActiveTyp=='New'?1:0;
 				$scope.Active = {};
 				$scope.ActiveStudent = '';
+				$scope.PInfoShow = 'PINFF';
+				$scope.AttachmentFile = null;
 				aModal.open('StudentInfoModal');  
 				if(student) {
 					delete student.classroom_user_id;
@@ -151,7 +187,7 @@ define(['app','api','atomic/bomb'],function(app){
 					if($scope.ActiveTyp=='New')
 						$scope.ModalLabel = student.id;
 					$scope.ActiveStudent = student;
-					
+					loadInquiryDocs();
 					
 				}else{
 					$scope.setActiveTyp('New');
@@ -212,7 +248,6 @@ define(['app','api','atomic/bomb'],function(app){
 
 			$scope.uploadAttachment = function(){
 				let studId =  $scope.ActiveStudent.id;
-				console.log($scope.ActiveStudent);
 				let docType =  $scope.AttachmentType;
 				var meta  = {student_id:studId,type:'document',doc_type:docType}
 				$selfScope.$broadcast('FileUploadStart',meta);
@@ -238,6 +273,21 @@ define(['app','api','atomic/bomb'],function(app){
 				document.getElementById(formId).submit();
 			}
 			
+
+			function loadInquiryDocs(){
+				let inqId = $scope.ActiveStudent.id;
+				let filter = {id:inqId};
+				$scope.InqDocs = [];
+				$scope.IDHeaders = ['Files'];
+				$scope.IDProps = ['file'];
+				let success = function(response){
+					$scope.InqDocs = response.data.docs;
+					$scope.AttachmentType = null;
+					$scope.AttachmentFile = null;
+				};
+				let error = function(response){};
+				api.GET('inquiries/docs',filter,success,error);
+			}
 			
 	}]);
 });
