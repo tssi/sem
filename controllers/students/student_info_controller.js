@@ -184,6 +184,7 @@ define(['app','api','atomic/bomb'],function(app){
 					var mLbl = student.first_name[0]+'.' +student.last_name;
 					if(student.lrn)	mLbl +=  ' '+ student.lrn;
 					$scope.ModalLabel = mLbl;
+					student.birthday = new Date(student.birthday);
 					if($scope.ActiveTyp=='New')
 						$scope.ModalLabel = student.id;
 					$scope.ActiveStudent = student;

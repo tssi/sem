@@ -49,10 +49,15 @@ class InquiriesController extends AppController {
 
 			if(!isset($student['preffix'])) $student['preffix'] = "";
 			if(!isset($student['suffix'])) $student['suffix'] = "";
+
+			if(isset($student['birthday'])):
+				$student['birthday'] =  date('Y-m-d',strtotime($student['birthday']));
+			endif;
 			//TODO: Load from  master config
 			$hist['esp']= 2024;
 			if ($this->Inquiry->save($student)) {
 				$this->StudentHistory->save($hist);
+				$this->data['Inquiry']=$student;
 				$this->Session->setFlash(__('The payment scheme has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
