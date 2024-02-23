@@ -239,6 +239,10 @@ define(['app','api','atomic/bomb'],function(app){
 						$scope.ActiveTyp = 'New';
 						$scope.goToPage(1);
 						$scope.Active = response.data;
+						if($scope.Active.id){
+							$scope.ActiveStudent.id = $scope.Active.id;
+							$scope.ModalLabel = $scope.ActiveStudent.id;
+						}
 					});
 				}
 			}
