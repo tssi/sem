@@ -59,15 +59,14 @@ class Inquiry extends AppModel {
 					$val = $cond[$search];
 					unset($cond[$search]);
 					unset($cond['Inquiry.lrn LIKE']);
-					$cond = array('OR'=>array('Inquiry.first_name LIKE'=>$val,'Inquiry.middle_name LIKE'=>$val,'Inquiry.last_name LIKE'=>$val));
+					$cond['OR'] = array('OR'=>array('Inquiry.first_name LIKE'=>$val,'Inquiry.middle_name LIKE'=>$val,'Inquiry.last_name LIKE'=>$val));
 				}
-				
+
 				$conds[$i]=$cond;
 			}
 			//pr($conds); exit();
 			$queryData['conditions']=$conds;
 		}
-		
 		return $queryData;
 	}
 	
@@ -100,5 +99,61 @@ class Inquiry extends AppModel {
 		
 		return $IID;
 	}
+
+	function checkInfo($student) {
+	    // Trim all input values
+	    $names = array('first_name', 'middle_name', 'last_name', 'suffix');
+	    foreach ($names as $nameKey) {
+	        if (isset($student[$nameKey])) {
+	            $student[$nameKey] = trim($student[$nameKey]);
+	        }else{
+	        	$student[$nameKey] = "";
+	        }
+	    }
+
+	    // Use find('all') to retrieve matches based on first and last name
+	    $potentialMatches = $this->find('all', array(
+	    	'recursive'=>-1,
+	        'conditions' => array(
+	            'Inquiry.first_name LIKE' => $student['first_name'] . "%",
+	            'Inquiry.last_name LIKE' => $student['last_name'] . "%"
+	        ),
+	        'fields' => array('id', 'first_name', 'middle_name', 'last_name', 'suffix', 'birthday'), // Specify only the fields you need
+	    ));
+
+	    // Check each potential match for more specific criteria
+	    $similar = array();
+	    foreach ($potentialMatches as $match) :
+	        $matchedStudent = $match['Inquiry'];
+
+	         foreach ($names as $nameKey):
+		        if (isset($matchedStudent[$nameKey])):
+		            $matchedStudent[$nameKey] = strtolower($matchedStudent[$nameKey]);
+		            $student[$nameKey] = strtolower($student[$nameKey]);
+		        endif;
+		     endforeach; 
+		    
+	        // Assume a match
+	        $isMatch = false;
+	        $similar['keyword'] = sprintf("%s %s",$matchedStudent['first_name'],$matchedStudent['last_name']);
+	        $checkFields= array('middle_name','suffix','birthday');
+	        foreach($checkFields as $cFld):
+	        	if(!empty($student[$cFld]) && $matchedStudent[$cFld]==$student[$cFld]):
+	        		$isMatch = true;
+	            	$similar['keyword'] = sprintf("%s %s %s",$matchedStudent['first_name'],$matchedStudent['last_name'],$matchedStudent[$cFld]);
+	            	$similar['keyword'] .=  sprintf(" with ref_no %s",$matchedStudent['id']);
+	        	endif;
+	        endforeach;
+
+	        // If after all checks, it's still a match, return false (duplicate exists)
+	        if ($isMatch) 
+	        	return $similar;
+	        
+	    endforeach;
+
+	    // If no matches found after all checks, return false (unique)
+	    return false;
+	}
+
 
 }

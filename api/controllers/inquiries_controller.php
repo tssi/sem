@@ -35,11 +35,13 @@ class InquiriesController extends AppController {
 			$hist  = array();
 			$student = $this->data['Inquiry'];
 			if(!isset($student['id'])):
+				$hasSimilar = $this->Inquiry->checkInfo($student);
+				if($hasSimilar):
+					return $this->cakeError('similarRecord',$hasSimilar);
+				endif;
 				$student['id']=$this->Inquiry->generateIID();
-				$student['student_id'] = $this->Student->generateSID('LS','X');
-			
-				//pr($student); exit();
 
+				$student['student_id'] = $this->Student->generateSID('LS','X');
 				$hist = array('student_id'=>$student['id'],'ref_no'=>$student['id'],'transaction'=>'INQ_INFO','status'=>'ADDNEW');
 				$acctObj = array('id'=>$student['id'],'account_type'=>'inquiry');
 				$this->Account->save($acctObj);

@@ -37,7 +37,7 @@ define(['app','api','atomic/bomb'],function(app){
 				$scope.Ginputs = [{field:'last_name'},{field:'first_name'},{field:'middle_name'},{field:'rel'}];
 				$scope.GuardHeader = ['Last Name','First Name', 'Middle Name', 'Relationship'];
 				$scope.GuardProp = ['last_name','first_name','middle_name','rel'];
-				$scope.SearchBy = ['lrn','full_name'];// Fields you can search from the items 			
+				$scope.SearchBy = ['lrn','full_name','id'];// Fields you can search from the items 			
 				// TODO: Move this to general types config 
 				$scope.PrevSchType = [
 					{id:'PRV',name:'Private'},
@@ -237,7 +237,7 @@ define(['app','api','atomic/bomb'],function(app){
 						$scope.Active = response.data;
 					});
 				}else{
-					api.POST('inquiries',data,function(response){
+					let success = function(response){
 						//aModal.close("StudentInfoModal");
 						if(!$scope.ActiveStudent.id){
 							$scope.CurrentPage = $scope.Meta.last;
@@ -250,7 +250,13 @@ define(['app','api','atomic/bomb'],function(app){
 							$scope.ActiveStudent.id = $scope.Active.id;
 							$scope.ModalLabel = $scope.ActiveStudent.id;
 						}
-					});
+					};
+					let error = function(response){
+						let error = response.meta;
+						alert(`Error ${error.code}: ${error.message}`);
+						$scope.saving = false;
+					}
+					api.POST('inquiries',data,success,error);
 				}
 			}
 
