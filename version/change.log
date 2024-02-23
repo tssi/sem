@@ -1,3 +1,7 @@
 #v 1.1.1 : 21 Feb 2024
 - Update inquiry module with additional fields under Personal and Parents tab
 - Add Forms tab to generate forms, upload documents and review files
+
+#v 1.1.2 : 21 Feb 2024
+- Improve inquiry saving by validating similar records to avoid duplicates
+- Adjust AIF-201 Application for Enrollment 
