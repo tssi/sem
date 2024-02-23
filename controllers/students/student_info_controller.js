@@ -173,23 +173,30 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.openModal = function(student){
 
 				$scope.saving = false;
-				$scope.ActiveTab = $scope.ActiveTyp=='New'?1:0;
+				let isNew = $scope.ActiveTyp=='New';
+				$scope.ActiveTab = isNew?1:0;
 				$scope.Active = {};
 				$scope.ActiveStudent = '';
 				$scope.PInfoShow = 'PINFF';
 				$scope.AttachmentFile = null;
 				aModal.open('StudentInfoModal');  
 				if(student) {
+					
 					delete student.classroom_user_id;
-					var mLbl = student.first_name[0]+'.' +student.last_name;
-					if(student.lrn)	mLbl +=  ' '+ student.lrn;
+					
+					// Modal Label
+					var mLbl;
+					if(isNew){
+						mLbl = `Inquiry ${student.id}`;
+					}else{
+						mLbl =  `${student.lrn} ${student.first_name[0]}. ${student.last_name}`;
+					}
 					$scope.ModalLabel = mLbl;
+
+					// Handle birthday date
 					student.birthday = new Date(student.birthday);
-					if($scope.ActiveTyp=='New')
-						$scope.ModalLabel = student.id;
 					$scope.ActiveStudent = student;
 					loadInquiryDocs();
-					
 				}else{
 					$scope.setActiveTyp('New');
 					$scope.ActiveTab = 1;
