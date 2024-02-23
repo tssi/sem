@@ -2,7 +2,7 @@
 require('admission_inq_f1c.php');
 class AdmissionInquiryForm201 extends AdmissionInquiryForm1C{
 	protected $_docName = '     Admission 201 Form 2 (AIF-201)';
-	protected $_docTitle = 'APPLICAITON FOR ENROLLMENT';	
+	protected $_docTitle = 'APPLICATION FOR ENROLLMENT';	
 	function AdmissionInquiryForm201(){
 		$this->showLines = !true;
 		$this->FPDF(AdmissionInquiryForm201::$_orient, AdmissionInquiryForm201::$_unit,array(AdmissionInquiryForm201::$_width,AdmissionInquiryForm201::$_height));
