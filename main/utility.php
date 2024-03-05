@@ -27,10 +27,14 @@ class Utility {
 
         return self::$versionData;
     }
-    public static function getVersionNo(){
+    public static function getVersionNo($includeAlias=false){
         Utility::getVersionInfo();
         $versionNo = sprintf("v%s.%s.%s",self::$versionData['MAJOR'],self::$versionData['MINOR'],self::$versionData['PATCH']);
+        if($includeAlias):
+                $versionNo = self::$versionData['ALIAS'].' '.$versionNo;
+        endif;
         $versionNo = htmlspecialchars($versionNo);
+
     
         return $versionNo;
     }
@@ -50,4 +54,5 @@ class Utility {
         // Add more conditions for other file types if necessary
     }
 }
+define('APP_VERSION',Utility::getVersionNo(true));
 ?>
