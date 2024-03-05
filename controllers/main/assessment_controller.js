@@ -25,7 +25,7 @@ define(['app','api','atomic/bomb'],function(app){
 				{id:'N', name:'No'},
 			];
 			$scope.StudFields = ['sno','lrn','enroll_status','department_id',
-								'year_level_id','section_id','student_type','program_id'];
+								'year_level_id','section_id','student_type','program_id','prev_school_type'];
 			$scope.Headers = ['Sno','Student', 'Track','Type'];
 			$scope.Props = ['sno','full_name','program_id','subsidy_status'];
 
@@ -215,6 +215,9 @@ define(['app','api','atomic/bomb'],function(app){
 			if(ENROL_STAT=='OLD'){
 				$scope.PrevSchool = PREV_SCHOOL.PRIVATE;
 				$scope.HasSubsidy = $scope.ActiveStudent.subsidy_status=='REGXX'?'N':'Y';
+			}else{
+				// For new student link previous school type
+				$scope.PrevSchool = stud.prev_school_type;
 			}
 
 			if(YEAR_LVLID!='GZ' && ENROL_STAT =='OLD'){

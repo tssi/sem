@@ -153,12 +153,13 @@ class Student extends AppModel {
 		$condInq[]=array('NOT Inquiry.id'=>$a_ids);
 		
 		// Define response fields
-		$flds = array('id','lrn','full_name','program_id','year_level_id','student_type','department_id');
+		$flds = array('id','lrn','full_name','program_id','year_level_id','student_type','department_id','prev_school_type');
 		// Find all Inquiry based on the filter
 		$I = $INQ->find('all',array('conditions'=>$condInq,'recursive'=>-1,'fields'=>$flds));
 		// Update flds for students
 		array_pop($flds); // Remove deparment_id
-		array_pop($flds); // remove student_type
+		array_pop($flds); // Remove student_type
+		array_pop($flds); // Remove prev_school_type
 		$flds[]='sno'; // Add sno
 
 		// Setup STU and contain relevant fields
