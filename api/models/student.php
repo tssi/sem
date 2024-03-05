@@ -173,7 +173,9 @@ class Student extends AppModel {
 		// Loop into students and build stu object
 		foreach($S as $i=>$SO):
 			$stu =$SO['Student'];
+			if(isset($SO['Account']['subsidy_status'])):
 			$stu['student_type']=$SO['Account']['subsidy_status']; //Can be ESC , PUB or REG
+			endif;
 			$stu['department_id']=$SO['YearLevel']['department_id'];
 			$stu['enroll_status']='OLD';
 			array_push($RES, $stu);
