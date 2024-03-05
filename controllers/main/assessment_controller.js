@@ -74,6 +74,8 @@ define(['app','api','atomic/bomb'],function(app){
 					checkAssessment(stud.id);
 				if(stud.hasOwnProperty('student_type'))
 					stud.subsidy_status = stud.student_type;
+				if(stud.hasOwnProperty('prev_school_type'))
+					$scope.PrevSchool = stud.prev_school_type;
 				if(!stud.name)
 					stud.name =  stud.full_name;
 				switch(stud.subsidy_status){
