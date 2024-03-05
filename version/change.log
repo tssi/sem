@@ -11,3 +11,7 @@
 - Improve placement of student info, barcode and added timestamp
 - Display payment schedule without Option B
 - Indicate Registar's and Student's Copy
+
+#v 1.1.4 : 05 Mar 2024
+- Improve Assessment Form spacing, include ref no and inquiry no
+- Display App Version No. in print out
