@@ -292,7 +292,14 @@ define(['app','api','atomic/bomb'],function(app){
 				if(sy==2024){
 					if(sid==23){
 						// SNO 2023 and below
-						sidFltr = YEAR_LVLID!='GY'?'S23':'B23';
+						// Applicable to G9 GX GZ
+						if(YEAR_LVLID!='GY')
+							sidFltr = 'B23';
+						
+						// Applicable to G8
+						if(YEAR_LVLID=='G8')
+							sidFltr = 'S23'
+						
 					}else{
 						// SNO 2022 and below
 						sidFltr = YEAR_LVLID!='GY'?'B23':'B22';
