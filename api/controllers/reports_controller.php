@@ -336,7 +336,7 @@ class ReportsController extends AppController{
 		endif;
 		//pr($advisory);
 		//exit;
-		$this->set(compact('data'));
+		$this->set(compact('data','sy'));
 		
 			
 	}
