@@ -10,7 +10,6 @@ class StudentPreAssessForm extends Formsheet{
 	protected static $page_count;
 	protected static $ctr = 1.8;
 	protected static $grand_total = 0;
-	
 	function StudentPreAssessForm(){
 		$this->showLines = !true;
 		$this->FPDF(StudentPreAssessForm::$_orient, StudentPreAssessForm::$_unit,array(StudentPreAssessForm::$_width,StudentPreAssessForm::$_height));
@@ -30,30 +29,38 @@ class StudentPreAssessForm extends Formsheet{
 		);
 		$this->section($metrics);
         $y=1;
-
         //$this->drawLine(32,'h',array(-2,42));
 		if(isset($start))
             $y=$start;
 		$this->DrawImage(0,$y-1.8,2,0.7,__DIR__."/images/newlogo.png");
 		$this->GRID['font_size']=14;
 		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
-		
+		$AID = $ass['id'];
+
 		$SNO =  trim($data['sno']);
 		$this->GRID['font_size']=8;
-		$this->rightText(0,$y+2.5,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),42,'');
+		$type =$start>1?"REGISTRAR'S COPY":"STUDENT'S COPY";
+		$tX =  $start>1? 43.5:42.75;
+		$this->rightText(0,$y+2,$type,$tX,'');
+		$this->rightText(0,$y+3,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
 
-		$y+=4;
+		$this->GRID['font_size']=8.5;
+
+		$y+=4.5;
 		$this->leftText(.7,$y,'Name of Student:','','');
 		$name =  ($data['last_name'].', '.$data['first_name'].' '.$data['middle_name']);
 		$name =  ucwords(strtolower($name));
 		$name =  utf8_decode($name);
-		$this->leftText(7,$y,$name,'','b');
+		$this->leftText(7.5,$y,$name,'','b');
 		$y++;
 		$yearLevel = 'Incoming '.$complete['Section']['YearLevel']['description'];
 		if($complete['Section']['department_id']=='SH')
 			$yearLevel .= ' '.$complete['Section']['Program']['name'];
 		$this->leftText(.7,$y,'Grade Level: ' ,'','');
-		$this->leftText(7,$y,$yearLevel,'','b');
+		$this->leftText(7.5,$y,$yearLevel,'','b');
+		$y++;
+		$this->leftText(.7,$y,'Student No: ' ,'','');
+		$this->leftText(7.5,$y,$SNO,'','b');
 		$this->GRID['font_size']=6;
 		//$yearLevel = 'Current '.$data['YearLevel']['description'];
 		//$yearLevel .= ' '.$data['Section']['name'];
@@ -67,15 +74,16 @@ class StudentPreAssessForm extends Formsheet{
 			$by = 0.85; // Y Position
 		else 
 			$by=5.1;
-		$code=$SNO; // Data to be encode can be alphanumeric and dash ex. 2022-1234
+		$by+=0.12;
+		$code=$AID; // Replace with Assessment ID
 		$color = '000'; // RGB color
 		$w = 0.015; // width
-		$h = 0.2; // Height
+		$h = 0.25; // Height
 		$angle = 0; // Angle rotation
 		$type = 'code128'; // Format code128 make shorter barcode
 		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);  
-		$this->rightText(32,5.5+$start,trim($data['sno']),5,'');
-		// TODO: Display barcode top and bottom portion underneath assessment form label
+		$this->leftText(26,6.75+$start,'Ref No.',12,'');
+		$this->rightText(26,6.75+$start,$AID,12,'');
 
 		
 	}
@@ -102,14 +110,15 @@ class StudentPreAssessForm extends Formsheet{
 		$this->leftText(25.5,$y+.6,'ASSESSMENT FORM','','b');
 		
 		$this->GRID['font_size']=8;
-		$type =$start>1?"REGISTRAR'S COPY":"STDUENT'S COPY";
+		$type =$start>1?"REGISTRAR'S COPY":"STUDENT'S COPY";
 		$tX =  $start>1? 43.5:42.75;
 		$this->rightText(0,$y+2,$type,$tX,'');
 		$this->rightText(0,$y+3,'S.Y. '. intval($ass['esp']).' - '.(intval($ass['esp'])+1),38,'');
-		$y+=4;
+		$y+=4.5;
         
-		//$SNO = trim($data['sno']);
-		$this->GRID['font_size']=9;
+		$AID = $ass['id'];
+		$IID = $data['id'];
+		$this->GRID['font_size']=8.5;
 		$this->leftText(.7,$y,'Name of Student:','','');
 		$name =  ($data['last_name'].', '.$data['first_name'].' '.$data['middle_name']);
 		$name =  ucwords(strtolower($name));
@@ -122,6 +131,10 @@ class StudentPreAssessForm extends Formsheet{
 			$yearLevel .= ' '.$sec['Program']['name'];
 		$this->leftText(.7,$y,'Grade Level: ' ,'','');
 		$this->leftText(7.5,$y,$yearLevel,'','b');
+		$y++;
+		$this->leftText(.7,$y,'Inquiry No: ' ,'','');
+		$this->leftText(7.5,$y,$IID,'','b');
+
 		$this->GRID['font_size']=8;
 		// Barcode Display
 		$bx = 5.3; // X Position
@@ -129,25 +142,26 @@ class StudentPreAssessForm extends Formsheet{
 			$by = 0.85; // Y Position
 		else 
 			$by=5.1;
-		$by+=0.16;
-		$code=$data['id']; // Data to be encode can be alphanumeric and dash ex. 2022-1234
+		$by+=0.12;
+		$code=$AID; // Data to be encode can be alphanumeric and dash ex. 2022-1234
 		$color = '000'; // RGB color
 		$w = 0.015; // width
-		$h = 0.2; // Height
+		$h = 0.25; // Height
 		$angle = 0; // Angle rotation
 		$type = 'code128'; // Format code128 make shorter barcode
 		Barcode::fpdf($this, $color, $bx, $by, $angle, $type, $code,$w,$h);
-		$this->rightText(33.5,4+$start,$data['id'],5,'');
+		$this->leftText(26,6.75+$start,'Ref No.',12,'');
+		$this->rightText(26,6.75+$start,$AID,12,'');
 
 	}
 	
 	function data($data,$start){
-        
 		$this->showLines = !true;
-        $this->drawBox(0,$start-1,38,13.5);
+		$start = $start +1;
+        $this->drawBox(0.75,$start-1,37.25,13.5);
 		$this->GRID['font_size']=8;
 		$y=$start;
-		$this->leftText(5,$y,'SCHOOL FEES',10,'');
+		$this->leftText(7,$y,'SCHOOL FEES',10,'');
 		$this->centerText(29,$y,'PAYMENT SCHEDULE',4,'');
 		$this->GRID['font_size']=7;
 		$end = $y+1;
@@ -172,9 +186,9 @@ class StudentPreAssessForm extends Formsheet{
 		$total=0;
 		foreach($data['AssessmentFee'] as $d){
 			if($data['Assessment']['account_details']=='Adjust')			
-				$this->leftText(0.2,$y,$d['name'],'','');
+				$this->leftText(1.5,$y,$d['name'],'','');
 			else
-				$this->leftText(0.2,$y,$d['Fee']['name'],'','');
+				$this->leftText(1.5,$y,$d['Fee']['name'],'','');
 			if($d['due_amount']>=0)
 				$this->rightText(15,$y,number_format($d['due_amount'],2),'','');
 			else{
@@ -186,7 +200,7 @@ class StudentPreAssessForm extends Formsheet{
 			$y++;
 		}
 		//$this->drawLine($y-0.6,'h',array(0,16));
-		$this->leftText(0.2,$y,'Total','','b');
+		$this->leftText(1.5,$y,'Total','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
 		$mod_bal = $data['Assessment']['module_balance'];
 		if($mod_bal>0):
@@ -248,8 +262,14 @@ class StudentPreAssessForm extends Formsheet{
         
         $this->leftText(1,$y+1,$note,'i','');
         $this->leftText(1,$y+2,$note1,'i','');
-        $timestamp =  sprintf("Date Generated: %s",date('d M Y h:i a',time()));
+
+
+        
+         $timestamp =  sprintf("Date Generated: %s",date('d M Y h:i a',time()));
         $this->leftText(0.5,$y+5.5,$timestamp,'','');
+        $this->GRID['font_size']=6;
+        $version =  sprintf("%s",APP_VERSION);
+        $this->leftText(0.5,$y+6.5,$version,'','');
         $this->GRID['font_size']=8;
         $y=$y+4;
 
