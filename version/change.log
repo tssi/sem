@@ -5,3 +5,9 @@
 #v 1.1.2 : 21 Feb 2024
 - Improve inquiry saving by validating similar records to avoid duplicates
 - Adjust AIF-201 Application for Enrollment 
+
+#v 1.1.3 : 05 Mar 2024
+- Adjust Assessment Form to display breakdown of discounts & other details
+- Improve placement of student info, barcode and added timestamp
+- Display payment schedule without Option B
+- Indicate Registar's and Student's Copy
