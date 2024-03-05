@@ -54,6 +54,7 @@ class ReportsController extends AppController{
 		$assId = $data['Assessment']['id'];
 		$sectId = $data['Assessment']['section_id'];
 		$esp = $data['Assessment']['esp'];
+		$sy = floor($esp);
 		$stud_program = $data['Section']['program_id'];
 		$level = $data['Section']['year_level_id'];
 		$asmModified =  (int)date('Ymd',strtotime($data['Assessment']['modified']));
@@ -185,12 +186,19 @@ class ReportsController extends AppController{
 			$name =  $f['Fee']['name'];
 			//pr($f);
 			if($type!="2OTH"):
-					$type="1".$type;
-					if($type=="1TF")
-						$type = "0TF";
-					if($type=='1DSC')
-						$type = '4DSC';
-				endif;
+				$type="1".$type;
+				if($type=="1TF")
+					$type = "0TF";
+				if($type=='1DSC')
+					$type = '4DSC';
+			endif;
+
+			// NOTE: Resolve discount breakdown for SY 2024
+			if($sy>=2024 && $ogType=='DSC'):
+				// Adjust type code to prevent from combining amounts and display in correct order
+				$type =$f['id'].'DSC'.$f['fee_id'];
+			endif;
+
 			if(!isset($feeTotals[$type])){
 				// Use description based on type
 				switch($ogType){
@@ -198,6 +206,7 @@ class ReportsController extends AppController{
 					case 'LAB': $label = 'Laboratory Fee'; break;
 					case 'MSC': $label = $isSecondSem?'Registration':'Misc. Fee'; break;
 					case 'TUT': $label = 'Tutorial Fee'; break;
+					case 'DSC': $label = $name; break;
 					
 					// If fee is different from the 3 main types use the fee name
 					default: $label = $name; break; 
