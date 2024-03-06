@@ -17,3 +17,8 @@
 - Improve Assessment Form spacing, include ref no and inquiry no
 - Display App Version No. in print out
 
+#v 1.1.5 : 05 Mar 2024
+- Assessment form adjust labels for Tuition and Other Fees, FPS & ER
+- Exclude OLD Students from Early Registration Discounts
+- Exclusion applicable for Batch and Individual Assessment
+
