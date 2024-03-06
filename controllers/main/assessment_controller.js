@@ -217,6 +217,7 @@ define(['app','api','atomic/bomb'],function(app){
 			if(ENROL_STAT=='OLD'){
 				$scope.PrevSchool = PREV_SCHOOL.PRIVATE;
 				$scope.HasSubsidy = $scope.ActiveStudent.subsidy_status=='REGXX'?'N':'Y';
+				$scope.IsEarlyEnroll = 'N';
 			}else{
 				// For new student link previous school type
 				$scope.PrevSchool = stud.prev_school_type;
