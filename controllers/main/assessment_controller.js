@@ -95,6 +95,7 @@ define(['app','api','atomic/bomb'],function(app){
 
 
 		$selfScope.$watch('ASC.ActiveType', function(type){
+			console.log(type,$scope.Scheme);
 			if($scope.Scheme!=null){
 				angular.forEach($scope.Tuition.schemes, function(s){
 					if(type==s.subsidy_status)
@@ -293,19 +294,13 @@ define(['app','api','atomic/bomb'],function(app){
 				var sid = parseInt(sno.substring(4,2));
 				var sy =  $scope.ActiveSy;
 				if(sy==2024){
-					if(sid==23){
+					if(sid<=23){
 						// SNO 2023 and below
 						// Applicable to G9 GX GZ
-						if(YEAR_LVLID!='GY')
+						if(YEAR_LVLID=='GZ')
 							sidFltr = 'B23';
-						
-						// Applicable to G8
-						if(YEAR_LVLID=='G8')
-							sidFltr = 'S23'
-						
-					}else{
-						// SNO 2022 and below
-						sidFltr = YEAR_LVLID!='GY'?'B23':'B22';
+						else
+							sidFltr = `S${sid}`;
 					}	
 				}
 				else{ 
@@ -377,8 +372,12 @@ define(['app','api','atomic/bomb'],function(app){
 			$scope.Tuition =  $filter("filter")($scope.AllTuitions,{id:tuiId})[0];
 		});
 		function pickScheme(stud){
+			let subsidyType = stud.subsidy_status;
+			if($scope.HasSubsidy=='N'){
+				subsidyType = SUBSIDY_TYPE.REGULAR;
+			}
 			angular.forEach($scope.Tuition.schemes, function(s){
-				if(stud.subsidy_status==s.subsidy_status)
+				if(subsidyType==s.subsidy_status)
 					$scope.SelectScheme(s);
 			})
 		}
