@@ -23,3 +23,6 @@
 - Exclusion applicable for Batch and Individual Assessment
 - Correction in Tuition Fee amount
 
+#v 1.1.6 : 06 Mar 2024
+- Display correct tuition based on student number for OLD Students Incoming G8 - G10
+- Update tuition fee for SID 23, 22 & 21  and reflect the correct pay sched
