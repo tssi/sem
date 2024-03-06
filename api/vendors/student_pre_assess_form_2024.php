@@ -200,7 +200,7 @@ class StudentPreAssessForm extends Formsheet{
 			$y++;
 		}
 		//$this->drawLine($y-0.6,'h',array(0,16));
-		$this->leftText(1.5,$y,'Total','','b');
+		$this->leftText(1.5,$y,'Balance Due','','b');
 		$this->rightText(15,$y,number_format($total,2),'','b');
 		$mod_bal = $data['Assessment']['module_balance'];
 		if($mod_bal>0):
